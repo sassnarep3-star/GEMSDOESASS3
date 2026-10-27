@@ -139,3 +139,16 @@ def test_interrupted_download_keeps_existing_file_and_cleans_partial(tmp_path, m
         restore(entry(), tmp_path)
     assert existing.read_bytes() == b'old invalid file'
     assert not (tmp_path / 'file.tif.partial').exists()
+
+
+def test_parallel_bootstrap_uses_the_same_binary_safe_streamer(tmp_path, monkeypatch):
+    import bootstrap_template
+    payload = b'\xff\x80\x00' * 50
+    requests = []
+    def fake(endpoint, out, *, timeout):
+        requests.append(endpoint); out.write(payload)
+    monkeypatch.setattr(bootstrap_template, 'stream_github_raw', fake)
+    target = tmp_path / 'input.tif'
+    bootstrap_template.fetch_file('repos/owner/repo/contents/a.tif?ref=pinned', target, hashlib.sha256(payload).hexdigest())
+    assert target.read_bytes() == payload
+    assert len(requests) == 1

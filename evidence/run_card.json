@@ -48,5 +48,7 @@
     "Three independently reproduced shared template defects remain open upstream; this account has read-only access.",
     "Competition data page requires authentication; the audited sample is an owner mirror, not organizer-authenticated.",
     "No uploaded-byte receipt, hidden labels, live team quota or calibrated leaderboard forecast is available."
-  ]
+  ],
+  "session_scope": "This session only; a separate parallel H1 experiment is preserved in evidence/h1-run-card.json.",
+  "parallel_session_evidence": "evidence/h1-run-card.json"
 }

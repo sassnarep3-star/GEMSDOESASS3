@@ -123,3 +123,19 @@ test('duplicated sites or comparisons cannot masquerade as a complete audit', as
     assert.equal(await page.locator('#portfolio-rows a').count(), 0);
   }
 });
+
+test('preserved parallel dashboard remains readable, marked provisional and fail-closed', async () => {
+  for (const width of [1440, 390]) {
+    const page = await browser.newPage({ viewport: { width, height: 850 } });
+    const errors = []; page.on('pageerror', e => errors.push(e.message));
+    await page.route('https://api.github.com/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ pushed_at: '2026-10-27T10:00:00Z' }) }));
+    await page.goto(base + '/parallel-h1.html');
+    await page.waitForFunction(() => document.querySelectorAll('#focus-rows tr').length === 9, null, { timeout: 5000 });
+    assert.match(await page.locator('[role="note"]').first().innerText(), /protocol deviation/);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
+    assert.deepEqual(errors, []);
+    await page.goto(base + '/parallel-h1-guide.html');
+    assert.match(await page.locator('[role="note"]').first().innerText(), /no TIFF was approved/);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
+  }
+});

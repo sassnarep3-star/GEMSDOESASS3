@@ -1,6 +1,6 @@
 # GEMS Field Notes
 
-> **Current decision: DO NOT SUBMIT.** No new competition TIFF or score was produced. The usual 37,654-dot budget cannot satisfy the literal registry rule, the required assigned method paragraph and cached feature stack are missing, and shared-template defects are unresolved. [Executive guide](executive-summary.html) · [Detailed review](research/REVIEW.md) · [Run card](evidence/run_card.json).
+> **Current decision: DO NOT SUBMIT.** No new submission TIFF or organizer-confirmed score was produced. The usual 37,654-dot budget cannot satisfy the literal registry rule, the required assigned method paragraph and cached feature stack are missing, and shared-template defects are unresolved. [Executive guide](executive-summary.html) · [Detailed review](research/REVIEW.md) · [Run card](evidence/run_card.json).
 
 ## Standing user brief — read at the start of every session
 
@@ -44,6 +44,7 @@ python scripts/restore_audit_inputs.py --group all  # hash-pinned owner mirrors 
 python scripts/registry_preflight.py --dots 37654  # exit 2 = proven stop; 0 = not proven, NOT a pass
 python scripts/audit_focus.py                      # 72 directed historical comparisons
 python scripts/refresh_sources.py                  # public GitHub refs only, not scores
+python scripts/bootstrap_template.py --template-only # shared source for parallel-session tests
 pytest -q
 npm ci --ignore-scripts
 npm run test:js
@@ -77,3 +78,10 @@ Coordinate an explicit lane; resolve the literal lattice/budget conflict without
 ## Earlier parallel review snapshots
 
 Other sessions independently recorded earlier reviews in [`docs/EXECUTIVE_SUMMARY.md`](docs/EXECUTIVE_SUMMARY.md), [`docs/review-2026-10-27.md`](docs/review-2026-10-27.md) and [`evidence/negative_run_card.json`](evidence/negative_run_card.json). Those records preserve what those sessions knew at the time; statements that this repository has no audits, tests or mirrored inputs are now superseded by the current [dashboard](index.html) and [review](research/REVIEW.md). No earlier negative verdict is converted into a submission approval.
+
+
+## Concurrent H1 record
+
+A parallel session merged an [H1 implementation](src/lane_h1.py), [run card](evidence/h1-run-card.json), [research review](docs/research/results-and-irregularities.md) and a [preserved dashboard](parallel-h1.html). It reports one provisional surface experiment, not a generated TIFF; the H1 surface failed the lattice overlap rule and the run is negative. That session chose H1 without the explicitly assigned method paragraph, so it is a protocol deviation, **not** authorization to run that lane again. The H1 CLI now requires a caller-supplied coordinator assignment attestation before it can run; the attestation is not independently authenticated. This session ran zero geological experiments and used no submission slot. The other session reports one experiment and zero slots.
+
+The two historical nine-site audits remain independently reproducible: this session's [72-comparison audit](scripts/audit_focus.py) and the parallel session's preserved [audit](scripts/audit_focus_h1.py). Neither is a full-registry clearance.

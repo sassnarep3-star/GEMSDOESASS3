@@ -38,6 +38,19 @@ def load_manifest(path: Path = MANIFEST) -> dict:
     return manifest
 
 
+def stream_github_raw(endpoint: str, stream, *, timeout: int = 90) -> None:
+    """Stream GitHub API response bytes without charset conversion."""
+    if not endpoint.startswith("repos/"):
+        raise ValueError("expected a GitHub repository API endpoint")
+    headers = {"Accept": "application/vnd.github.raw+json", "User-Agent": "gems-field-notes-audit"}
+    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    request = Request(f"https://api.github.com/{endpoint}", headers=headers)
+    with urlopen(request, timeout=timeout) as response:
+        shutil.copyfileobj(response, stream, length=1 << 20)
+
+
 def restore(entry: dict, target_dir: Path) -> str:
     repo, ref, path = entry["repo"], entry["ref"], entry["path"]
     name, expected = entry["destination"], entry["sha256"]
@@ -52,17 +65,12 @@ def restore(entry: dict, target_dir: Path) -> str:
     if dest.is_file() and sha256_file(dest) == expected:
         return "verified cached"
     temp = dest.with_name(dest.name + ".partial")
-    endpoint = f"https://api.github.com/repos/{repo}/contents/{quote(path, safe='/')}?ref={ref}"
-    headers = {"Accept": "application/vnd.github.raw+json", "User-Agent": "gems-field-notes-audit"}
-    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
+    endpoint = f"repos/{repo}/contents/{quote(path, safe='/')}?ref={ref}"
     try:
         # GitHub labels raw bytes with charset=utf-8. Newer gh versions may try
-        # to transcode binary TIFFs; urllib streams the response byte-for-byte.
-        request = Request(endpoint, headers=headers)
-        with urlopen(request, timeout=90) as response, temp.open("wb") as stream:
-            shutil.copyfileobj(response, stream, length=1 << 20)
+        # to transcode binary TIFFs; the shared streamer keeps bytes unchanged.
+        with temp.open("wb") as stream:
+            stream_github_raw(endpoint, stream)
         actual = sha256_file(temp)
         if actual != expected:
             raise ValueError(f"SHA-256 mismatch for {entry['id']}: {actual} != {expected}")

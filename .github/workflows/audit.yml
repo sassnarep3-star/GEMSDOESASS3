@@ -23,6 +23,10 @@ jobs:
           cache: npm
       - run: python -m pip install -r requirements.txt
       - run: npm ci --ignore-scripts
+      - name: Restore unmodified shared source for parallel-session tests
+        run: python scripts/bootstrap_template.py --template-only
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: Restore checksum-pinned research inputs
         run: |
           set +e
