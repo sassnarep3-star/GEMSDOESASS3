@@ -6,7 +6,7 @@
 
 **No submission TIFF was generated in this checkout. There is no file here that is approved to download or submit.** The repository currently contains only this README: no model code, data, cached features, evaluator, writer, registry rasters, tests, run cards, or TIFFs. Consequently we cannot run a holdout, measure uniqueness, validate the competition grid, diagnose the reported `[0, 1]` error, or truthfully estimate an entry's competition score. Do not spend a DrivenData submission slot on a historical TIFF or on a file generated without those checks.
 
-The task is research-and-validation first, not file-generation-at-any-cost. A candidate can be **downloadable for research** while still being **not approved to submit**. A local format pass, a projected score, or a historical score is not submission authorization.
+The task is research-and-validation first, not file-generation-at-any-cost. A candidate can be **downloadable for research** while still being **not approved to submit**. A local format pass, a projected score, or a historical score is not submission authorization. The inherited GitHub Pages landing page is [`docs/index.html`](docs/index.html); its detailed public-facing brief is [`docs/EXECUTIVE_SUMMARY.md`](docs/EXECUTIVE_SUMMARY.md). Keep both aligned with this README, which is the session-start source of truth.
 
 ## Project charter — carry forward the user's requirements
 
