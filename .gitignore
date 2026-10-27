@@ -1,12 +1,18 @@
-# Local virtual environments, downloaded source rasters and generated caches
+# Virtual environments & caches (excluded from Git and Arena snapshots)
 .venv/
-__pycache__/
-.pytest_cache/
-*.py[cod]
 .cache/
-data/raw/
-data/cache/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Raw / large competition rasters (restored via scripts/prepare_data.py into .cache/gems_data)
 data/official/
-data/processed/
+data/raw/
+data/external/
+data/scored/
 *.partial
-node_modules/
+*.assembling
+Unselected files/

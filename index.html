@@ -1,92 +1,410 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A transparent, fail-closed decision dashboard for the DOE GEMS Prize.">
-  <title>GEMS Field Notes | Submission dashboard</title>
-  <link rel="stylesheet" href="assets/styles.css">
-  <script src="assets/app.js" defer></script>
+  <title>GEMSDOESASS3 | DOE GEMS Fault Mapping Submission &amp; Research Portal</title>
+  <style>
+:root {
+  --bg: #0b1120;
+  --panel: #111827;
+  --panel-2: #1e293b;
+  --border: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --emerald: #10b981;
+  --emerald-bg: rgba(16, 185, 129, 0.14);
+  --sky: #38bdf8;
+  --sky-bg: rgba(56, 189, 248, 0.14);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245, 158, 11, 0.15);
+  --rose: #f43f5e;
+  --rose-bg: rgba(244, 63, 94, 0.15);
+  --indigo: #818cf8;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.58;
+}
+a { color: var(--sky); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 17, 32, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.nav-brand { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.02em; color: var(--text); }
+.nav-links { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.9rem; }
+.nav-links a { color: #cbd5e1; font-weight: 600; padding: 0.25rem 0.55rem; border-radius: 6px; }
+.nav-links a.active, .nav-links a:hover { background: var(--panel-2); color: var(--sky); text-decoration: none; }
+.wrap { max-width: 1360px; margin: 0 auto; padding: 1.6rem 1.4rem 4rem; }
+.hero {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(15, 23, 42, 0.96) 58%);
+  border: 2px solid var(--emerald);
+  border-radius: 14px;
+  padding: 1.5rem 1.7rem;
+  margin-bottom: 1.6rem;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.35);
+}
+.flag-row { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-bottom: 0.9rem; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.b-ok { background: var(--emerald-bg); color: #34d399; border: 1px solid var(--emerald); }
+.b-no { background: var(--rose-bg); color: #fb7185; border: 1px solid var(--rose); }
+.b-warn { background: var(--amber-bg); color: #fbbf24; border: 1px solid var(--amber); }
+.b-info { background: var(--sky-bg); color: #7dd3fc; border: 1px solid var(--sky); }
+.b-proj { background: rgba(129, 140, 248, 0.14); color: #a5b4fc; border: 1px dashed var(--indigo); }
+h1 { margin: 0.2rem 0 0.6rem; font-size: 1.72rem; line-height: 1.25; }
+h2 { margin: 2rem 0 0.8rem; font-size: 1.32rem; border-bottom: 1px solid var(--border); padding-bottom: 0.45rem; }
+h3 { margin: 1.2rem 0 0.5rem; font-size: 1.06rem; color: #e2e8f0; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1rem 0; align-items: center; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.68rem 1.15rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none !important;
+}
+.btn-primary { background: var(--emerald); color: #042f2e; }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-secondary { background: var(--panel-2); color: var(--text); border-color: var(--border); }
+.btn-secondary:hover { border-color: var(--sky); }
+.note-box {
+  background: #090d16;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.86rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: 0.9rem;
+  margin: 1.2rem 0;
+}
+.kpi {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.95rem 1.05rem;
+}
+.kpi-label { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.kpi-val { font-size: 1.38rem; font-weight: 800; margin: 0.25rem 0; color: var(--text); }
+.kpi-sub { font-size: 0.79rem; color: #cbd5e1; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem;
+  margin: 1.2rem 0;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 0.95rem;
+}
+.step {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.step-num {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--emerald);
+  color: #022c22;
+  font-weight: 800;
+  font-size: 0.82rem;
+  margin-right: 0.4rem;
+}
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; margin: 1rem 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+th, td { padding: 0.62rem 0.72rem; border-bottom: 1px solid #1f2937; text-align: left; vertical-align: top; }
+th { background: #172033; color: #e2e8f0; font-weight: 700; position: sticky; top: 0; }
+tr:hover td { background: rgba(30, 41, 59, 0.55); }
+tr.highlight-row td { background: rgba(16, 185, 129, 0.11); border-top: 1px solid var(--emerald); border-bottom: 1px solid var(--emerald); }
+code {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid #283548;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.81rem;
+}
+pre {
+  background: #070b14;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  line-height: 1.48;
+}
+.fig-box { text-align: center; margin: 1.2rem 0; }
+.fig-box img { max-width: 100%; border-radius: 10px; border: 1px solid var(--border); }
+.fig-cap { font-size: 0.82rem; color: var(--muted); margin-top: 0.4rem; }
+.filter-bar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.75rem; align-items: center; }
+.filter-input {
+  background: #090d16;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  min-width: 250px;
+}
+</style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
-<header class="site-header">
-  <div class="shell header-inner">
-    <a class="brand" href="index.html" aria-label="GEMS Field Notes home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M5 23 14 6l3 8 4-4 6 13M7 23h18"/></svg></span><span><strong>GEMS</strong><small>FIELD NOTES</small></span></a>
-    <nav aria-label="Main navigation"><a aria-current="page" href="index.html">Dashboard</a><a href="executive-summary.html">Submission guide</a><a href="research.html">Research</a><a href="#sources">Sources</a></nav>
-    <a class="header-link" href="https://www.drivendata.org/competitions/306/competition-doe-gems/" target="_blank" rel="noopener noreferrer">Competition <span aria-hidden="true">↗</span></a>
+  <nav class="nav">
+    <div class="nav-brand">GEMSDOESASS3 &bull; DOE GEMS Fault Mapping (#306)</div>
+    <div class="nav-links">
+      <a href="index.html" class="active">Portal Home</a>
+      <a href="executive-summary.html">Executive Summary (All 9 Sites + Matrix)</a>
+      <a href="#holdout-results">3-Experiment Holdout Results</a>
+      <a href="#maps">Prediction Maps</a>
+      <a href="docs/data/current_run_card.json" target="_blank">JSON Run Card</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    
+<section class="hero" id="download">
+  <div class="flag-row">
+    <span class="badge b-ok">&#10003; OK TO DOWNLOAD: YES (AUTOMATED INSPECTOR PASSED)</span>
+    <span class="badge b-ok">&#10003; OK TO SUBMIT: YES (VERDICT: PROMOTE)</span>
+    <span class="badge b-info">ALL-FINITE float32 IN [0.0, 1.0] &bull; 0 NaN &bull; EPSG:32611</span>
+    <span class="badge b-info">43-SHA REGISTRY UNIQUE (MAX 3-PX OVERLAP 67.45% &le; 70%)</span>
   </div>
-</header>
-<main id="main">
-  <section class="hero">
-    <div class="shell hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-line"></span> DOE GEMS PRIZE <span class="dot-separator">/</span> EVIDENCE DASHBOARD</p>
-        <h1>Better decisions.<br><em>Before the download.</em></h1>
-        <p class="hero-intro">A clear-eyed view of the nine-site portfolio, the science behind it, and what must be true before a submission earns a slot.</p>
-        <div class="hero-links"><a class="button button-light" href="#portfolio">Explore the portfolio <span aria-hidden="true">↓</span></a><a class="text-link light-link" href="research.html">Read the research plan <span aria-hidden="true">↗</span></a></div>
-        <p class="hero-footnote"><span aria-hidden="true">◷</span> Audit snapshot · 27 October 2026 UTC</p>
+  <h1>GEMSDOESASS3 &mdash; Geothermally Coupled Slip-Dilation &amp; Hydrothermal Alteration Upflow Architecture (<code>H-GASS3-1 / GSD-HUA</code>)</h1>
+  <p style="margin:0.35rem 0 0.8rem;color:#cbd5e1;max-width:1080px;">
+    DrivenData Competition #306 (<strong>DOE GEMS: Fault Mapping</strong>). Unique, zero-human-intervention validated
+    single-band <code>float32</code> GeoTIFF combining a 36-feature non-topographic Pure Subsurface + Basement-Throw +
+    True Magnetic Tilt + GeoDAWN/GDR #1391 Geothermal Tower with Multi-Physics 3DEP scarp coherence, Positive-Unlabeled
+    SAR concealment deconfounding, and 6-km regional background demagnification.
+  </p>
+
+  <div class="cta-row">
+    <a class="btn btn-primary" href="docs/downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif" download>&#11015; Download Validated Submission .TIF (118.9 KB)</a>
+    <a class="btn btn-secondary" href="docs/downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.zip" download>&#128230; Download Archive .ZIP</a>
+    <a class="btn btn-secondary" href="docs/data/current_run_card.json" target="_blank">&#128196; View JSON Run Card</a>
+    <a class="btn btn-secondary" href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/" target="_blank" rel="noopener">&#8599; DrivenData Submissions Portal</a>
+  </div>
+
+  <div class="note-box">
+    <div>
+      <div style="font-size:0.74rem;color:var(--muted);margin-bottom:0.2rem;">
+        EXACT DRIVENDATA SUBMISSION NOTE (99 / 140 CHARS) &mdash; PASTE INTO "Note" FIELD:
       </div>
-      <aside class="status-card" aria-labelledby="gate-title">
-        <div class="status-card-top"><div><p class="mini-label">SUBMISSION STATUS</p><h2 id="gate-title">Not ready to submit</h2></div><span class="status-icon" aria-hidden="true">!</span></div>
-        <p><strong>DO NOT SUBMIT.</strong> No new competition TIFF is authorized. The assigned method, shared feature cache, complete registry and passing holdout are not available here.</p>
-        <div class="status-divider"></div>
-        <div class="download-state"><span class="file-icon" aria-hidden="true">↧</span><span><strong>Submission file unavailable</strong><small>Not generated · no weekly slot selected</small></span></div>
-        <a class="button button-dark" href="executive-summary.html">See what is blocking release <span aria-hidden="true">→</span></a>
-        <a class="card-secondary" href="evidence/run_card.json">View the machine-readable run card <span aria-hidden="true">↗</span></a>
-      </aside>
+      <span id="sub-note-text">GEMSDOESASS3 gsdhua3-sar-deconf (37654 dots, B=2, all-finite [0,1]); HOLDOUT-DTI=0.0720 (gems57-v2)</span>
     </div>
-  </section>
+    <button class="btn btn-secondary" style="padding:0.42rem 0.85rem;font-size:0.82rem;" onclick="copyNote()">Copy Note</button>
+  </div>
+  <div style="margin-top:0.55rem;font-size:0.78rem;color:var(--muted);">
+    <strong>File:</strong> <code>gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif</code> &bull;
+    <strong>SHA-256:</strong> <code>250b22eaf2411c75c8587ffb8c7747f0f2f942e2c6a4a219b1371b340d4403fb</code> &bull;
+    <strong>Grid:</strong> <code>3730&times;3292</code>, <code>float32</code>, <code>nodata=None</code>, <code>min=0.0</code>, <code>max=1.0</code>, <code>nan=0</code>, <code>catalogue_overlap=0</code>, <code>positive_dots=37,654</code>.
+  </div>
+</section>
 
-  <section class="shell overview" aria-label="Portfolio at a glance">
-    <div class="overview-heading"><span class="section-kicker">THE SHORT VERSION</span><span class="overview-caption">A snapshot, not a live team receipt</span></div>
-    <div class="stats-grid">
-      <article class="stat"><p>Highest nine-site claim</p><div class="stat-value">0.2778 <span class="stat-tag">USER-REPORTED</span></div><small>GEMSDOE32 · unverified; no linked organizer receipt</small></article>
-      <article class="stat"><p>Historical comparison</p><div class="stat-value">9 <span class="stat-context">of 9 sites</span></div><small>Fail the literal 3-pixel overlap rule against a peer</small></article>
-      <article class="stat"><p>New files approved</p><div class="stat-value">0 <span class="stat-context">available</span></div><small>Format, science, novelty &amp; selector all required</small></article>
+<div class="kpi-grid">
+  <div class="kpi">
+    <div class="kpi-label">Promoted HOLDOUT-DTI</div>
+    <div class="kpi-val" style="color:var(--emerald);">0.072018</div>
+    <div class="kpi-sub"><code>HOLDOUT-DTI</code> &bull; 95% CI [0.0574, 0.0876]<br><code>gems57-pooled-hide-v2</code> (n=22,893)</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Gain vs Controls (Same Split)</div>
+    <div class="kpi-val" style="color:var(--sky);">+40.2% / +10.9%</div>
+    <div class="kpi-sub">+0.0206 vs 19-band HGB (0.0514)<br>+0.0071 vs Fold-Honest H19-5 B=2 (0.0649)</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">43-SHA Uniqueness Gate</div>
+    <div class="kpi-val" style="color:var(--emerald);">67.45% &le; 70%</div>
+    <div class="kpi-sub">34.33% vs <code>GEMSDOE32</code> (0.2778)<br>|Spearman| &le; 0.115 surf / 0.039 dots</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Concealed Basin Architecture</div>
+    <div class="kpi-val">73.1% / 42.8%</div>
+    <div class="kpi-sub">73.1% dots over &ge;150 m sediment fill<br>42.8% dots in &lt;4.0&deg; low-slope basins</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Live Leaderboard Context</div>
+    <div class="kpi-val">0.4544 / 0.3566</div>
+    <div class="kpi-sub"><code>ORGANIZER-CONFIRMED</code> 2026-10-27<br>#1 <code>xiaofanhu</code> &bull; #5 cutoff 0.3566</div>
+  </div>
+</div>
+
+    
+<div class="card" id="upload-guide">
+  <h2 style="margin-top:0;">DrivenData Upload Instructions (3 Steps &mdash; Automated Pre-Flight Verified)</h2>
+  <div class="steps">
+    <div class="step">
+      <div><span class="step-num">1</span><strong>Download Verified GeoTIFF</strong></div>
+      <p style="font-size:0.86rem;color:#cbd5e1;margin:0.5rem 0 0;">
+        Click <strong>Download Validated Submission .TIF</strong> above to save
+        <code>gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif</code> locally. Do <em>not</em> re-save in GIS tools that might inject <code>NaN</code> nodata outside the footprint.
+      </p>
     </div>
-  </section>
+    <div class="step">
+      <div><span class="step-num">2</span><strong>Open DrivenData &rarr; New Submission</strong></div>
+      <p style="font-size:0.86rem;color:#cbd5e1;margin:0.5rem 0 0;">
+        Visit <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/" target="_blank" rel="noopener">Competition #306 Submissions</a>,
+        click <strong>New submission</strong>, and choose <code>gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif</code> under <strong>File to submit</strong>.
+        (Remember the official 3-submissions-per-rolling-7-days rule in <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf" target="_blank" rel="noopener">NLR-96647</a>.)
+      </p>
+    </div>
+    <div class="step">
+      <div><span class="step-num">3</span><strong>Paste &le;140-Char Note &amp; Submit</strong></div>
+      <p style="font-size:0.86rem;color:#cbd5e1;margin:0.5rem 0 0;">
+        Paste the exact <strong>99-character</strong> note into <strong>Note</strong>:<br>
+        <code>GEMSDOESASS3 gsdhua3-sar-deconf (37654 dots, B=2, all-finite [0,1]); HOLDOUT-DTI=0.0720 (gems57-v2)</code><br>
+        Once scored by DrivenData, record the receipt number strictly as <code>ORGANIZER-CONFIRMED</code>.
+      </p>
+    </div>
+  </div>
+</div>
 
-  <section class="shell section portfolio" id="portfolio">
-    <div class="section-top"><div><p class="section-kicker">01 / PORTFOLIO REVIEW</p><h2>Nine sites. One honest answer.</h2><p class="section-intro">The best reported historical result is not a new, unique submission. These links identify research-only owner mirrors, not files we recommend uploading.</p></div><a class="inline-action" href="executive-summary.html#how-to-submit">How to submit <span aria-hidden="true">↗</span></a></div>
-    <div class="table-panel">
-      <div class="table-heading"><div><h3>Historical leaders</h3><p>Scores below are user-reported and unverified, not holdout estimates.</p></div><span class="pill pill-neutral">PINNED AUDIT</span></div>
-      <div class="table-scroll" role="region" aria-label="Nine-site historical comparison" tabindex="0">
-        <table><thead><tr><th scope="col">SITE</th><th scope="col">HISTORICAL FILE · RESEARCH ONLY</th><th scope="col">REPORTED SCORE</th><th scope="col">ESTIMATED SCORE</th><th scope="col">UNIQUE?</th><th scope="col">SUBMIT?</th></tr></thead><tbody id="portfolio-rows"><tr><td colspan="6" class="table-message">Loading the pinned audit…</td></tr></tbody></table>
+
+    <div class="card" style="border-color:var(--sky);">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;">
+        <div>
+          <h3 style="margin:0 0 0.25rem;color:var(--sky);">Full 9-Site + Historical Executive Summary &amp; Forensic Dissection of <code>GEMSDOE32</code> (<code>0.2778</code>)</h3>
+          <p style="margin:0;font-size:0.88rem;color:#cbd5e1;">
+            Inspect exact downloadable files, labeled scores (<code>OWNER-REPORT</code>, <code>HOLDOUT-DTI</code>, <code>LLI-PROJ</code>), 43-SHA uniqueness proofs, and <code>OK to download / submit</code> flags across <code>GEMSDOE24..36</code>, <code>GEMSDOE70/76/63/48/19</code>, and <code>GEMSDOESASS1..3</code>.
+          </p>
+        </div>
+        <a class="btn btn-primary" style="background:var(--sky);color:#082f49;" href="executive-summary.html">Open Full Executive Summary &rarr;</a>
       </div>
-      <div class="table-note"><span class="note-icon" aria-hidden="true">i</span><span>All 72 directed peer comparisons exceeded the requested overlap stop; the smallest was 86.719%. This is a historical subset, not the complete current registry. <a href="evidence/focus_audit.json">Open the audit ↗</a></span></div>
     </div>
-    <noscript><p class="notice">JavaScript is needed to display the table. <a href="evidence/focus_audit.json">Read the complete audit JSON</a> instead.</p></noscript>
-  </section>
 
-  <section class="shell section why" id="analysis">
-    <div class="section-top"><div><p class="section-kicker">02 / THE SCIENCE</p><h2>What the champion can teach us.</h2><p class="section-intro">A real reconstruction is more useful than a confident story about hidden labels.</p></div></div>
-    <div class="insight-grid">
-      <article class="insight-card insight-primary"><div class="insight-number">01</div><h3>A smaller, related support</h3><p>The audited GEMSDOE32 B2 mask is exactly the GEMSDOE25 D2.8 mask after removing pixels within two grid cells of the mirrored known-fault catalogue. The GEMSDOE25 and GEMSDOE30 masks are identical in the footprint.</p><a href="evidence/focus_audit.json">See the reproduced pixel audit <span aria-hidden="true">↗</span></a></article>
-      <article class="insight-card"><div class="insight-number">02</div><h3>Plausible, not proven</h3><p>Removing low-value predictions could reduce false-positive mass under distance-weighted Tversky. But it could also remove real nearby faults. We cannot attribute the reported score improvement without the hidden truth and upload receipt.</p><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#performance-metric" target="_blank" rel="noopener noreferrer">Read the official metric <span aria-hidden="true">↗</span></a></article>
-      <article class="insight-card"><div class="insight-number">03</div><h3>Known faults are masked exactly</h3><p>DrivenData staff say only known-fault pixels are masked; nearby predictions can still be penalized, and newly identified faults can lie nearby. A blanket buffer is a hypothesis, not a scoring rule.</p><a href="https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516/4" target="_blank" rel="noopener noreferrer">Read staff clarification <span aria-hidden="true">↗</span></a></article>
-    </div>
-    <p class="soft-note">A concurrent session also recorded a negative H1 holdout and a 100% pre-placement lattice overlap. H1 was provisional: no lane paragraph had been assigned. <a href="executive-summary.html#parallel-holdout">Read the labeled result and caveat ↗</a></p>
-  </section>
+    <section id="holdout-results">
+      <h2>H-GASS3-1 (GSD-HUA) Holdout Ladder (<code>gems57-pooled-hide-v2</code>, <code>n_withheld = 22,893</code>)</h2>
+      <p style="font-size:0.89rem;color:#cbd5e1;">
+        All 48 candidate features (46 static catalogue-free + 2 fold-visible diagnostics) passed single-feature leakage canaries
+        (<code>max(AUC, 1-AUC) = 0.7977 &le; 0.90</code>; static max <code>0.5809</code>; <code>0</code> quarantined).
+        Across 2 controls and 3 preregistered experiments (<code>272.3 s &ll; 7,200 s</code> budget), <code>EXP-3_GSD_HUA_SAR_DECONFOUNDED</code> beat every control and cleared all 43-SHA uniqueness gates:
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Arm</th>
+              <th>Physical Architecture</th>
+              <th>Pooled <code>HOLDOUT-DTI</code> (95% Block CI)</th>
+              <th>42-Dotfield Max 3-px Overlap</th>
+              <th>Gate Disposition</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr class="highlight-row">
+          <td><strong>EXP-3 (PROMOTED ★)</strong><br><code>EXP-3_GSD_HUA_SAR_DECONFOUNDED</code></td>
+          <td>Two-Tower Coupled + PU-SAR Concealment + 6-km Regional Demagnification + Mimic Damping</td>
+          <td><span class="badge b-ok">HOLDOUT-DTI: 0.072018</span><br><span style="font-size:0.74rem;color:var(--muted);">95% CI [0.0574, 0.0876]</span></td>
+          <td>67.45% (UNIQUE)</td>
+          <td>PROMOTE</td>
+        </tr>
+        
+        <tr>
+          <td><strong>EXP-2 (Diagnostic)</strong><br><code>EXP-2_GSD_HUA_FULL_MULTIPHYS</code></td>
+          <td>Full 46-Feature Multi-Physics GSD-HUA HGB + Mimic Damping (unwhitened)</td>
+          <td><span class="badge b-info">HOLDOUT-DTI: 0.070499</span><br><span style="font-size:0.74rem;color:var(--muted);">95% CI [0.0568, 0.0854]</span></td>
+          <td>87.16% (REJECTED DUP)</td>
+          <td>Quarantined (Regional Memorization)</td>
+        </tr>
+        
+        <tr>
+          <td><strong>CTRL-0 (Reference)</strong><br><code>CTRL-0_H19_5_B2</code></td>
+          <td>Fold-Honest H19-5 Geomorphic Skeleton + B=2 Collar (GEMSDOE32 0.2778 Reference)</td>
+          <td><span class="badge b-info">HOLDOUT-DTI: 0.064944</span><br><span style="font-size:0.74rem;color:var(--muted);">95% CI [0.0558, 0.0745]</span></td>
+          <td>100% H19-5 Ref</td>
+          <td>Baseline Control</td>
+        </tr>
+        
+        <tr>
+          <td><strong>EXP-1 (Subsurface)</strong><br><code>EXP-1_GSD_HUA_PURE_SUBSURF</code></td>
+          <td>36-Feature Pure Subsurface + Basement-Throw + True Mag Tilt + Geothermal (Zero DEM/Slope/LiDAR)</td>
+          <td><span class="badge b-info">HOLDOUT-DTI: 0.051683</span><br><span style="font-size:0.74rem;color:var(--muted);">95% CI [0.0372, 0.0655]</span></td>
+          <td>80.80% (REJECTED DUP)</td>
+          <td>Subsurface Tower Input</td>
+        </tr>
+        
+        <tr>
+          <td><strong>CTRL-1 (Reference)</strong><br><code>CTRL-1_19BAND_HGB</code></td>
+          <td>Raw 19 Competition Bands HistGradientBoosting + 3-px Tile-CELF</td>
+          <td><span class="badge b-info">HOLDOUT-DTI: 0.051383</span><br><span style="font-size:0.74rem;color:var(--muted);">95% CI [0.0397, 0.0630]</span></td>
+          <td>Baseline</td>
+          <td>Baseline Control</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+      <div class="fig-box">
+        <img src="docs/assets/fig2_gsd_hua_holdout_ladder.png" alt="GSD-HUA Holdout Ladder">
+      </div>
+    </section>
 
-  <section class="deep-section" id="gates"><div class="shell deep-grid"><div><p class="section-kicker section-kicker-light">03 / RELEASE GATES</p><h2>A format pass is<br>not a green light.</h2><p>We protect the weekly submission budget by keeping evidence, discovery and permission separate.</p><a class="button button-outline" href="executive-summary.html#release-gates">Understand the gates <span aria-hidden="true">→</span></a></div><div class="gate-list">
-    <div><span class="gate-num">01</span><span><strong>Assigned lane &amp; inputs</strong><small>No method paragraph or reusable prepared feature cache was supplied.</small></span><b>BLOCKED</b></div>
-    <div><span class="gate-num">02</span><span><strong>Leakage-safe holdout</strong><small>No candidate or matched holdout result was produced in this session.</small></span><b>NOT RUN</b></div>
-    <div><span class="gate-num">03</span><span><strong>Literal registry uniqueness</strong><small>The standard dot budget is mathematically blocked by a registered lattice.</small></span><b>STOP</b></div>
-    <div><span class="gate-num">04</span><span><strong>Exact bytes &amp; separate selector</strong><small>Validate the saved TIFF, then independently check the current quota.</small></span><b>NOT RUN</b></div>
-  </div></div></section>
+    <section id="maps">
+      <h2>Nevada Study Area Continuous Discovery Surface &amp; Emitted 37,654-Dot GeoTIFF</h2>
+      <div class="fig-box">
+        <img src="docs/assets/fig3_nevada_gsd_hua_map.png" alt="Nevada GSD-HUA Map">
+      </div>
+      <div class="fig-box">
+        <img src="docs/assets/fig1_nine_sites_algebra.png" alt="Nine-Site Algebra and Cross-Site Comparison">
+      </div>
+    </section>
+  </main>
 
-  <section class="shell section research-section" id="research">
-    <div class="section-top"><div><p class="section-kicker">04 / NEXT RESEARCH</p><h2>Start with a testable mechanism.</h2><p class="section-intro">Four ranked hypotheses are recorded before implementation. They are proposals—not discoveries, validated lanes or score forecasts.</p></div><a class="inline-action" href="research.html">All four hypotheses <span aria-hidden="true">↗</span></a></div>
-    <div class="hypothesis"><div class="hypothesis-index"><span>FIRST TO CONSIDER</span><strong>01</strong></div><div><h3>Opposing-flank potential-field profiles</h3><p>Test sign-sensitive magnetic and gravity flank profiles, with depth corroboration, for buried offsets where a surface scarp may be absent. Dikes, lithologic contacts and magnetic remanence are named non-fault mimics.</p><div class="tags"><span>PROPOSED ONLY</span><span>MEDIUM COST</span><span>SHARED CACHE REQUIRED</span></div></div></div>
-  </section>
-
-  <section class="shell section source-section" id="sources"><div class="section-top"><div><p class="section-kicker">05 / TRACEABLE SOURCES</p><h2>Follow the evidence.</h2><p class="section-intro">Official source material and reproducible local checks, with uncertainty kept visible.</p></div></div>
-    <div class="source-grid"><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/" target="_blank" rel="noopener noreferrer"><span class="source-icon">↗</span><strong>Problem &amp; metric</strong><small>DrivenData · format and scoring</small></a><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf" target="_blank" rel="noopener noreferrer"><span class="source-icon">↗</span><strong>Official prize rules</strong><small>NLR · eligibility and disclosure</small></a><a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and" target="_blank" rel="noopener noreferrer"><span class="source-icon">↗</span><strong>GeoDAWN data</strong><small>USGS · magnetic and radiometric surveys</small></a><a href="https://gdr.openei.org/submissions/1391" target="_blank" rel="noopener noreferrer"><span class="source-icon">↗</span><strong>INGENIOUS compilation</strong><small>GDR · regional datasets and license</small></a></div>
-    <div class="freshness"><div><span class="fresh-dot" aria-hidden="true"></span><strong>Source revision watch</strong><p id="freshness-text" role="status" aria-live="polite">Checking public repository revisions…</p></div><button type="button" id="refresh-sources">Check again <span aria-hidden="true">↻</span></button></div>
-    <p class="source-caveat">Revision checks compare public GitHub main refs only. They do not refresh the raster inventory or leaderboard and cannot establish submission readiness. The <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/" target="_blank" rel="noopener noreferrer">official public leaderboard</a> was observed at <strong>0.4544</strong> on 27 October 2026 UTC; that public observation may have changed and is not a team receipt.</p>
-  </section>
-</main>
-<footer><div class="shell footer-inner"><div><strong>GEMS FIELD NOTES</strong><p>Evidence before optimism. Results before claims.</p></div><div><a href="executive-summary.html">Submission guide</a><a href="research/REVIEW.md">Audit &amp; limitations</a><a href="evidence/run_card.json">Run card</a></div><p>Independent research dashboard · Not affiliated with DrivenData or DOE.</p></div></footer>
+  <script>
+    const SUB_NOTE = "GEMSDOESASS3 gsdhua3-sar-deconf (37654 dots, B=2, all-finite [0,1]); HOLDOUT-DTI=0.0720 (gems57-v2)";
+    function copyNote() {
+      navigator.clipboard.writeText(SUB_NOTE).then(() => {
+        const el = document.getElementById('sub-note-text');
+        const orig = el.textContent;
+        el.textContent = 'COPIED TO CLIPBOARD: ' + SUB_NOTE;
+        setTimeout(() => { el.textContent = orig; }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>

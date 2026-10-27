@@ -1,0 +1,31 @@
+name: Automated GEMSDOESASS3 Gate & Submission Inspector
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  validate-submission-and-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install geospatial & test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy scikit-learn rasterio pytest
+
+      - name: Run zero-human-intervention GeoTIFF & Run Card gate inspector
+        run: python scripts/verify_all_gates.py
+
+      - name: Run pytest invariant suite
+        run: pytest -v

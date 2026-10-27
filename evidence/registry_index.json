@@ -1,0 +1,354 @@
+{
+  "schema_version": 1,
+  "complete_accessible_scan": true,
+  "errors": [],
+  "rasters": [
+    {
+      "sha256": "b5ca6f1755af059e17f5edf0940fd7e945d43a1359e103a4789eae33c536ad41",
+      "repo_first": "buffedlizard55-lab/GEMSDOE24",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE24_gvc1_scored__gems24-gvc1-negative-geothermal-lineament-submod-20261025-abe8e51c719d-zeros.tif",
+      "sources": [
+        "GEMSDOE24_gvc1_scored:gems24-gvc1-negative-geothermal-lineament-submod-20261025-abe8e51c719d-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "86516533fb525ebce792152ae4ed852e88ae4feda0bd596710c7319a238b8071",
+      "repo_first": "buffedlizard55-lab/GEMSDOE24",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE24_s3dep1_latest__gems24-s3dep1-negative-10m-monoclinal-20261026-464fa34b4091-zeros.tif",
+      "sources": [
+        "GEMSDOE24_s3dep1_latest:gems24-s3dep1-negative-10m-monoclinal-20261026-464fa34b4091-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "9df52a41c34d4f508b57128c1bc6c2dd716c6149d22dd8717137baa463ed0336",
+      "repo_first": "buffedlizard55-lab/GEMSDOE24",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE24_tmcg_latest__gems24-tmcg-b-decoupled-basin-20261027T113937Z-6f8d042d5ee4-zeros.tif",
+      "sources": [
+        "GEMSDOE24_tmcg_latest:gems24-tmcg-b-decoupled-basin-20261027T113937Z-6f8d042d5ee4-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "9e0200dc3b1597c7cfc94b1a39938da3e7e61cac52f89a1249992eaccf23b9ed",
+      "repo_first": "buffedlizard55-lab/GEMSDOE25",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE25_h74_latest__gems25-h74-rmps-subsurf-catfree-b2-37654-20261026-3751606e1ce5-zeros.tif",
+      "sources": [
+        "GEMSDOE25_h74_latest:gems25-h74-rmps-subsurf-catfree-b2-37654-20261026-3751606e1ce5-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "3e78737f0da8dd2ca66cc6caac0ce8eeefcd6715707f8d1bd3091845cd9bcc30",
+      "repo_first": "buffedlizard55-lab/GEMSDOE25",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE25_hist_best__gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+      "sources": [
+        "GEMSDOE25_hist_best:gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "7503f4d498694c0107e0efad92cd06613b56d6fe402712532c1805e778166c1a",
+      "repo_first": "buffedlizard55-lab/GEMSDOE25",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE25_mgd_scored__gems25-h66-mgd-flank-sapd3-0-k3p5-20261025-da617550a0e9-zeros.tif",
+      "sources": [
+        "GEMSDOE25_mgd_scored:gems25-h66-mgd-flank-sapd3-0-k3p5-20261025-da617550a0e9-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "8585c5e870f197f84fda5bac7f22047d646fb73d455eb8b1129486c79bb976cf",
+      "repo_first": "buffedlizard55-lab/GEMSDOE27",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE27_h29_scored__gems27-h29-hydrothermal-piedmont-celf-20261025-511898747886-allfinite.tif",
+      "sources": [
+        "GEMSDOE27_h29_scored:gems27-h29-hydrothermal-piedmont-celf-20261025-511898747886-allfinite.tif"
+      ]
+    },
+    {
+      "sha256": "2c002b02792419864bd3b29a218e543cb41e3f07b3b57c29ef35c6e39e184bfe",
+      "repo_first": "buffedlizard55-lab/GEMSDOE27",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE27_h31_latest__gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-allfinite.tif",
+      "sources": [
+        "GEMSDOE27_h31_latest:gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-allfinite.tif"
+      ]
+    },
+    {
+      "sha256": "a9bf76b57453a5b3af74c8eef837df53c29a0931162aa540b8763220b36ba3bb",
+      "repo_first": "buffedlizard55-lab/GEMSDOE27",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE27_hist_best__gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+      "sources": [
+        "GEMSDOE27_hist_best:gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif"
+      ]
+    },
+    {
+      "sha256": "26748e4b4721277b093c776f7ca72920023d0ee6e9514ee38e677c8010f4068e",
+      "repo_first": "buffedlizard55-lab/GEMSDOE28",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE28_h32_1__gems28-h32-1-prethin-tip-euler-d2-8-20261003-31e35eee884e-allfinite.tif",
+      "sources": [
+        "GEMSDOE28_h32_1:gems28-h32-1-prethin-tip-euler-d2-8-20261003-31e35eee884e-allfinite.tif"
+      ]
+    },
+    {
+      "sha256": "529d9e1bd80b54957ca16398e47bfc51b1e32eaee8fc89d6dfbddbd7036c5ffc",
+      "repo_first": "buffedlizard55-lab/GEMSDOE28",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE28_h38_1__gems28-h38-1-hf-euler-r30-r1-20261003-56a9f473edc7-allfinite.tif",
+      "sources": [
+        "GEMSDOE28_h38_1:gems28-h38-1-hf-euler-r30-r1-20261003-56a9f473edc7-allfinite.tif"
+      ]
+    },
+    {
+      "sha256": "7c74270ad48fa0b865163853046a6d3815967c5bf37bbda5b74ca7fa22583a32",
+      "repo_first": "buffedlizard55-lab/GEMSDOE28",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE28_hist_best_h36_1__gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+      "sources": [
+        "GEMSDOE28_hist_best_h36_1:gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif"
+      ]
+    },
+    {
+      "sha256": "77934be607d48a4daec5b046009cdabf61d3fdee210aadc75be82ac70f3beb2e",
+      "repo_first": "buffedlizard55-lab/GEMSDOE28",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE28_s22_latest__gems28-s22-ctxhgb-20261026-e23dabcec6e2-allfinite.tif",
+      "sources": [
+        "GEMSDOE28_s22_latest:gems28-s22-ctxhgb-20261026-e23dabcec6e2-allfinite.tif"
+      ]
+    },
+    {
+      "sha256": "0fbf3b4a47c2229b68de59e174617f3b47973613ff57950712d25b9166c1d900",
+      "repo_first": "buffedlizard55-lab/GEMSDOE30",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE30_csr1_latest__gems30-CSR1-44090-20261026-502fb5948335-zeros.tif",
+      "sources": [
+        "GEMSDOE30_csr1_latest:gems30-CSR1-44090-20261026-502fb5948335-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "8cf893ead5667df21d3288a9968c35fd5385c425b029d82ee71d311715b129fd",
+      "repo_first": "buffedlizard55-lab/GEMSDOE30",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE30_hist_best__gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+      "sources": [
+        "GEMSDOE30_hist_best:gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif"
+      ]
+    },
+    {
+      "sha256": "22850984a68c393f60c6cc9aeafd8d74fd8a3479654bdfcfd3626a4b99ff0381",
+      "repo_first": "buffedlizard55-lab/GEMSDOE30",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE30_msdb1_scored__gems30-MSDB1-edge44090-20261025-e7856ec3f14a.tif",
+      "sources": [
+        "GEMSDOE30_msdb1_scored:gems30-MSDB1-edge44090-20261025-e7856ec3f14a.tif"
+      ]
+    },
+    {
+      "sha256": "41f1e63a803950db1f621321d5a26c5d3fbbfcc3999923035f0de8a253f7901e",
+      "repo_first": "buffedlizard55-lab/GEMSDOE31",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE31_h31y_latest__gemsdoe31-h31y-regime-mosaic-37654-20261026-66162f1f-zeros.tif",
+      "sources": [
+        "GEMSDOE31_h31y_latest:gemsdoe31-h31y-regime-mosaic-37654-20261026-66162f1f-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "acd853936e5a7170b207f23411b1844caa0e7cfdfc303c600e520ccfe75159e6",
+      "repo_first": "buffedlizard55-lab/GEMSDOE31",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE31_hist_best__gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif",
+      "sources": [
+        "GEMSDOE31_hist_best:gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif"
+      ]
+    },
+    {
+      "sha256": "857dd662430c0130c46f920666d70dae5df6148951ad76d42d31a8d540c32972",
+      "repo_first": "buffedlizard55-lab/GEMSDOE31",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE31_xfcoh31__gems31-xfcoh31-xfield-coherence-37654-20261026-zeros.tif",
+      "sources": [
+        "GEMSDOE31_xfcoh31:gems31-xfcoh31-xfield-coherence-37654-20261026-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "93c21c4cc18735aaeea44626b0697d72b96f9048ab817d9f0c5fb27381ef5f0f",
+      "repo_first": "buffedlizard55-lab/GEMSDOE32",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE32_arena49_pcg__gemsdoe32-arena49-pcg-dualconcord-37654-20261026T220056Z-54e97629-zeros.tif",
+      "sources": [
+        "GEMSDOE32_arena49_pcg:gemsdoe32-arena49-pcg-dualconcord-37654-20261026T220056Z-54e97629-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "d82d63ab9c935b4eb6d8886129a7820da4642d20c3304c57364c55380438f27a",
+      "repo_first": "buffedlizard55-lab/GEMSDOE32",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE32_h47_ldgi_latest__gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif",
+      "sources": [
+        "GEMSDOE32_h47_ldgi_latest:gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "c534effe023f2876b08239384d075be313d489a8dc3bf8dbf22f7d6509872112",
+      "repo_first": "buffedlizard55-lab/GEMSDOE32",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE32_h50_tmspi__gemsdoe32-h50-tmspi-dualconcord-37654-20261026T214025Z-f0e385b9-zeros.tif",
+      "sources": [
+        "GEMSDOE32_h50_tmspi:gemsdoe32-h50-tmspi-dualconcord-37654-20261026T214025Z-f0e385b9-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+      "repo_first": "buffedlizard55-lab/GEMSDOE32",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE32_hist_best_02778__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+      "sources": [
+        "GEMSDOE32_hist_best_02778:gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "76f9e157d01bb9bec2d98c3c5941b6114e06e0f439272d5f140af6e3584c8825",
+      "repo_first": "buffedlizard55-lab/GEMSDOE33",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE33_a33_r3_llc__gemsdoe33-a33-r3-llc-37654-20261026-7f91f9f3ced9-zeros.tif",
+      "sources": [
+        "GEMSDOE33_a33_r3_llc:gemsdoe33-a33-r3-llc-37654-20261026-7f91f9f3ced9-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "be5013aad085c23a9317959f85c7d494e28eac5875f61addce8ec81b5bb51de3",
+      "repo_first": "buffedlizard55-lab/GEMSDOE33",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE33_fsml2_latest__gemsdoe33-fsml2-cc-37654-20261026-6fd4410bbaee-zeros.tif",
+      "sources": [
+        "GEMSDOE33_fsml2_latest:gemsdoe33-fsml2-cc-37654-20261026-6fd4410bbaee-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "87f857d505e23247e991ccfab2cbe9f49a04df4f9c8028dce7ea261554690757",
+      "repo_first": "buffedlizard55-lab/GEMSDOE33",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE33_hist_best__GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
+      "sources": [
+        "GEMSDOE33_hist_best:GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif"
+      ]
+    },
+    {
+      "sha256": "2bb4513d6307e2394d5de7e7e7649e28eff067b602b805a0215e82aa5ff89907",
+      "repo_first": "buffedlizard55-lab/GEMSDOE36",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE36_ctrb__gemsdoe36-h36-ctrb-submod-36800-20261025T000000Z-a1d85443-zeros.tif",
+      "sources": [
+        "GEMSDOE36_ctrb:gemsdoe36-h36-ctrb-submod-36800-20261025T000000Z-a1d85443-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "e15891020b9c57056ac7fa874a5e506fbd6ed9314a4ea8e73af0753887a3708a",
+      "repo_first": "buffedlizard55-lab/GEMSDOE36",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE36_hist_best_02750__gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif",
+      "sources": [
+        "GEMSDOE36_hist_best_02750:gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "86fc8243ad573bcdbfac8b432daf0ec5b6800b991b2c3278706358be7eb9922d",
+      "repo_first": "buffedlizard55-lab/GEMSDOE36",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOE36_kpl36_latest__gemsdoe36-kpl36-exp3-20261026-fc869911e88c-zeros.tif",
+      "sources": [
+        "GEMSDOE36_kpl36_latest:gemsdoe36-kpl36-exp3-20261026-fc869911e88c-zeros.tif"
+      ]
+    },
+    {
+      "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+      "sources": [
+        "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
+      ]
+    },
+    {
+      "sha256": "052688eafbc7a55d90caab72252a50304fe5caa8ecf973f8e791b4ae910f0792",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/8GEMSDOE_Hedge-v2_submission.tif",
+      "sources": [
+        "8GEMSDOE_Hedge-v2_submission.tif"
+      ]
+    },
+    {
+      "sha256": "1381e784fb8b8340beffd0e735ac9eea89ad35d1a807f8a9bab5506e3fc8275e",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+      "sources": [
+        "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif"
+      ]
+    },
+    {
+      "sha256": "7637b72d4c6c3e10226bf46bd72a20272d62ccbe29743062632d10b158b49c58",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+      "sources": [
+        "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif"
+      ]
+    },
+    {
+      "sha256": "055309694ed499ca3d87e76b3f5e81c292aef6e39c418d33ff5a817aa1309bea",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+      "sources": [
+        "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif"
+      ]
+    },
+    {
+      "sha256": "89109a3bd2cd3b12e7a0f388113c519843acfc9c4f46825affefc3e63dd99b22",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+      "sources": [
+        "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif"
+      ]
+    },
+    {
+      "sha256": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif",
+      "sources": [
+        "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif"
+      ]
+    },
+    {
+      "sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+      "sources": [
+        "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+        "GEMSDOE24_hist_best:gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif"
+      ]
+    },
+    {
+      "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+      "sources": [
+        "gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+        "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif"
+      ]
+    },
+    {
+      "sha256": "33003374335d84bf885f2d8f5e9dd4c57044c8ec58fa6a0d7fa581e8bc41c11d",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+      "sources": [
+        "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif"
+      ]
+    },
+    {
+      "sha256": "2fc94a38d77f74d4f4ed1a97a83e7bb71a1ceea090515ec641e6681cc47c44c8",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+      "sources": [
+        "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+        "GEMSDOE28_h27_4_solo:gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif"
+      ]
+    },
+    {
+      "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gemsdoe-ens12-adopted-7f00890a.tif",
+      "sources": [
+        "gemsdoe-ens12-adopted-7f00890a.tif"
+      ]
+    },
+    {
+      "sha256": "2314b59920bfeeaf6a592d4868b25eca62212825620f9945723c2f6d0a2e5b22",
+      "repo_first": "buffedlizard55-lab/historical-scored",
+      "cache_file": ".cache/gems_data/scored/gemsdoe9-PLACEHOLDER-2314b599.tif",
+      "sources": [
+        "gemsdoe9-PLACEHOLDER-2314b599.tif"
+      ]
+    },
+    {
+      "sha256": "50b1350dd92cde3af8bd85f13f39f7feb8c82416f095df281cd8c5291dbb1274",
+      "repo_first": "sassnarep3-star/GEMSDOESASS1",
+      "cache_file": ".cache/gems_data/focus_registry/GEMSDOESASS1_latest__gemsdoesass1-hybrid-blindpiedmont-dispersed-37654-20261027T113459Z-cbceb1d0-zeros.tif",
+      "sources": [
+        "GEMSDOESASS1_latest:gemsdoesass1-hybrid-blindpiedmont-dispersed-37654-20261027T113459Z-cbceb1d0-zeros.tif"
+      ]
+    }
+  ]
+}

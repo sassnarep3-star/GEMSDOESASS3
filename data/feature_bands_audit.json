@@ -1,0 +1,192 @@
+[
+  {
+    "band": 1,
+    "description": "mag_anom - Magnetic anomaly - deviation from expected Earth's magnetic field",
+    "sentinel_in_footprint": 3061,
+    "min": -1052.0047607421875,
+    "p01": -288.56201538085935,
+    "p50": -57.68793296813965,
+    "p99": 311.91366790771315,
+    "max": 2109.447509765625
+  },
+  {
+    "band": 2,
+    "description": "rtp - Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects",
+    "sentinel_in_footprint": 3061,
+    "min": -2786.299560546875,
+    "p01": -458.7529602050781,
+    "p50": -137.22166442871094,
+    "p99": 395.7310452270498,
+    "max": 4508.76025390625
+  },
+  {
+    "band": 3,
+    "description": "tmi_hg - Total magnetic intensity horizontal gradient - rate of change in horizontal direction",
+    "sentinel_in_footprint": 3061,
+    "min": 0.004909869749099016,
+    "p01": 0.6607922160625458,
+    "p50": 13.155465126037598,
+    "p99": 189.22795288085933,
+    "max": 2200.4365234375
+  },
+  {
+    "band": 4,
+    "description": "geod_2ndinv - Geodetic second invariant - measure of strain rate tensor magnitude",
+    "sentinel_in_footprint": 3061,
+    "min": 1.2000000476837158,
+    "p01": 1.7517664992809296,
+    "p50": 19.90778923034668,
+    "p99": 57.77365165710446,
+    "max": 87.45342254638672
+  },
+  {
+    "band": 5,
+    "description": "iso_grav_anom_slope - Isostatic gravity anomaly slope - gradient of gravity after isostatic correction",
+    "sentinel_in_footprint": 3061,
+    "min": 0.0013825353235006332,
+    "p01": 0.015869836211204528,
+    "p50": 0.10218460857868195,
+    "p99": 0.36784943819045957,
+    "max": 0.6517290472984314
+  },
+  {
+    "band": 6,
+    "description": "tc - Tilt angle or total curvature - magnetic field derivative for edge detection",
+    "sentinel_in_footprint": 3073,
+    "min": 2.9534237384796143,
+    "p01": 7.722299365997313,
+    "p50": 18.48169994354248,
+    "p99": 29.100453147888167,
+    "max": 88.56654357910156
+  },
+  {
+    "band": 7,
+    "description": "geod_shearrate - Geodetic shear rate - rate of angular deformation from GPS/InSAR",
+    "sentinel_in_footprint": 3061,
+    "min": 0.0,
+    "p01": 0.0,
+    "p50": 9.699999809265137,
+    "p99": 38.5,
+    "max": 54.400001525878906
+  },
+  {
+    "band": 8,
+    "description": "geod_dilaterate - Geodetic dilatation rate - rate of volumetric strain (expansion/contraction)",
+    "sentinel_in_footprint": 3061,
+    "min": -16.5,
+    "p01": -9.5,
+    "p50": 5.5,
+    "p99": 27.0,
+    "max": 34.52448272705078
+  },
+  {
+    "band": 9,
+    "description": "tmi_vg - Total magnetic intensity vertical gradient - rate of change in vertical direction",
+    "sentinel_in_footprint": 3061,
+    "min": -7.650597095489502,
+    "p01": -0.6922200167179108,
+    "p50": -0.008997071534395218,
+    "p99": 0.79353726863861,
+    "max": 20.510923385620117
+  },
+  {
+    "band": 10,
+    "description": "deq_n100a15 - Distance to earthquake (n=100km radius, a=15\u00b0 azimuth parameters)",
+    "sentinel_in_footprint": 3061,
+    "min": 0.0,
+    "p01": 118.30000305175781,
+    "p50": 622.7999877929688,
+    "p99": 50237.19921875,
+    "max": 4962515.0
+  },
+  {
+    "band": 11,
+    "description": "iso_grav_anom_vg - Isostatic gravity anomaly vertical gradient - vertical rate of change",
+    "sentinel_in_footprint": 3061,
+    "min": -18.164581298828125,
+    "p01": -4.330517201423645,
+    "p50": -0.07213491946458817,
+    "p99": 4.242436604499806,
+    "max": 12.578903198242188
+  },
+  {
+    "band": 12,
+    "description": "det_elev - Detrended elevation - topography with regional trends removed",
+    "sentinel_in_footprint": 3061,
+    "min": -589.9837036132812,
+    "p01": -466.82999725341796,
+    "p50": -75.57621002197266,
+    "p99": 707.4249407958962,
+    "max": 1469.9127197265625
+  },
+  {
+    "band": 13,
+    "description": "iso_grav_anom - Isostatic gravity anomaly - gravity after compensating for topographic mass",
+    "sentinel_in_footprint": 3061,
+    "min": -45.75756072998047,
+    "p01": -32.765608367919924,
+    "p50": -7.26103401184082,
+    "p99": 12.895497713088968,
+    "max": 24.232954025268555
+  },
+  {
+    "band": 14,
+    "description": "tmi - Total magnetic intensity - total strength of magnetic field",
+    "sentinel_in_footprint": 3061,
+    "min": -2178.27783203125,
+    "p01": -429.78480438232424,
+    "p50": -124.8157730102539,
+    "p99": 354.6851562499992,
+    "max": 4506.14111328125
+  },
+  {
+    "band": 15,
+    "description": "depth_to_base_surf - Depth to basement surface - thickness of sedimentary cover",
+    "sentinel_in_footprint": 3061,
+    "min": -14.837310791015625,
+    "p01": 1.2142881524562836,
+    "p50": 316.3645324707031,
+    "p99": 3416.0773437499984,
+    "max": 7135.306640625
+  },
+  {
+    "band": 16,
+    "description": "ieq_n100a15 - Earthquake intensity or density (n=100km radius, a=15\u00b0 parameters)",
+    "sentinel_in_footprint": 3061,
+    "min": 236.8000030517578,
+    "p01": 263.8999938964844,
+    "p50": 755.7000122070312,
+    "p99": 5082.493603515623,
+    "max": 7869.5
+  },
+  {
+    "band": 17,
+    "description": "cond_surf - Conductivity surface - electrical conductivity of subsurface",
+    "sentinel_in_footprint": 3061,
+    "min": 0.1937037855386734,
+    "p01": 1.1678259372711182,
+    "p50": 2.885897636413574,
+    "p99": 4.488641319274901,
+    "max": 4.969292640686035
+  },
+  {
+    "band": 18,
+    "description": "iso_grav_anom_hg - Isostatic gravity anomaly horizontal gradient - horizontal rate of change",
+    "sentinel_in_footprint": 3061,
+    "min": -15.441243171691895,
+    "p01": -5.133355989456176,
+    "p50": 0.037620771676301956,
+    "p99": 5.404924478530874,
+    "max": 12.856057167053223
+  },
+  {
+    "band": 19,
+    "description": "det_elev_slope - Detrended elevation slope - gradient of elevation after detrending",
+    "sentinel_in_footprint": 3061,
+    "min": 0.001103136339224875,
+    "p01": 0.0700527185201645,
+    "p50": 3.7492629289627075,
+    "p99": 32.72273990631099,
+    "max": 62.64591598510742
+  }
+]
