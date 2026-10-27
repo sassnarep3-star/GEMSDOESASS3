@@ -1,46 +1,42 @@
-# GEMSDOESASS3
+# GEMSDOESASS3 — GEMS fault-mapping research
 
-> **Current decision — 2026-10-27:** **NO TIFF was generated; DO NOT DOWNLOAD OR SUBMIT a file from this checkout.** At the start of this review, the repository contained only this README. There are still no competition rasters, labels, cached feature stack, evaluator, writer, registry, validator, or assigned method lane. Inventing a TIFF or a score would be unsafe and scientifically indefensible.
+> **Current release decision: NO-GO.** This checkout contains no competition rasters, scored submission rasters, cached feature stack, evaluator, or writer. No new GeoTIFF has been generated or validated. **There is currently no file here that is approved to download or submit.** A valid-format file alone would not establish scientific quality or permission to spend a competition slot.
 
-## Project charter (read before every project session)
+## Start here every session
 
-This project aims to discover faults relevant to geothermal resources in the DOE GEMS challenge and produce an auditable, technically valid GeoTIFF only when evidence supports promotion. Optimize the probability of a defensible result; own the outcome and report failures as useful evidence. Do not treat a model projection or a locally reported score as a score receipt.
+Before changing code or proposing a submission, read the [Executive Summary and Research Gate](docs/EXECUTIVE_SUMMARY.md) and the latest [dated repository review/run card](docs/review-2026-10-27.md). The executive summary records the standing mission, evidence limits, best results reported for the requested sites, ranked research hypotheses, official sources, and machine-verification gates. The dated review records this branch's inventory, cross-site audit, blockers, and negative run card. Both are explicit about unverified claims.
 
-### Non-negotiable protocol
+## Standing project charter
 
-1. **Stay in the explicitly assigned method lane.** Before placement and again on final predictions, compare each raster's rank-correlation and 3-pixel dot overlap against the complete registry. Stop and record a negative result if `|Spearman| > 0.90` or more than `70%` of dots fall within `3 px` of any one registered raster. Do not evade a duplicate gate by moving dots.
-2. **Reuse shared tools.** Use the template's cached features and shared hide-and-recover evaluator and submission writer. Hold out whole fault segments with a buffer; derive catalogue features only from visible faults; mask visible labels pixel-exactly; evaluate pooled distance-weighted Tversky (alpha `0.2`, beta `0.8`, triangular kernel support `300 m`). Fix shared tools in the shared template, not in a private fork.
-3. **Label every result by evidence class.** Distinguish `HOLDOUT-DTI` (evaluator version, withheld-positive count, and 95% CI), `ORGANIZER-CONFIRMED` (only when copied from a submission-page receipt), owner-reported/unverified claims, and public-leaderboard observations. A projection is never a score.
-4. **Run feature-alone leakage canaries.** Test each feature on the holdout before trusting it; AUC above `0.90` is a leakage alarm until proven otherwise.
-5. **Fail closed on file quality.** Reopen the exact output bytes and validate one-band `float32`, EPSG:32611, 100 m resolution, exact sample-template bounds/shape/transform, footprint handling, and finite prediction values in `[0,1]`. A local format pass is not proof of organizer acceptance or scientific value.
-6. **Use a machine-readable run card.** Record hypothesis, mechanism, a named non-fault mimic, holdout result and CI, registry correlation/overlap, SHA-256, validator result, filename, submission note (at most 140 characters), and `promote` or `negative` verdict. A negative result is a deliverable.
-7. **Budget:** at most 3 experiments or 2 hours per lane. Do not select a competition slot from this research step; slot selection is a separate decision under the live weekly cap.
-8. **No copying submissions.** A new filename or byte encoding does not make a copied/near-duplicate raster unique. Never call a TIF submission-ready unless all scientific, uniqueness, format, evidence, and separate selector gates pass.
+The objective is to develop an auditable, scientifically defensible method for identifying previously unmapped geothermal-region faults for the DOE GEMS competition. Prioritize expected competition value (“maximize P(Win)”) and own outcomes end-to-end. Do not confuse a reported leaderboard score, an internal estimate, a holdout score, and an organizer receipt.
 
-### Submission gate shown first
+### Non-negotiable research and submission protocol
 
-**Available competition-ready download: NONE.** No TIF currently exists in this repository, so there is no file, estimated score, uniqueness result, or upload permission to offer. Do not rename/download a historical site artifact as a new submission. See [`docs/EXECUTIVE_SUMMARY.md`](docs/EXECUTIVE_SUMMARY.md) for the nine-site review and blockers.
+1. **One pre-registered method lane per run.** Check its raster rank-correlation against every available registry raster and the fraction of predicted dots within three pixels of each registry raster, both before placement and after final placement. Correlation above 0.90 or overlap above 70% means duplicate/drift: record it and stop.
+2. **Reuse shared tools and cached features.** Use the designated template's cached feature stack, `evaluate_holdout.py`, and `submission_writer.py`; do not maintain a private fork. Hold out complete fault segments with a buffer, derive catalogue-based features only from visible faults, mask visible faults pixel-exactly, and compute pooled distance-weighted Tversky (alpha 0.2, beta 0.8; 300 m triangular kernel). Fix a shared-tool defect in its source template and report it. This checkout currently lacks those tools and data; do not silently replace them with an unverified implementation.
+3. **Label results and provenance.** A score is either `HOLDOUT-DTI` (evaluator/version, withheld positives, 95% CI) or `ORGANIZER-CONFIRMED` (copied from a submission receipt). Anything else must be explicitly labeled unverified and must not be described as a score estimate or confirmed result.
+4. **Leakage canary.** Test every feature independently on the spatial holdout. AUC above 0.90 is presumptive leakage until resolved.
+5. **Run card.** End experiments with JSON containing hypothesis, mechanism, a named non-fault mimic, holdout DTI and CI, registry correlation/overlap, raster SHA-256, validator results (footprint NaN check, range, CRS/shape/transform), submission filename, a note no longer than 140 characters, and `promote` or `negative` verdict. A negative result is a valid deliverable.
+6. **Hard budget and selector separation.** Stop at three experiments or two hours, whichever comes first. Research does not choose or consume a real submission slot; a separate selector must apply the weekly cap and approval gates.
+7. **Never fabricate or copy a submission.** Only publish a generated TIF when its bytes, provenance, uniqueness, and format have been verified. If evidence is missing, say so and fail closed.
 
-### Project brief to carry forward
+## Submission eligibility
 
-- Review the GEMS challenge rules, problem description, scoring, official data sources, and reference solution. Keep an auditable source inventory and an up-to-date feed of verified project evidence.
-- Focus the initial comparison on GEMSDOE24, GEMSDOE25, GEMSDOE27, GEMSDOE28, GEMSDOE30, GEMSDOE31, GEMSDOE32, GEMSDOE33, and GEMSDOE36. Identify the best **reported** historical result at each site, but do not confuse it with an organizer receipt, a holdout result, or an authorized submission.
-- Before implementing a new idea, rank 3–5 geological hypotheses with named input layers, physical signature, why it might identify catalogue-missing faults, differences from prior methods, expected direction of value (not a numerical score forecast), cost, data source, and non-fault mimics. Verify novelty against a complete registry; do not claim an idea is untried when the record is incomplete.
-- Validate the top candidate with spatially blocked hide-and-recover before any weekly submission slot. Require an improvement over the frozen, same-evaluator holdout best with a paired uncertainty interval that supports the decision; do not extrapolate a leaderboard score without calibration evidence.
-- Make a valid TIF easy to find only after all gates pass. Provide the unique submission name, a short note, exact download, validator receipt, and click-by-click submission guide. Explain that DrivenData expects a single-band float32 GeoTIFF with predictions in `[0,1]` and matching CRS, resolution, bounds, and grid; format validity alone is not authorization.
-- Use free, public, official data where possible, verify license/coverage/access before proposing a data-dependent experiment, and identify any login, compute, data, or registry blockers honestly. Do not claim autonomous access to private competition data or submission receipts.
-- Keep results and useful scientific knowledge organized for reuse. Cite official sources and flag conflicts, stale values, missing artifacts, and contradictions for review. Do not claim a result is hallucination-free without reproducing the underlying bytes and calculations.
+The organizer's problem description requires a single-layer float32 GeoTIFF on the training grid (UTM zone 11N / EPSG:32611, 100 m, matching bounds), with predictions in [0, 1] and null/NaN outside the study bounds. The competition evaluates distance-weighted Tversky, with alpha 0.2, beta 0.8, and a triangular 300 m distance kernel. A successful writer/validator check is a **format gate only**; it does not mean the result is scientifically good, unique, or approved for upload.
 
-## Verified primary references
+**Current blockers:** this checkout now has a charter, static status page, and executive-summary documentation, but still has no `data/`, source code, test suite, feature cache, template evaluator/writer, registry rasters, or candidate TIFFs. The competition data page is access-controlled; no DrivenData session is available in this environment. Consequently, no genuine holdout score, confidence interval, uniqueness comparison, or competition-ready TIFF can be produced from this checkout. Do not substitute a blank raster or a TIF copied from another site.
 
-- [DrivenData problem description and submission format](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
-- [DrivenData public leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) (dynamic; record access date with any quoted observation)
-- [DrivenData competition data page](https://www.drivendata.org/competitions/306/competition-doe-gems/data/) (login may be required)
-- [DrivenData / DOE GEMS reference solution](https://github.com/drivendataorg/gems-prize-reference-solution)
-- [USGS GeoDAWN data release](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and) · [DOI 10.5066/P93LGLVQ](https://doi.org/10.5066/P93LGLVQ)
-- [INGENIOUS project, Great Basin Center for Geothermal Energy](https://gbcge.org/current-projects/ingenious/)
-- [Challenge rules PDF](https://docs.nlr.gov/docs/fy26osti/96647.pdf)
+## Official references
 
-## Repository state
+- [DrivenData GEMS problem description, datasets, metric, and submission format](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
+- [DrivenData competition overview and rules](https://www.drivendata.org/competitions/306/competition-doe-gems/)
+- [Official public leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) (dynamic; the executive summary records a dated snapshot rather than treating an old value as current)
+- [Organizer reference solution](https://github.com/drivendataorg/gems-prize-reference-solution)
+- [USGS GeoDAWN data release](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and)
+- [USGS 3DEP products and services](https://www.usgs.gov/3d-elevation-program/about-3dep-products-services)
+- [INGENIOUS project](https://gbcge.org/current-projects/ingenious/)
+- [EPSG:32611](https://epsg.io/32611)
 
-The baseline checkout at the start of this review was a single-commit repository containing only this file. This review adds a static homepage and executive/submission guide, but no training, validation, data-download, or TIF-generation system exists. GitHub Pages deployment is not configured or verified here. Do not run training or claim a TIF is ready until the required data, shared template/tooling, and assigned lane are present and inspected. The first next step is to obtain the official competition files through an authorized route, then build/reuse and test a shared pipeline—not to manufacture a placeholder submission.
+## Executive summary / GitHub Pages
+
+Open [`docs/index.html`](docs/index.html) for the clear, public-facing status page and [`docs/EXECUTIVE_SUMMARY.md`](docs/EXECUTIVE_SUMMARY.md) for the full comparison, research hypotheses, caveats, and next steps.

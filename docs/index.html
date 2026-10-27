@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Auditable DOE GEMS fault-mapping research status, historical site comparisons, and submission gates.">
+  <title>GEMS Research | Submission status</title>
+  <style>
+    :root { color-scheme: light; --ink:#182522; --muted:#596863; --line:#dce5df; --paper:#f4f7f4; --white:#fff; --green:#164d3b; --red:#8d2525; --red-bg:#fff0ef; --gold:#785600; --gold-bg:#fff8e7; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    .wrap { width:min(1080px, calc(100% - 36px)); margin:0 auto; }
+    header { background:#102d27; color:#f4fbf6; padding:42px 0 38px; }
+    .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.76rem; font-weight:750; color:#b7d6c4; }
+    h1 { margin:.35rem 0 .5rem; font-size:clamp(2rem,5vw,3.15rem); line-height:1.1; letter-spacing:-.035em; }
+    header p { color:#d0e2d6; max-width:730px; margin:.7rem 0 0; }
+    main { padding:26px 0 60px; }
+    .banner { border:1px solid #e4aaaa; border-left:6px solid var(--red); background:var(--red-bg); border-radius:10px; padding:18px 20px; margin-bottom:20px; }
+    .banner strong { display:block; color:var(--red); font-size:1.1rem; margin-bottom:3px; }
+    .banner p { margin:.3rem 0; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .card { background:var(--white); border:1px solid var(--line); border-radius:12px; padding:20px; box-shadow:0 2px 8px #193e2c0a; }
+    .card h2 { font-size:1.15rem; margin:0 0 9px; }
+    .card p { margin:.45rem 0; color:#34443f; }
+    .metric { font-size:1.65rem; font-weight:780; color:var(--green); letter-spacing:-.03em; }
+    .small { color:var(--muted)!important; font-size:.9rem; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); background:var(--white); border-radius:12px; margin:14px 0 22px; }
+    table { border-collapse:collapse; width:100%; min-width:780px; }
+    th,td { text-align:left; padding:12px 14px; vertical-align:top; border-bottom:1px solid var(--line); }
+    th { background:#eaf1ec; font-size:.83rem; text-transform:uppercase; letter-spacing:.045em; }
+    tr:last-child td { border-bottom:0; }
+    td.score { white-space:nowrap; font-variant-numeric:tabular-nums; font-weight:700; }
+    a { color:#145c47; text-underline-offset:3px; }
+    a:hover { color:#0b392b; }
+    .pill { display:inline-block; padding:3px 9px; border-radius:999px; background:var(--gold-bg); color:var(--gold); font-weight:700; font-size:.78rem; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .button { display:inline-block; padding:9px 14px; border-radius:8px; background:var(--green); color:white; font-weight:700; text-decoration:none; }
+    .button.secondary { background:#e9f1ec; color:var(--green); border:1px solid #cbdcd1; }
+    footer { padding:20px 0 34px; color:var(--muted); font-size:.88rem; }
+    @media(max-width:700px) { .grid { grid-template-columns:1fr; } header { padding:32px 0; } main { padding-top:18px; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">DOE GEMS · Research and audit</div>
+    <h1>Submission status</h1>
+    <p>Evidence-first tracking of reported prior results, scientific hypotheses, and the automated gates required before a GeoTIFF can be called eligible to submit.</p>
+  </div>
+</header>
+<main class="wrap">
+  <section class="banner" role="alert" aria-label="Do not submit status">
+    <strong>NO-GO — no submission file is available or approved.</strong>
+    <p>This checkout has no competition raster data, approved template tools, or registry artifacts. No new TIF has been generated, scored, or tested for uniqueness. Do not upload a historical site artifact as if it were a new candidate.</p>
+  </section>
+
+  <section class="grid" aria-label="Current research status">
+    <article class="card">
+      <h2>Highest result in the supplied site list</h2>
+      <div class="metric">0.2778 · GEMSDOE32</div>
+      <p><code>h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros</code></p>
+      <p class="small">Value transcribed from the request. No submission receipt or raster bytes were available here; it is not independently confirmed. Its score cannot identify the method or explain its performance by itself.</p>
+    </article>
+    <article class="card">
+      <h2>Unique / OK to submit?</h2>
+      <p><span class="pill">NOT VERIFIED</span></p>
+      <p>No registry-raster correlation or dot-overlap comparison was possible. No holdout DTI, confidence interval, leakage canary, or final-byte validator was run.</p>
+      <p><strong>Download:</strong> no TIF in this repo. <strong>Submit:</strong> not approved.</p>
+    </article>
+  </section>
+
+  <h2 id="sites">Highest entries listed for the nine requested sites</h2>
+  <p class="small">All values below are user-supplied historical values, not organizer-confirmed receipts or holdout scores. “Uniqueness” is unknown until raster bytes are compared with the full registry.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Site</th><th>Highest entry quoted</th><th>Value quoted*</th><th>Unique here?</th><th>Download / submit</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://buffedlizard55-lab.github.io/GEMSDOE24/">GEMSDOE24</a></td><td><code>h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan</code></td><td class="score">0.2477</td><td>Unknown</td><td>No approval</td></tr>
+        <tr><td><a href="https://buffedlizard55-lab.github.io/GEMSDOE25/">GEMSDOE25</a></td><td><code>dotted-h19-5-d2-8-20261002-e56ea318af89-nan</code></td><td class="score">0.2600</td><td>Unknown</td><td>No approval</td></tr>
+        <tr><td><a href="https://buffedlizard55-lab.github.io/GEMSDOE27/">GEMSDOE27</a></td><td><code>topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan</code></td><td class="score">0.2449</td><td>Unknown</td><td>No approval</td></tr>
+        <tr><td><a href="https://buffedlizard55-lab.github.io/GEMSDOE28/">GEMSDOE28</a></td><td><code>h36-1-rung30-blind-r1-20261003-b531dae0a36f-nan</code></td><td class="score">0.2710</td><td>Unknown</td><td>No approval</td></tr>
+        <tr><td><a href="https://buffedlizard55-lab.github.io/GEMSDOE30/">GEMSDOE30</a></td><td><code>d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca</code></td><td class="score">0.2600</td><td>Unknown</td><td>No approval</td></tr>
+        <tr><td><a href="https://buffedlizard55-lab.github.io/GEMSDOE31/docs/">GEMSDOE31</a></td><td><code>h27-4-solo-d28-20261004-8acb75e1-nan</code></td><td class="score">0.2708</td><td>Unknown</td><td>No approval</td></tr>
+        <tr><td><a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html">GEMSDOE32</a></td><td><code>h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros</code></td><td class="score">0.2778</td><td>Unknown</td><td>No approval</td></tr>
+        <tr><td><a href="https://buffedlizard55-lab.github.io/GEMSDOE33/">GEMSDOE33</a></td><td><code>h33d-analog-tip-stepover-r30-20261004-cb490425926e</code></td><td class="score">0.2632</td><td>Unknown</td><td>No approval</td></tr>
+        <tr><td><a href="https://buffedlizard55-lab.github.io/GEMSDOE36/docs/">GEMSDOE36</a></td><td><code>anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros</code></td><td class="score">0.2750</td><td>Unknown</td><td>No approval</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small">* User-reported values copied from the prompt; not independently verified. The official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">public leaderboard</a> was checked on 2026-10-27 at 11:36 UTC: its top displayed value was 0.4544 (ORGANIZER-PUBLISHED public leaderboard snapshot, not a submission receipt). This is higher than the request's two conflicting older claims (0.3195 and 0.4413). Public-board values are dynamic and do not establish private-test or final-prize performance.</p>
+
+  <section class="card">
+    <h2>What must pass before a future TIF can be approved?</h2>
+    <p>Use the shared approved feature cache, holdout evaluator, and submission writer. Test complete buffered fault segments using the official distance-weighted Tversky metric; run a leakage canary for every feature; compare surface correlation and final-dot overlap against registry rasters; validate the final GeoTIFF's one-band float32 data, exact sample-grid CRS/shape/transform, valid-footprint range and finiteness, and outside-footprint nulls. Record the saved-byte SHA-256 and a complete JSON run card.</p>
+    <p>The published competition format and metric are defined in the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official DrivenData problem description</a>. A passing format check is not evidence of a good score or permission to spend a weekly slot.</p>
+    <div class="actions">
+      <a class="button" href="EXECUTIVE_SUMMARY.md">Read full executive summary</a>
+      <a class="button secondary" href="submission-guide.html">How to submit (only after approval)</a>
+      <a class="button secondary" href="../README.md">Project charter &amp; protocol</a>
+      <a class="button secondary" href="review-2026-10-27.md">Dated review &amp; run card</a>
+      <a class="button secondary" href="../evidence/negative_run_card.json">Machine-readable negative card</a>
+    </div>
+  </section>
+</main>
+<footer class="wrap">
+  Sources: <a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS GeoDAWN</a> · <a href="https://www.usgs.gov/3d-elevation-program/about-3dep-products-services">USGS 3DEP</a> · <a href="https://github.com/drivendataorg/gems-prize-reference-solution">Organizer reference solution</a> · <a href="https://gbcge.org/current-projects/ingenious/">INGENIOUS</a>.<br>
+  Status is fail-closed: missing evidence is reported as unknown, never silently promoted.
+</footer>
+</body>
+</html>
