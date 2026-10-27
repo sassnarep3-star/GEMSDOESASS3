@@ -1,0 +1,53 @@
+name: Audit and static site tests
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '22'
+          cache: npm
+      - run: python -m pip install -r requirements.txt
+      - run: npm ci --ignore-scripts
+      - name: Restore unmodified shared source for parallel-session tests
+        run: python scripts/bootstrap_template.py --template-only
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Restore checksum-pinned research inputs
+        run: |
+          set +e
+          python scripts/restore_audit_inputs.py --group all > /tmp/gems-restore.log 2>&1
+          result=$?
+          set -e
+          cat /tmp/gems-restore.log
+          if test "$result" -ne 0; then
+            printf '::error::%s\n' "$(tail -n 3 /tmp/gems-restore.log | tr '\n' ' ')"
+            exit "$result"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Reproduce the lattice stop and historical comparisons
+        run: |
+          set +e
+          python scripts/registry_preflight.py --dots 37654 --out /tmp/registry-preflight.json
+          code=$?
+          set -e
+          test "$code" -eq 2
+          python scripts/audit_focus.py --out /tmp/focus-audit.json
+      - run: pytest -q
+      - run: npm run test:js
+      - run: npm run test:browser

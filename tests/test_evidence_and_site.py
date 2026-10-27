@@ -84,7 +84,7 @@ class Links(HTMLParser):
 
 
 def test_local_site_links_resolve_and_download_is_disabled():
-    pages = [ROOT / "index.html", ROOT / "executive-summary.html"]
+    pages = [ROOT / "index.html", ROOT / "executive-summary.html", ROOT / "parallel-h1.html", ROOT / "parallel-h1-guide.html"]
     parsers = {}
     for page in pages:
         parser = Links(); parser.feed(page.read_text()); parsers[page] = parser
@@ -98,10 +98,10 @@ def test_local_site_links_resolve_and_download_is_disabled():
             if u.fragment and target in parsers:
                 assert u.fragment in parsers[target].ids, f"{page.name}: missing #{u.fragment}"
     home = pages[0].read_text()
-    assert "DO NOT SUBMIT" in home.upper() and "None approved" in home
-    assert 'class="button button-disabled" disabled' in home
-    assert "0.2778" in home and "User-reported" in home
-    assert "0.4544" in home and "27 Oct 2026" in home
+    assert "DO NOT SUBMIT" in home.upper() and "Submission file unavailable" in home
+    assert not any(link.lower().endswith((".tif", ".zip")) for _, link in parsers[pages[0]].links)
+    assert "0.2778" in home and "user-reported" in home.lower()
+    assert "0.4544" in home and "27 October 2026" in home
     assert not list(ROOT.glob("*.tif"))
 
 

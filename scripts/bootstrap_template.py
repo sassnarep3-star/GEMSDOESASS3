@@ -3,7 +3,8 @@
 
 This script does not include credentials, data, or a private evaluator fork.
 The bridges are public mirrors, NOT independently authenticated DrivenData data.
-Data and source modules remain in .cache and are never committed. Requires gh.
+Data and source modules remain in .cache and are never committed. Some upstream
+assembler calls still require gh; no upstream source files are changed here.
 """
 from __future__ import annotations
 
@@ -13,8 +14,9 @@ import importlib
 import json
 import os
 from pathlib import Path
-import subprocess
 import sys
+
+from restore_audit_inputs import stream_github_raw
 
 ROOT = Path(__file__).resolve().parents[1]
 CACHE = ROOT / ".cache"
@@ -56,8 +58,7 @@ def fetch_file(endpoint: str, dest: Path, expected: str) -> None:
     tmp = dest.with_name(dest.name + ".partial")
     try:
         with tmp.open("wb") as out:
-            subprocess.run(["gh", "api", endpoint, "-H", "Accept: application/vnd.github.raw"],
-                           stdout=out, check=True, timeout=180)
+            stream_github_raw(endpoint, out, timeout=180)
         digest = sha256(tmp)
         if digest != expected:
             raise ValueError(f"hash mismatch for {endpoint}: {digest} != {expected}")

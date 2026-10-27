@@ -75,3 +75,16 @@ def test_receipts_never_overwrite_existing_evidence(tmp_path):
     write_card({"negative": True}, new)
     assert '"negative": true' in new.read_text()
     assert not list(tmp_path.glob("*.partial"))
+
+
+def test_provisional_h1_cannot_run_without_coordinator_assignment(tmp_path):
+    import json
+    from run_h1 import require_lane_assignment
+    with pytest.raises(ValueError, match='not an assigned lane'):
+        require_lane_assignment(None)
+    record = tmp_path / 'assignment.json'
+    record.write_text(json.dumps({'lane': 'H1', 'assigned': False, 'assigned_by': 'coordinator', 'method_paragraph': 'H1 method'}))
+    with pytest.raises(ValueError, match='assignment must attest'):
+        require_lane_assignment(record)
+    record.write_text(json.dumps({'lane': 'H1', 'assigned': True, 'assigned_by': 'coordinator', 'method_paragraph': 'H1 method'}))
+    assert require_lane_assignment(record)['assigned'] is True

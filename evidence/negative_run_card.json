@@ -1,4 +1,6 @@
 {
+  "historical_snapshot": true,
+  "superseded_by": "evidence/run_card.json",
   "review_date_utc": "2026-10-27",
   "hypothesis": "No experiment conducted; the checkout has no assigned method lane or input data.",
   "mechanism": "Not tested. Do not generate or place predictions without the specified shared feature stack, holdout evaluator, writer, and complete registry.",

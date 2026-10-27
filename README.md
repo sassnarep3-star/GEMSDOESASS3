@@ -1,78 +1,87 @@
-# GEMS Fieldnotes
+# GEMS Field Notes
 
-**Decision: DO NOT SUBMIT. No new submission GeoTIFF was created or uploaded.**
+> **Current decision: DO NOT SUBMIT.** No new submission TIFF or organizer-confirmed score was produced. The usual 37,654-dot budget cannot satisfy the literal registry rule, the required assigned method paragraph and cached feature stack are missing, and shared-template defects are unresolved. [Executive guide](executive-summary.html) · [Detailed review](research/REVIEW.md) · [Run card](evidence/run_card.json).
 
-An evidence-led research and review workspace for the DOE GEMS Prize. The [GitHub Pages dashboard](https://sassnarep3-star.github.io/GEMSDOESASS3/) presents the decision, nine-site comparison, sources, and [executive summary and submission guide](executive-summary.html). Its research snapshot is dated **27 October 2026**; the official leaderboard may change. The site does not scrape DrivenData.
+## Standing user brief — read at the start of every session
 
-## Standing project request and principles
+The full conversation is the authoritative prompt. The following preserves the operative request and protocol here; it is a concise record, **not a claim that every repeated passage and all historical submission names have been transcribed verbatim**. A [prior partial prompt record](https://github.com/buffedlizard55-lab/GEMSDOE32/blob/1398109a23f04a2ace71c1bd2f527cfba87860b5/docs/research/standing-prompt-as-recorded-20261026.md) also warns that its completeness is unverified.
 
-The user's standing brief, condensed and de-duplicated from the supplied repeated prompts (the conversation is the authoritative verbatim record):
-
-> Be a creative scientific assistant for a blind geothermal/fault-mapping competition. Research whether existing geoscience and engineering methods can be combined to find genuinely unmapped geothermal faults and improve performance. Review the highest reported submissions from GEMSDOE24, 25, 27, 28, 30, 31, 32, 33 and 36, explain the reported GEMSDOE32 0.2778 result, and create executive summaries with official references. Make the website readable on desktop and mobile, with a clear file download, submission verdict, instructions, unique submission name and short note when a candidate actually exists. Distinguish user reports, holdouts, estimates and verified organizer receipts. Keep working autonomously, avoid hallucinations, document irregularities and access needs, review three times, and open and merge a pull request when permitted.
+> Review the repo. Focus on the highest scoring submissions from GEMSDOE24, GEMSDOE25, GEMSDOE27, GEMSDOE28, GEMSDOE30, GEMSDOE31, GEMSDOE32, GEMSDOE33 and GEMSDOE36. Provide a clear executive summary, a unique new competition TIFF, its estimated score, uniqueness evidence, and an obvious download/submit decision. Do not copy a previous submission except for learning and education. Perform validation through the project without a human geological inspector. The user reported a prior portal rejection: “Predicted values must be in range [0, 1]”. Give any eventual candidate a unique name and a short note (at most 140 characters).
 >
-> In parallel use the assigned single-method lane, the shared cached feature stack, `evaluate_holdout.py` and `submission_writer.py`. Hide and recover whole fault segments with a buffer, derive catalogue features from visible faults only, mask visible faults pixel-exactly and use the official pooled DTI with α=0.2, β=0.8 and a 300 m triangular kernel. Test each feature alone for leakage; AUC over 0.90 is a stop until disproven. Compare surface rank and three-pixel overlap against the registry before dot placement and final dots after placement: a correlation above 0.90 or overlap above 70% is a duplicate and a mandatory stop. Report the exact metric evidence class, evaluator, withheld-positive count, 95% CI and a JSON run card. Stop after three experiments or two hours. Never spend a competition slot on an unproven hypothesis; promotion is a separate selector with the weekly cap. A negative result is a deliverable.
+> Before implementing, generate 3–5 candidate geological hypotheses, naming layers, physical signature, why they could catch a fault missing from the catalogue, differences from existing work, expected improvement and cost. Verify any external data source is free, official and obtainable before describing it as viable. Validate the top candidate on a spatially blocked holdout and beat the current comparable best before considering a weekly submission slot. Do not invent an organizer score or present a projection as a score.
+>
+> **PARALLEL-RUN PROTOCOL — read first.** This session is one of several running from this same prompt.
+>
+> 1. **LANE.** Your lane is the single method paragraph below. Stay inside it. If your raster's rank-correlation with any registry raster exceeds 0.90, or more than 70% of your dots fall within 3 px of one registry raster's dots, log it as a duplicate and stop. Check this on the surface before placement AND on the final dots.
+> 2. **REUSE, DON'T REBUILD.** Use the template's cached feature stack, `evaluate_holdout.py` and `submission_writer.py`. Holdout = hide-and-recover: withhold whole fault segments with a buffer, derive every catalogue-based feature only from the visible faults, mask visible faults pixel-exactly, score pooled DTI (alpha 0.2, beta 0.8, 300 m triangular kernel). If a shared tool is wrong, fix it once in the template and report it; never keep a private fork.
+> 3. **LABEL EVERY NUMBER** as HOLDOUT-DTI (evaluator version, number of withheld positives, 95% CI) or ORGANIZER-CONFIRMED (copied from a submission-page receipt). A projection is never written as a score. Historical values supplied by the user without receipts must instead be identified as unverified reports, not mislabeled as either evidence class.
+> 4. **LEAKAGE CANARY.** Test each feature alone on the holdout before trusting any result. AUC above 0.90 means leakage until proven otherwise.
+> 5. **RUN CARD.** End with one JSON card: hypothesis; mechanism; named non-fault mimic; holdout DTI + CI; correlation/overlap vs registry; raster SHA-256; validator output (no NaN inside footprint, values in [0,1], CRS/shape/transform match); submission name + note of at most 140 characters; verdict promote / negative. Negative results are deliverables.
+> 6. **BUDGET.** Stop after 3 experiments or 2 hours. Do not pick submissions: promotion to a real slot is a separate selector step, within the weekly cap shown on the submission page.
+>
+> Build a simple, clean GitHub Pages site with a submission guide and auditable official source links. Research and validate autonomously, flag irregularities, and avoid hallucinations. Work through three passes: implement and verify; review for bugs, missing requirements and edge cases; then recheck and improve. Open and merge a pull request on the permitted session branch. Explain remaining work and limitations.
 
-The prompt references a single-method paragraph but supplies none, so H1 was explicitly chosen as a **provisional**, not coordinator-assigned, lane before implementation; the distinction is documented in the [pre-registration](docs/research/preregistration-2026-10-27.md). Concurrent preliminary reviewers interpreted the missing assignment more strictly and did not experiment. For future parallel runs, obtain an explicit lane assignment in the shared registry before starting. The user's historical values are archived as *claims*, not treated as receipts; see the [history list](docs/user-reported-history.md). User priorities and safety gates take precedence over a desire to display a TIFF.
+**Core values:** *Maximize P(Win)* by weighing tradeoffs and protecting scarce slots; *Own the Outcome* by verifying, reporting failures, and fixing what can be fixed. Those values never authorize silently weakening the protocol or inventing evidence.
 
-### Research and evidence principles
+## What this repository provides
 
-- **Maximize P(Win):** choose evidence-backed experiments over slot-consuming guesses. **Own the Outcome:** preserve failures and fix or report shared tooling defects rather than keeping a private fork.
-- Do not invent a leaderboard score, a prior score, a confidence interval, source provenance, a receipt, uniqueness, an allowed quota, or a TIFF. Predictions of geological plausibility are not performance estimates.
-- A historical file is never “unique” merely because it has a new name or different metadata. A single disqualifying registered peer is enough to stop; a pass needs the complete accessible registry.
-- Label scores **HOLDOUT-DTI** with evaluator, withheld positives and 95% CI, or **ORGANIZER-CONFIRMED** only when a receipt links the score to the exact bytes. A timestamped public leaderboard observation is neither a receipt for our TIFF nor a private score.
-- Validate saved file bytes automatically: a single float32 band, correct sample grid/CRS/transform, finite inside the footprint and values in `[0,1]`, plus a SHA-256. A validator is not a scientific or uniqueness gate.
-- Do not bypass the strict stop rule, quietly prune predictions to evade it, or use a live competition slot without a separate selector and current quota. Do not keep a private fork of a shared tool; report shared defects upstream.
-- Cite primary and official sources, respect data licensing and site terms, and label owner mirrors and dated snapshots honestly. Useful negative experiments should remain reproducible.
+- [Dashboard](index.html): nine-site comparison, historical score evidence classes, literal novelty findings and a fail-closed status.
+- [Executive submission guide](executive-summary.html): steps, range-error troubleshooting, and official links.
+- [Research page](research.html) and [four ranked prospective hypotheses](research/HYPOTHESES.md), written before this implementation; none is an assigned lane or validated result.
+- [Detailed research review](research/REVIEW.md) and [exact-byte historical audit](evidence/focus_audit.json).
+- [A mathematical registry preflight](scripts/registry_preflight.py) and [saved-byte GeoTIFF auditor](scripts/geotiff_audit.py). These are audit tools, **not** a replacement model, holdout evaluator, submission writer or slot selector.
+- [Synthetic probes](evidence/upstream_probe.json) of shared-template issues [#37](https://github.com/buffedlizard55-lab/GEMSDOE32/issues/37), [#41](https://github.com/buffedlizard55-lab/GEMSDOE32/issues/41) and [#42](https://github.com/buffedlizard55-lab/GEMSDOE32/issues/42). They remain unresolved upstream; this account has read-only access there. No private fork was kept.
 
-## Current result
+## Reproduce the read-only audit
 
-| Item | Evidence |
-| --- | --- |
-| New file / submission | **None.** The only new run stopped before dot placement. |
-| H1 pre-placement surface | **0.048064 HOLDOUT-DTI**, evaluator `gems57-pooled-hide-v2`, 60,988 withheld positives, 95% spatial-cluster CI `[0.044295, 0.051633]`. Not a dot-field or organizer score. |
-| Same-fold terrain control | **0.059785 HOLDOUT-DTI**, same evaluator and positives, CI `[0.054213, 0.065646]`; H1 minus control `−0.011721`, paired CI `[−0.014326, −0.009464]`. |
-| Uniqueness stop | 100% of H1's positive surface support was within 3 pixels of a registered lattice (limit: more than 70%). Full-footprint Spearman was `−0.000259`. Only one disqualifying peer was required; this was not a complete registry scan. |
-| Historical 0.2778 | **User-reported, unverified attribution.** The linked H33 audit calls the file unscored. We cannot connect a receipt to its SHA. H33 removes 2,545 catalogue-near pixels from GEMSDOE31 H27, adding none; a plausible mechanism is not proof of causation. |
-| Public leaderboard | **0.4544 official public leaderboard observation**, 2026-10-27 UTC, not our receipt or a private/final score. [Check the source](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/). |
+Python 3.11+, GitHub CLI (`gh`) and internet access to GitHub and PyPI are required. JavaScript tests also require Node.js 22+, npm and the npm registry; the bundled headless-browser smoke test targets Linux x86-64 with `tar`. Owner mirrors are not authenticated organizer files. Raster downloads and the virtual environment are ignored by Git.
 
-The [run card](evidence/h1-run-card.json) includes the hypothesis, mechanism, non-fault mimic, holdout components and CI, registry witness, raw/derived canaries, explicit null raster/validator/name fields, and `negative` verdict. The separate [input audit](evidence/h1-input-audit.json) documents post-stop raw-band canaries and lattice coverage. An [independent distance-transform check](evidence/h1-overlap-verification.json) reconstructed the same surface hash and confirmed the overlap, without making a new candidate. No estimated organizer score is available.
-
-## Project map
-
-- [Dashboard](index.html) and [executive summary / submission guide](executive-summary.html).
-- [Research results, sources, irregularities and remaining access](docs/research/results-and-irregularities.md).
-- [Four ranked hypotheses and pre-registration](docs/research/preregistration-2026-10-27.md).
-- [Nine-site audit JSON](docs/data/focus-nine-audit.json) and [pinned input manifest](registry/focus-nine.json): only those nine historical files, not the full registry.
-- [H1 implementation](src/lane_h1.py), [bounded run](scripts/run_h1.py), [post-stop input audit](scripts/audit_h1_inputs.py), [historical raster audit](scripts/audit_focus.py), and [pinned template/data bootstrap](scripts/bootstrap_template.py).
-- [Automated tests](tests/), [three-pass review log](docs/research/review-log.md), and [CI workflow](.github/workflows/ci.yml).
-- Preserved preliminary reviews: [initial executive summary](docs/EXECUTIVE_SUMMARY.md), [dated review](docs/review-2026-10-27.md), [previous landing page](docs/index.html), [previous submission guide](docs/submission-guide.html), and [review-only negative card](evidence/negative_run_card.json). These describe an earlier state before H1 and the raster audit; they are not the current run card. The prior [README at the merged main commit](https://github.com/sassnarep3-star/GEMSDOESASS3/blob/dc7e945/README.md) remains available in Git history.
-
-## Reproducing the checks
-
-Python 3.11, `gh` authenticated for the public GitHub API, sufficient disk/memory and network access are required. Raw imagery, generated caches, TIFFs, credentials and environments are intentionally not committed. The bootstrap fetches unmodified shared modules from a pinned public revision and verifies file SHA-256; the input data are **owner-published mirrors**, not authenticated organizer downloads. Do not use the mirrored sample's pixel values as independent truth: its nonzero mask exactly equals the mirrored fault catalogue despite the official description of an absence sample.
-
-```sh
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-.venv/bin/python scripts/bootstrap_template.py --template-only   # small source files, for tests
-.venv/bin/pytest -q
-node tests/site_dom_test.cjs
-python3 -m http.server 8000 --bind 0.0.0.0                   # local static site
+```bash
+python -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+python scripts/restore_audit_inputs.py --group all  # hash-pinned owner mirrors only
+python scripts/registry_preflight.py --dots 37654  # exit 2 = proven stop; 0 = not proven, NOT a pass
+python scripts/audit_focus.py                      # 72 directed historical comparisons
+python scripts/refresh_sources.py                  # public GitHub refs only, not scores
+python scripts/bootstrap_template.py --template-only # shared source for parallel-session tests
+pytest -q
+npm ci --ignore-scripts
+npm run test:js
+npm run test:browser  # headless Chromium, with mocked GitHub responses
+python -m http.server 8000 --bind 0.0.0.0          # local preview
 ```
 
-To rebuild the much larger, 19-band data cache and rerun the historical or raw-input audits:
+The preflight's nonzero stop is intentional. Do not chain it with later commands using `&&` when reproducing the full audit. The three software probes can be reproduced without modifying the shared template:
 
-```sh
-.venv/bin/python scripts/bootstrap_template.py --cache-bands
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python scripts/audit_focus.py
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python scripts/audit_h1_inputs.py
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python scripts/verify_h1_overlap.py
+```bash
+git clone https://github.com/buffedlizard55-lab/GEMSDOE32.git /tmp/gems32-audit
+# In the separate read-only source clone, pin the recorded commit (not a new branch).
+git -C /tmp/gems32-audit checkout --detach 1398109a23f04a2ace71c1bd2f527cfba87860b5
+python scripts/probe_upstream.py --template-dir /tmp/gems32-audit
 ```
 
-Published evidence is never overwritten by these scripts. Reproductions default to timestamped JSON under `.cache/reproductions/`; `--output` accepts a new explicit path and refuses to overwrite an existing file.
+To examine an exact TIFF (this does **not** approve submission):
 
-`run_h1.py` records the fixed research experiment, but the published run is already negative; it will not place dots or produce a TIFF. Do not keep rerunning or tuning that stopped lane to seek an exemption. It checks one disqualifying witness, not the full registry. The shared writer is exercised on a synthetic temporary raster in tests and is never used to publish a candidate from this negative run.
+```bash
+python scripts/geotiff_audit.py candidate.tif --template /path/to/authenticated_sample_submission.tif
+```
 
-## Remaining access and decisions
+The validator separately reports finite/in-range footprint values, raw whole-array range and outside null/mask. It never clips or changes a raster, including if the JSON output path aliases an input. The CLI returns 0 only if both local profiles pass, 2 if either fails, and 1 on an error; even exit 0 is not approval. A raw-array failure is not proof of organizer rejection. Official outside-null wording and the previously reported range rejection leave the actual portal handling of an internal mask uncertain; only an organizer receipt establishes acceptance.
 
-An authenticated organizer sample and submission receipts, complete registry and same-evaluator prior best are not available here; use of new data requires verified rights, coverage and alignment. The shared writer requires finite zero-filled exterior pixels, while the official description says data outside bounds are null/NaN. If the mirrored irregular footprint is the relevant boundary, these policies conflict; a local writer pass is not proof of compliance. Resolve the boundary against an authenticated sample and organizer guidance, and correct the shared template before a release rather than silently treating zero-fill as equivalent. A separate authorized selector needs a current quota before any upload. Some sister repositories do not grant this account push access; their sites have not been modified. The upstream metric documentation has a mathematically incorrect single-dot inequality (the metric computation used here is correct); our GitHub integration could neither push a fix nor file an issue upstream. Details, examples, and the public official links are in the [research review](docs/research/results-and-irregularities.md).
+## Status and next work
+
+The highest of the nine supplied claims is GEMSDOE32 B2 **0.2778 USER-REPORTED / UNVERIFIED**, not an authenticated team score. The official public leaderboard showed **0.4544** on 2026-10-27 UTC, not a team receipt and potentially stale. A local HOLDOUT-DTI is not a calibrated leaderboard score; no forecast or victory claim is justified.
+
+Coordinate an explicit lane; resolve the literal lattice/budget conflict without silently changing the rule; fix the shared tools upstream; restore the prepared cache and complete current registry; obtain authenticated competition inputs; then run leakage canaries, matched buffered whole-segment holdout, both novelty stages, saved-byte validation and a separate quota-aware selector. See [the detailed review](research/REVIEW.md) for the independent evidence and exact limitations.
+
+## Earlier parallel review snapshots
+
+Other sessions independently recorded earlier reviews in [`docs/EXECUTIVE_SUMMARY.md`](docs/EXECUTIVE_SUMMARY.md), [`docs/review-2026-10-27.md`](docs/review-2026-10-27.md) and [`evidence/negative_run_card.json`](evidence/negative_run_card.json). Those records preserve what those sessions knew at the time; statements that this repository has no audits, tests or mirrored inputs are now superseded by the current [dashboard](index.html) and [review](research/REVIEW.md). No earlier negative verdict is converted into a submission approval.
+
+
+## Concurrent H1 record
+
+A parallel session merged an [H1 implementation](src/lane_h1.py), [run card](evidence/h1-run-card.json), [research review](docs/research/results-and-irregularities.md) and a [preserved dashboard](parallel-h1.html). It reports one provisional surface experiment, not a generated TIFF; the H1 surface failed the lattice overlap rule and the run is negative. That session chose H1 without the explicitly assigned method paragraph, so it is a protocol deviation, **not** authorization to run that lane again. The H1 CLI now requires a caller-supplied coordinator assignment attestation before it can run; the attestation is not independently authenticated. This session ran zero geological experiments and used no submission slot. The other session reports one experiment and zero slots.
+
+The two historical nine-site audits remain independently reproducible: this session's [72-comparison audit](scripts/audit_focus.py) and the parallel session's preserved [audit](scripts/audit_focus_h1.py). Neither is a full-registry clearance.

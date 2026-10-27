@@ -2,6 +2,9 @@
 
 # Executive summary — requested GEMS sites and research gates
 
+> **Historical parallel-session snapshot.** Some statements below describe the checkout before the later byte-level audits and test suite were added. For the current evidence and decision, see the [dashboard](../index.html), [submission guide](../executive-summary.html), and [updated review](../research/REVIEW.md). The earlier negative decision remains preserved; no file is approved.
+
+
 **Decision: DO NOT SUBMIT.** No candidate raster was generated in this checkout. It has no competition data, template toolchain, or comparison registry. There is no download-ready TIF and no defensible estimate of a future TIF's leaderboard score. A file must not be called unique until its raster content has been measured against the actual registry rasters.
 
 ## Immediate answer

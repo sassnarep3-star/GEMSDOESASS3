@@ -53,6 +53,22 @@ def write_card(card: dict, output: Path) -> None:
             temporary.unlink(missing_ok=True)
 
 
+def require_lane_assignment(path: Path | None) -> dict:
+    """Require an explicit coordinator assignment before re-running H1.
+
+    This checks a caller-provided attestation, not the identity of its author.
+    The original parallel run was provisional and is retained as negative evidence.
+    """
+    if path is None:
+        raise ValueError("H1 is not an assigned lane; provide an explicit coordinator assignment before running")
+    record = json.loads(path.read_text(encoding="utf-8"))
+    if (not isinstance(record, dict) or record.get("lane") != "H1" or record.get("assigned") is not True
+            or not isinstance(record.get("assigned_by"), str) or not record["assigned_by"].strip()
+            or not isinstance(record.get("method_paragraph"), str) or not record["method_paragraph"].strip()):
+        raise ValueError("assignment must attest lane H1, assigned=true, assigned_by and a method paragraph")
+    return record
+
+
 def elapsed_guard(start: float) -> None:
     if time.monotonic() - start >= 7200:
         raise TimeoutError("two-hour experiment budget reached; stop")
@@ -107,7 +123,9 @@ def leakage_canaries(features, support, folds, sample_size=100000, seed=20261027
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", help="new run-card path; never overwrites existing evidence")
+    parser.add_argument("--assignment", type=Path, help="coordinator lane-assignment JSON; caller attestation, not authenticated")
     args = parser.parse_args()
+    require_lane_assignment(args.assignment)
     output = choose_output(OUT, args.output)
     start = time.monotonic()
     sys.path.insert(0, str(ensure_template()))

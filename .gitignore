@@ -1,8 +1,12 @@
+# Local virtual environments, downloaded source rasters and generated caches
 .venv/
-.cache/
 __pycache__/
 .pytest_cache/
-*.pyc
+*.py[cod]
+.cache/
+data/raw/
+data/cache/
 data/official/
 data/processed/
 *.partial
+node_modules/
