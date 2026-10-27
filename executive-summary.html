@@ -179,9 +179,10 @@
               <li>
                 <strong>Saved bytes:</strong> validate the actual file automatically, not a preview: single
                 band, correct shape/CRS/transform, finite footprint values in [0,1], and recorded SHA-256. The
-                supplied shared writer also enforces finite zeros outside; the official description says
-                null/NaN outside, so verify the current organizer instructions and acceptance before assuming
-                either policy is accepted.
+                supplied shared writer enforces finite zeros outside the mirrored footprint, while the official
+                description says null/NaN outside the bounds. If that footprint defines the relevant boundary,
+                the policies conflict. Verify the boundary with an authenticated sample and organizer guidance,
+                and fix the shared writer upstream before release; a local pass does not establish compliance.
               </li>
               <li>
                 <strong>Separate selector:</strong> promotion and use of a live slot happen only after those

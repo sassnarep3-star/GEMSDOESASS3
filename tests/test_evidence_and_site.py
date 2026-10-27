@@ -103,3 +103,17 @@ def test_local_site_links_resolve_and_download_is_disabled():
     assert "0.2778" in home and "User-reported" in home
     assert "0.4544" in home and "27 Oct 2026" in home
     assert not list(ROOT.glob("*.tif"))
+
+
+def test_earlier_reviews_are_preserved_but_clearly_superseded():
+    for path in ("docs/EXECUTIVE_SUMMARY.md", "docs/review-2026-10-27.md"):
+        text = (ROOT / path).read_text()
+        assert "Historical preliminary review" in text[:400]
+        assert "h1-run-card.json" in text[:400]
+    legacy = (ROOT / "docs/index.html").read_text()
+    assert "ARCHIVED REVIEW" in legacy and "../index.html" in legacy
+    assert "h1-run-card.json" in legacy
+    old = strict_json("evidence/negative_run_card.json")
+    assert old["verdict"] == "negative" and old["raster_sha256"] is None
+    guide = (ROOT / "executive-summary.html").read_text()
+    assert "policies conflict" in guide and "does not establish compliance" in guide
