@@ -1,0 +1,38 @@
+{
+  "review_date_utc": "2026-10-27",
+  "hypothesis": "No experiment conducted; the checkout has no assigned method lane or input data.",
+  "mechanism": "Not tested. Do not generate or place predictions without the specified shared feature stack, holdout evaluator, writer, and complete registry.",
+  "named_non_fault_mimic": "Not applicable; no candidate surface was evaluated.",
+  "holdout_dti": {
+    "status": "NOT RUN",
+    "evaluator_version": null,
+    "withheld_positive_count": null,
+    "value": null,
+    "confidence_interval_95": null
+  },
+  "correlation_overlap_vs_registry": {
+    "status": "NOT RUN",
+    "complete_registry_available": false,
+    "surface_max_abs_spearman": null,
+    "final_dot_max_overlap_within_3px": null,
+    "historical_owner_site_claim": "GEMSDOE28 owner-maintained cross-site review reports all 72 directional pairwise comparisons among the nine historical masks exceed 70%; not independently reproduced in this checkout."
+  },
+  "raster_sha256": null,
+  "validator_output": {
+    "status": "NOT RUN; no raster generated",
+    "no_nan_inside_footprint": null,
+    "values_in_0_1": null,
+    "crs_shape_transform_match": null,
+    "reason": "No sample template or submission TIFF is present in the repository."
+  },
+  "submission_name": null,
+  "submission_note": "No candidate generated; no submission authorized.",
+  "verdict": "negative",
+  "blocking_conditions": [
+    "Repository contains only README.md at the starting commit.",
+    "No assigned method paragraph/lane is present in this checkout.",
+    "No competition data, cached features, shared evaluator, submission writer, or validator is present.",
+    "No complete current registry is present.",
+    "No organizer submission receipt or weekly selector approval is present."
+  ]
+}
