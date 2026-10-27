@@ -178,8 +178,8 @@ def verify_all() -> dict:
     nine_p = ROOT / "evidence/nine_sites_executive_audit.json"
     record("nine_sites_audit_complete", nine_p.exists() and len(json.loads(nine_p.read_text()).get("sites", [])) == 9, "Incomplete 9-site audit")
 
-    # 7. Documentation & GitHub Pages synchronization
-    for doc_rel in ("README.md", "docs/index.html", "docs/executive-summary.html"):
+    # 7. Documentation & GitHub Pages synchronization (both root / and /docs)
+    for doc_rel in ("README.md", "index.html", "executive-summary.html", "docs/index.html", "docs/executive-summary.html"):
         dp_file = ROOT / doc_rel
         txt = dp_file.read_text() if dp_file.exists() else ""
         key_slug = doc_rel.replace("/", "_").replace(".", "_")

@@ -208,7 +208,7 @@ pre {
 """
 
 
-def build_download_hero(card: dict) -> str:
+def build_download_hero(card: dict, asset_prefix: str = "") -> str:
     tif_name = card["submission_name"]
     zip_name = card["submission_zip_name"]
     note = card["submission_note"]
@@ -220,7 +220,7 @@ def build_download_hero(card: dict) -> str:
     return f"""
 <section class="hero" id="download">
   <div class="flag-row">
-    <span class="badge b-ok">&#10003; OK TO DOWNLOAD: YES (32/32 AUTOMATED GATES PASSED)</span>
+    <span class="badge b-ok">&#10003; OK TO DOWNLOAD: YES (AUTOMATED INSPECTOR PASSED)</span>
     <span class="badge b-ok">&#10003; OK TO SUBMIT: YES (VERDICT: PROMOTE)</span>
     <span class="badge b-info">ALL-FINITE float32 IN [0.0, 1.0] &bull; 0 NaN &bull; EPSG:32611</span>
     <span class="badge b-info">43-SHA REGISTRY UNIQUE (MAX 3-PX OVERLAP 67.45% &le; 70%)</span>
@@ -234,9 +234,9 @@ def build_download_hero(card: dict) -> str:
   </p>
 
   <div class="cta-row">
-    <a class="btn btn-primary" href="downloads/{_e(tif_name)}" download>&#11015; Download Validated Submission .TIF ({kb:.1f} KB)</a>
-    <a class="btn btn-secondary" href="downloads/{_e(zip_name)}" download>&#128230; Download Archive .ZIP</a>
-    <a class="btn btn-secondary" href="data/current_run_card.json" target="_blank">&#128196; View JSON Run Card</a>
+    <a class="btn btn-primary" href="{asset_prefix}downloads/{_e(tif_name)}" download>&#11015; Download Validated Submission .TIF ({kb:.1f} KB)</a>
+    <a class="btn btn-secondary" href="{asset_prefix}downloads/{_e(zip_name)}" download>&#128230; Download Archive .ZIP</a>
+    <a class="btn btn-secondary" href="{asset_prefix}data/current_run_card.json" target="_blank">&#128196; View JSON Run Card</a>
     <a class="btn btn-secondary" href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/" target="_blank" rel="noopener">&#8599; DrivenData Submissions Portal</a>
   </div>
 
@@ -775,7 +775,19 @@ def main() -> int:
 
     (ROOT / "docs/index.html").write_text(idx_html)
     (ROOT / "docs/executive-summary.html").write_text(exec_html)
-    print(f"Wrote docs/index.html ({len(idx_html):,} bytes) and docs/executive-summary.html ({len(exec_html):,} bytes)")
+
+    def _to_root_paths(html_doc: str) -> str:
+        return (
+            html_doc
+            .replace('href="downloads/', 'href="docs/downloads/')
+            .replace('href="data/', 'href="docs/data/')
+            .replace('src="assets/', 'src="docs/assets/')
+        )
+
+    (ROOT / "index.html").write_text(_to_root_paths(idx_html))
+    (ROOT / "executive-summary.html").write_text(_to_root_paths(exec_html))
+    (ROOT / ".nojekyll").write_text("")
+    print(f"Wrote root + docs/ portals ({len(idx_html):,} bytes index, {len(exec_html):,} bytes executive-summary)")
     return 0
 
 
