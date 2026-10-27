@@ -73,3 +73,7 @@ The validator separately reports finite/in-range footprint values, raw whole-arr
 The highest of the nine supplied claims is GEMSDOE32 B2 **0.2778 USER-REPORTED / UNVERIFIED**, not an authenticated team score. The official public leaderboard showed **0.4544** on 2026-10-27 UTC, not a team receipt and potentially stale. A local HOLDOUT-DTI is not a calibrated leaderboard score; no forecast or victory claim is justified.
 
 Coordinate an explicit lane; resolve the literal lattice/budget conflict without silently changing the rule; fix the shared tools upstream; restore the prepared cache and complete current registry; obtain authenticated competition inputs; then run leakage canaries, matched buffered whole-segment holdout, both novelty stages, saved-byte validation and a separate quota-aware selector. See [the detailed review](research/REVIEW.md) for the independent evidence and exact limitations.
+
+## Earlier parallel review snapshots
+
+Other sessions independently recorded earlier reviews in [`docs/EXECUTIVE_SUMMARY.md`](docs/EXECUTIVE_SUMMARY.md), [`docs/review-2026-10-27.md`](docs/review-2026-10-27.md) and [`evidence/negative_run_card.json`](evidence/negative_run_card.json). Those records preserve what those sessions knew at the time; statements that this repository has no audits, tests or mirrored inputs are now superseded by the current [dashboard](index.html) and [review](research/REVIEW.md). No earlier negative verdict is converted into a submission approval.

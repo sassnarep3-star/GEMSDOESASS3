@@ -108,3 +108,14 @@ def test_source_snapshot_cannot_overwrite_its_manifest(monkeypatch, tmp_path):
     monkeypatch.setattr(sys, 'argv', ['refresh_sources.py', '--out', str(manifest)])
     assert refresh_sources.main() == 1
     assert manifest.read_text() == 'original'
+
+
+def test_parallel_review_snapshots_are_preserved_and_marked_superseded():
+    for name in ['docs/index.html', 'docs/submission-guide.html', 'docs/EXECUTIVE_SUMMARY.md', 'docs/review-2026-10-27.md']:
+        text = (ROOT / name).read_text()
+        assert 'Historical parallel-session' in text
+        assert 'DO NOT SUBMIT' in text or 'no file is approved' in text
+    old_card = json.loads((ROOT / 'evidence/negative_run_card.json').read_text())
+    assert old_card['historical_snapshot'] is True
+    assert old_card['superseded_by'] == 'evidence/run_card.json'
+    assert old_card['verdict'] == 'negative'
