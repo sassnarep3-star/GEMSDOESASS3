@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "session_date_utc": "2026-10-27",
+  "hypothesis": "Prospective only: opposing-flank magnetic and gravity profiles may mark a buried offset; no lane was assigned or model fitted.",
+  "mechanism": "Test sign-sensitive, multi-offset reduced-to-pole/magnetic-gradient profiles with independent gravity and conductive-base-depth corroboration.",
+  "non_fault_mimic": "Unfaulted lithologic contacts or dikes with magnetic remanence can create similar field contrasts.",
+  "holdout_dti": {
+    "status": "not run",
+    "evaluator_version": null,
+    "withheld_positive_pixels": null,
+    "value": null,
+    "ci95": null,
+    "reason": "No assigned lane or reusable cached feature stack; shared template defects are unresolved."
+  },
+  "correlation_overlap_vs_registry": {
+    "new_candidate_surface": null,
+    "new_candidate_dots": null,
+    "new_candidate_status": "not assessed; no surface or candidate exists",
+    "historical_scope": "Nine pinned owner-mirrored historical rasters, not the complete current registry.",
+    "minimum_historical_directed_3px_overlap": 0.8671895382207149,
+    "standard_budget": 37654,
+    "minimum_possible_3px_overlap_vs_registered_lattice": 0.8234184947150369,
+    "standard_budget_verdict": "proven duplicate stop for every placement at this budget",
+    "evidence": [
+      "evidence/focus_audit.json",
+      "evidence/registry_preflight.json"
+    ]
+  },
+  "raster_sha256": null,
+  "validator_output": {
+    "status": "not run; no candidate raster",
+    "no_nan_inside_footprint": null,
+    "values_in_0_1": null,
+    "crs_match": null,
+    "shape_match": null,
+    "transform_match": null,
+    "organizer_acceptance": "unknown"
+  },
+  "submission_name": null,
+  "submission_note": null,
+  "verdict": "negative",
+  "geological_experiments_run": 0,
+  "weekly_submission_slots_used": 0,
+  "separate_selector_approval": false,
+  "limitations": [
+    "The user prompt refers to a single assigned method paragraph but none is present.",
+    "The reusable prepared feature stack and complete current registry are absent.",
+    "Three independently reproduced shared template defects remain open upstream; this account has read-only access.",
+    "Competition data page requires authentication; the audited sample is an owner mirror, not organizer-authenticated.",
+    "No uploaded-byte receipt, hidden labels, live team quota or calibrated leaderboard forecast is available."
+  ]
+}

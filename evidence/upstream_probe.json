@@ -1,0 +1,51 @@
+{
+  "kind": "synthetic software probes; no geological experiment or score",
+  "checked_utc": "2026-10-27T11:50:32.456249+00:00",
+  "template_repository": "https://github.com/buffedlizard55-lab/GEMSDOE32",
+  "template_commit": "1398109a23f04a2ace71c1bd2f527cfba87860b5",
+  "source_sha256": {
+    "scripts/submission_writer.py": "cf7eb9948cfe5032e1db2362ddd5a075c2c744bb33ebbcfb2ba2b5ebd1b1de9b",
+    "scripts/evaluate_holdout.py": "d786273021c86b62af2504060309554218ca1442ed84d717f13334dddeea892c",
+    "src/gems32/holdout.py": "c476410a3fe27e9c2d6b97e206633ec252929df1c0c0e4c620da0c2f311fd538",
+    "src/gems32/release_gate.py": "ebf5bd483e84234ceb885070a1e717892f921d52112c0af52ffcd41f392ebebd"
+  },
+  "writer": {
+    "input": [
+      [
+        0.2,
+        1.2
+      ],
+      [
+        "NaN",
+        -0.1
+      ]
+    ],
+    "forwarded_binary_mask": [
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "issue": "https://github.com/buffedlizard55-lab/GEMSDOE32/issues/37",
+    "warning": "Entry point silently thresholds probabilities and malformed inputs; no TIFF was written."
+  },
+  "empty_truth_holdout": {
+    "fold_false_positive_mass": 1.0,
+    "pooled_block_false_positive_mass": 0.0,
+    "issue": "https://github.com/buffedlizard55-lab/GEMSDOE32/issues/41",
+    "warning": "Empty-truth prediction mass is absent from pooled block terms in this probe."
+  },
+  "surface_gate": {
+    "preview_dot_overlap": 1.0,
+    "gate_returned_pass": true,
+    "issue": "https://github.com/buffedlizard55-lab/GEMSDOE32/issues/42",
+    "warning": "Surface-stage gate returned pass despite identical preview dots in this probe."
+  },
+  "upstream_write_access": false,
+  "upstream_modified": false,
+  "action": "Already reported upstream; read-only access prevents a shared fix. Fail closed."
+}
