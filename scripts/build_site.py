@@ -73,6 +73,23 @@ def _build_focus_rows_data(focus9: dict, rc: dict) -> list[dict]:
             "status_text": "✅ VALIDATED & SAFE TO SUBMIT",
             "notes": "Beats 0.2778 Champion on BOTH HIDE-RECOVER-v3.0 (+12.0%, 95% CI > 0) AND off-catalogue SGMC-CAL-v3.0 (0.0657 > 0.0641). Passes 385/385 genuine uniqueness (max 63.27% <= 70%).",
         },
+        {
+            "site": "GEMSDOESASS3 (PR #7 Parallel)",
+            "era_tag": "Earlier GSD-HUA Run (Oct 27)",
+            "era_group": "era2",
+            "file": "gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif",
+            "dl_url": "downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif",
+            "dots": 37654,
+            "score_html": "<strong>HOLDOUT-DTI: 0.0720</strong> <span class='mono'>[0.0574, 0.0876]</span><br><small>gems57-pooled-hide-v2 (n=22,893; Δ CI includes 0)</small>",
+            "sgmc_str": "0.0359 [0.0308, 0.0412]",
+            "ov_sass3": "22.46%",
+            "rho_sass3": "+0.0222",
+            "ov_02778": "23.10%",
+            "finite_01": "PASS (0 NaN)",
+            "status_cls": "badge-warn",
+            "status_text": "SUPERSEDED BY LWST EXP3 (-44% SGMC)",
+            "notes": "Parallel PR #7 run; paired CI vs H19-5 crossed 0 and off-catalogue SGMC-CAL dropped to 0.0359 vs LWST EXP3's 0.0657 (+83.2%).",
+        },
         row_entry(
             "GEMSDOE32", "Era-1 Champion", "era1", "GEMSDOE32_champ_0.2778",
             "<strong>OWNER-REPORT / PORTAL: 0.2778</strong><br><small>HOLDOUT-DTI: 0.0992 [0.0860, 0.1127] (n=22,232)</small>",
@@ -804,8 +821,9 @@ def build_readme_md(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) -
             .replace("<span class='mono'>", "`").replace("</span>", "`")
             .replace("<br><small>", " — ").replace("</small>", "")
         )
+        readme_dl = f"docs/{r['dl_url']}" if r["dl_url"].startswith("downloads/") else r["dl_url"]
         md_rows.append(
-            f"| **{r['site']}** ({r['era_tag']}) | [`{r['file']}`]({r['dl_url']}) ({r['dots']:,}d, {r['finite_01']}) | "
+            f"| **{r['site']}** ({r['era_tag']}) | [`{r['file']}`]({readme_dl}) ({r['dots']:,}d, {r['finite_01']}) | "
             f"{score_clean} | `{r['sgmc_str']}` | vs SASS3: `{r['ov_sass3']}` (`ρ={r['rho_sass3']}`) / vs 0.2778: `{r['ov_02778']}` | **{r['status_text']}** — {r['notes']} |"
         )
     md_table = "\n".join(md_rows)
@@ -943,17 +961,43 @@ python scripts/generate_figures.py && python scripts/build_site.py
 """
 
 
+def _to_root_mirror(html_doc: str) -> str:
+    """Rewrite docs-relative asset/download/data links for root-level GitHub Pages mirror."""
+    out = html_doc
+    out = out.replace('href="styles.css"', 'href="docs/styles.css"')
+    out = out.replace('href="downloads/', 'href="docs/downloads/')
+    out = out.replace("href='downloads/", "href='docs/downloads/")
+    out = out.replace('href="data/', 'href="docs/data/')
+    out = out.replace('src="assets/', 'src="docs/assets/')
+    return out
+
+
 def main() -> int:
     rc = _load("evidence/run_card.json")
+    rc["download_path"] = f"docs/downloads/{rc['submission_name']}"
+    rc["ok_to_download"] = bool(rc.get("ok_to_submit", True))
+    for p in (
+        ROOT / "evidence/run_card.json",
+        ROOT / "evidence/current_run_card.json",
+        ROOT / "docs/data/run_card.json",
+        ROOT / "docs/data/current_run_card.json",
+    ):
+        p.write_text(json.dumps(rc, indent=2) + "\n")
+
     ledger = _load("evidence/lwst_experiment_ledger.json")
     focus9 = _load("evidence/focus9_executive_audit.json")
     ir_ledger = _load("evidence/irregularities_ledger.json")
 
     rows = _build_focus_rows_data(focus9, rc)
-    (ROOT / "docs" / "index.html").write_text(build_index_html(rc, ledger, rows, ir_ledger))
-    (ROOT / "docs" / "executive-summary.html").write_text(build_exec_summary_html(rc, ledger, rows))
+    idx_html = build_index_html(rc, ledger, rows, ir_ledger)
+    exe_html = build_exec_summary_html(rc, ledger, rows)
+
+    (ROOT / "docs" / "index.html").write_text(idx_html)
+    (ROOT / "docs" / "executive-summary.html").write_text(exe_html)
+    (ROOT / "index.html").write_text(_to_root_mirror(idx_html))
+    (ROOT / "executive-summary.html").write_text(_to_root_mirror(exe_html))
     (ROOT / "README.md").write_text(build_readme_md(rc, ledger, rows, ir_ledger))
-    print("Built docs/index.html, docs/executive-summary.html, and README.md successfully.")
+    print("Built docs/*.html, root mirrors, current_run_card.json, and README.md successfully.")
     return 0
 
 

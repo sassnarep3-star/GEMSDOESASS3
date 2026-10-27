@@ -1,19 +1,21 @@
-# Python & virtual environments
+# Virtual environments & caches (excluded from Git and Arena snapshots)
+.venv/
+.cache/
 __pycache__/
 *.py[cod]
-.venv/
+*$py.class
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 
-# Regenerable large rasters & caches (restored via scripts/restore_data.py & scripts/prepare_data.py)
-.cache/
+# Raw / large competition rasters & intermediate feature stacks
+data/official/
 data/raw/
 data/work/
 data/*.tif
 data/external/
 data/scored/
 *.npy
-*.npz
 *.partial
 *.assembling
+Unselected files/

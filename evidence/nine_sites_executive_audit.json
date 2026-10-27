@@ -1,0 +1,844 @@
+{
+  "schema_version": 1,
+  "evaluator_version": "gems57-pooled-hide-v2",
+  "holdout_protocol": "buffered-whole-components-loqo-v2 (seeds 20, 21 merged on 20 km physical blocks before 1000-draw bootstrap)",
+  "lineage_proof": {
+    "h19_5_dots": 121131,
+    "d28_outside_h19_5_pixels": 0,
+    "gemsdoe25_equals_gemsdoe30_symdiff": 0,
+    "gemsdoe28_solo_equals_gemsdoe31_symdiff": 0,
+    "b1_equals_d28_minus_dcat_le_1_symdiff": 0,
+    "b2_champion_equals_d28_minus_dcat_le_2_symdiff": 0,
+    "gemsdoe36_contains_100pct_of_b2_champion": true,
+    "gemsdoe36_extra_dots_over_b2_champion": 1200
+  },
+  "sites": [
+    {
+      "site": "GEMSDOE24",
+      "site_url": "https://buffedlizard55-lab.github.io/GEMSDOE24/",
+      "repo_url": "https://github.com/buffedlizard55-lab/GEMSDOE24",
+      "hist_name": "h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan",
+      "hist_score_owner_report": 0.2477,
+      "hist_key": "GEMSDOE24_hist_best",
+      "hist_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE24/HEAD/docs/downloads/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+      "latest_name": "gems24-s3dep1-negative-10m-monoclinal-20261026-464fa34b4091-zeros.tif",
+      "latest_key": "GEMSDOE24_s3dep1_latest",
+      "latest_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE24/HEAD/docs/downloads/gems24-s3dep1-negative-10m-monoclinal-20261026-464fa34b4091-zeros.tif",
+      "latest_site_verdict": "DO NOT SUBMIT (71.3% local DKRN1 overlap; C2ST flag)",
+      "historical_best": {
+        "sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310",
+        "bytes": 1632732,
+        "whole_array_finite": false,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 60069,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 8769,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.096653,
+          "ci95": [
+            0.085535,
+            0.107455
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.267242,
+          "uncertainty_band_loo_mae": [
+            0.2452,
+            0.2893
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 60069,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_other_8_hist": 1.0,
+        "nearest_peer_site": "GEMSDOE25",
+        "unique_vs_other_8_sites": false,
+        "ok_to_submit_again": false,
+        "why_not_resubmit": "Already submitted historical H19-5 family member (>70% 3-px overlap across all 9 historical leaders)."
+      },
+      "latest_unique_candidate": {
+        "sha256": "86516533fb525ebce792152ae4ed852e88ae4feda0bd596710c7319a238b8071",
+        "bytes": 823378,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 37654,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.009474,
+          "ci95": [
+            0.00777,
+            0.011172
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.146009,
+          "uncertainty_band_loo_mae": [
+            0.1239,
+            0.1681
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 37654,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_focus_peers": 0.5262,
+        "nearest_focus_peer": "GEMSDOE27_latest",
+        "unique_vs_other_8_sites": true,
+        "vs_champion_02778_3px_overlap": 0.4695
+      }
+    },
+    {
+      "site": "GEMSDOE25",
+      "site_url": "https://buffedlizard55-lab.github.io/GEMSDOE25/",
+      "repo_url": "https://github.com/buffedlizard55-lab/GEMSDOE25",
+      "hist_name": "dotted-h19-5-d2-8-20261002-e56ea318af89-nan",
+      "hist_score_owner_report": 0.26,
+      "hist_key": "GEMSDOE25_hist_best",
+      "hist_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE25/HEAD/docs/downloads/gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+      "latest_name": "gems25-h74-rmps-subsurf-catfree-b2-37654-20261026-3751606e1ce5-zeros.tif",
+      "latest_key": "GEMSDOE25_h74_latest",
+      "latest_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE25/HEAD/docs/downloads/gems25-h74-rmps-subsurf-catfree-b2-37654-20261026-3751606e1ce5-zeros.tif",
+      "latest_site_verdict": "DO NOT SUBMIT (pure subsurface trailed full-stack H35)",
+      "historical_best": {
+        "sha256": "3e78737f0da8dd2ca66cc6caac0ce8eeefcd6715707f8d1bd3091845cd9bcc30",
+        "bytes": 836982,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 44090,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 6436,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.100926,
+          "ci95": [
+            0.090081,
+            0.111684
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.27109,
+          "uncertainty_band_loo_mae": [
+            0.249,
+            0.2932
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 44090,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_other_8_hist": 1.0,
+        "nearest_peer_site": "GEMSDOE24",
+        "unique_vs_other_8_sites": false,
+        "ok_to_submit_again": false,
+        "why_not_resubmit": "Already submitted historical H19-5 family member (>70% 3-px overlap across all 9 historical leaders)."
+      },
+      "latest_unique_candidate": {
+        "sha256": "9e0200dc3b1597c7cfc94b1a39938da3e7e61cac52f89a1249992eaccf23b9ed",
+        "bytes": 826738,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 37654,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.000277,
+          "ci95": [
+            0.000189,
+            0.00037
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.077096,
+          "uncertainty_band_loo_mae": [
+            0.055,
+            0.0992
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 37654,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_focus_peers": 0.3528,
+        "nearest_focus_peer": "GEMSDOE30_latest",
+        "unique_vs_other_8_sites": true,
+        "vs_champion_02778_3px_overlap": 0.2363
+      }
+    },
+    {
+      "site": "GEMSDOE27",
+      "site_url": "https://buffedlizard55-lab.github.io/GEMSDOE27/",
+      "repo_url": "https://github.com/buffedlizard55-lab/GEMSDOE27",
+      "hist_name": "topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan",
+      "hist_score_owner_report": 0.2449,
+      "hist_key": "GEMSDOE27_hist_best",
+      "hist_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE27/HEAD/docs/downloads/gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+      "latest_name": "gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-allfinite.tif",
+      "latest_key": "GEMSDOE27_h31_latest",
+      "latest_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE27/HEAD/docs/downloads/gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-allfinite.tif",
+      "latest_site_verdict": "QUALIFIED PROMOTE TO SELECTOR (unique dual-regime CELF)",
+      "historical_best": {
+        "sha256": "a9bf76b57453a5b3af74c8eef837df53c29a0931162aa540b8763220b36ba3bb",
+        "bytes": 866160,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 61328,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 8875,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.096395,
+          "ci95": [
+            0.085284,
+            0.10709
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.2648,
+          "uncertainty_band_loo_mae": [
+            0.2427,
+            0.2869
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 61328,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_other_8_hist": 0.9802,
+        "nearest_peer_site": "GEMSDOE24",
+        "unique_vs_other_8_sites": false,
+        "ok_to_submit_again": false,
+        "why_not_resubmit": "Already submitted historical H19-5 family member (>70% 3-px overlap across all 9 historical leaders)."
+      },
+      "latest_unique_candidate": {
+        "sha256": "2c002b02792419864bd3b29a218e543cb41e3f07b3b57c29ef35c6e39e184bfe",
+        "bytes": 825820,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 37654,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.013703,
+          "ci95": [
+            0.011766,
+            0.015696
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.144382,
+          "uncertainty_band_loo_mae": [
+            0.1223,
+            0.1665
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 37654,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_focus_peers": 0.577,
+        "nearest_focus_peer": "GEMSDOE27_hist",
+        "unique_vs_other_8_sites": true,
+        "vs_champion_02778_3px_overlap": 0.5023
+      }
+    },
+    {
+      "site": "GEMSDOE28",
+      "site_url": "https://buffedlizard55-lab.github.io/GEMSDOE28/",
+      "repo_url": "https://github.com/buffedlizard55-lab/GEMSDOE28",
+      "hist_name": "h36-1-rung30-blind-r1-20261003-b531dae0a36f-nan",
+      "hist_score_owner_report": 0.271,
+      "hist_key": "GEMSDOE28_hist_best_h36_1",
+      "hist_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE28/HEAD/docs/downloads/gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+      "latest_name": "gems28-s22-ctxhgb-20261026-e23dabcec6e2-allfinite.tif",
+      "latest_key": "GEMSDOE28_s22_latest",
+      "latest_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE28/HEAD/docs/downloads/gems28-s22-ctxhgb-20261026-e23dabcec6e2-allfinite.tif",
+      "latest_site_verdict": "PROMOTE TO SELECTOR CHECKLIST (multiscale context HGB)",
+      "historical_best": {
+        "sha256": "7c74270ad48fa0b865163853046a6d3815967c5bf37bbda5b74ca7fa22583a32",
+        "bytes": 825430,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 37660,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 2353,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.028218,
+          "ci95": [
+            0.024626,
+            0.031798
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.279079,
+          "uncertainty_band_loo_mae": [
+            0.257,
+            0.3011
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 37660,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_other_8_hist": 1.0,
+        "nearest_peer_site": "GEMSDOE24",
+        "unique_vs_other_8_sites": false,
+        "ok_to_submit_again": false,
+        "why_not_resubmit": "Already submitted historical H19-5 family member (>70% 3-px overlap across all 9 historical leaders)."
+      },
+      "latest_unique_candidate": {
+        "sha256": "77934be607d48a4daec5b046009cdabf61d3fdee210aadc75be82ac70f3beb2e",
+        "bytes": 826194,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 37654,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.016301,
+          "ci95": [
+            0.014929,
+            0.017775
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.112591,
+          "uncertainty_band_loo_mae": [
+            0.0905,
+            0.1347
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 37654,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_focus_peers": 0.5473,
+        "nearest_focus_peer": "GEMSDOE30_latest",
+        "unique_vs_other_8_sites": true,
+        "vs_champion_02778_3px_overlap": 0.4205
+      }
+    },
+    {
+      "site": "GEMSDOE30",
+      "site_url": "https://buffedlizard55-lab.github.io/GEMSDOE30/",
+      "repo_url": "https://github.com/buffedlizard55-lab/GEMSDOE30",
+      "hist_name": "d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca",
+      "hist_score_owner_report": 0.26,
+      "hist_key": "GEMSDOE30_hist_best",
+      "hist_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE30/HEAD/docs/downloads/gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+      "latest_name": "gems30-CSR1-44090-20261026-502fb5948335-zeros.tif",
+      "latest_key": "GEMSDOE30_csr1_latest",
+      "latest_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE30/HEAD/docs/downloads/gems30-CSR1-44090-20261026-502fb5948335-zeros.tif",
+      "latest_site_verdict": "DO NOT SUBMIT (CSR-1 trailed MSDB1 full-stack baseline)",
+      "historical_best": {
+        "sha256": "8cf893ead5667df21d3288a9968c35fd5385c425b029d82ee71d311715b129fd",
+        "bytes": 806758,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 44090,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 6436,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.100926,
+          "ci95": [
+            0.090081,
+            0.111684
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.27109,
+          "uncertainty_band_loo_mae": [
+            0.249,
+            0.2932
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 44090,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_other_8_hist": 1.0,
+        "nearest_peer_site": "GEMSDOE24",
+        "unique_vs_other_8_sites": false,
+        "ok_to_submit_again": false,
+        "why_not_resubmit": "Already submitted historical H19-5 family member (>70% 3-px overlap across all 9 historical leaders)."
+      },
+      "latest_unique_candidate": {
+        "sha256": "0fbf3b4a47c2229b68de59e174617f3b47973613ff57950712d25b9166c1d900",
+        "bytes": 415760,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 44090,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.002033,
+          "ci95": [
+            0.001499,
+            0.00267
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.118546,
+          "uncertainty_band_loo_mae": [
+            0.0965,
+            0.1406
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 44090,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_focus_peers": 0.4423,
+        "nearest_focus_peer": "GEMSDOE28_latest",
+        "unique_vs_other_8_sites": true,
+        "vs_champion_02778_3px_overlap": 0.3606
+      }
+    },
+    {
+      "site": "GEMSDOE31",
+      "site_url": "https://buffedlizard55-lab.github.io/GEMSDOE31/docs/",
+      "repo_url": "https://github.com/buffedlizard55-lab/GEMSDOE31",
+      "hist_name": "h27-4-solo-d28-20261004-8acb75e1-nan",
+      "hist_score_owner_report": 0.2708,
+      "hist_key": "GEMSDOE31_hist_best",
+      "hist_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE31/HEAD/docs/downloads/gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif",
+      "latest_name": "gemsdoe31-h31y-regime-mosaic-37654-20261026-66162f1f-zeros.tif",
+      "latest_key": "GEMSDOE31_h31y_latest",
+      "latest_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE31/HEAD/docs/downloads/gemsdoe31-h31y-regime-mosaic-37654-20261026-66162f1f-zeros.tif",
+      "latest_site_verdict": "DO NOT SUBMIT (H31-YM trailed H31-X junction comparator)",
+      "historical_best": {
+        "sha256": "acd853936e5a7170b207f23411b1844caa0e7cfdfc303c600e520ccfe75159e6",
+        "bytes": 154580,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 40199,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 2545,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.029707,
+          "ci95": [
+            0.026054,
+            0.033232
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.280062,
+          "uncertainty_band_loo_mae": [
+            0.258,
+            0.3021
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 40199,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_other_8_hist": 1.0,
+        "nearest_peer_site": "GEMSDOE24",
+        "unique_vs_other_8_sites": false,
+        "ok_to_submit_again": false,
+        "why_not_resubmit": "Already submitted historical H19-5 family member (>70% 3-px overlap across all 9 historical leaders)."
+      },
+      "latest_unique_candidate": {
+        "sha256": "41f1e63a803950db1f621321d5a26c5d3fbbfcc3999923035f0de8a253f7901e",
+        "bytes": 148173,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 37654,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.008811,
+          "ci95": [
+            0.00732,
+            0.010506
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.128602,
+          "uncertainty_band_loo_mae": [
+            0.1065,
+            0.1507
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 37654,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_focus_peers": 0.5063,
+        "nearest_focus_peer": "GEMSDOE27_hist",
+        "unique_vs_other_8_sites": true,
+        "vs_champion_02778_3px_overlap": 0.4593
+      }
+    },
+    {
+      "site": "GEMSDOE32",
+      "site_url": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html",
+      "repo_url": "https://github.com/buffedlizard55-lab/GEMSDOE32",
+      "hist_name": "h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros",
+      "hist_score_owner_report": 0.2778,
+      "hist_key": "GEMSDOE32_hist_best_02778",
+      "hist_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE32/HEAD/docs/downloads/gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+      "latest_name": "gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif",
+      "latest_key": "GEMSDOE32_h47_ldgi_latest",
+      "latest_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE32/HEAD/docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif",
+      "latest_site_verdict": "PROMOTE TO SELECTOR (H47-1 LDGI beat 0.2778 & H38 on holdout)",
+      "historical_best": {
+        "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+        "bytes": 219065,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 37654,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.003885,
+          "ci95": [
+            0.003316,
+            0.004478
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.285977,
+          "uncertainty_band_loo_mae": [
+            0.2639,
+            0.308
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 37654,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_other_8_hist": 1.0,
+        "nearest_peer_site": "GEMSDOE24",
+        "unique_vs_other_8_sites": false,
+        "ok_to_submit_again": false,
+        "why_not_resubmit": "Already submitted historical H19-5 family member (>70% 3-px overlap across all 9 historical leaders)."
+      },
+      "latest_unique_candidate": {
+        "sha256": "d82d63ab9c935b4eb6d8886129a7820da4642d20c3304c57364c55380438f27a",
+        "bytes": 211243,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 37654,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.006168,
+          "ci95": [
+            0.005275,
+            0.007073
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.075939,
+          "uncertainty_band_loo_mae": [
+            0.0539,
+            0.098
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 37654,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_focus_peers": 0.4761,
+        "nearest_focus_peer": "GEMSDOE27_latest",
+        "unique_vs_other_8_sites": true,
+        "vs_champion_02778_3px_overlap": 0.3578
+      }
+    },
+    {
+      "site": "GEMSDOE33",
+      "site_url": "https://buffedlizard55-lab.github.io/GEMSDOE33/",
+      "repo_url": "https://github.com/buffedlizard55-lab/GEMSDOE33",
+      "hist_name": "h33d-analog-tip-stepover-r30-20261004-cb490425926e",
+      "hist_score_owner_report": 0.2632,
+      "hist_key": "GEMSDOE33_hist_best",
+      "hist_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE33/HEAD/docs/downloads/GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
+      "latest_name": "gemsdoe33-fsml2-cc-37654-20261026-6fd4410bbaee-zeros.tif",
+      "latest_key": "GEMSDOE33_fsml2_latest",
+      "latest_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE33/HEAD/docs/downloads/gemsdoe33-fsml2-cc-37654-20261026-6fd4410bbaee-zeros.tif",
+      "latest_site_verdict": "DO NOT SUBMIT (FSML2-CC negative vs CSHT)",
+      "historical_best": {
+        "sha256": "87f857d505e23247e991ccfab2cbe9f49a04df4f9c8028dce7ea261554690757",
+        "bytes": 917544,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 41865,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 3894,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.052964,
+          "ci95": [
+            0.046931,
+            0.058741
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.279729,
+          "uncertainty_band_loo_mae": [
+            0.2577,
+            0.3018
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 41865,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_other_8_hist": 0.9971,
+        "nearest_peer_site": "GEMSDOE24",
+        "unique_vs_other_8_sites": false,
+        "ok_to_submit_again": false,
+        "why_not_resubmit": "Already submitted historical H19-5 family member (>70% 3-px overlap across all 9 historical leaders)."
+      },
+      "latest_unique_candidate": {
+        "sha256": "be5013aad085c23a9317959f85c7d494e28eac5875f61addce8ec81b5bb51de3",
+        "bytes": 826738,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 37654,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.102769,
+          "uncertainty_band_loo_mae": [
+            0.0807,
+            0.1248
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 37654,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_focus_peers": 0.4737,
+        "nearest_focus_peer": "GEMSDOE30_latest",
+        "unique_vs_other_8_sites": true,
+        "vs_champion_02778_3px_overlap": 0.3282
+      }
+    },
+    {
+      "site": "GEMSDOE36",
+      "site_url": "https://buffedlizard55-lab.github.io/GEMSDOE36/docs/",
+      "repo_url": "https://github.com/buffedlizard55-lab/GEMSDOE36",
+      "hist_name": "anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros",
+      "hist_score_owner_report": 0.275,
+      "hist_key": "GEMSDOE36_hist_best_02750",
+      "hist_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE36/HEAD/docs/downloads/gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif",
+      "latest_name": "gemsdoe36-kpl36-exp3-20261026-fc869911e88c-zeros.tif",
+      "latest_key": "GEMSDOE36_kpl36_latest",
+      "latest_download_url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE36/HEAD/docs/downloads/gemsdoe36-kpl36-exp3-20261026-fc869911e88c-zeros.tif",
+      "latest_site_verdict": "PROMOTE (KPL-36 3-5 km line coherence + PU spy)",
+      "historical_best": {
+        "sha256": "e15891020b9c57056ac7fa874a5e506fbd6ed9314a4ea8e73af0753887a3708a",
+        "bytes": 318190,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 38854,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.004001,
+          "ci95": [
+            0.003431,
+            0.004593
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.283854,
+          "uncertainty_band_loo_mae": [
+            0.2618,
+            0.3059
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 38854,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_other_8_hist": 0.9758,
+        "nearest_peer_site": "GEMSDOE27",
+        "unique_vs_other_8_sites": false,
+        "ok_to_submit_again": false,
+        "why_not_resubmit": "Already submitted historical H19-5 family member (>70% 3-px overlap across all 9 historical leaders)."
+      },
+      "latest_unique_candidate": {
+        "sha256": "86fc8243ad573bcdbfac8b432daf0ec5b6800b991b2c3278706358be7eb9922d",
+        "bytes": 827142,
+        "whole_array_finite": true,
+        "in_footprint_finite": true,
+        "range_0_1": true,
+        "dots": 37654,
+        "on_catalogue_dots": 0,
+        "in_2px_collar_dots": 0,
+        "holdout_dti": {
+          "evidence_class": "HOLDOUT-DTI",
+          "evaluator_version": "gems57-pooled-hide-v2",
+          "withheld_positive_pixels": 22893,
+          "dti": 0.002831,
+          "ci95": [
+            0.00202,
+            0.003599
+          ]
+        },
+        "lli_projection": {
+          "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+          "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+          "projected_dti": 0.110003,
+          "uncertainty_band_loo_mae": [
+            0.0879,
+            0.1321
+          ],
+          "loo_mae": 0.0221,
+          "loo_spearman": 0.9259,
+          "off_cat_dots": 37654,
+          "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+        },
+        "max_3px_overlap_vs_focus_peers": 0.6994,
+        "nearest_focus_peer": "GEMSDOE27_latest",
+        "unique_vs_other_8_sites": true,
+        "vs_champion_02778_3px_overlap": 0.5613
+      }
+    }
+  ],
+  "sibling_gemsdoesass1": {
+    "site": "GEMSDOESASS1",
+    "sha256": "50b1350dd92cde3af8bd85f13f39f7feb8c82416f095df281cd8c5291dbb1274",
+    "bytes": 793296,
+    "whole_array_finite": true,
+    "in_footprint_finite": true,
+    "range_0_1": true,
+    "dots": 37654,
+    "on_catalogue_dots": 0,
+    "in_2px_collar_dots": 0,
+    "holdout_dti": {
+      "evidence_class": "HOLDOUT-DTI",
+      "evaluator_version": "gems57-pooled-hide-v2",
+      "withheld_positive_pixels": 22893,
+      "dti": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "lli_projection": {
+      "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+      "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+      "projected_dti": 0.054852,
+      "uncertainty_band_loo_mae": [
+        0.0328,
+        0.0769
+      ],
+      "loo_mae": 0.0221,
+      "loo_spearman": 0.9259,
+      "off_cat_dots": 37654,
+      "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+    },
+    "vs_champion_02778_3px_overlap": 0.1514
+  }
+}
