@@ -1,3 +1,5 @@
+> **Historical preliminary review — superseded for current status.** This document records a review before the H1 experiment and nine-raster audit. Its statements that no experiment, data, or comparisons existed are historical, not current. No submission TIFF was produced. See the [current dashboard](../index.html), [H1 run card](../evidence/h1-run-card.json), and [updated research review](research/results-and-irregularities.md).
+
 # Executive summary — requested GEMS sites and research gates
 
 **Decision: DO NOT SUBMIT.** No candidate raster was generated in this checkout. It has no competition data, template toolchain, or comparison registry. There is no download-ready TIF and no defensible estimate of a future TIF's leaderboard score. A file must not be called unique until its raster content has been measured against the actual registry rasters.

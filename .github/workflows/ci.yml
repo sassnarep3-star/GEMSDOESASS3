@@ -1,0 +1,29 @@
+name: Tests and safety gates
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - run: python -m pip install -r requirements.txt
+      - name: Restore hash-pinned shared template only
+        run: python scripts/bootstrap_template.py --template-only
+      - run: pytest -q
+      - run: node tests/site_dom_test.cjs

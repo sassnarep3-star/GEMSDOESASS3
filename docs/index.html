@@ -43,15 +43,15 @@
 <body>
 <header>
   <div class="wrap">
-    <div class="eyebrow">DOE GEMS · Research and audit</div>
-    <h1>Submission status</h1>
-    <p>Evidence-first tracking of reported prior results, scientific hypotheses, and the automated gates required before a GeoTIFF can be called eligible to submit.</p>
+    <div class="eyebrow">DOE GEMS · Preliminary review archive</div>
+    <h1>Earlier submission review</h1>
+    <p>This page preserves an initial snapshot. Later work restored pinned mirrors, ran a bounded negative experiment, and audited nine historical rasters.</p>
   </div>
 </header>
 <main class="wrap">
   <section class="banner" role="alert" aria-label="Do not submit status">
-    <strong>NO-GO — no submission file is available or approved.</strong>
-    <p>This checkout has no competition raster data, approved template tools, or registry artifacts. No new TIF has been generated, scored, or tested for uniqueness. Do not upload a historical site artifact as if it were a new candidate.</p>
+    <strong>ARCHIVED REVIEW · NO-GO remains current.</strong>
+    <p>This is the preliminary review, not the current dashboard. Later work measured the H1 surface and nine historical files; H1 failed the uniqueness gate, and no submission TIFF was created. <a href="../index.html">Open the current dashboard</a> or <a href="../executive-summary.html">submission guide</a>. Do not upload historical artifacts.</p>
   </section>
 
   <section class="grid" aria-label="Current research status">
@@ -59,18 +59,18 @@
       <h2>Highest result in the supplied site list</h2>
       <div class="metric">0.2778 · GEMSDOE32</div>
       <p><code>h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros</code></p>
-      <p class="small">Value transcribed from the request. No submission receipt or raster bytes were available here; it is not independently confirmed. Its score cannot identify the method or explain its performance by itself.</p>
+      <p class="small">Value transcribed from the request. The later audit checked the raster bytes, but no receipt authenticates their association with the score. The score alone cannot identify the mechanism.</p>
     </article>
     <article class="card">
       <h2>Unique / OK to submit?</h2>
       <p><span class="pill">NOT VERIFIED</span></p>
-      <p>No registry-raster correlation or dot-overlap comparison was possible. No holdout DTI, confidence interval, leakage canary, or final-byte validator was run.</p>
+      <p>This preliminary review did not run those tests. A later H1 surface holdout and registry comparison produced a negative result; no final TIFF or final-byte validator exists. See the <a href="../evidence/h1-run-card.json">current run card</a>.</p>
       <p><strong>Download:</strong> no TIF in this repo. <strong>Submit:</strong> not approved.</p>
     </article>
   </section>
 
   <h2 id="sites">Highest entries listed for the nine requested sites</h2>
-  <p class="small">All values below are user-supplied historical values, not organizer-confirmed receipts or holdout scores. “Uniqueness” is unknown until raster bytes are compared with the full registry.</p>
+  <p class="small">All values below are user-supplied historical values, not organizer-confirmed receipts or holdout scores. The “unknown” cells describe this earlier review; the later <a href="../index.html#sites">nine-file audit</a> measured disqualifying overlap for every row, without claiming a complete registry scan.</p>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Site</th><th>Highest entry quoted</th><th>Value quoted*</th><th>Unique here?</th><th>Download / submit</th></tr></thead>
