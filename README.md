@@ -4,7 +4,7 @@
 
 ## Start here every session
 
-Before changing code or proposing a submission, read the [Executive Summary and Research Gate](docs/EXECUTIVE_SUMMARY.md). It records the standing mission, evidence limits, best results reported for the requested sites, ranked research hypotheses, official sources, and the machine-verification gates. The summary is deliberately explicit about unverified claims.
+Before changing code or proposing a submission, read the [Executive Summary and Research Gate](docs/EXECUTIVE_SUMMARY.md) and the latest [dated repository review/run card](docs/review-2026-10-27.md). The executive summary records the standing mission, evidence limits, best results reported for the requested sites, ranked research hypotheses, official sources, and machine-verification gates. The dated review records this branch's inventory, cross-site audit, blockers, and negative run card. Both are explicit about unverified claims.
 
 ## Standing project charter
 
@@ -24,7 +24,7 @@ The objective is to develop an auditable, scientifically defensible method for i
 
 The organizer's problem description requires a single-layer float32 GeoTIFF on the training grid (UTM zone 11N / EPSG:32611, 100 m, matching bounds), with predictions in [0, 1] and null/NaN outside the study bounds. The competition evaluates distance-weighted Tversky, with alpha 0.2, beta 0.8, and a triangular 300 m distance kernel. A successful writer/validator check is a **format gate only**; it does not mean the result is scientifically good, unique, or approved for upload.
 
-**Current blockers:** this checkout is only an initial commit with a 14-byte README. It has no `data/`, source code, test suite, feature cache, template evaluator/writer, registry rasters, or candidate TIFFs. The competition data page is access-controlled; no DrivenData session is available in this environment. Consequently, no genuine holdout score, confidence interval, uniqueness comparison, or competition-ready TIFF can be produced from this checkout. Do not substitute a blank raster or a TIF copied from another site.
+**Current blockers:** this checkout now has a charter, static status page, and executive-summary documentation, but still has no `data/`, source code, test suite, feature cache, template evaluator/writer, registry rasters, or candidate TIFFs. The competition data page is access-controlled; no DrivenData session is available in this environment. Consequently, no genuine holdout score, confidence interval, uniqueness comparison, or competition-ready TIFF can be produced from this checkout. Do not substitute a blank raster or a TIF copied from another site.
 
 ## Official references
 
