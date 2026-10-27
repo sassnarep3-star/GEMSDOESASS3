@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
-# Reproducible competition & external dataset provisioning wrapper.
-# Delegates to scripts/prepare_data.py, which verifies every dataset against
-# pinned SHA-256 checksums in registry/data_manifest.json.
+# Autonomous Competition Data Placement & SHA-256 Verification Script
+# Restores competition rasters, external USGS/DOE layers, and historical scored rasters
+# into GEMS_DATA_DIR (defaulting to .cache/gems_data) and writes data/restore_receipt.json.
 set -euo pipefail
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-PYTHON_BIN="${REPO_ROOT}/.venv/bin/python"
-if [[ ! -x "${PYTHON_BIN}" ]]; then
-  PYTHON_BIN="python3"
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+TARGET_DIR="${GEMS_DATA_DIR:-$ROOT/.cache/gems_data}"
+PY="${ROOT}/.venv/bin/python"
+if [[ ! -x "$PY" ]]; then
+  PY="python3"
 fi
-exec "${PYTHON_BIN}" "${SCRIPT_DIR}/prepare_data.py" "$@"
+
+mkdir -p "$TARGET_DIR" "$ROOT/data"
+echo "[GEMSDOESASS3] Verifying and restoring competition data into: $TARGET_DIR"
+PYTHONPATH="$ROOT/src" "$PY" "$ROOT/scripts/restore_data.py" --group all --target-dir "$TARGET_DIR"
+echo "[GEMSDOESASS3] Competition data placement and SHA-256 verification succeeded."

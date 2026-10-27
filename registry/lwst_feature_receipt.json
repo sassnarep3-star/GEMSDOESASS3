@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lane": "H-SASS3-A_LWST-GeoConduit",
+  "channels": [
+    "spi_mag_wavenumber",
+    "spi_grav_wavenumber",
+    "wijns_theta_mag",
+    "wijns_theta_grav",
+    "spi_cross_tensor_concord",
+    "upward_150m_dip_shift",
+    "basement_detachment_flexure",
+    "transtensional_slip_dilation",
+    "hydrothermal_alteration_trough",
+    "claycap_lateral_boundary",
+    "ingenious_thermal_upflow_aniso",
+    "lidar_scarp_polarity_asymmetry",
+    "piedmont_breakline_deconf",
+    "steerable_multiscale_aniso_2km",
+    "mimic_veto_clean_gate",
+    "lwst_unsupervised_conduit_index"
+  ],
+  "n_channels": 16,
+  "shape": [
+    3730,
+    3292,
+    16
+  ],
+  "dtype": "float32",
+  "label_free_verified": true,
+  "sgmc_free_verified": true,
+  "elapsed_s": 96.32
+}

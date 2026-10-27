@@ -1,204 +1,229 @@
 #!/usr/bin/env python3
-"""Generate publication-grade diagnostic figures in docs/assets/ from verified JSON/NPZ evidence."""
+"""Generate publication-grade scientific diagnostic figures for GEMSDOESASS3 GitHub Pages."""
 from __future__ import annotations
 
 import json
+import re
+import sys
 from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import rasterio
+from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSETS = ROOT / "docs/assets"
-ASSETS.mkdir(parents=True, exist_ok=True)
+sys.path.insert(0, str(ROOT / "src"))
+from gems32 import holdout, lwst_geoconduit as lwst  # noqa: E402
 
 
-def fig1_nine_sites_and_collar_mechanism() -> None:
-    audit = json.loads((ROOT / "evidence/nine_sites_executive_audit.json").read_text())
-    card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
+def main() -> int:
+    ddir = Path("/tmp/gems_data")
+    wdir = Path("/tmp/gems_work")
+    assets = ROOT / "docs" / "assets"
+    assets.mkdir(parents=True, exist_ok=True)
 
-    sites = audit["sites"]
-    names = [s["site"].replace("GEMSDOE", "GEMS-") for s in sites]
-    hist_scores = [s["hist_score_owner_report"] for s in sites]
-    latest_holdout = [s["latest_unique_candidate"]["holdout_dti"]["dti"] for s in sites]
+    run_card = json.loads((ROOT / "evidence" / "run_card.json").read_text())
+    canary = json.loads((ROOT / "evidence" / "leakage_canary_report.json").read_text())
+    uniq = json.loads((ROOT / "evidence" / "uniqueness_audit_386.json").read_text())
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.5, 5.2), dpi=160)
-    fig.patch.set_facecolor("#0f172a")
-    for ax in (ax1, ax2):
-        ax.set_facecolor("#1e293b")
-        ax.tick_params(colors="#e2e8f0", labelsize=9)
-        for sp in ax.spines.values():
-            sp.set_color("#334155")
+    cand_tif = ROOT / "docs" / "downloads" / run_card["submission_name"]
+    ctx = holdout.load_holdout_context(ddir)
+    foot = ctx.foot
+    labels = ctx.labels
+    sgmc_off = ctx.sgmc_off
 
-    # Left panel: H19-5 Set-Algebra Collar Purification Curve (OWNER-REPORT)
-    steps = [
-        "19GEMSDOE\nH19-5 Raw\n(121,131 px)",
-        "GEMS-24\nd=1.5 Thin\n(60,069 px)",
-        "GEMS-25 ≡ 30\nd=2.8 B=0\n(44,090 px)",
-        "GEMS-28 ≡ 31\nd=2.8 B=1\n(40,199 px)",
-        "GEMS-32 ★\nd=2.8 B=2\n(37,654 px)",
-        "GEMS-36\nB=2 + 1200\n(38,854 px)",
-    ]
-    step_scores = [0.2225, 0.2477, 0.2600, 0.2708, 0.2778, 0.2750]
-    colors_l = ["#64748b", "#38bdf8", "#0ea5e9", "#6366f1", "#10b981", "#f59e0b"]
-    bars1 = ax1.bar(range(len(steps)), step_scores, color=colors_l, width=0.62, edgecolor="#f8fafc", linewidth=0.8)
-    ax1.plot(range(len(steps)), step_scores, color="#f8fafc", marker="o", linewidth=1.6, markersize=5)
-    ax1.set_xticks(range(len(steps)))
-    ax1.set_xticklabels(steps, fontsize=8, color="#e2e8f0")
-    ax1.set_ylim(0.18, 0.305)
-    ax1.set_ylabel("Live Score [OWNER-REPORT]", color="#f8fafc", fontsize=10, fontweight="bold")
-    ax1.set_title("Exact H19-5 Set-Algebra & Collar Purification (0 px SymDiff)", color="#f8fafc", fontsize=10.5, fontweight="bold")
-    ax1.grid(axis="y", color="#334155", linestyle="--", alpha=0.6)
-    for b, v in zip(bars1, step_scores):
-        ax1.text(b.get_x() + b.get_width() / 2, v + 0.003, f"{v:.4f}", ha="center", va="bottom", color="#f8fafc", fontsize=8.5, fontweight="bold")
+    with rasterio.open(cand_tif) as ds:
+        cand_dots = (ds.read(1) > 0) & foot
 
-    # Right panel: Latest Unique Off-H19-5 Candidates on Shared Holdout (gems57-pooled-hide-v2)
-    labels_r = names + ["SASS1\n(cbceb1)", "SASS3 ★\n(GSD-HUA)"]
-    vals_r = latest_holdout + [0.001715, card["holdout_dti"]["dti"]]
-    cols_r = ["#475569" if i != len(labels_r) - 1 else "#10b981" for i in range(len(labels_r))]
-    cols_r[3] = "#f59e0b"  # GEMS-28 s22 (>70% overlap flag)
-    cols_r[2] = "#38bdf8"  # GEMS-27 h31 (best unique peer)
-    y_pos = np.arange(len(labels_r))
-    bars2 = ax2.barh(y_pos, vals_r, color=cols_r, height=0.66, edgecolor="#f8fafc", linewidth=0.7)
-    ax2.axvline(0.064944, color="#f43f5e", linestyle="--", linewidth=1.5, label="CTRL-0 Fold-Honest H19-5 B=2 (0.0649)")
-    ax2.set_yticks(y_pos)
-    ax2.set_yticklabels(labels_r, fontsize=8.5, color="#e2e8f0")
-    ax2.set_xlim(0, 0.086)
-    ax2.set_xlabel("Pooled HOLDOUT-DTI [gems57-pooled-hide-v2, n=22,893]", color="#f8fafc", fontsize=9.5, fontweight="bold")
-    ax2.set_title("Cross-Site Unique Candidate Holdout Comparison", color="#f8fafc", fontsize=10.5, fontweight="bold")
-    ax2.legend(loc="lower right", facecolor="#0f172a", edgecolor="#475569", labelcolor="#f8fafc", fontsize=8)
-    ax2.grid(axis="x", color="#334155", linestyle="--", alpha=0.6)
-    for b, v in zip(bars2, vals_r):
-        ax2.text(v + 0.0012, b.get_y() + b.get_height() / 2, f"{v:.4f}", va="center", color="#f8fafc", fontsize=8, fontweight="bold")
+    lwst_mm = np.load(wdir / "lwst_extra_stack.npy", mmap_mode="r")
+    prob_oof = np.load(wdir / "lwst_full_oof.npy", mmap_mode="r")
 
-    fig.tight_layout()
-    fig.savefig(ASSETS / "fig1_nine_sites_algebra.png", dpi=160)
-    plt.close(fig)
+    plt.rcParams.update({
+        "font.family": "DejaVu Sans",
+        "axes.edgecolor": "#cbd5e1",
+        "axes.linewidth": 0.9,
+        "figure.facecolor": "#ffffff",
+    })
 
+    # --- Figure 1: 3-Panel Spatial Diagnostic ---
+    s = 4
+    foot_s = foot[::s, ::s]
+    lbl_s = ndi.maximum_filter(labels, size=4)[::s, ::s]
+    sgmc_s = ndi.maximum_filter(sgmc_off, size=4)[::s, ::s]
+    dots_s = ndi.maximum_filter(cand_dots, size=4)[::s, ::s]
 
-def fig2_gsd_hua_holdout_ladder() -> None:
-    exp = json.loads((ROOT / "evidence/gsd_hua_experiments.json").read_text())
-    scores = exp["holdout_scores"]
-    arm_order = [
-        ("CTRL-1_19BAND_HGB", "CTRL-1: Raw 19-Band HGB\n(37,654 dots)", "#64748b"),
-        ("EXP-1_GSD_HUA_PURE_SUBSURF", "EXP-1: Pure Subsurface Tower\n(36 non-DEM cols, 80.8% ov)", "#38bdf8"),
-        ("CTRL-0_H19_5_B2", "CTRL-0: Fold-Honest H19-5 B=2\n(GEMSDOE32 ref, 37,654 dots)", "#f43f5e"),
-        ("EXP-2_GSD_HUA_FULL_MULTIPHYS", "EXP-2: Full 46-Feat GSD-HUA\n(Unwhitened, 87.2% ov DUP)", "#f59e0b"),
-        ("EXP-3_GSD_HUA_SAR_DECONFOUNDED", "EXP-3: GSD-HUA SAR-Deconf ★\n(PROMOTED, 67.4% ov <= 70%)", "#10b981"),
-    ]
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.5, 4.9), dpi=160)
-    fig.patch.set_facecolor("#0f172a")
-    for ax in (ax1, ax2):
-        ax.set_facecolor("#1e293b")
-        ax.tick_params(colors="#e2e8f0", labelsize=9)
-        for sp in ax.spines.values():
-            sp.set_color("#334155")
-
-    y = np.arange(len(arm_order))
-    means = [scores[k]["dti"] for k, _, _ in arm_order]
-    lo = [scores[k]["dti"] - scores[k]["ci95"][0] for k, _, _ in arm_order]
-    hi = [scores[k]["ci95"][1] - scores[k]["dti"] for k, _, _ in arm_order]
-    cols = [c for _, _, c in arm_order]
-    lbls = [l for _, l, _ in arm_order]
-
-    ax1.barh(y, means, xerr=[lo, hi], color=cols, height=0.58, capsize=4, ecolor="#f8fafc", edgecolor="#f8fafc", linewidth=0.8)
-    ax1.set_yticks(y)
-    ax1.set_yticklabels(lbls, fontsize=8.5, color="#e2e8f0")
-    ax1.set_xlim(0, 0.098)
-    ax1.set_xlabel("HOLDOUT-DTI +/- 95% Block-Bootstrap CI (n_withheld = 22,893)", color="#f8fafc", fontsize=9.5, fontweight="bold")
-    ax1.set_title("H-GASS3-1 (GSD-HUA) 3-Experiment Holdout Ladder", color="#f8fafc", fontsize=10.5, fontweight="bold")
-    ax1.grid(axis="x", color="#334155", linestyle="--", alpha=0.6)
-    for yi, m, h in zip(y, means, hi):
-        ax1.text(m + h + 0.0015, yi, f"{m:.5f}", va="center", color="#f8fafc", fontsize=8.5, fontweight="bold")
-
-    # Right panel: Uniqueness 3-px Overlap vs HOLDOUT-DTI Frontier
-    pts = [
-        ("EXP-1 Subsurface", 0.8080, 0.05168, "#38bdf8"),
-        ("EXP-2 Unwhitened", 0.8716, 0.07050, "#f59e0b"),
-        ("GEMSDOE28 s22", 0.7508, 0.01627, "#fb7185"),
-        ("GEMSDOE27 h31", 0.5808, 0.01368, "#94a3b8"),
-        ("GEMSDOE32 h47", 0.5146, 0.00619, "#94a3b8"),
-        ("GEMSDOESASS1", 0.2034, 0.00172, "#94a3b8"),
-        ("EXP-3 GSD-HUA ★\n(PROMOTED)", 0.6745, 0.07202, "#10b981"),
-    ]
-    ax2.axvspan(0.70, 0.95, color="#ef4444", alpha=0.18, label="Duplicate Zone (>70% 3-px Overlap)")
-    ax2.axvline(0.70, color="#ef4444", linestyle="--", linewidth=1.6)
-    ax2.axhline(0.064944, color="#38bdf8", linestyle=":", linewidth=1.4, label="CTRL-0 H19-5 B=2 (0.06494)")
-    for name, ov, dti, c in pts:
-        sz = 150 if "EXP-3" in name else 80
-        ax2.scatter([ov], [dti], s=sz, color=c, edgecolors="#f8fafc", linewidth=1.2, zorder=5)
-        dx = -0.02 if ov > 0.78 else 0.012
-        ha = "right" if ov > 0.78 else "left"
-        if "EXP-3" in name:
-            dx, ha = -0.020, "right"
-            ax2.text(ov + dx, dti - 0.0115, name, color="#10b981", fontsize=8.5, ha=ha, fontweight="bold")
-        else:
-            ax2.text(ov + dx, dti + 0.001, name, color="#f8fafc", fontsize=8, ha=ha)
-    ax2.set_xlim(0.15, 0.94)
-    ax2.set_ylim(-0.003, 0.092)
-    ax2.set_xlabel("Worst 3-px Forward Overlap Across All 42 Dot-Field Rasters", color="#f8fafc", fontsize=9.5, fontweight="bold")
-    ax2.set_ylabel("Pooled HOLDOUT-DTI", color="#f8fafc", fontsize=9.5, fontweight="bold")
-    ax2.set_title("Uniqueness Gate (<= 0.70) vs Holdout Recovery Frontier", color="#f8fafc", fontsize=10.5, fontweight="bold")
-    ax2.legend(loc="upper left", facecolor="#0f172a", edgecolor="#475569", labelcolor="#f8fafc", fontsize=8)
-    ax2.grid(color="#334155", linestyle="--", alpha=0.6)
-
-    fig.tight_layout()
-    fig.savefig(ASSETS / "fig2_gsd_hua_holdout_ladder.png", dpi=160)
-    plt.close(fig)
-
-
-def fig3_nevada_prediction_map() -> None:
-    npz = np.load(ROOT / "evidence/gsd_hua_map_preview.npz")
-    surf = npz["surface_ds"].astype(np.float32)
-    fp = npz["footprint_ds"]
-    cat = npz["catalogue_ds"]
-    dots_yx = npz["dots_yx"]
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.8, 6.2), dpi=160)
-    fig.patch.set_facecolor("#0f172a")
-    for ax in (ax1, ax2):
-        ax.set_facecolor("#090d16")
-        ax.tick_params(colors="#cbd5e1", labelsize=8)
-        for sp in ax.spines.values():
-            sp.set_color("#334155")
-
-    disp = np.ma.masked_where(~fp, surf)
-    im = ax1.imshow(disp, cmap="magma", vmin=0.0, vmax=0.85, interpolation="nearest")
-    cb = fig.colorbar(im, ax=ax1, fraction=0.042, pad=0.03)
-    cb.ax.yaxis.set_tick_params(color="#e2e8f0", labelcolor="#e2e8f0", labelsize=8)
-    cb.set_label("SAR-Deconfounded GSD-HUA Surface [0, 1]", color="#e2e8f0", fontsize=8.5)
-    ax1.set_title("Continuous GSD-HUA Fault Discovery Surface\n(Spearman <= 0.115 vs All 43 Registry Rasters)", color="#f8fafc", fontsize=10, fontweight="bold")
-    ax1.set_xlabel("X (400 m ds px, EPSG:32611)", color="#cbd5e1", fontsize=8.5)
-    ax1.set_ylabel("Y (400 m ds px, EPSG:32611)", color="#cbd5e1", fontsize=8.5)
-
-    bg = np.zeros((*fp.shape, 3), dtype=np.float32)
-    bg[fp] = [0.11, 0.16, 0.24]
-    bg[cat] = [0.96, 0.25, 0.37]  # Mapped catalogue in crimson
-    ax2.imshow(bg, interpolation="nearest")
-    ax2.scatter(
-        dots_yx[::2, 1] / 4.0,
-        dots_yx[::2, 0] / 4.0,
-        s=0.45,
-        c="#10b981",
-        alpha=0.78,
-        linewidths=0,
-        label="Emitted Off-Catalogue Dots (37,654 px, B=2)",
+    raw_conduit = lwst_mm[:, :, 14] * (
+        0.42 * lwst_mm[:, :, 4] + 0.30 * lwst_mm[:, :, 11] + 0.28 * lwst_mm[:, :, 7]
     )
-    ax2.plot([], [], color="#f43f5e", linewidth=2, label="Mapped Catalogue (0 Overlap Pixels)")
-    ax2.set_title("Emitted GeoTIFF: 37,654 Dots (73.1% Cover >=150 m, 42.8% Slope <4 deg)\nAll-Finite float32 in [0, 1] | 34.3% 3-px Overlap vs GEMSDOE32", color="#f8fafc", fontsize=9.6, fontweight="bold")
-    ax2.set_xlabel("X (400 m ds px, EPSG:32611)", color="#cbd5e1", fontsize=8.5)
-    ax2.legend(loc="lower left", facecolor="#0f172a", edgecolor="#475569", labelcolor="#f8fafc", fontsize=8, markerscale=8)
+    conduit_max = ndi.maximum_filter(raw_conduit, size=4)[::s, ::s]
+    conduit_field = np.where(foot_s, conduit_max, np.nan)
+    vmax_c = float(np.nanpercentile(conduit_field, 98.5))
+    oof_s = np.where(foot_s, ndi.maximum_filter(prob_oof, size=4)[::s, ::s], np.nan)
+
+    fig, axes = plt.subplots(1, 3, figsize=(15.8, 5.9), dpi=160)
+    # Panel A
+    ax = axes[0]
+    bg = np.full((*foot_s.shape, 3), 0.96, dtype=np.float32)
+    bg[foot_s] = [0.90, 0.93, 0.96]
+    bg[sgmc_s] = [0.92, 0.50, 0.10]
+    bg[lbl_s] = [0.08, 0.26, 0.56]
+    ax.imshow(bg, interpolation="nearest")
+    ax.set_title("A. Mapped Catalogue vs. Off-Catalogue SGMC\nBlue: labels.tif (60,988 px) | Orange: SGMC >300 m (62,703 px)", fontsize=9.8, fontweight="bold", pad=8)
+    ax.set_xticks([]); ax.set_yticks([])
+
+    # Panel B
+    ax = axes[1]
+    bg2 = np.full((*foot_s.shape, 3), 0.96, dtype=np.float32)
+    ax.imshow(bg2, interpolation="nearest")
+    im = ax.imshow(conduit_field, cmap="inferno", vmin=0.0, vmax=max(vmax_c, 0.5), interpolation="bilinear")
+    ax.set_title("B. LWST-GeoConduit Physical Ridges (Zero Labels)\n3-D SPI Wavenumber + Wijns Theta + Transtensional Slip", fontsize=9.8, fontweight="bold", pad=8)
+    ax.set_xticks([]); ax.set_yticks([])
+    cb = fig.colorbar(im, ax=ax, fraction=0.042, pad=0.02)
+    cb.ax.tick_params(labelsize=8)
+    cb.set_label("400 m Block-Max Conduit Z-Score", fontsize=8)
+
+    # Panel C
+    ax = axes[2]
+    bg3 = np.full((*foot_s.shape, 3), 0.96, dtype=np.float32)
+    bg3[foot_s] = [0.08, 0.11, 0.18]
+    bg3[lbl_s] = [0.30, 0.40, 0.54]
+    is_ha = dots_s & (np.nan_to_num(oof_s, nan=0.0) >= 0.30)
+    is_hb = dots_s & (~is_ha)
+    bg3[is_hb] = [0.99, 0.73, 0.18]
+    bg3[is_ha] = [0.16, 0.89, 0.72]
+    ax.imshow(bg3, interpolation="nearest")
+    ax.set_title("C. Shipped EXP3 Dual-Horizon Allocation (37,654 Dots)\nTeal: Horizon-A OOF (19,584d) | Gold: Horizon-B LWST (18,070d)", fontsize=9.8, fontweight="bold", pad=8)
+    ax.set_xticks([]); ax.set_yticks([])
+
+    fig.suptitle(
+        "GEMSDOESASS3 Spatial Architecture — Great Basin Study Area (EPSG:32611, 3,730 x 3,292 @ 100 m)",
+        fontsize=12.2, fontweight="bold", y=0.99, color="#0f172a"
+    )
+    fig.tight_layout(rect=[0, 0, 1, 0.94])
+    fig.savefig(assets / "fig1_lwst_great_basin_map.png", dpi=160, bbox_inches="tight", pad_inches=0.14)
+    plt.close(fig)
+
+    # --- Figure 2: Pareto Frontier & Live Calibration ---
+    fig, axes = plt.subplots(1, 2, figsize=(14.8, 5.6), dpi=160)
+
+    ax = axes[0]
+    ax.axvline(0.099202, color="#64748b", linestyle="--", linewidth=1.1, label="0.2778 Champion HR Baseline (0.0992)")
+    ax.axhline(0.064121, color="#0284c7", linestyle=":", linewidth=1.2, label="0.2778 Champion SGMC Baseline (0.0641)")
+    ax.fill_between([0.099202, 0.160], 0.064121, 0.082, color="#dcfce7", alpha=0.55, label="Dual-Win Zone (Beats 0.2778 on BOTH)")
+
+    pts = [
+        ("0.2778 Champion (32)", 0.099202, 0.064121, "#1e293b", "s", 85, (-0.036, 0.0016)),
+        ("D2.8 0.2600 (25/30)", 0.092800, 0.060592, "#64748b", "o", 60, (-0.031, -0.0028)),
+        ("EXP1 Unsup LWST", 0.045596, 0.075215, "#d97706", "^", 95, (0.0025, -0.0005)),
+        ("EXP2 Dual-HGB OOF", 0.116690, 0.050066, "#2563eb", "v", 95, (-0.016, -0.0032)),
+        ("GEMSDOE28 S22 (promote)", 0.144900, 0.050532, "#ef4444", "D", 65, (-0.038, 0.0020)),
+        ("GEMSDOE36 KPL36 (promote)", 0.140700, 0.044458, "#dc2626", "D", 65, (-0.043, -0.0025)),
+        ("GEMSDOE32 H47-1 (held)", 0.119765, 0.065888, "#7c3aed", "P", 85, (0.0022, 0.0012)),
+        ("GEMSDOE24 S3DEP1 (held >70% ov)", 0.146300, 0.073816, "#9333ea", "X", 80, (-0.052, 0.0014)),
+        ("GEMSDOESASS3 EXP3 (SHIPPED)", 0.111062, 0.065702, "#059669", "*", 250, (-0.010, -0.0036)),
+    ]
+    for lbl, x, y, col, mk, sz, (dx, dy) in pts:
+        ax.scatter([x], [y], c=col, marker=mk, s=sz, zorder=5, edgecolors="#0f172a", linewidths=0.7)
+        ax.annotate(lbl, (x, y), xytext=(x + dx, y + dy), fontsize=8.1,
+                    fontweight="bold" if "SHIPPED" in lbl else "normal",
+                    color="#065f46" if "SHIPPED" in lbl else "#1e293b")
+
+    ax.set_xlim(0.038, 0.158)
+    ax.set_ylim(0.040, 0.080)
+    ax.set_xlabel("HOLDOUT-DTI: HIDE-RECOVER-v3.0 (Withheld Quaternary Faults, n=22,232)", fontsize=9.2, fontweight="bold")
+    ax.set_ylabel("Off-Catalogue HOLDOUT-DTI (SGMC-CAL-v3.0, n=62,703)", fontsize=9.2, fontweight="bold")
+    ax.set_title("A. Dual-Domain Pareto Frontier Across Focus Sites\nEXP3 Is the Only Unique Promoted Raster in the Dual-Win Zone", fontsize=10.2, fontweight="bold")
+    ax.grid(True, alpha=0.28)
+    ax.legend(loc="lower left", fontsize=8.0)
+
+    ax = axes[1]
+    live_pts = [
+        ("30: MSDB1 (0.1462)", 0.049232, 0.1462, "#dc2626", (0.0502, 0.150)),
+        ("27: H29 (0.2190)", 0.055815, 0.2190, "#ea580c", (0.0510, 0.222)),
+        ("24: H25-1 (0.2477)", 0.057932, 0.2477, "#475569", (0.0518, 0.249)),
+        ("27: T-v2 (0.2449)", 0.058262, 0.2449, "#475569", (0.0588, 0.236)),
+        ("25/30: D2.8 (0.2600)", 0.060592, 0.2600, "#334155", (0.0543, 0.264)),
+        ("33: H33d (0.2632)", 0.062551, 0.2632, "#334155", (0.0616, 0.251)),
+        ("28/31: H27-4 (0.2708)", 0.063010, 0.2708, "#1e293b", (0.0560, 0.276)),
+        ("28: H36-1 (0.2710)", 0.062967, 0.2710, "#1e293b", (0.0635, 0.263)),
+        ("32: Champ (0.2778)", 0.064121, 0.2778, "#0284c7", (0.0578, 0.287)),
+        ("36: PINN (0.2750)", 0.064444, 0.2750, "#0f172a", (0.0648, 0.274)),
+    ]
+    xs_l = np.array([p[1] for p in live_pts])
+    ys_l = np.array([p[2] for p in live_pts])
+    coef = np.polyfit(xs_l, ys_l, 1)
+    xx_fit = np.linspace(0.0475, 0.067, 50)
+    ax.plot(xx_fit, np.polyval(coef, xx_fit), "--", color="#64748b", linewidth=1.2, label="Empirical Trend Across 10 Live Receipts (Spearman r = 0.96)")
+    for lbl, x, y, col, (tx, ty) in live_pts:
+        ax.scatter([x], [y], c=col, s=58, zorder=5, edgecolors="#0f172a", linewidths=0.6)
+        ax.annotate(lbl, (x, y), xytext=(tx, ty), fontsize=7.8, color="#1e293b",
+                    arrowprops=dict(arrowstyle="-", color="#94a3b8", lw=0.7))
+    ax.axvline(0.065702, color="#059669", linewidth=2.1, linestyle="-.", label="GEMSDOESASS3 EXP3 SGMC-CAL = 0.0657 (Unscored Live)")
+    ax.set_xlim(0.0475, 0.0695)
+    ax.set_ylim(0.135, 0.298)
+    ax.set_xlabel("Off-Catalogue HOLDOUT-DTI (GEMSDOE32-SGMC-CAL-v3.0)", fontsize=9.2, fontweight="bold")
+    ax.set_ylabel("ORGANIZER-CONFIRMED Live DrivenData DTI", fontsize=9.2, fontweight="bold")
+    ax.set_title("B. Empirical Alignment of Off-Catalogue SGMC-CAL-v3.0\nvs. ORGANIZER-CONFIRMED DrivenData Leaderboard Receipts", fontsize=10.2, fontweight="bold")
+    ax.grid(True, alpha=0.28)
+    ax.legend(loc="lower right", fontsize=8.0)
 
     fig.tight_layout()
-    fig.savefig(ASSETS / "fig3_nevada_gsd_hua_map.png", dpi=160)
+    fig.savefig(assets / "fig2_pareto_holdout_sgmc.png", dpi=160, bbox_inches="tight", pad_inches=0.16)
     plt.close(fig)
+
+    # --- Figure 3: Deduplicated Top-12 Uniqueness Overlaps & Top-14 Leakage Canary ---
+    fig, axes = plt.subplots(1, 2, figsize=(15.0, 5.2), dpi=160)
+
+    ax = axes[0]
+    dedup_ov = []
+    seen_stems = set()
+    for r in uniq["final_dots"]["top_25_genuine_by_overlap"]:
+        stem = re.sub(r"-(zeros|nan|allfinite)\.tif$", "", Path(r["path"]).name)
+        key = f"{r['repo']}:{stem}"
+        if key not in seen_stems:
+            seen_stems.add(key)
+            dedup_ov.append((r, stem))
+        if len(dedup_ov) == 12:
+            break
+    dedup_ov = dedup_ov[::-1]
+    labels_ov = [f"{r['repo']}: {stem[:32]}" for r, stem in dedup_ov]
+    vals_ov = [r["within_3px_fraction"] for r, _ in dedup_ov]
+    ax.barh(range(len(dedup_ov)), vals_ov, color="#0d9488", edgecolor="#0f172a", height=0.68)
+    ax.axvline(0.70, color="#dc2626", linestyle="--", linewidth=1.8, label="Protocol Rule 1 Ceiling (0.70)")
+    ax.set_yticks(range(len(dedup_ov)))
+    ax.set_yticklabels(labels_ov, fontsize=7.9)
+    ax.set_xlim(0.0, 0.80)
+    ax.set_xlabel("Fraction of Candidate Dots Within <= 3 px (300 m) of Registry Raster", fontsize=9.0, fontweight="bold")
+    ax.set_title("A. 385-Raster Uniqueness Gate (Top-12 Distinct Candidates)\nMax Overlap = 0.6327 <= 0.70 | Max |Spearman| = 0.1255 <= 0.90", fontsize=9.8, fontweight="bold")
+    ax.grid(True, axis="x", alpha=0.28)
+    ax.legend(loc="lower right", fontsize=8.0)
+
+    ax = axes[1]
+    top_c = sorted(canary["channels"], key=lambda x: x["symmetric_auc_canary"], reverse=True)[:14][::-1]
+    lwst_set = set(lwst.LWST_CHANNELS)
+    c_names = [f"{c['channel']} ({'LWST' if c['channel'] in lwst_set else 'base'})" for c in top_c]
+    c_aucs = [c["symmetric_auc_canary"] for c in top_c]
+    colors_c = ["#2563eb" if c["channel"] in lwst_set else "#64748b" for c in top_c]
+    ax.barh(range(len(top_c)), c_aucs, color=colors_c, edgecolor="#0f172a", height=0.68)
+    ax.axvline(0.90, color="#dc2626", linestyle="--", linewidth=1.8, label="Protocol Rule 4 Canary Ceiling (0.90)")
+    ax.axvline(0.50, color="#94a3b8", linestyle=":", linewidth=1.0)
+    ax.set_yticks(range(len(top_c)))
+    ax.set_yticklabels(c_names, fontsize=8.0)
+    ax.set_xlim(0.45, 0.96)
+    ax.set_xlabel("Single-Feature Symmetric Holdout AUC max(AUC, 1 - AUC)", fontsize=9.0, fontweight="bold")
+    ax.set_title("B. 51-Channel Single-Feature Leakage Canary (n=22,232)\nAll 51/51 Passed (Max = curv_s2 @ 0.5883; Blue = LWST)", fontsize=9.8, fontweight="bold")
+    ax.grid(True, axis="x", alpha=0.28)
+    ax.legend(loc="lower right", fontsize=8.0)
+
+    fig.tight_layout()
+    fig.savefig(assets / "fig3_uniqueness_canary_audit.png", dpi=160, bbox_inches="tight", pad_inches=0.16)
+    plt.close(fig)
+    print("Regenerated polished figures in docs/assets/ successfully.")
+    return 0
 
 
 if __name__ == "__main__":
-    fig1_nine_sites_and_collar_mechanism()
-    fig2_gsd_hua_holdout_ladder()
-    fig3_nevada_prediction_map()
-    print("Generated all 3 diagnostic figures in docs/assets/")
+    raise SystemExit(main())

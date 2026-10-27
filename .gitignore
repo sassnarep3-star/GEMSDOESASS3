@@ -8,11 +8,14 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 
-# Raw / large competition rasters (restored via scripts/prepare_data.py into .cache/gems_data)
+# Raw / large competition rasters & intermediate feature stacks
 data/official/
 data/raw/
+data/work/
+data/*.tif
 data/external/
 data/scored/
+*.npy
 *.partial
 *.assembling
 Unselected files/
