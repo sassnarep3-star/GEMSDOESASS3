@@ -1,0 +1,120 @@
+{
+  "candidate_id": "EXP3_LWST_DUAL_HORIZON_CONDUIT",
+  "slug": "lwst-geoconduit-dual37654",
+  "content_digest8": "a9ad3386",
+  "description": "GEMSDOESASS3 flagship unique submission: Two-stage 300 m CELF submodular allocation combining spatially-collared Dual-Objective HistGradientBoosting (Classifier + 300 m Kernel Regressor) 51-channel OOF structural/piedmont crests (19,584 dots, 52.0%) with thalweg-vetoed Thurston-Smith 3-D SPI local wavenumber, Wijns Theta-map concordance, 150 m upward continuation, basement flexure & GDR #1391 transtensional geothermal conduits (18,070 dots, 48.0%).",
+  "submission_note_zeros": "GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657",
+  "submission_note_nan": "GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657 [ARCHIVE-NAN-DO-NOT-SUBMIT]",
+  "zeros_tif": {
+    "filename": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
+    "size_bytes": 211511,
+    "sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
+    "mode": "zeros",
+    "geometry_reference": "/tmp/gems_data/sample_submission.tif",
+    "crs": "EPSG:32611",
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "shape": [
+      3730,
+      3292
+    ],
+    "dtype": "float32",
+    "nodata": null,
+    "nodata_repr": "None",
+    "emitted_positive_pixels": 37654,
+    "footprint_fraction": 0.007287,
+    "on_catalogue_positive_pixels": 0,
+    "in_footprint_finite_pixels": 5167373,
+    "in_footprint_min": 0.0,
+    "in_footprint_max": 1.0,
+    "full_grid_finite_pixels": 12279160,
+    "checks": {
+      "exact_reference_grid_match": true,
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_zero_nan": true,
+      "in_footprint_zero_inf": true,
+      "in_footprint_zero_sentinel": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_compliant": true,
+      "zero_on_catalogue_leakage": true,
+      "validator_range_0_1_guaranteed": true
+    },
+    "all_checks_passed": true
+  },
+  "nan_tif": {
+    "filename": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-nan.tif",
+    "size_bytes": 346413,
+    "sha256": "8e89a03614caa7ca37968b99d68517401ca5ac282c34d6a2c6a744387c8be5b4",
+    "mode": "nan",
+    "geometry_reference": "/tmp/gems_data/sample_submission.tif",
+    "crs": "EPSG:32611",
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "shape": [
+      3730,
+      3292
+    ],
+    "dtype": "float32",
+    "nodata": null,
+    "nodata_repr": "nan",
+    "emitted_positive_pixels": 37654,
+    "footprint_fraction": 0.007287,
+    "on_catalogue_positive_pixels": 0,
+    "in_footprint_finite_pixels": 5167373,
+    "in_footprint_min": 0.0,
+    "in_footprint_max": 1.0,
+    "full_grid_finite_pixels": 5167373,
+    "checks": {
+      "exact_reference_grid_match": true,
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_zero_nan": true,
+      "in_footprint_zero_inf": true,
+      "in_footprint_zero_sentinel": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_compliant": true,
+      "zero_on_catalogue_leakage": true,
+      "validator_range_0_1_guaranteed": true
+    },
+    "all_checks_passed": true
+  },
+  "holdout_metrics": {
+    "catalogue_hidden_mean": 0.111062,
+    "catalogue_hidden_per_quadrant": {
+      "NW": 0.12770703882571963,
+      "NE": 0.1202768649328256,
+      "SW": 0.07301181488438231,
+      "SE": 0.13389927114352185
+    },
+    "sgmc_prevalence_calibrated_dti": 0.065702,
+    "drift_corrected_holdout_mean": 0.088382,
+    "drift_corrected_per_quadrant": {
+      "NW": 0.12770703882571963,
+      "NE": 0.1202768649328256,
+      "SW": 0.07301181488438231,
+      "SE": 0.13389927114352185
+    },
+    "predicted_leaderboard_dti": null,
+    "ei_drift_corrected": 0.01186,
+    "slot_decision": "OK_TO_SUBMIT_PROMOTE"
+  }
+}

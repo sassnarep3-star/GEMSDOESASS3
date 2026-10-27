@@ -1,0 +1,19 @@
+# Python & virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Regenerable large rasters & caches (restored via scripts/restore_data.py & scripts/prepare_data.py)
+.cache/
+data/raw/
+data/work/
+data/*.tif
+data/external/
+data/scored/
+*.npy
+*.npz
+*.partial
+*.assembling
