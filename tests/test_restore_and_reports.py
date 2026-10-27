@@ -1,8 +1,8 @@
 from html.parser import HTMLParser
+import io
 import hashlib
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
@@ -18,9 +18,10 @@ def entry(payload=b"content"):
 
 def test_restore_hash_verifies_and_uses_cache(tmp_path, monkeypatch):
     calls = []
-    def fake(args, stdout, check):
-        calls.append(args); stdout.write(b"content"); return SimpleNamespace(returncode=0)
-    monkeypatch.setattr("restore_audit_inputs.subprocess.run", fake)
+    def fake(request, timeout):
+        calls.append(request.full_url)
+        return io.BytesIO(b"content")
+    monkeypatch.setattr("restore_audit_inputs.urlopen", fake)
     assert restore(entry(), tmp_path) == "restored & verified"
     assert (tmp_path / "file.tif").read_bytes() == b"content"
     assert restore(entry(), tmp_path) == "verified cached"
@@ -29,9 +30,9 @@ def test_restore_hash_verifies_and_uses_cache(tmp_path, monkeypatch):
 
 def test_restore_bad_hash_never_replaces_existing(tmp_path, monkeypatch):
     existing = tmp_path / "file.tif"; existing.write_bytes(b"old invalid file")
-    def fake(args, stdout, check):
-        stdout.write(b"wrong bytes")
-    monkeypatch.setattr("restore_audit_inputs.subprocess.run", fake)
+    def fake(request, timeout):
+        return io.BytesIO(b"wrong bytes")
+    monkeypatch.setattr("restore_audit_inputs.urlopen", fake)
     with pytest.raises(ValueError, match="SHA-256 mismatch"):
         restore(entry(), tmp_path)
     assert existing.read_bytes() == b"old invalid file"
@@ -119,3 +120,22 @@ def test_parallel_review_snapshots_are_preserved_and_marked_superseded():
     assert old_card['historical_snapshot'] is True
     assert old_card['superseded_by'] == 'evidence/run_card.json'
     assert old_card['verdict'] == 'negative'
+
+
+def test_binary_bytes_are_not_transcoded(tmp_path, monkeypatch):
+    payload = b'\xff\xfe\x00\x80' * 100
+    monkeypatch.setattr('restore_audit_inputs.urlopen', lambda request, timeout: io.BytesIO(payload))
+    assert restore(entry(payload), tmp_path) == 'restored & verified'
+    assert (tmp_path / 'file.tif').read_bytes() == payload
+
+
+def test_interrupted_download_keeps_existing_file_and_cleans_partial(tmp_path, monkeypatch):
+    existing = tmp_path / 'file.tif'; existing.write_bytes(b'old invalid file')
+    class Broken(io.BytesIO):
+        def read(self, size=-1):
+            raise OSError('interrupted')
+    monkeypatch.setattr('restore_audit_inputs.urlopen', lambda request, timeout: Broken())
+    with pytest.raises(OSError, match='interrupted'):
+        restore(entry(), tmp_path)
+    assert existing.read_bytes() == b'old invalid file'
+    assert not (tmp_path / 'file.tif.partial').exists()
