@@ -33,22 +33,43 @@ def test_docs_pages_and_relative_links():
 
 
 def test_sibling_focus9_urls_verified_against_clones():
-    ref_root = Path("/tmp/ref_repos")
-    if not ref_root.exists():
-        return
+    """Every buffedlizard55-lab sibling link on the public pages must resolve in the sibling checkouts.
+
+    Skips with a visible reason (not a silent pass) when the checkouts are absent. Set GEMS_SIB_ROOT
+    to the directory that holds x_gNN/GEMSDOEnn-main trees (default /tmp/sib).
+    """
+    import os
+    import pytest
+
+    sib_root = Path(os.environ.get("GEMS_SIB_ROOT", "/tmp/sib"))
+    if not sib_root.exists():
+        pytest.skip(f"sibling checkouts not present at {sib_root}; set GEMS_SIB_ROOT")
     txt = (ROOT / "docs" / "index.html").read_text()
     urls = sorted(
         set(
             re.findall(
-                r"https://github\.com/sassnarep3-star/(GEMSDOE\d+)/(?:raw|blob)/main/([^\s\"'<>]+)",
+                r"https://github\.com/buffedlizard55-lab/(GEMSDOE\d+)/(?:raw|blob)/main/([^\s\"'<>]+)",
                 txt,
             )
         )
     )
-    assert len(urls) == 18
+    missing = []
     for repo, rel in urls:
-        local_p = ref_root / repo / rel
-        assert local_p.exists(), f"Missing verified sibling artifact {repo}/{rel}"
+        num = repo[len("GEMSDOE"):]
+        if not (sib_root / f"x_g{num}" / f"{repo}-main" / rel).exists():
+            missing.append(f"{repo}/{rel}")
+    assert not missing, f"Missing sibling artifacts: {missing}"
+
+
+def test_no_broken_sassnarep3_sibling_links_remain():
+    """The sassnarep3-star sibling repos return 404. Only correction text may still name them."""
+    pages = ["README.md", "index.html", "executive-summary.html", "docs/index.html", "docs/executive-summary.html"]
+    for rel in pages:
+        for line in (ROOT / rel).read_text().splitlines():
+            if "CORRECTED 2026-10-28" in line or "WRONG" in line:
+                continue
+            assert not re.search(r"github\.com/sassnarep3-star/GEMSDOE\d+/", line), f"{rel}: {line[:120]}"
+
 
 
 def test_readme_contains_standing_prompt_and_synchronized_runcard():

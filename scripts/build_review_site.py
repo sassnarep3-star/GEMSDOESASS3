@@ -8,6 +8,21 @@ ROOT = Path(__file__).resolve().parents[1]
 card = json.loads((ROOT / 'evidence/current_run_card.json').read_text())
 audit = json.loads((ROOT / 'evidence/nine_sites_executive_audit.json').read_text())
 e = html.escape
+rev = json.loads((ROOT / 'evidence/independent_review_20261028.json').read_text())
+_lat = rev['lattice_gate_literal']
+_uq = rev['uniqueness_gate']
+review_sec = (
+    '<section><h2>Independent review (2026-10-28)</h2><ul>'
+    f"<li><strong>Format gate:</strong> {'PASS' if rev['verdict']['format_valid_programmatic'] else 'FAIL'} (recomputed from the raster).</li>"
+    f"<li><strong>Uniqueness on the {_uq['n_submitted_rasters_compared']} submitted downloads:</strong> {'PASS' if rev['verdict']['unique_on_downloads_programmatic'] else 'FAIL'} "
+    f"(max within-3 px overlap {_uq['max_within3_frac']*100:.2f}% vs 70%).</li>"
+    f"<li><strong>Literal registry rule, including the calibration lattice:</strong> {'PASS' if rev['verdict']['unique_literal_incl_calibration_lattice'] else 'FAIL'} "
+    f"({_lat['within3_frac']*100:.2f}% vs 70%). <strong>Verdict: NOT OK to submit.</strong></li>"
+    "<li><strong>Score claims:</strong> the earlier \"beats 0.2778\" claim is withdrawn; the 0.2778 and 0.4544 comparisons are not demonstrated (HOLDOUT-DTI CIs overlap).</li>"
+    "<li>Full review, corrections, per-site table, ranked hypotheses and limitations: "
+    "<a href=\"research/independent-review-20261028.md\">independent-review-20261028.md</a>.</li>"
+    '</ul></section>'
+)
 rows = []
 for site in audit['sites']:
     h = site['historical_best']['holdout_dti']
@@ -21,6 +36,7 @@ body = f'''<section class="hero"><p class="label">SUBMISSION STATUS · BLOCKED</
 <h1>Do not submit the current GeoTIFF</h1><p>Its pixels pass the local range check, but the literal uniqueness gate fails. A prior registry audit and an independent recheck found <strong>99.7849% of its dots within 3 pixels</strong> of the registered 13GEMSDOE lattice. The protocol allows at most 70%. No density exemption is allowed. This is not a claim that the files are byte-identical.</p>
 <p><a href="{e(card['download_path'].removeprefix('docs/'), quote=True)}">Download historical TIF for analysis only</a> · <a href="data/current_run_card.json">Run card</a> · <a href="executive-summary.html">Submission instructions</a></p>
 <p>Archive: <code>{e(card['submission_name'])}</code><br>SHA-256: <code>{e(card['raster_sha256'])}</code><br>Historical note: <code>{e(card['submission_note'])}</code></p></section>
+{review_sec}
 <section><h2>Executive summary: nine sites</h2><p>There is <strong>no eligible file to recommend</strong>. These are historical leaders identified in the repository audit, not suggestions to resubmit. Values are historical <strong>HOLDOUT-DTI</strong>, evaluator <code>gems57-pooled-hide-v2</code>, 22,893 withheld positives, with 95% intervals. They are not organizer scores or calibrated leaderboard estimates. Audit measurements were not rerun in this session.</p><div class="scroll"><table><thead><tr><th>Site</th><th>Historical file (not approved)</th><th>HOLDOUT-DTI [95% CI]</th><th>Unique against other focus sites?</th></tr></thead><tbody>{table}</tbody></table></div>
 <p>For the former candidate, the historical run card reports HOLDOUT-DTI <strong>0.111062 [0.098423, 0.123755]</strong>, evaluator <code>GEMSDOE32-HIDE-RECOVER-v3.0</code>, 22,232 withheld positives. Its historical companion control is 0.099202 [0.085951, 0.112668] under the same evaluator. This does not predict a leaderboard score, and neither evaluation was reproduced here.</p></section>
 <section><h2>What explains the GEMSDOE32 result?</h2><p>The user reports a 0.2778 result for h33-h33-2-b2, but an organizer receipt was not independently available; it is not organizer-confirmed here. The repository's historical set-algebra audit reports that this raster removes a two-pixel catalogue collar from the d2.8 dotted H19-5 family. This suggests a plausible combination of off-catalogue masking and spatial allocation matched the metric, not proof of the causal reason. Held-out positives and the organizer's hidden labels can differ. Nothing here establishes that a new submission exceeds that result or either conflicting leaderboard figure in the request.</p></section>
@@ -32,5 +48,5 @@ for name,title in [('index.html','GEMS review'),('executive-summary.html','Submi
     page=f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title><style>{style}</style></head><body><main><nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Submission guide</a></nav>{body}</main></body></html>\n'
     (ROOT / 'docs' / name).write_text(page)
     # Root Pages uses a different base for artifacts.
-    rootpage = page.replace('href="downloads/', 'href="docs/downloads/').replace('href="data/', 'href="docs/data/').replace('href="hypotheses.md"', 'href="docs/hypotheses.md"')
+    rootpage = page.replace('href="downloads/', 'href="docs/downloads/').replace('href="data/', 'href="docs/data/').replace('href="hypotheses.md"', 'href="docs/hypotheses.md"').replace('href="research/', 'href="docs/research/')
     (ROOT / name).write_text(rootpage)
