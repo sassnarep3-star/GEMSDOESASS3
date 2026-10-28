@@ -17,7 +17,7 @@ review_sec = (
     f"<li><strong>Uniqueness on the {_uq['n_submitted_rasters_compared']} submitted downloads:</strong> {'PASS' if rev['verdict']['unique_on_downloads_programmatic'] else 'FAIL'} "
     f"(max within-3 px overlap {_uq['max_within3_frac']*100:.2f}% vs 70%).</li>"
     f"<li><strong>Literal registry rule, including the calibration lattice:</strong> {'PASS' if rev['verdict']['unique_literal_incl_calibration_lattice'] else 'FAIL'} "
-    f"({_lat['within3_frac']*100:.2f}% vs 70%). <strong>Verdict: NOT OK to submit.</strong></li>"
+    f"({_lat['within3_frac']*100:.2f}% vs 70%). <strong>Verdict: NOT OK to submit.</strong> At 37,654 dots no raster can meet this rule: only {_lat['coverage_analysis']['footprint_px_outside_3px_of_lattice']:,} footprint pixels lie outside the lattice buffer, and {_lat['coverage_analysis']['dots_needed_outside_3px_to_pass']:,} dots would be needed there. An owner decision on the calibration lattice is required.</li>"
     "<li><strong>Score claims:</strong> the earlier \"beats 0.2778\" claim is withdrawn; the 0.2778 and 0.4544 comparisons are not demonstrated (HOLDOUT-DTI CIs overlap).</li>"
     "<li>Full review, corrections, per-site table, ranked hypotheses and limitations: "
     "<a href=\"research/independent-review-20261028.md\">independent-review-20261028.md</a>.</li>"

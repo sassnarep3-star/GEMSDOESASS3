@@ -63,6 +63,15 @@
     "note": "Final-dot check only. Protocol Rule 1 also asks for a surface check before placement; not re-run here."
   },
   "lattice_gate_literal": {
+    "coverage_analysis": {
+      "footprint_px": 5165852,
+      "footprint_fraction_within_3px_of_lattice": 0.99896,
+      "footprint_px_outside_3px_of_lattice": 5379,
+      "dots": 37654,
+      "dots_needed_outside_3px_to_pass": 11297,
+      "pass_possible_at_this_dot_count": false,
+      "reading": "Literal rule is unsatisfiable at this dot count: the uncovered footprint pixels are fewer than the dots needed outside the 3 px buffer."
+    },
     "pass": false,
     "available": true,
     "witness_path": "x_g24/GEMSDOE24-main/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",

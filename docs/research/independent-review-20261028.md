@@ -110,7 +110,7 @@ Ranking is by expected DTI improvement and implementation cost. "Untried" means 
 
 ## 10. Limitations
 
-1. The literal registry rule blocks this file (C9). Under that rule it is not OK to submit. Whether the calibration lattice should count is a protocol decision for the owner, not for this review.
+1. The literal registry rule blocks this file (C9). 99.90% of the footprint lies within 3 px of a lattice positive, leaving 5,379 footprint pixels outside the buffer. Passing needs at least 11,297 of the 37,654 dots there. Literal rule is unsatisfiable at this dot count: the uncovered footprint pixels are fewer than the dots needed outside the 3 px buffer. The owner must decide whether the synthetic calibration lattice counts under Rule 1. This review applies no exemption.
 1a. No organizer score for the new file. Only the upload itself can show whether it is accepted or what it scores.
 2. Holdout values are proxies. The HIDE-RECOVER proxy is not leak-free for catalogue-built masks, and it does not rank the owner scores.
 3. Owner scores come from the task prompt, not from organizer receipts.
