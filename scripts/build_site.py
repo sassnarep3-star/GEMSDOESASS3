@@ -1023,6 +1023,7 @@ def _to_root_mirror(html_doc: str) -> str:
 
 
 def main() -> int:
+    raise SystemExit("Legacy page builder disabled: its promotion claims violate the literal registry gate. Use scripts/build_review_site.py.")
     rc = _load("evidence/run_card.json")
     rc["download_path"] = f"docs/downloads/{rc['submission_name']}"
     rc["ok_to_download"] = bool(rc.get("ok_to_submit", True))

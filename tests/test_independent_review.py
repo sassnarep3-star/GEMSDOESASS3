@@ -41,19 +41,45 @@ def test_experiment_e1_is_negative_and_spends_no_slot():
 def test_review_json_verdict_is_conservative():
     r = json.loads((ROOT / "evidence/independent_review_20261028.json").read_text())
     v = r["verdict"]
-    assert v["ok_to_download_and_upload_as_valid_unique_file"] is True
+    # Literal registry rule (incl. calibration lattice) blocks the file: NOT OK to submit.
+    assert v["unique_on_downloads_programmatic"] is True
+    assert v["unique_literal_incl_calibration_lattice"] is False
+    assert v["ok_to_download_and_upload_as_valid_unique_file"] is False
+    assert v["ok_to_download_as_format_valid_archive_only"] is True
     assert v["beats_0_2778_champion_demonstrated"] is False
     assert v["beats_0_4544_leader_demonstrated"] is False
     assert v["promote_to_real_slot"] is False
+    assert r["lattice_gate_literal"]["within3_frac"] > 0.70
     assert r["link_gate"]["all_resolved"] is True
     assert len(r["per_site_table"]) == 9
 
 
-def test_banner_present_on_all_pages_and_claims_are_withdrawn():
-    for rel in PAGES:
+def test_lattice_gate_reproduces_main_pin_when_witness_present():
+    import os
+
+    import pytest
+
+    import independent_review as ir
+
+    if not (Path(os.environ.get("GEMS_SIB_ROOT", "/tmp/sib")) / ir.LATTICE_REL).exists():
+        pytest.skip("lattice witness not present; set GEMS_SIB_ROOT")
+    lat = ir.lattice_gate()
+    assert lat["witness_sha256_matches_main_pin"] is True
+    assert lat["same_grid_crs_shape_transform"] is True
+    assert abs(lat["within3_frac"] - 0.997849) < 1e-5
+    assert lat["pass"] is False
+
+
+def test_pages_state_block_and_link_review():
+    for rel in ["README.md"]:
+        txt = (ROOT / rel).read_text()
+        assert "NOT OK to submit" in txt
+        assert "independent-review-20261028.md" in txt
+    for rel in ["index.html", "docs/index.html"]:
         txt = (ROOT / rel).read_text()
         assert "Independent review (2026-10-28)" in txt, rel
-        assert "NOT DEMONSTRATED" in txt, rel
+    for rel in ["executive-summary.html", "docs/executive-summary.html"]:
+        assert "BLOCKED" in (ROOT / rel).read_text(), rel
 
 
 def test_ledger_copies_identical_and_retractions_recorded():
@@ -64,6 +90,7 @@ def test_ledger_copies_identical_and_retractions_recorded():
     assert "RETRACTED" in ids["IR-SASS3-05"]["resolution"]
     assert "CORRECTED" in ids["IR-SASS3-03"]["resolution"]
     assert "IR-SASS3-18" in ids
+    assert "IR-SASS3-19" in ids
 
 
 def test_lwst_baseline_is_true_champion_not_d28_parent():
@@ -77,5 +104,7 @@ def test_independent_review_markdown_has_run_card_and_sources():
     md = (ROOT / "docs/research/independent-review-20261028.md").read_text()
     assert "```json" in md
     assert "NOT DEMONSTRATED" in md
+    assert "**NO**" in md
+    assert "99.78%" in md
     assert "docs.nlr.gov/docs/fy26osti/96647.pdf" in md
     assert md.count("| GEMSDOE") == 9

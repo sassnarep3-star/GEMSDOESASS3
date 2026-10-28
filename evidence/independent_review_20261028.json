@@ -4,12 +4,14 @@
   "file_under_review": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
   "verdict": {
     "format_valid_programmatic": true,
-    "unique_programmatic": true,
-    "ok_to_download_and_upload_as_valid_unique_file": true,
+    "unique_on_downloads_programmatic": true,
+    "unique_literal_incl_calibration_lattice": false,
+    "ok_to_download_and_upload_as_valid_unique_file": false,
+    "ok_to_download_as_format_valid_archive_only": true,
     "beats_0_2778_champion_demonstrated": false,
     "beats_0_4544_leader_demonstrated": false,
     "promote_to_real_slot": false,
-    "reason_not_promoted": "Protocol Rule 6: promotion to a real slot is a separate selector step; no holdout result shows a significant gain over the champion."
+    "reason_not_promoted": "Blocked by the literal registry-overlap rule (lattice witness 99.78% > 70%). Also Protocol Rule 6: promotion is a separate selector step."
   },
   "format_gate": {
     "checks": {
@@ -59,31 +61,43 @@
     "source": "evidence/independent_uniqueness_lwst_20261028.json (scripts/independent_uniqueness_audit.py)",
     "note": "Final-dot check only. Protocol Rule 1 also asks for a surface check before placement; not re-run here."
   },
+  "lattice_gate_literal": {
+    "pass": false,
+    "available": true,
+    "witness_path": "x_g24/GEMSDOE24-main/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "witness_sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
+    "witness_sha256_matches_main_pin": true,
+    "same_grid_crs_shape_transform": true,
+    "witness_positive_px": 206895,
+    "within3_frac": 0.997849,
+    "limit": 0.7,
+    "note": "Literal rule, no exemption. Reproduces the 99.7849% figure recorded on main (docs/research/review-20261028.md)."
+  },
   "link_gate": {
     "pages": {
       "README.md": {
         "remaining_sassnarep3_star_links": 0,
-        "buffedlizard55_lab_links": 18
+        "buffedlizard55_lab_links": 0
       },
       "index.html": {
         "remaining_sassnarep3_star_links": 0,
-        "buffedlizard55_lab_links": 18
+        "buffedlizard55_lab_links": 0
       },
       "executive-summary.html": {
         "remaining_sassnarep3_star_links": 0,
-        "buffedlizard55_lab_links": 18
+        "buffedlizard55_lab_links": 0
       },
       "docs/index.html": {
         "remaining_sassnarep3_star_links": 0,
-        "buffedlizard55_lab_links": 18
+        "buffedlizard55_lab_links": 0
       },
       "docs/executive-summary.html": {
         "remaining_sassnarep3_star_links": 0,
-        "buffedlizard55_lab_links": 18
+        "buffedlizard55_lab_links": 0
       }
     },
-    "unique_targets": 18,
-    "targets_resolved": 18,
+    "unique_targets": 0,
+    "targets_resolved": 0,
     "unresolved": [],
     "all_resolved": true,
     "resolution_root": "/tmp/sib"

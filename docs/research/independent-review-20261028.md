@@ -6,9 +6,10 @@ Every number is labelled **HOLDOUT-DTI** (evaluator named), **ORGANIZER-CONFIRME
 
 | Question | Answer | Basis (label) |
 |---|---|---|
-| Is the file OK to download and upload? | **YES** (format and uniqueness gates only; not a score claim) | Recomputed from the raster (programmatic) |
+| Is the file OK to download and upload? | **NO** (literal registry-overlap rule fails; format-valid archive only) | Recomputed from the raster (programmatic) |
 | Format valid? | PASS | single band float32, EPSG:32611, 3730 rows x 3292 cols, sample geotransform, values in {0,1}, no NaN, 37,654 dots |
-| Unique? | PASS | max within-3 px overlap 66.53% vs 70% limit; max sampled abs Spearman 0.135 vs 0.90; 451 submitted rasters |
+| Unique on the 451 submitted downloads? | PASS | max within-3 px overlap 66.53% vs 70% limit; max sampled abs Spearman 0.135 vs 0.90 |
+| Unique under the literal rule (any registry raster, incl. calibration lattice)? | **FAIL** | lattice witness `inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif` (SHA-256 verified): 99.78% of dots within 3 px vs 70% limit |
 | Beats the 0.2778 champion? | **NOT DEMONSTRATED** | LWST SGMC-CAL HOLDOUT-DTI 0.065702 [0.058992, 0.071240] vs champion 0.064121 (same evaluator). The CI contains the champion point. |
 | Beats the 0.4544 leader? | **NOT DEMONSTRATED** | No organizer score exists for this file. ORGANIZER-CONFIRMED leader 0.4544 (xiaofanhu). |
 | Promote to a real slot? | **NO** | Protocol Rule 6: promotion is a separate selector step. |
@@ -41,7 +42,8 @@ Each file is already scored or belongs to a scored family, so none should be res
 | C2 | 0.111062 [0.098423, 0.123755] is the shipped file's HIDE-RECOVER value | WRONG | It is a per-fold OOF value. `evaluate_holdout.py` on the shipped file gives 0.006130 [0.005175, 0.007123]. |
 | C3 | 0.099202 is the 0.2778 champion baseline | WRONG | It is the D2.8 parent e56ea318af89 (owner-reported 0.2600). The true champion e5eb6e7e gives static HR 0.004515. Code fixed in `scripts/run_lwst_experiments.py` (IR-SASS3-08). Artifacts still carry the old value until the pipeline is rerun. |
 | C4 | Sibling repos at sassnarep3-star/GEMSDOE* | WRONG (404) | Rewritten to buffedlizard55-lab. 18 unique targets, all resolved in the sibling checkouts (IR-SASS3-09). The owner should confirm the mapping. |
-| C5 | Uniqueness max 63.27% across 385 rasters | STALE | Current audit: 66.53% across 451 submitted rasters (vs gemsdoe32-h49, newer). Still under 70%. |
+| C5 | Uniqueness max 63.27% across 385 rasters | STALE | Current audit: 66.53% across 451 submitted rasters (vs gemsdoe32-h49, newer). Still under 70% on downloads; see C9 for the literal rule. |
+| C9 | This review: file OK to upload, uniqueness PASS | WRONG (corrected) | The audit excluded `inputs/calibration`. That raster is a registry raster under the literal rule. It has 99.78% overlap, which fails the 70% limit. Main's review (`docs/research/review-20261028.md`) reaches the same block. |
 | C6 | Root cause of the portal error is NaN outside the footprint | UNVERIFIED | No portal log exists. The file passes the format gate, so it is safe under the stated rule. |
 | C7 | verify_all_gates 30/30 PASS = independent verification | OVERSTATED | It reads JSON the pipeline wrote. The recomputed gates are in `scripts/independent_review.py` (IR-SASS3-15). |
 | C8 | Leaderboard progression 0.4413 to 0.4544 | CORRECT | Live public top: xiaofanhu 0.4544 (ORGANIZER-CONFIRMED). Public scores may differ from the private final (Rules 3.2). |
@@ -78,6 +80,7 @@ The evidence supports a narrower answer than the prompt implies:
 - HIDE-RECOVER HOLDOUT-DTI 0.001576 [0.000263, 0.003255]; SGMC-CAL HOLDOUT-DTI 0.000914 [0.00033, 0.001634].
 - Single-feature canary: symmetric AUC 0.602 (pass, <= 0.90).
 - Pre-registered criteria failed. Verdict: **NEGATIVE**. Slot spent: False.
+- The E1 candidate was not run against the calibration lattice. The verdict is negative on the holdout, so the lattice check is moot for E1. It would be required before any promotion.
 - Evidence: `evidence/hypothesis_h_sass3_e_experiment.json`, produced by `scripts/hypothesis_h_sass3_e_basement_curvature.py`.
 
 ## 8. Ranked untried hypotheses (3 to 5)
@@ -101,14 +104,17 @@ Ranking is by expected DTI improvement and implementation cost. "Untried" means 
 | https://github.com/drivendataorg/gems-prize-reference-solution (commit aebe92f) | Cloned | Metric is not in the notebook |
 | https://github.com/buffedlizard55-lab/GEMSDOE{24,25,27,28,30,31,32,33,36} | Tarballs downloaded and checked | Sibling submissions; champion SHA-256 matches the sibling audit |
 | https://github.com/sassnarep3-star/GEMSDOE* | 404 | Not usable (C4) |
+| https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif (lattice witness) | Checked in the sibling checkout; SHA-256 b4570b40... matches main's pin | Literal registry rule (C9) |
+
 | USGS GeoDAWN (doi 10.5066/P93LGLVQ, cited in the Rules), epsg.io/32611, Tversky index wiki, gbcge.org INGENIOUS, USGS ANSS | NOT fetched in this session | Listed for manual review |
 
 ## 10. Limitations
 
-1. No organizer score for the new file. Only the upload itself can show whether it is accepted or what it scores.
+1. The literal registry rule blocks this file (C9). Under that rule it is not OK to submit. Whether the calibration lattice should count is a protocol decision for the owner, not for this review.
+1a. No organizer score for the new file. Only the upload itself can show whether it is accepted or what it scores.
 2. Holdout values are proxies. The HIDE-RECOVER proxy is not leak-free for catalogue-built masks, and it does not rank the owner scores.
 3. Owner scores come from the task prompt, not from organizer receipts.
-4. Uniqueness was checked on final dots only. The surface check that Rule 1 also requires was not re-run.
+4. Uniqueness was checked on final dots only. The surface check that Rule 1 also requires was not re-run. The downloads audit excludes non-download rasters; the literal gate adds the lattice only.
 5. Zeros fill the area outside the footprint. The organizer sample uses NaN nodata. Both are in [0,1], but whether the portal treats them identically is unconfirmed.
 6. Public and private leaderboard scores can differ (Rules 3.2).
 7. Generative-AI use must be disclosed in the submission narrative (Rules 3.2, IR-SASS3-11). This is an owner action.

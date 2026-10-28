@@ -122,7 +122,8 @@ def verify_all() -> dict:
         record("zip_sha256_matches_run_card", sha256_file(zip_path) == card["zip_sha256"], "Zip SHA256 mismatch")
         with zipfile.ZipFile(zip_path, "r") as zf:
             names = zf.namelist()
-            record("zip_contains_valid_tif", tif_path.name in names, f"zip contents={names}")
+            record("zip_contains_valid_tif", names == [tif_path.name], f"zip contents={names}")
+            record("zip_inner_matches_tif", names == [tif_path.name] and hashlib.sha256(zf.read(tif_path.name)).hexdigest() == card["raster_sha256"], "ZIP bytes differ from TIF")
 
     # Dual-Evaluator Holdout wins vs 0.2778 Champion
     hr = card["holdout_dti"]["primary_hide_and_recover"]
@@ -141,10 +142,19 @@ def verify_all() -> dict:
         f"SGMC={sg['prevalence_calibrated_dti']} vs {sg['champion_02778_calibrated_dti']}",
     )
 
+    # Protocol applies to every registry raster, including space-filling ones.
+    # Historical receipt has a literal failing row; no null-calibration exemption.
+    audit = json.loads((ROOT / "evidence/uniqueness_audit_386.json").read_text())
+    lattice = audit.get("space_filling_calibration_lattices", [])
+    record("literal_registry_overlap_all_rasters", bool(lattice) and all(
+        isinstance(row.get("within_3px_fraction"), (int, float))
+        and 0 <= row["within_3px_fraction"] <= 0.70 for row in lattice),
+        "Registry lattice overlaps 99.7849% of candidate dots; protocol limit is 70%")
+
     # 386-Raster Uniqueness + Parallel Sibling GeoTIFF check
     uq = card["registry_correlation_and_overlap"]
     record(
-        "uniqueness_386_registry_passed",
+        "historical_non_lattice_subset_passed",
         uq["registry_rasters_checked"] == 386
         and uq["pre_placement_surface_max_abs_spearman"] <= 0.90
         and uq["final_dots_max_abs_spearman"] <= 0.90
@@ -206,7 +216,7 @@ def main() -> int:
     print(f"  OK TO DOWNLOAD  : {'YES (APPROVED)' if res['ok_to_download'] else 'NO (BLOCKED)'}")
     print(f"  OK TO SUBMIT    : {'YES (VERDICT: PROMOTE)' if res['ok_to_submit'] else 'NO'}")
     print("=" * 78)
-    return 0 if res["ok"] else 1
+    return 0 if res["ok"] or ("--expect-blocked" in sys.argv and not res["ok_to_submit"] and res["problems"] == ["literal_registry_overlap_all_rasters: Registry lattice overlaps 99.7849% of candidate dots; protocol limit is 70%"] and res["verdict"] == "negative") else 1
 
 
 if __name__ == "__main__":

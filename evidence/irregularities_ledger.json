@@ -15,7 +15,7 @@
       "severity": "HIGH (AUDITED)",
       "title": "Cross-site duplication across all 9 focus sites' Era-1 leaderboard winners (H19-5 / D2.8 family)",
       "finding": "Every Era-1 live-scored winner across GEMSDOE24..36 (`0.2449` to `0.2778`) has 86.7%–100.0% within-3px dot overlap with the GEMSDOE32 0.2778 Champion (`e5eb6e7e-zeros.tif`). Moreover, GEMSDOE25 and GEMSDOE30 (`e56ea318af89-zeros.tif`, 0.2600) are byte-identical (`XOR = 0`), and GEMSDOE28 `h27-4` and GEMSDOE31 `h27-4` (`8acb75e1`, 0.2708) have `XOR = 0` positive pixels.",
-      "resolution": "All Era-1 files are marked DO NOT RESUBMIT in the Executive Summary table; GEMSDOESASS3 achieves 41.53% overlap vs the 0.2778 Champion and <= 63.27% across all 385 genuine rasters. CORRECTION 2026-10-28: the independent audit (evidence/independent_uniqueness_lwst_20261028.json) compared 451 submitted rasters and finds the maximum within-3 px overlap of the shipped LWST file is 66.53% (vs gemsdoe32-h49, 2026-10-27T23:50Z), not 63.27%. Still below the 70% limit."
+      "resolution": "All Era-1 files are marked DO NOT RESUBMIT in the Executive Summary table; GEMSDOESASS3 achieves 41.53% overlap vs the 0.2778 Champion and <= 63.27% across all 385 genuine rasters. CORRECTION 2026-10-28: the independent audit (evidence/independent_uniqueness_lwst_20261028.json) compared 451 submitted rasters and finds the maximum within-3 px overlap of the shipped LWST file is 66.53% (vs gemsdoe32-h49, 2026-10-27T23:50Z), not 63.27%. That is below 70% on the downloads only. The literal rule that includes the calibration lattice gives 99.78% (IR-SASS3-19)."
     },
     {
       "id": "IR-SASS3-03",
@@ -128,6 +128,13 @@
       "title": "Large gap to the leaderboard top",
       "finding": "The best owner-reported focus-site score is 0.2778 (OWNER-REPORT). The live top is 0.4544 (ORGANIZER-CONFIRMED on the public board). The gap is 0.1766. No file in this repo has a supported estimate above 0.2778.",
       "resolution": "Open. The untried hypotheses in docs/research/independent-review-20261028.md are candidates, not results."
+    },
+    {
+      "id": "IR-SASS3-19",
+      "severity": "HIGH (CORRECTED 2026-10-28)",
+      "title": "Independent uniqueness audit excluded the calibration lattice; literal rule blocks the file",
+      "finding": "The 2026-10-28 downloads audit compared 451 submitted rasters and reported max within-3 px overlap 66.53%, so it reported the file as unique. The audit excluded non-download rasters, including inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif. Protocol Rule 1 says \"any registry raster\". Recomputed here: 99.7849% of the 37,654 dots lie within 3 px of the lattice (SHA-256 b4570b40... matches the pin on main; same CRS, shape and transform). This fails the 70% limit. Main's review (docs/research/review-20261028.md) reaches the same block.",
+      "resolution": "Verdict corrected to NOT OK to submit under the literal rule (scripts/independent_review.py, lattice_gate). Whether the synthetic lattice should count is a protocol decision for the owner; no exemption is applied here."
     }
   ]
 }

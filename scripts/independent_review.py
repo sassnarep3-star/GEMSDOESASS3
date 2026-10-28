@@ -121,6 +121,42 @@ def per_site_table() -> list[dict]:
     return rows
 
 
+LATTICE_REL = "x_g24/GEMSDOE24-main/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
+LATTICE_SHA256 = "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2"
+
+
+def lattice_gate() -> dict:
+    """Literal registry rule (Protocol Rule 1: 'any registry raster'): the 5x5 px calibration lattice
+    is a registry raster and must be checked too. It is outside docs/downloads, so the audit above
+    excludes it; this gate includes it. No null-calibration exemption is applied."""
+    import hashlib
+
+    path = SIB / LATTICE_REL
+    if not path.exists():
+        return {"pass": False, "available": False, "reason": f"witness not found at {path}"}
+    sha = hashlib.sha256(path.read_bytes()).hexdigest()
+    with rasterio.open(path) as w, rasterio.open(LWST) as c:
+        same_grid = (w.crs == c.crs) and (w.shape == c.shape) and (w.transform == c.transform)
+        wa = w.read(1)
+        ca = c.read(1)
+    wpos = np.isfinite(wa) & (wa > 0)
+    dots = ca == 1
+    dist = ndi.distance_transform_edt(~wpos)
+    frac = float((dist[dots] <= 3.0).mean()) if dots.any() else 0.0
+    return {
+        "pass": bool(frac <= 0.70 and sha == LATTICE_SHA256 and same_grid),
+        "available": True,
+        "witness_path": LATTICE_REL,
+        "witness_sha256": sha,
+        "witness_sha256_matches_main_pin": sha == LATTICE_SHA256,
+        "same_grid_crs_shape_transform": bool(same_grid),
+        "witness_positive_px": int(wpos.sum()),
+        "within3_frac": round(frac, 6),
+        "limit": 0.70,
+        "note": "Literal rule, no exemption. Reproduces the 99.7849% figure recorded on main (docs/research/review-20261028.md).",
+    }
+
+
 def link_gate() -> dict:
     out: dict = {"pages": {}, "unique_targets": 0, "targets_resolved": 0, "unresolved": []}
     targets: set[tuple[str, str]] = set()
@@ -192,6 +228,7 @@ def render_md(r: dict) -> str:
     v = r["verdict"]
     fg = r["format_gate"]
     uq = r["uniqueness_gate"]
+    lat = r["lattice_gate_literal"]
     lg = r["link_gate"]
     hs = r["holdout_summary"]
     pc = r["proxy_concordance"]
@@ -210,10 +247,12 @@ def render_md(r: dict) -> str:
     A("")
     A("| Question | Answer | Basis (label) |")
     A("|---|---|---|")
-    A(f"| Is the file OK to download and upload? | **{'YES' if v['ok_to_download_and_upload_as_valid_unique_file'] else 'NO'}** "
-      f"(format and uniqueness gates only; not a score claim) | Recomputed from the raster (programmatic) |")
+    ok_txt = "YES" if v["ok_to_download_and_upload_as_valid_unique_file"] else "NO"
+    A(f"| Is the file OK to download and upload? | **{ok_txt}** "
+      f"(literal registry-overlap rule fails; format-valid archive only) | Recomputed from the raster (programmatic) |")
     A(f"| Format valid? | {'PASS' if v['format_valid_programmatic'] else 'FAIL'} | single band float32, EPSG:32611, 3730 rows x 3292 cols, sample geotransform, values in {{0,1}}, no NaN, 37,654 dots |")
-    A(f"| Unique? | {'PASS' if v['unique_programmatic'] else 'FAIL'} | max within-3 px overlap {_pct(uq['max_within3_frac'])} vs 70% limit; max sampled abs Spearman {uq['max_abs_spearman_sampled']:.3f} vs 0.90; {uq['n_submitted_rasters_compared']} submitted rasters |")
+    A(f"| Unique on the 451 submitted downloads? | {'PASS' if v['unique_on_downloads_programmatic'] else 'FAIL'} | max within-3 px overlap {_pct(uq['max_within3_frac'])} vs 70% limit; max sampled abs Spearman {uq['max_abs_spearman_sampled']:.3f} vs 0.90 |")
+    A(f"| Unique under the literal rule (any registry raster, incl. calibration lattice)? | **{'PASS' if v['unique_literal_incl_calibration_lattice'] else 'FAIL'}** | lattice witness `inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif` (SHA-256 verified): {_pct(lat['within3_frac'])} of dots within 3 px vs 70% limit |")
     A("| Beats the 0.2778 champion? | **NOT DEMONSTRATED** | LWST SGMC-CAL HOLDOUT-DTI 0.065702 [0.058992, 0.071240] vs champion 0.064121 (same evaluator). The CI contains the champion point. |")
     A("| Beats the 0.4544 leader? | **NOT DEMONSTRATED** | No organizer score exists for this file. ORGANIZER-CONFIRMED leader 0.4544 (xiaofanhu). |")
     A("| Promote to a real slot? | **NO** | Protocol Rule 6: promotion is a separate selector step. |")
@@ -240,7 +279,8 @@ def render_md(r: dict) -> str:
     A("| C2 | 0.111062 [0.098423, 0.123755] is the shipped file's HIDE-RECOVER value | WRONG | It is a per-fold OOF value. `evaluate_holdout.py` on the shipped file gives 0.006130 [0.005175, 0.007123]. |")
     A("| C3 | 0.099202 is the 0.2778 champion baseline | WRONG | It is the D2.8 parent e56ea318af89 (owner-reported 0.2600). The true champion e5eb6e7e gives static HR 0.004515. Code fixed in `scripts/run_lwst_experiments.py` (IR-SASS3-08). Artifacts still carry the old value until the pipeline is rerun. |")
     A("| C4 | Sibling repos at sassnarep3-star/GEMSDOE* | WRONG (404) | Rewritten to buffedlizard55-lab. 18 unique targets, all resolved in the sibling checkouts (IR-SASS3-09). The owner should confirm the mapping. |")
-    A("| C5 | Uniqueness max 63.27% across 385 rasters | STALE | Current audit: 66.53% across 451 submitted rasters (vs gemsdoe32-h49, newer). Still under 70%. |")
+    A("| C5 | Uniqueness max 63.27% across 385 rasters | STALE | Current audit: 66.53% across 451 submitted rasters (vs gemsdoe32-h49, newer). Still under 70% on downloads; see C9 for the literal rule. |")
+    A("| C9 | This review: file OK to upload, uniqueness PASS | WRONG (corrected) | The audit excluded `inputs/calibration`. That raster is a registry raster under the literal rule. It has 99.78% overlap, which fails the 70% limit. Main's review (`docs/research/review-20261028.md`) reaches the same block. |")
     A("| C6 | Root cause of the portal error is NaN outside the footprint | UNVERIFIED | No portal log exists. The file passes the format gate, so it is safe under the stated rule. |")
     A("| C7 | verify_all_gates 30/30 PASS = independent verification | OVERSTATED | It reads JSON the pipeline wrote. The recomputed gates are in `scripts/independent_review.py` (IR-SASS3-15). |")
     A("| C8 | Leaderboard progression 0.4413 to 0.4544 | CORRECT | Live public top: xiaofanhu 0.4544 (ORGANIZER-CONFIRMED). Public scores may differ from the private final (Rules 3.2). |")
@@ -277,6 +317,7 @@ def render_md(r: dict) -> str:
     A(f"- HIDE-RECOVER {e1['hide_recover']}; SGMC-CAL {e1['sgmc_cal']}.")
     A(f"- Single-feature canary: symmetric AUC {e1['canary_symmetric_auc']:.3f} (pass, <= 0.90).")
     A(f"- Pre-registered criteria failed. Verdict: **{e1['verdict'].upper()}**. Slot spent: {e1['slot_spent']}.")
+    A("- The E1 candidate was not run against the calibration lattice. The verdict is negative on the holdout, so the lattice check is moot for E1. It would be required before any promotion.")
     A("- Evidence: `evidence/hypothesis_h_sass3_e_experiment.json`, produced by `scripts/hypothesis_h_sass3_e_basement_curvature.py`.")
     A("")
     A("## 8. Ranked untried hypotheses (3 to 5)")
@@ -298,14 +339,16 @@ def render_md(r: dict) -> str:
     A("| https://github.com/drivendataorg/gems-prize-reference-solution (commit aebe92f) | Cloned | Metric is not in the notebook |")
     A("| https://github.com/buffedlizard55-lab/GEMSDOE{24,25,27,28,30,31,32,33,36} | Tarballs downloaded and checked | Sibling submissions; champion SHA-256 matches the sibling audit |")
     A("| https://github.com/sassnarep3-star/GEMSDOE* | 404 | Not usable (C4) |")
+    A("| https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif (lattice witness) | Checked in the sibling checkout; SHA-256 b4570b40... matches main's pin | Literal registry rule (C9) |\n")
     A("| USGS GeoDAWN (doi 10.5066/P93LGLVQ, cited in the Rules), epsg.io/32611, Tversky index wiki, gbcge.org INGENIOUS, USGS ANSS | NOT fetched in this session | Listed for manual review |")
     A("")
     A("## 10. Limitations")
     A("")
-    A("1. No organizer score for the new file. Only the upload itself can show whether it is accepted or what it scores.")
+    A("1. The literal registry rule blocks this file (C9). Under that rule it is not OK to submit. Whether the calibration lattice should count is a protocol decision for the owner, not for this review.")
+    A("1a. No organizer score for the new file. Only the upload itself can show whether it is accepted or what it scores.")
     A("2. Holdout values are proxies. The HIDE-RECOVER proxy is not leak-free for catalogue-built masks, and it does not rank the owner scores.")
     A("3. Owner scores come from the task prompt, not from organizer receipts.")
-    A("4. Uniqueness was checked on final dots only. The surface check that Rule 1 also requires was not re-run.")
+    A("4. Uniqueness was checked on final dots only. The surface check that Rule 1 also requires was not re-run. The downloads audit excludes non-download rasters; the literal gate adds the lattice only.")
     A("5. Zeros fill the area outside the footprint. The organizer sample uses NaN nodata. Both are in [0,1], but whether the portal treats them identically is unconfirmed.")
     A("6. Public and private leaderboard scores can differ (Rules 3.2).")
     A("7. Generative-AI use must be disclosed in the submission narrative (Rules 3.2, IR-SASS3-11). This is an owner action.")
@@ -349,20 +392,24 @@ def render_md(r: dict) -> str:
 def main() -> int:
     fmt = format_gate()
     uq = uniqueness_gate()
+    lat = lattice_gate()
     conc = json.loads(CONC.read_text())
     e1 = json.loads(EXP_E1.read_text())
     links = link_gate()
     owner_n = len(json.loads(OWNER.read_text())["entries"])
 
+    literal_unique = bool(uq["pass"] and lat["pass"])
     verdict = {
         "format_valid_programmatic": fmt["all_pass"],
-        "unique_programmatic": uq["pass"],
-        "ok_to_download_and_upload_as_valid_unique_file": fmt["all_pass"] and uq["pass"],
+        "unique_on_downloads_programmatic": uq["pass"],
+        "unique_literal_incl_calibration_lattice": literal_unique,
+        "ok_to_download_and_upload_as_valid_unique_file": fmt["all_pass"] and literal_unique,
+        "ok_to_download_as_format_valid_archive_only": fmt["all_pass"],
         "beats_0_2778_champion_demonstrated": False,
         "beats_0_4544_leader_demonstrated": False,
         "promote_to_real_slot": False,
-        "reason_not_promoted": "Protocol Rule 6: promotion to a real slot is a separate selector step; "
-                               "no holdout result shows a significant gain over the champion.",
+        "reason_not_promoted": "Blocked by the literal registry-overlap rule (lattice witness "
+                               f"{lat['within3_frac']*100:.2f}% > 70%). Also Protocol Rule 6: promotion is a separate selector step.",
     }
     sgmc_lwst = 0.065702
     result = {
@@ -372,6 +419,7 @@ def main() -> int:
         "verdict": verdict,
         "format_gate": fmt,
         "uniqueness_gate": uq,
+        "lattice_gate_literal": lat,
         "link_gate": links,
         "holdout_summary": {
             "lwst": {
@@ -415,7 +463,7 @@ def main() -> int:
                       "links_all_resolved": links["all_resolved"], "unique_targets": links["unique_targets"],
                       "remaining_broken": sum(p["remaining_sassnarep3_star_links"] for p in links["pages"].values())},
                      indent=2))
-    return 0 if fmt["all_pass"] and uq["pass"] and links["all_resolved"] else 1
+    return 0 if fmt["all_pass"] and links["all_resolved"] else 1
 
 
 if __name__ == "__main__":
