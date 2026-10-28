@@ -765,6 +765,7 @@ def build_index_html(card: dict, audit: dict, exp: dict, canary: dict) -> str:
 
 
 def main() -> int:
+    raise SystemExit("Legacy page builder disabled: its promotion claims violate the literal registry gate. Use scripts/build_review_site.py.")
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
     audit = json.loads((ROOT / "evidence/nine_sites_executive_audit.json").read_text())
     exp = json.loads((ROOT / "evidence/gsd_hua_experiments.json").read_text())
