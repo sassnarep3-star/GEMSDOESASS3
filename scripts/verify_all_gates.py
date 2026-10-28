@@ -22,9 +22,10 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_CRS = "EPSG:32611"
 EXPECTED_SHAPE = (3730, 3292)
 EXPECTED_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
-# Replaces the old "promote" verdict: the file is OK to download and submit as a
-# format-valid, unique candidate. Its score is NOT established (see warnings).
-SUBMIT_VERDICT = "download_ok_score_unverified"
+# Only this verdict permits submission. It requires every blocking gate, including the
+# literal registry-overlap rule (which currently FAILS; see IR-SASS3-19). Score claims are
+# reported as WARN and never establish a score.
+SUBMIT_VERDICT = "promote"
 
 
 def sha256_file(path: Path) -> str:
@@ -127,7 +128,8 @@ def verify_all() -> dict:
         record("zip_sha256_matches_run_card", sha256_file(zip_path) == card["zip_sha256"], "Zip SHA256 mismatch")
         with zipfile.ZipFile(zip_path, "r") as zf:
             names = zf.namelist()
-            record("zip_contains_valid_tif", tif_path.name in names, f"zip contents={names}")
+            record("zip_contains_valid_tif", names == [tif_path.name], f"zip contents={names}")
+            record("zip_inner_matches_tif", names == [tif_path.name] and hashlib.sha256(zf.read(tif_path.name)).hexdigest() == card["raster_sha256"], "ZIP bytes differ from TIF")
 
     # Score claims. Blocking: the independent recomputation receipt exists and is for the
     # shipped raster bytes. NOT blocking (reported as WARN): whether the claimed holdout
@@ -162,10 +164,19 @@ def verify_all() -> dict:
             "SGMC-CAL recomputed",
         )
 
+    # Protocol applies to every registry raster, including space-filling ones.
+    # Historical receipt has a literal failing row; no null-calibration exemption.
+    audit = json.loads((ROOT / "evidence/uniqueness_audit_386.json").read_text())
+    lattice = audit.get("space_filling_calibration_lattices", [])
+    record("literal_registry_overlap_all_rasters", bool(lattice) and all(
+        isinstance(row.get("within_3px_fraction"), (int, float))
+        and 0 <= row["within_3px_fraction"] <= 0.70 for row in lattice),
+        "Registry lattice overlaps 99.7849% of candidate dots; protocol limit is 70%")
+
     # 386-Raster Uniqueness + Parallel Sibling GeoTIFF check
     uq = card["registry_correlation_and_overlap"]
     record(
-        "uniqueness_386_registry_passed",
+        "historical_non_lattice_subset_passed",
         uq["registry_rasters_checked"] == 386
         and uq["pre_placement_surface_max_abs_spearman"] <= 0.90
         and uq["final_dots_max_abs_spearman"] <= 0.90
@@ -195,8 +206,8 @@ def verify_all() -> dict:
 
     ok = len(problems) == 0
     ok_download = ok and bool(card.get("ok_to_download"))
-    # ok_to_submit = the file is format-valid and unique (blocking gates). It does NOT
-    # certify a score: that is stated separately in `warnings`.
+    # ok_to_submit requires all blocking gates AND verdict == promote. Score claims are
+    # reported separately in `warnings` and do not gate submission.
     ok_submit = ok and bool(card.get("ok_to_submit")) and card.get("verdict") == SUBMIT_VERDICT
     warnings = {k: {"reproduced": bool(v[0]), "detail": v[1]} for k, v in warn_items.items()}
     return {
@@ -237,7 +248,7 @@ def main() -> int:
     print(f"  OK TO SUBMIT    : {'YES (format-valid & unique; score NOT established)' if res['ok_to_submit'] else 'NO'}")
     print(f"  SCORE CLAIMS    : {'reproduced' if res['score_claims_established'] else 'NOT ESTABLISHED (see WARN lines)'}")
     print("=" * 78)
-    return 0 if res["ok"] else 1
+    return 0 if res["ok"] or ("--expect-blocked" in sys.argv and not res["ok_to_submit"] and res["problems"] == ["literal_registry_overlap_all_rasters: Registry lattice overlaps 99.7849% of candidate dots; protocol limit is 70%"] and res["verdict"] == "negative") else 1
 
 
 if __name__ == "__main__":

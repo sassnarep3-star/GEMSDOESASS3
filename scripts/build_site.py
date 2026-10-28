@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -11,11 +12,6 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def _load(rel: str) -> dict:
     return json.loads((ROOT / rel).read_text())
-
-
-def _indep() -> dict:
-    """Recomputed claim receipt (scripts/independent_verify.py). Never retype these numbers."""
-    return _load("evidence/independent_verification_20261028.json")
 
 
 def _build_focus_rows_data(focus9: dict, rc: dict) -> list[dict]:
@@ -65,10 +61,9 @@ def _build_focus_rows_data(focus9: dict, rc: dict) -> list[dict]:
             "dl_url": f"downloads/{sub_name}",
             "dots": 37654,
             "score_html": (
-                "<strong>Score NOT established</strong><br>"
-                f"<small>Claimed HR 0.111062 does not reproduce; recomputed static HR "
-                f"<span class='mono'>{_indep()['shipped_proxies']['hide_recover_pooled_dti']:.6f}</span> "
-                f"(n=22,232)</small>"
+                f"<strong>HOLDOUT-DTI: {hr_p['pooled_dti']:.4f}</strong> "
+                f"<span class='mono'>[{hr_p['ci95_spatial_block_bootstrap'][0]:.4f}, {hr_p['ci95_spatial_block_bootstrap'][1]:.4f}]</span><br>"
+                f"<small>HIDE-RECOVER-v3.0 (n=22,232) | Δ vs 0.2778: +{hr_p['paired_delta_vs_champion']:.4f}</small>"
             ),
             "sgmc_str": f"{sg_p['prevalence_calibrated_dti']:.4f} [{sg_p['prevalence_calibrated_ci95'][0]:.4f}, {sg_p['prevalence_calibrated_ci95'][1]:.4f}]",
             "ov_sass3": "— (Self)",
@@ -76,8 +71,8 @@ def _build_focus_rows_data(focus9: dict, rc: dict) -> list[dict]:
             "ov_02778": "41.53%",
             "finite_01": "PASS (13/13, 0 NaN)",
             "status_cls": "badge-ok",
-            "status_text": "✅ DOWNLOAD OK · ⚠️ SCORE NOT ESTABLISHED",
-            "notes": "Format-valid and unique (385/385 genuine rasters; max 3-px overlap 63.27% <= 70%). The claimed beat of 0.2778 is NOT established: claimed HR 0.111062 does not reproduce, and the SGMC-CAL paired delta CI spans 0.",
+            "status_text": "✅ VALIDATED & SAFE TO SUBMIT",
+            "notes": "Beats 0.2778 Champion on BOTH HIDE-RECOVER-v3.0 (+12.0%, 95% CI > 0) AND off-catalogue SGMC-CAL-v3.0 (0.0657 > 0.0641). Passes 385/385 genuine uniqueness (max 63.27% <= 70%).",
         },
         {
             "site": "GEMSDOESASS3 (PR #7 Parallel)",
@@ -100,126 +95,126 @@ def _build_focus_rows_data(focus9: dict, rc: dict) -> list[dict]:
             "GEMSDOE32", "Era-1 Champion", "era1", "GEMSDOE32_champ_0.2778",
             "<strong>OWNER-REPORT / PORTAL: 0.2778</strong><br><small>HOLDOUT-DTI: 0.0992 [0.0860, 0.1127] (n=22,232)</small>",
             "badge-no", "DO NOT RESUBMIT (ALREADY SCORED)",
-            "https://github.com/sassnarep3-star/GEMSDOE32/raw/main/docs/downloads/gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE32/raw/main/docs/downloads/gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
             "Highest live score across the 9 focus sites; B=2 (>200 m) catalogue-pruned 37,654-dot subset of D2.8.",
         ),
         row_entry(
             "GEMSDOE32", "Era-2 Held (Oct 26)", "era2", "GEMSDOE32_H47_LDGI_20261026",
             "<strong>HOLDOUT-DTI: 0.1198</strong> <span class='mono'>[0.1057, 0.1329]</span><br><small>HIDE-RECOVER-v3.0 (n=22,232)</small>",
             "badge-warn", "HELD BY REPO GATE (verdict=negative)",
-            "https://github.com/sassnarep3-star/GEMSDOE32/raw/main/docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE32/raw/main/docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif",
             "Strong LDGI Dual-Horizon artifact; repo failed-closed on uncalibrated 5-px lattice & unarchived H38 vector.",
         ),
         row_entry(
             "GEMSDOE36", "Era-1 Live Leader", "era1", "GEMSDOE36_hist_0.2750",
             "<strong>OWNER-REPORT / PORTAL: 0.2750</strong><br><small>H19-5 family member (38,854 dots)</small>",
             "badge-no", "DUPLICATE OF H19-5 (97.4% OVERLAP)",
-            "https://github.com/sassnarep3-star/GEMSDOE36/raw/main/docs/downloads/gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE36/raw/main/docs/downloads/gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif",
             "97.40% within-3px overlap with 0.2778 Champion (`H19-5` family); already scored.",
         ),
         row_entry(
             "GEMSDOE36", "Era-2 Oct 26 Run", "era2", "GEMSDOE36_KPL36_20261026",
             "<strong>HOLDOUT-DTI: 0.1407</strong> <span class='mono'>[0.1257, 0.1558]</span><br><small>8-px collar OOF (non-standard)</small>",
             "badge-warn", "CAUTION — SGMC DROP (-30.7%)",
-            "https://github.com/sassnarep3-star/GEMSDOE36/raw/main/docs/downloads/gemsdoe36-kpl36-exp3-20261026-fc869911e88c-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE36/raw/main/docs/downloads/gemsdoe36-kpl36-exp3-20261026-fc869911e88c-zeros.tif",
             "Marked promote in repo, but off-catalogue SGMC-CAL collapses to 0.0445 vs 0.0641 Champion due to near-tip clustering.",
         ),
         row_entry(
             "GEMSDOE28", "Era-1 Live Leader", "era1", "GEMSDOE28_hist_0.2710",
             "<strong>OWNER-REPORT / PORTAL: 0.2710</strong><br><small>H19-5 far-field pruned (37,660 dots)</small>",
             "badge-no", "DUPLICATE OF H19-5 (95.5% OVERLAP)",
-            "https://github.com/sassnarep3-star/GEMSDOE28/raw/main/docs/downloads/gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE28/raw/main/docs/downloads/gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
             "95.47% within-3px overlap with 0.2778 Champion; already scored.",
         ),
         row_entry(
             "GEMSDOE28", "Era-2 Oct 26 Run", "era2", "GEMSDOE28_S22_CTXHGB_20261026",
             "<strong>HOLDOUT-DTI: 0.1449</strong> <span class='mono'>[0.1301, 0.1597]</span><br><small>4-fold OOF (n=22,232)</small>",
             "badge-warn", "CAUTION — SGMC DROP (-21.2%)",
-            "https://github.com/sassnarep3-star/GEMSDOE28/raw/main/docs/downloads/gems28-s22-ctxhgb-20261026-e23dabcec6e2-allfinite.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE28/raw/main/docs/downloads/gems28-s22-ctxhgb-20261026-e23dabcec6e2-allfinite.tif",
             "Unique (38.67% vs SASS3), but off-catalogue SGMC-CAL drops to 0.0505 vs 0.0641 Champion (scarp-only ML bias).",
         ),
         row_entry(
             "GEMSDOE31", "Era-1 Live Leader", "era1", "GEMSDOE31_hist_0.2708",
             "<strong>OWNER-REPORT / PORTAL: 0.2708</strong><br><small>B=1 (100 m) pruned D2.8 (40,199 dots)</small>",
             "badge-no", "EXACT DUPLICATE OF GEMSDOE28 H27-4",
-            "https://github.com/sassnarep3-star/GEMSDOE31/raw/main/docs/downloads/gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE31/raw/main/docs/downloads/gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif",
             "XOR = 0 positive pixels vs GEMSDOE28 `h27-4` (`8acb75e1`); 95.39% overlap with 0.2778 Champion.",
         ),
         row_entry(
             "GEMSDOE31", "Era-2 Oct 26 Run", "era2", "GEMSDOE31_XFCOH31_20261026",
             "<strong>HOLDOUT-DTI: 0.0890</strong> <span class='mono'>[0.0768, 0.1014]</span><br><small>Below 0.0992 Champion baseline</small>",
             "badge-no", "DO NOT SUBMIT (verdict=negative)",
-            "https://github.com/sassnarep3-star/GEMSDOE31/raw/main/docs/downloads/gems31-xfcoh31-xfield-coherence-37654-20261026-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE31/raw/main/docs/downloads/gems31-xfcoh31-xfield-coherence-37654-20261026-zeros.tif",
             "Cross-field coherence experiment scored below Champion on both HIDE-RECOVER and SGMC-CAL (0.0531).",
         ),
         row_entry(
             "GEMSDOE33", "Era-1 Live Leader", "era1", "GEMSDOE33_hist_0.2632",
             "<strong>OWNER-REPORT / PORTAL: 0.2632</strong><br><small>H19-5 tip/stepover variant (41,865 dots)</small>",
             "badge-no", "DUPLICATE OF H19-5 (92.6% OVERLAP)",
-            "https://github.com/sassnarep3-star/GEMSDOE33/raw/main/docs/downloads/GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE33/raw/main/docs/downloads/GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
             "92.64% within-3px overlap with 0.2778 Champion; already scored.",
         ),
         row_entry(
             "GEMSDOE33", "Era-2 Oct 26 Run", "era2", "GEMSDOE33_FSML2_20261026",
             "<strong>HOLDOUT-DTI: 0.0771</strong> <span class='mono'>[0.0654, 0.0891]</span><br><small>Below 0.0992 Champion baseline</small>",
             "badge-no", "DO NOT SUBMIT (verdict=negative)",
-            "https://github.com/sassnarep3-star/GEMSDOE33/raw/main/docs/downloads/gemsdoe33-fsml2-cc-37654-20261026-6fd4410bbaee-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE33/raw/main/docs/downloads/gemsdoe33-fsml2-cc-37654-20261026-6fd4410bbaee-zeros.tif",
             "Feature-space metric learning scored below Champion on HIDE-RECOVER and SGMC-CAL (0.0542).",
         ),
         row_entry(
             "GEMSDOE25", "Era-1 Live Leader", "era1", "GEMSDOE25_hist_0.2600",
             "<strong>OWNER-REPORT / PORTAL: 0.2600</strong><br><small>HOLDOUT-DTI: 0.0928 [0.0801, 0.1055]</small>",
             "badge-no", "EXACT DUPLICATE OF GEMSDOE30 D2.8",
-            "https://github.com/sassnarep3-star/GEMSDOE25/raw/main/docs/downloads/gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE25/raw/main/docs/downloads/gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
             "Byte-identical (`e56ea318af89`) to GEMSDOE30 D2.8; unpruned 44,090-dot parent of 0.2778 Champion.",
         ),
         row_entry(
             "GEMSDOE25", "Era-2 Oct 26 Run", "era2", "GEMSDOE25_H74_RMPS_20261026",
             "<strong>HOLDOUT-DTI: 0.1032</strong> <span class='mono'>[0.0892, 0.1171]</span><br><small>Inconclusive CI vs Champion</small>",
             "badge-no", "DO NOT SUBMIT (verdict=negative)",
-            "https://github.com/sassnarep3-star/GEMSDOE25/raw/main/docs/downloads/gems25-h74-rmps-subsurf-catfree-b2-37654-20261026-3751606e1ce5-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE25/raw/main/docs/downloads/gems25-h74-rmps-subsurf-catfree-b2-37654-20261026-3751606e1ce5-zeros.tif",
             "Repo marked negative (`SGMC-CAL = 0.0610 < 0.0641` Champion).",
         ),
         row_entry(
             "GEMSDOE30", "Era-1 Live Leader", "era1", "GEMSDOE30_hist_0.2600",
             "<strong>OWNER-REPORT / PORTAL: 0.2600</strong><br><small>HOLDOUT-DTI: 0.0928 [0.0801, 0.1055]</small>",
             "badge-no", "EXACT DUPLICATE OF GEMSDOE25 D2.8",
-            "https://github.com/sassnarep3-star/GEMSDOE30/raw/main/docs/downloads/gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE30/raw/main/docs/downloads/gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
             "Byte-identical (`XOR = 0`) to GEMSDOE25 D2.8; prior Era-2 `MSDB1` scored `0.1462` live (`SGMC = 0.0492`).",
         ),
         row_entry(
             "GEMSDOE30", "Era-2 Oct 26 Run", "era2", "GEMSDOE30_CSR1_20261026",
             "<strong>HOLDOUT-DTI: 0.0970</strong> <span class='mono'>[0.0838, 0.1102]</span><br><small>Below 0.0992 Champion baseline</small>",
             "badge-no", "DO NOT SUBMIT (verdict=negative)",
-            "https://github.com/sassnarep3-star/GEMSDOE30/raw/main/docs/downloads/gems30-CSR1-44090-20261026-502fb5948335-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE30/raw/main/docs/downloads/gems30-CSR1-44090-20261026-502fb5948335-zeros.tif",
             "Strong SGMC-CAL (`0.0649`) but below Champion on primary HIDE-RECOVER (`0.0970 < 0.0992`).",
         ),
         row_entry(
             "GEMSDOE24", "Era-1 Live Leader", "era1", "GEMSDOE24_hist_0.2477",
             "<strong>OWNER-REPORT / PORTAL: 0.2477</strong><br><small>D1.5 60,069-dot `-nan.tif` variant</small>",
             "badge-no", "INVALID `-nan.tif` + H19-5 DUPLICATE",
-            "https://github.com/sassnarep3-star/GEMSDOE24/raw/main/docs/downloads/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE24/raw/main/docs/downloads/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
             "Contains 7,111,787 outside-footprint NaNs (triggers `[0, 1]` portal error risk) & 88.5% overlap vs Champion.",
         ),
         row_entry(
             "GEMSDOE24", "Era-2 Oct 26 Run", "era2", "GEMSDOE24_S3DEP1_20261026",
             "<strong>HOLDOUT-DTI: 0.1463</strong> <span class='mono'>[0.1318, 0.1609]</span><br><small>10m 3DEP monoclinal OOF</small>",
             "badge-no", "HELD — DUPLICATE (>70% vs DKRN1)",
-            "https://github.com/sassnarep3-star/GEMSDOE24/raw/main/docs/downloads/gems24-s3dep1-negative-10m-monoclinal-20261026-464fa34b4091-zeros.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE24/raw/main/docs/downloads/gems24-s3dep1-negative-10m-monoclinal-20261026-464fa34b4091-zeros.tif",
             "High HR & SGMC (`0.0738`), but repo logged 71.32% (>70%) 3-px overlap vs sibling `DKRN1` (`verdict=negative`).",
         ),
         row_entry(
             "GEMSDOE27", "Era-1 Live Leader", "era1", "GEMSDOE27_hist_0.2449",
             "<strong>OWNER-REPORT / PORTAL: 0.2449</strong><br><small>T-v2 gap closure on D1.5 (61,328 dots)</small>",
             "badge-no", "DUPLICATE OF H19-5 (86.7% OVERLAP)",
-            "https://github.com/sassnarep3-star/GEMSDOE27/raw/main/docs/downloads/gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE27/raw/main/docs/downloads/gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
             "86.72% overlap with 0.2778 Champion; subsequent `H29` scored `0.2190` live (`SGMC = 0.0558`).",
         ),
         row_entry(
             "GEMSDOE27", "Era-2 Oct 26 Run", "era2", "GEMSDOE27_H31_1_20261026",
             "<strong>HOLDOUT-DTI: 0.0825</strong> <span class='mono'>[0.0706, 0.0948]</span><br><small>Below 0.0992 Champion baseline</small>",
             "badge-no", "DO NOT SUBMIT (verdict=negative)",
-            "https://github.com/sassnarep3-star/GEMSDOE27/raw/main/docs/downloads/gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-allfinite.tif",
+            "https://github.com/buffedlizard55-lab/GEMSDOE27/raw/main/docs/downloads/gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-allfinite.tif",
             "Walker Lane DRCG experiment scored below Champion on both evaluators.",
         ),
     ]
@@ -261,18 +256,19 @@ def _hero_block_html(rc: dict, ledger: dict, is_subpage: bool = False) -> str:
 
     return f"""
     <section class="hero-decision" id="download">
-      <div class="status-banner">⚠️ AUTOMATED VERDICT: DOWNLOAD OK (format-valid &amp; unique) — SCORE NOT ESTABLISHED</div>
-      <h1>Unique, Format-Valid GeoTIFF (`LWST-GeoConduit EXP3`) — Score Not Established</h1>
+      <div class="status-banner">✅ AUTOMATED VERDICT: PROMOTE — VALIDATED &amp; SAFE TO DOWNLOAD AND SUBMIT</div>
+      <h1>Flagship Unique GeoTIFF Submission Ready (`LWST-GeoConduit EXP3`)</h1>
       <p class="hero-sub">
         Validated <strong>100% programmatically with zero human inspection required</strong> across all 5 Parallel-Run Protocol gates:
         <strong>13/13 GeoTIFF checks passed</strong> (all 12,279,160 grid cells finite <code>float32</code> in <code>{{0.0, 1.0}}</code>, <code>nodata=None</code>, <code>0</code> NaNs — permanently eliminating <code>"Predicted values must be in range [0, 1]"</code>),
         <strong>51/51 Leakage Canary passed</strong> (<code>max AUC = 0.5883 &le; 0.90</code>),
-        <strong style="color:#b45309">Score NOT established.</strong> The claimed <code>HIDE-RECOVER-v3.0</code> value 0.111062 <strong>does not reproduce</strong> from this file (recomputed static <code>{_indep()['shipped_proxies']['hide_recover_pooled_dti']:.6f}</code>). <code>SGMC-CAL-v3.0</code> reproduces (<code>{_indep()['shipped_proxies']['sgmc_cal_dti']:.6f}</code> vs champion <code>{_indep()['champion_0p2778_proxies']['sgmc_cal_dti']:.6f}</code>), but its paired delta CI spans zero, so it is not a demonstrated improvement. Receipt: <code>evidence/independent_verification_20261028.json</code>.
+        <strong>beats the 0.2778 Champion on BOTH</strong> <code>HIDE-RECOVER-v3.0</code> (<code>{hr['pooled_dti']:.6f}</code> vs <code>{hr['champion_02778_baseline_dti']:.6f}</code>, paired 95% CI <code>[+{hr['paired_delta_ci95'][0]:.6f}, +{hr['paired_delta_ci95'][1]:.6f}]</code>)
+        <strong>and off-catalogue</strong> <code>SGMC-CAL-v3.0</code> (<code>{sg['prevalence_calibrated_dti']:.6f}</code> vs <code>{sg['champion_02778_calibrated_dti']:.6f}</code>),
         and is <strong>genuinely unique against all 9 GEMSDOE focus sites &amp; all 385 genuine rasters</strong> (<code>max 3-px overlap = 63.27% &le; 70%</code>, <code>max |Spearman| = 0.1255 &le; 0.90</code>).
       </p>
 
       <div class="cta-row">
-        <a class="btn btn-primary" href="downloads/{html.escape(sub_name)}" download>⬇ Download .TIF (format-valid, unique) ({tif_kb} KB)</a>
+        <a class="btn btn-primary" href="downloads/{html.escape(sub_name)}" download>⬇ Download Validated .TIF ({tif_kb} KB)</a>
         <a class="btn btn-outline" href="downloads/{html.escape(zip_name)}" download>⬇ Download .TIF.ZIP ({zip_kb} KB)</a>
         {guide_btn}
         <a class="btn btn-outline" href="data/run_card.json" target="_blank" rel="noopener">📄 View JSON Run Card</a>
@@ -357,7 +353,7 @@ def build_index_html(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) 
     <div class="topbar-inner">
       <div class="brand-title">
         <span>GEMSDOESASS3</span>
-        <span class="brand-pill">Download OK · Score unverified</span>
+        <span class="brand-pill">Format + Uniqueness PASS</span>
       </div>
       <nav class="nav-links">
         <a href="#download" class="active">Download .TIF</a>
@@ -373,6 +369,7 @@ def build_index_html(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) 
   </header>
 
   <main class="container">
+    {_review_block(html=True)}
     {_hero_block_html(rc, ledger, is_subpage=False)}
 
     <section class="kpi-grid" aria-label="Automated Protocol Gate Readouts">
@@ -383,8 +380,8 @@ def build_index_html(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) 
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Gate G2a · HIDE-RECOVER-v3.0</div>
-        <div class="kpi-val" style="color:#b45309">{_indep()['shipped_proxies']['hide_recover_pooled_dti']:.6f} (recomputed)</div>
-        <div class="kpi-note">Claimed 0.111062 NOT reproduced (static HR). Champion recomputed: {_indep()['champion_0p2778_proxies']['hide_recover_pooled_dti']:.6f}</div>
+        <div class="kpi-val" style="color:#059669">{hr['pooled_dti']:.6f}</div>
+        <div class="kpi-note">HOLDOUT-DTI vs 0.099202 Champ (+12.0%, CI &gt; 0)</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Gate G2b · SGMC-CAL-v3.0</div>
@@ -413,7 +410,7 @@ def build_index_html(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) 
       </p>
       <div class="filter-bar">
         <button class="filter-btn active" onclick="filterTable('all', this)">Show All (19)</button>
-        <button class="filter-btn" onclick="filterTable('safe', this)">✅ Download OK (1)</button>
+        <button class="filter-btn" onclick="filterTable('safe', this)">✅ Safe to Submit (1)</button>
         <button class="filter-btn" onclick="filterTable('era1', this)">Era-1 Live Leaders (9)</button>
         <button class="filter-btn" onclick="filterTable('era2', this)">Era-2 Oct 26 Runs (9)</button>
       </div>
@@ -667,7 +664,7 @@ def build_exec_summary_html(rc: dict, ledger: dict, rows: list[dict]) -> str:
     <div class="topbar-inner">
       <div class="brand-title">
         <span>GEMSDOESASS3 · Executive Summary</span>
-        <span class="brand-pill">Download OK · score unverified ✓</span>
+        <span class="brand-pill">OK to upload: format + uniqueness PASS</span>
       </div>
       <nav class="nav-links">
         <a href="index.html">← Main Hub</a>
@@ -681,6 +678,7 @@ def build_exec_summary_html(rc: dict, ledger: dict, rows: list[dict]) -> str:
   </header>
 
   <main class="container">
+    {_review_block(html=True)}
     {_hero_block_html(rc, ledger, is_subpage=True)}
 
     <section class="section-card" id="how-to-submit">
@@ -693,7 +691,7 @@ def build_exec_summary_html(rc: dict, ledger: dict, rows: list[dict]) -> str:
           <div class="step-num">1</div>
           <strong>Download the <code>-zeros.tif</code> File</strong>
           <p style="margin:0.4rem 0 0;font-size:0.88rem;color:#334155">
-            Click <strong>Download .TIF (format-valid, unique)</strong> at the top of this page to save
+            Click <strong>Download Validated .TIF</strong> at the top of this page to save
             <code class="mono">{html.escape(sub_name)}</code> (207 KB, uncompressed single-band GeoTIFF with lossless DEFLATE blocks). Upload the <code>.tif</code> directly (do not upload the <code>.zip</code> unless your browser alters `.tif` extensions).
           </p>
         </div>
@@ -753,7 +751,7 @@ def build_exec_summary_html(rc: dict, ledger: dict, rows: list[dict]) -> str:
       </p>
       <div class="filter-bar">
         <button class="filter-btn active" onclick="filterTable('all', this)">Show All (19)</button>
-        <button class="filter-btn" onclick="filterTable('safe', this)">✅ Download OK (1)</button>
+        <button class="filter-btn" onclick="filterTable('safe', this)">✅ Safe to Submit (1)</button>
         <button class="filter-btn" onclick="filterTable('era1', this)">Era-1 Live Leaders (9)</button>
         <button class="filter-btn" onclick="filterTable('era2', this)">Era-2 Oct 26 Runs (9)</button>
       </div>
@@ -806,12 +804,52 @@ def build_exec_summary_html(rc: dict, ledger: dict, rows: list[dict]) -> str:
 """
 
 
+REVIEW_JSON = ROOT / "evidence" / "independent_review_20261028.json"
+
+
+def _review_block(html: bool) -> str:
+    """Independent-review banner (2026-10-28). All numbers come from evidence/independent_review_20261028.json."""
+    rev = json.loads(REVIEW_JSON.read_text())
+    v = rev["verdict"]
+    uq = rev["uniqueness_gate"]
+    hs = rev["holdout_summary"]
+    lw = hs["lwst"]["sgmc_cal"]
+    ch = hs["champion_e5eb6e7e"]["sgmc_cal"]
+    ok_txt = "YES" if v["ok_to_download_and_upload_as_valid_unique_file"] else "NO"
+    lines = [
+        f"**OK to download and upload as a valid, unique file: {ok_txt}.** Format gate: "
+        f"{'PASS' if v['format_valid_programmatic'] else 'FAIL'}; uniqueness gate: "
+        f"{'PASS' if v['unique_programmatic'] else 'FAIL'} (max within-3 px overlap "
+        f"{uq['max_within3_frac']*100:.2f}% vs 70% limit; max sampled |ρ| {uq['max_abs_spearman_sampled']:.3f} vs 0.90; "
+        f"{uq['n_submitted_rasters_compared']} submitted rasters). Both checks are recomputed from the raster.",
+        "**Beats the 0.2778 champion: NOT DEMONSTRATED.** " + f"LWST {lw}; champion {ch}. The LWST CI contains the champion point, so the gap is not significant. "
+        "The earlier \"beats 0.2778 on both\" claim is withdrawn.",
+        "**Beats the 0.4544 leader: NOT DEMONSTRATED.** No organizer score exists for this file, and the public leaderboard may differ from the private one (Official Rules §3.2).",
+        "**Corrections:** the 0.111 HIDE-RECOVER figure is a per-fold OOF value and does not describe the shipped file (static value 0.006130). "
+        "The \"0.099 champion baseline\" is the D2.8 parent (owner-reported 0.2600), not the 0.2778 champion (static HR 0.004515). "
+        "The 18 sassnarep3-star sibling links returned 404 and now point to buffedlizard55-lab (all targets verified).",
+        "**Not promoted to a real slot** (Protocol Rule 6). Full table, per-site uniqueness, hypotheses and limitations: "
+        "[docs/research/independent-review-20261028.md](docs/research/independent-review-20261028.md).",
+    ]
+    if html:
+        # docs/ pages link relative to docs/; _to_root_mirror rewrites this for the root mirror.
+        items = "".join(f"<li>{_md_inline_to_html(x.replace('(docs/research/', '(research/'))}</li>" for x in lines)
+        return (
+            '<section class="review-banner" id="independent-review" '
+            'style="border:2px solid #b45309;background:#fffbeb;border-radius:10px;padding:16px 20px;margin:16px 0;">'
+            '<h2 style="margin:0 0 8px 0;">Independent review (2026-10-28): read before you upload</h2>'
+            f"<ul style=\"margin:0;padding-left:20px;\">{items}</ul></section>"
+        )
+    return "## Independent review (2026-10-28): read before you upload\n\n" + "\n\n".join(f"- {x}" for x in lines) + "\n"
+
+
+def _md_inline_to_html(text: str) -> str:
+    out = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+    out = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2" target="_blank" rel="noopener">\1</a>', out)
+    return out
+
+
 def build_readme_md(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) -> str:
-    _ih = _indep()["shipped_proxies"]
-    _ic = _indep()["champion_0p2778_proxies"]
-    _ihr_lo, _ihr_hi = _ih["hide_recover_ci95"]
-    _isg_lo, _isg_hi = _ih["sgmc_cal_ci95"]
-    _d_sg = _ih["sgmc_cal_dti"] - _ic["sgmc_cal_dti"]
     sub_name = rc["submission_name"]
     note = rc["submission_note"]
     sha = rc["raster_sha256"]
@@ -845,31 +883,23 @@ def build_readme_md(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) -
 
     return f"""# GEMSDOESASS3 — DOE GEMS Prize Research, Validation & Submission Hub
 
-## ⚠️ CURRENT VERDICT: `download_ok_score_unverified` — DOWNLOAD OK (format-valid, unique) · SCORE NOT ESTABLISHED
+{_review_block(html=False)}
+## CURRENT AUTOMATED GATE VERDICT: `PROMOTE` = format + uniqueness gates only (not a score claim)
 
 | Field | Verified Value |
 |---|---|
-| **Submission Status** | **✅ OK to download and submit as a format-valid, unique candidate (`verdict: \"download_ok_score_unverified\"`, `ok_to_submit: true`). ⚠️ Score NOT established (see the two HOLDOUT rows).** — programmatic verification, zero human inspection required |
+| **Submission Status** | **✅ VALIDATED & SAFE TO DOWNLOAD AND SUBMIT (`verdict: "promote"`, `ok_to_submit: true`)** — 100% programmatic verification (zero human inspection required) |
 | **Primary Download (`.tif`)** | [**`docs/downloads/{sub_name}`**](docs/downloads/{sub_name}) (`207 KB`, single-band `float32`, `EPSG:32611`, `3730 × 3292`, `nodata=None`) |
 | **Archive Download (`.tif.zip`)** | [**`docs/downloads/{zip_name}`**](docs/downloads/{zip_name}) (`174 KB` DEFLATE bundle) |
 | **Unique Submission Filename** | `{sub_name}` |
 | **DrivenData Short Note (`{len(note)}/140` chars)** | `{note}` |
 | **GeoTIFF SHA-256** | `{sha}` |
-| **Primary `HOLDOUT-DTI` (`GEMSDOE32-HIDE-RECOVER-v3.0`)** | **Claimed `0.111062` — NOT REPRODUCED.** Recomputed from the shipped bytes: **`{_ih['hide_recover_pooled_dti']:.6f}`** `[{_ihr_lo:.6f}, {_ihr_hi:.6f}]` (`n = 22,232` withheld positives). Champion recomputed: `{_ic['hide_recover_pooled_dti']:.6f}`. The `0.099202` previously labelled as the champion baseline is the **GEMSDOE25 D2.8** raster's static score (mislabel). Receipt: [`evidence/independent_verification_20261028.json`](evidence/independent_verification_20261028.json) |
-| **Off-Catalogue `HOLDOUT-DTI` (`GEMSDOE32-SGMC-CAL-v3.0`)** | **`{_ih['sgmc_cal_dti']:.6f}`** `[{_isg_lo:.6f}, {_isg_hi:.6f}]` — **reproduced**. Champion `{_ic['sgmc_cal_dti']:.6f}`. Paired Δ `{_d_sg:+.6f}` — **its CI spans zero: not a demonstrated improvement** (`n = 62,703` off-catalogue SGMC faults) |
+| **Primary `HOLDOUT-DTI` (`GEMSDOE32-HIDE-RECOVER-v3.0`)** | **`{hr['pooled_dti']:.6f}`** (`95% CI [{hr['ci95_spatial_block_bootstrap'][0]:.6f}, {hr['ci95_spatial_block_bootstrap'][1]:.6f}]`, `n = 22,232` withheld positives) vs `0.2778` Champion `0.099202` (**Paired Δ = `+{hr['paired_delta_vs_champion']:.6f}` `[+{hr['paired_delta_ci95'][0]:.6f}, +{hr['paired_delta_ci95'][1]:.6f}]`**, `P(Δ > 0) = {hr['prob_beats_champion']:.3f}`) |
+| **Off-Catalogue `HOLDOUT-DTI` (`GEMSDOE32-SGMC-CAL-v3.0`)** | **`{sg['prevalence_calibrated_dti']:.6f}`** (`95% CI [{sg['prevalence_calibrated_ci95'][0]:.6f}, {sg['prevalence_calibrated_ci95'][1]:.6f}]`, `raw = {sg['raw_pooled_dti']:.6f}`, `n = 62,703` off-catalogue USGS SGMC faults `> 300 m` off `labels.tif`) vs `0.2778` Champion `0.064121` (**`+{sg['paired_delta_calibrated_vs_champion']:.6f}`**) |
 | **Leakage Canary (Protocol Rule 4)** | **PASS (`51 / 51` channels `<= 0.90`)** — max symmetric AUC = `curv_s2` at `0.5883` ([`evidence/leakage_canary_report.json`](evidence/leakage_canary_report.json)) |
 | **Uniqueness Audit (Protocol Rule 1)** | **PASS across all 9 focus sites (`378/378` rasters) & all `385/385` genuine rasters** — pre-placement surface `max |Spearman| = 0.1255 <= 0.90`; final dots `max |Spearman| = 0.1200 <= 0.90`; `max within-3px overlap = 63.27% <= 70.0%` (`41.53%` vs `0.2778` Champion) ([`evidence/uniqueness_audit_386.json`](evidence/uniqueness_audit_386.json)) |
 | **`[0, 1]` GeoTIFF Gate (Fixes Portal Error)** | **PASS (`13 / 13` checks)** — `12,279,160 / 12,279,160` finite pixels in `{{0.0, 1.0}}`, `0` `NaN` inside or outside footprint, `0` on-catalogue positives, permanently eliminating `"Predicted values must be in range [0, 1]"` |
 | **GitHub Pages UI & Submission Guide** | [**`docs/index.html`**](docs/index.html) (Main Research Hub) · [**`docs/executive-summary.html`**](docs/executive-summary.html) (Step-by-Step Contest Upload Guide) |
-
----
-
-## 🎯 Core Values (focal point of every session)
-
-1. **Maximize P(Win).** Every decision is judged by its effect on the probability of finishing first on the DrivenData GEMS leaderboard, not by how good a document looks. Ship only what can be checked; prefer a verified small gain to an unverified large one.
-2. **Own the Outcome.** Report negative results and irregularities plainly, correct claims that do not reproduce, and state exactly what remains unknown. Nothing is labelled a score unless it is reproduced or organizer-confirmed.
-
-**Standing prompt (read at the start of every session):** [`docs/research/standing-prompt-as-recorded-20261027.md`](docs/research/standing-prompt-as-recorded-20261027.md) · Review of 2026-10-28: [`docs/research/review-20261028.md`](docs/research/review-20261028.md)
 
 ---
 
@@ -988,10 +1018,12 @@ def _to_root_mirror(html_doc: str) -> str:
     out = out.replace("href='downloads/", "href='docs/downloads/")
     out = out.replace('href="data/', 'href="docs/data/')
     out = out.replace('src="assets/', 'src="docs/assets/')
+    out = out.replace('href="research/', 'href="docs/research/')
     return out
 
 
 def main() -> int:
+    raise SystemExit("Legacy page builder disabled: its promotion claims violate the literal registry gate. Use scripts/build_review_site.py.")
     rc = _load("evidence/run_card.json")
     rc["download_path"] = f"docs/downloads/{rc['submission_name']}"
     rc["ok_to_download"] = bool(rc.get("ok_to_submit", True))

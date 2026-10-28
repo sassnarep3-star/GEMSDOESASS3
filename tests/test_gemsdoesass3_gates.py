@@ -100,12 +100,14 @@ def test_nine_sites_h19_5_set_algebra_invariants() -> None:
 def test_emitted_geotiff_and_all_automated_gates() -> None:
     """End-to-end automated inspection of the submission GeoTIFF (format + uniqueness blocking; score claims as WARN)."""
     res = verify_all()
-    assert res["ok"] is True, f"Failed gates: {res['problems']}"
-    assert res["ok_to_download"] is True
-    assert res["ok_to_submit"] is True
-    assert res["verdict"] == "download_ok_score_unverified"
+    assert res["ok"] is False
+    assert any("literal_registry_overlap_all_rasters" in p for p in res["problems"])
+    assert res["ok_to_download"] is False
+    assert res["ok_to_submit"] is False
+    assert res["verdict"] == "negative"
+    # Score claims are WARN (non-blocking) and must not be reported as established.
     assert res["score_claims_established"] is False
-    assert any(k.startswith("HR_0p111062") and not v["reproduced"] for k,v in res["warnings"].items())
+    assert any(k.startswith("HR_0p111062") and not v["reproduced"] for k, v in res["warnings"].items())
 
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
     tif_path = ROOT / card["download_path"]
@@ -120,3 +122,12 @@ def test_emitted_geotiff_and_all_automated_gates() -> None:
         assert float(arr.min()) >= 0.0
         assert float(arr.max()) <= 1.0
         assert int((arr > 0).sum()) == 37_654
+
+
+def test_space_filling_witness_does_not_get_a_protocol_exemption():
+    """A registry lattice is still a registry raster under the literal rule."""
+    audit = json.loads((ROOT / "evidence/uniqueness_audit_386.json").read_text())
+    witness = audit["space_filling_calibration_lattices"][0]
+    assert witness["within_3px_fraction"] > 0.70
+    assert witness["literal_duplicate"] is True
+    assert verify_all()["ok_to_submit"] is False

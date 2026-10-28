@@ -84,7 +84,9 @@
     "passed_all_focus_9_sites_literally": true,
     "passed_all_385_genuine_literally": true,
     "passed_null_calibrated_all_386": true,
-    "space_filling_lattice_note": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif is a synthetic 206,895-dot uniform 5x5 px calibration grid whose 3-px disk covers 99.871% of the footprint (sqrt(2^2+2^2)=2.828<=3 px); Spearman vs candidate is ~0.00 and null-calibrated excess is <= 0.0."
+    "space_filling_lattice_note": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif is a synthetic 206,895-dot uniform 5x5 px calibration grid whose 3-px disk covers 99.871% of the footprint (sqrt(2^2+2^2)=2.828<=3 px); Spearman vs candidate is ~0.00 and null-calibrated excess is <= 0.0.",
+    "literal_all_registry_max_within_3px_fraction": 0.997848834121209,
+    "literal_all_registry_passed": false
   },
   "raster_sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
   "zip_sha256": "d93ad7f6278e89247a24ee74d0a64b40c45314f8bb5acc00f58c0f24bfe33e16",
@@ -128,10 +130,11 @@
     }
   },
   "submission_name": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
-  "submission_note": "LWST-GeoConduit 37654 dots, B=2: format-valid, unique (max 3px overlap 63%). Score NOT established; HR claim unreproduced.",
-  "ok_to_submit": true,
-  "verdict": "download_ok_score_unverified",
+  "submission_note": "LWST-GeoConduit 37654 dots, B=2: format-valid. Literal lattice rule fails (99.8%). Score NOT established; HR unreproduced.",
+  "ok_to_submit": false,
+  "verdict": "negative",
   "download_path": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
   "ok_to_download": true,
-  "score_status": "NOT_ESTABLISHED: format-valid and unique; holdout claims recomputed in evidence/independent_verification_20261028.json (HR not reproduced, SGMC paired CI spans 0)"
+  "status_reason": "Literal registry overlap exceeds 70%: 0.997848834121209 against 13GEMSDOE lattice; no exemption allowed. Archival download only.",
+  "score_status": "NOT_ESTABLISHED. DO NOT SUBMIT under the literal registry-overlap rule (lattice 99.78% > 70%, IR-SASS3-19). Format valid. Holdout claims recomputed in evidence/independent_verification_20261028.json: HR 0.111062 NOT reproduced (static 0.006130); SGMC-CAL reproduced; paired delta CI spans zero."
 }
