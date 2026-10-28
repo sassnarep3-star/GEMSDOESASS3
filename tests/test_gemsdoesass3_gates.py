@@ -98,13 +98,16 @@ def test_nine_sites_h19_5_set_algebra_invariants() -> None:
 
 
 def test_emitted_geotiff_and_all_automated_gates() -> None:
-    """End-to-end automated programmatic inspection of the promoted submission GeoTIFF."""
+    """End-to-end automated inspection of the submission GeoTIFF (format + uniqueness blocking; score claims as WARN)."""
     res = verify_all()
     assert res["ok"] is False
     assert any("literal_registry_overlap_all_rasters" in p for p in res["problems"])
     assert res["ok_to_download"] is False
     assert res["ok_to_submit"] is False
     assert res["verdict"] == "negative"
+    # Score claims are WARN (non-blocking) and must not be reported as established.
+    assert res["score_claims_established"] is False
+    assert any(k.startswith("HR_0p111062") and not v["reproduced"] for k, v in res["warnings"].items())
 
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
     tif_path = ROOT / card["download_path"]

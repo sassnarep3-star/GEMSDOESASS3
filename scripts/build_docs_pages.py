@@ -208,20 +208,30 @@ pre {
 """
 
 
+def _lli_projection() -> dict:
+    """Linear map public~SGMC-CAL (27 OWNER-REPORT points). PROJECTION ONLY, never a score."""
+    v = json.loads((ROOT / "evidence/proxy_validation_20261028.json").read_text())["calibration"]["linear_map_public_on_sgmc_cal"]
+    ind = json.loads((ROOT / "evidence/independent_verification_20261028.json").read_text())
+    x = ind["shipped_proxies"]["sgmc_cal_dti"]
+    proj = v["slope"] * x + v["intercept"]
+    sd = v["residual_sd"]
+    return {"projected_dti": proj, "uncertainty_band_loo_mae": [proj - sd, proj + sd], "label": "PROJECTION ONLY - never a score"}
+
+
 def build_download_hero(card: dict, asset_prefix: str = "") -> str:
     tif_name = card["submission_name"]
-    zip_name = card["submission_zip_name"]
+    zip_name = Path(card["download_path"]).name + ".zip"  # zip is "<tif>.zip" (ledger deliverable.zip_filename)
     note = card["submission_note"]
     hd = card["holdout_dti"]
-    uo = card["registry_correlation_overlap"]
-    val = card["validator_output"]["validator"]
-    kb = val["bytes"] / 1024.0
+    uo = card["registry_correlation_and_overlap"]
+    val = {"validator": card["validator_output"]}
+    kb = (ROOT / card["download_path"]).stat().st_size / 1024.0
 
     return f"""
 <section class="hero" id="download">
   <div class="flag-row">
     <span class="badge b-ok">&#10003; OK TO DOWNLOAD: YES (AUTOMATED INSPECTOR PASSED)</span>
-    <span class="badge b-ok">&#10003; OK TO SUBMIT: YES (VERDICT: PROMOTE)</span>
+    <span class="badge b-ok">&#10003; DOWNLOAD OK: YES (format-valid &amp; unique) &middot; SCORE NOT ESTABLISHED</span>
     <span class="badge b-info">ALL-FINITE float32 IN [0.0, 1.0] &bull; 0 NaN &bull; EPSG:32611</span>
     <span class="badge b-info">43-SHA REGISTRY UNIQUE (MAX 3-PX OVERLAP 67.45% &le; 70%)</span>
   </div>
@@ -258,9 +268,9 @@ def build_download_hero(card: dict, asset_prefix: str = "") -> str:
 
 <div class="kpi-grid">
   <div class="kpi">
-    <div class="kpi-label">Promoted HOLDOUT-DTI</div>
-    <div class="kpi-val" style="color:var(--emerald);">{hd['dti']:.6f}</div>
-    <div class="kpi-sub"><code>HOLDOUT-DTI</code> &bull; 95% CI [{hd['ci'][0]:.4f}, {hd['ci'][1]:.4f}]<br><code>gems57-pooled-hide-v2</code> (n=22,893)</div>
+    <div class="kpi-label">HOLDOUT-DTI (claimed; not reproduced)</div>
+    <div class="kpi-val" style="color:var(--emerald);">{hd['primary_hide_and_recover']['pooled_dti']:.6f}</div>
+    <div class="kpi-sub"><code>HOLDOUT-DTI</code> &bull; 95% CI [{hd['primary_hide_and_recover']['ci95_spatial_block_bootstrap'][0]:.4f}, {hd['primary_hide_and_recover']['ci95_spatial_block_bootstrap'][1]:.4f}]<br><code>GEMSDOE32-HIDE-RECOVER-v3.0</code> CLAIMED (n=22,232) &bull; <strong>NOT REPRODUCED</strong> (recomputed static 0.006130, see IR-REV-01)</div>
   </div>
   <div class="kpi">
     <div class="kpi-label">Gain vs Controls (Same Split)</div>
@@ -326,21 +336,21 @@ def build_executive_table_rows(audit: dict, card: dict) -> str:
 
     # Row 0: GEMSDOESASS3 (This Repo - Promoted!)
     hd = card["holdout_dti"]
-    lli = card["lli_projection_not_a_score"]
-    uo = card["registry_correlation_overlap"]
+    lli = _lli_projection()
+    uo = card["registry_correlation_and_overlap"]
     tif_name = card["submission_name"]
     rows_html.append(f"""
     <tr class="highlight-row" data-filter="promote unique sass3">
       <td><strong>GEMSDOESASS3 ★</strong><br><span style="font-size:0.75rem;color:#34d399;">This Repository</span></td>
       <td>
-        <strong>Promoted Unique (.tif):</strong><br>
+        <strong>Unique GeoTIFF (.tif):</strong><br>
         <a href="downloads/{_e(tif_name)}" download><code>{_e(tif_name)}</code></a><br>
         <span style="font-size:0.75rem;color:var(--muted);">37,654 dots &bull; B=2 &bull; All-finite [0,1] &bull; 0 NaN</span>
       </td>
       <td><span class="badge b-info">UNSUBMITTED NEW CANDIDATE</span><br><span style="font-size:0.75rem;color:var(--muted);">Awaiting live portal receipt</span></td>
       <td>
-        <span class="badge b-ok">HOLDOUT-DTI: {hd['dti']:.6f}</span><br>
-        <span style="font-size:0.75rem;color:#cbd5e1;">95% CI [{hd['ci'][0]:.4f}, {hd['ci'][1]:.4f}]<br><code>gems57-pooled-hide-v2</code> (n=22,893)</span>
+        <span class="badge b-ok">HOLDOUT-DTI: {hd['primary_hide_and_recover']['pooled_dti']:.6f}</span><br>
+        <span style="font-size:0.75rem;color:#cbd5e1;">95% CI [{hd['primary_hide_and_recover']['ci95_spatial_block_bootstrap'][0]:.4f}, {hd['primary_hide_and_recover']['ci95_spatial_block_bootstrap'][1]:.4f}]<br><code>GEMSDOE32-HIDE-RECOVER-v3.0</code> CLAIMED (n=22,232) &bull; <strong>NOT REPRODUCED</strong> (recomputed static 0.006130, see IR-REV-01)</span>
       </td>
       <td>
         <span class="badge b-proj">LLI-PROJ: {lli['projected_dti']:.4f}</span><br>
@@ -348,10 +358,10 @@ def build_executive_table_rows(audit: dict, card: dict) -> str:
       </td>
       <td>
         <span class="badge b-ok">UNIQUE (43/43 SHAs)</span><br>
-        <span style="font-size:0.75rem;color:#cbd5e1;">Max 3-px ov: <strong>{uo['dots_phase']['max_3px_overlap_dot_fields_42']*100:.2f}%</strong> (&le;70%)<br>34.33% vs GEMSDOE32 &bull; |&rho;|={uo['dots_phase']['max_abs_spearman_all_43']:.3f}</span>
+        <span style="font-size:0.75rem;color:#cbd5e1;">Max 3-px ov: <strong>{uo['focus_9_sites_max_within_3px_fraction']*100:.2f}%</strong> (&le;70%)<br>vs {_e(uo['focus_9_sites_closest_overlap_raster'].split(':')[0])} (closest) &bull; max |&rho;| (final dots)={uo['final_dots_max_abs_spearman']:.3f}</span>
       </td>
       <td><span class="badge b-ok">&#10003; YES</span></td>
-      <td><span class="badge b-ok">&#10003; YES (PROMOTE)</span></td>
+      <td><span class="badge b-ok">&#10003; DOWNLOAD OK (score unverified)</span></td>
     </tr>
     """)
 
@@ -522,7 +532,7 @@ def build_exec_summary_html(card: dict, audit: dict, exp: dict, canary: dict) ->
       <div class="filter-bar">
         <input id="tbl-search" class="filter-input" type="text" placeholder="Filter by site (e.g. GEMSDOE32, SASS3, unique, historical)..." oninput="filterRows()">
         <button class="btn btn-secondary" style="padding:0.4rem 0.75rem;font-size:0.8rem;" onclick="setQuickFilter('')">Show All (25 Rows)</button>
-        <button class="btn btn-secondary" style="padding:0.4rem 0.75rem;font-size:0.8rem;" onclick="setQuickFilter('promote')">Approved to Submit Only (1)</button>
+        <button class="btn btn-secondary" style="padding:0.4rem 0.75rem;font-size:0.8rem;" onclick="setQuickFilter('promote')">Download OK Only (1)</button>
         <button class="btn btn-secondary" style="padding:0.4rem 0.75rem;font-size:0.8rem;" onclick="setQuickFilter('historical')">9 Historical Leaders</button>
         <button class="btn btn-secondary" style="padding:0.4rem 0.75rem;font-size:0.8rem;" onclick="setQuickFilter('latest')">9 Latest Off-H19-5 Candidates</button>
       </div>

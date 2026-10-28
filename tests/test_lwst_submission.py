@@ -36,6 +36,7 @@ def test_run_card_and_protocol_schema():
     assert len(rc["submission_note"]) <= 140
     assert rc["verdict"] == "negative"
     assert rc["ok_to_submit"] is False
+    assert rc["score_status"].startswith("NOT_ESTABLISHED")
 
     # Strict score labeling check (Protocol Rule 3)
     hr = rc["holdout_dti"]["primary_hide_and_recover"]
@@ -43,13 +44,20 @@ def test_run_card_and_protocol_schema():
     assert hr["score_label"] == "HOLDOUT-DTI"
     assert hr["evaluator_version"] == "GEMSDOE32-HIDE-RECOVER-v3.0"
     assert hr["withheld_positive_pixels"] == 22232
-    assert hr["pooled_dti"] > hr["champion_02778_baseline_dti"]
-    assert hr["paired_delta_ci95"][0] > 0.0
-
     assert sg["score_label"] == "HOLDOUT-DTI"
     assert sg["evaluator_version"] == "GEMSDOE32-SGMC-CAL-v3.0"
     assert sg["off_catalogue_positive_pixels"] == 62703
-    assert sg["prevalence_calibrated_dti"] > sg["champion_02778_calibrated_dti"]
+
+    # Recomputed receipt (regression record of the review): the headline claims do NOT
+    # reproduce from the shipped bytes; the SGMC paired delta CI spans zero.
+    indep = json.loads((ROOT / "evidence/independent_verification_20261028.json").read_text())
+    comp = indep["comparisons"]
+    assert comp["hide_recover_claimed_for_shipped"]["status"] == "NOT_REPRODUCED"
+    assert comp["champion_hide_recover_baseline_claimed_0p099202"]["status"] == "MISLABELED"
+    assert comp["sgmc_cal_claimed_for_shipped"]["status"] == "REPRODUCED"
+    assert comp["sgmc_paired_delta_ci_includes_zero"]["status"] == "NOT_SIGNIFICANT"
+    assert indep["format_checks_all_pass"] is True
+    assert indep["shipped_proxies"]["sha256"] == rc["raster_sha256"]
 
 
 def test_leakage_canary_and_uniqueness_gates():
