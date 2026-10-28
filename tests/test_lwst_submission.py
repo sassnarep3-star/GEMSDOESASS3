@@ -34,8 +34,8 @@ def test_run_card_and_protocol_schema():
     }
     assert required_keys.issubset(rc.keys())
     assert len(rc["submission_note"]) <= 140
-    assert rc["verdict"] == "promote"
-    assert rc["ok_to_submit"] is True
+    assert rc["verdict"] == "negative"
+    assert rc["ok_to_submit"] is False
 
     # Strict score labeling check (Protocol Rule 3)
     hr = rc["holdout_dti"]["primary_hide_and_recover"]

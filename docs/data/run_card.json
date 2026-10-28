@@ -84,7 +84,9 @@
     "passed_all_focus_9_sites_literally": true,
     "passed_all_385_genuine_literally": true,
     "passed_null_calibrated_all_386": true,
-    "space_filling_lattice_note": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif is a synthetic 206,895-dot uniform 5x5 px calibration grid whose 3-px disk covers 99.871% of the footprint (sqrt(2^2+2^2)=2.828<=3 px); Spearman vs candidate is ~0.00 and null-calibrated excess is <= 0.0."
+    "space_filling_lattice_note": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif is a synthetic 206,895-dot uniform 5x5 px calibration grid whose 3-px disk covers 99.871% of the footprint (sqrt(2^2+2^2)=2.828<=3 px); Spearman vs candidate is ~0.00 and null-calibrated excess is <= 0.0.",
+    "literal_all_registry_max_within_3px_fraction": 0.997848834121209,
+    "literal_all_registry_passed": false
   },
   "raster_sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
   "zip_sha256": "d93ad7f6278e89247a24ee74d0a64b40c45314f8bb5acc00f58c0f24bfe33e16",
@@ -129,8 +131,9 @@
   },
   "submission_name": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
   "submission_note": "GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657",
-  "ok_to_submit": true,
-  "verdict": "promote",
+  "ok_to_submit": false,
+  "verdict": "negative",
   "download_path": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
-  "ok_to_download": true
+  "ok_to_download": true,
+  "status_reason": "Literal registry overlap exceeds 70%: 0.997848834121209 against 13GEMSDOE lattice; no exemption allowed. Archival download only."
 }
