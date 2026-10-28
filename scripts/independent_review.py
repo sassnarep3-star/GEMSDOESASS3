@@ -27,6 +27,7 @@ import rasterio
 from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 LWST = ROOT / "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif"
 SAMPLE = ROOT / ".cache/gems_data/sample_submission.tif"
 CONC = ROOT / "evidence/proxy_leaderboard_concordance.json"
@@ -155,7 +156,28 @@ def lattice_gate() -> dict:
     dots = ca == 1
     dist = ndi.distance_transform_edt(~wpos)
     frac = float((dist[dots] <= 3.0).mean()) if dots.any() else 0.0
+    coverage = None
+    feats = ROOT / ".cache/gems_data/training_features.tif"
+    if feats.exists():
+        from gems32.grid import read_footprint  # local import: src/ on path only when needed
+
+        foot = read_footprint(feats)
+        cov_frac = float((dist[foot] <= 3.0).mean())
+        uncovered = int((dist[foot] > 3.0).sum())
+        n_dots = int(dots.sum())
+        need_outside = int(np.ceil(n_dots * (1.0 - 0.70)))
+        coverage = {
+            "footprint_px": int(foot.sum()),
+            "footprint_fraction_within_3px_of_lattice": round(cov_frac, 5),
+            "footprint_px_outside_3px_of_lattice": uncovered,
+            "dots": n_dots,
+            "dots_needed_outside_3px_to_pass": need_outside,
+            "pass_possible_at_this_dot_count": bool(uncovered >= need_outside),
+            "reading": "Literal rule is unsatisfiable at this dot count: the uncovered footprint pixels are fewer than the dots needed outside the 3 px buffer."
+            if uncovered < need_outside else "Literal rule is satisfiable at this dot count.",
+        }
     return {
+        "coverage_analysis": coverage,
         "pass": bool(frac <= 0.70 and sha == LATTICE_SHA256 and same_grid),
         "available": True,
         "witness_path": LATTICE_REL,
@@ -356,7 +378,11 @@ def render_md(r: dict) -> str:
     A("")
     A("## 10. Limitations")
     A("")
-    A("1. The literal registry rule blocks this file (C9). Under that rule it is not OK to submit. Whether the calibration lattice should count is a protocol decision for the owner, not for this review.")
+    cov = lat.get("coverage_analysis")
+    if cov:
+        A(f"1. The literal registry rule blocks this file (C9). {cov['footprint_fraction_within_3px_of_lattice']*100:.2f}% of the footprint lies within 3 px of a lattice positive, leaving {cov['footprint_px_outside_3px_of_lattice']:,} footprint pixels outside the buffer. Passing needs at least {cov['dots_needed_outside_3px_to_pass']:,} of the {cov['dots']:,} dots there. {cov['reading']} The owner must decide whether the synthetic calibration lattice counts under Rule 1. This review applies no exemption.")
+    else:
+        A("1. The literal registry rule blocks this file (C9). Under that rule it is not OK to submit. Whether the calibration lattice should count is a protocol decision for the owner, not for this review.")
     A("1a. No organizer score for the new file. Only the upload itself can show whether it is accepted or what it scores.")
     A("2. Holdout values are proxies. The HIDE-RECOVER proxy is not leak-free for catalogue-built masks, and it does not rank the owner scores.")
     A("3. Owner scores come from the task prompt, not from organizer receipts.")
