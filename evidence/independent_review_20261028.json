@@ -29,6 +29,7 @@
     "all_pass": true,
     "meta": {
       "crs": "EPSG:32611",
+      "sample_reference": "organizer sample",
       "width": 3292,
       "height": 3730,
       "transform": [

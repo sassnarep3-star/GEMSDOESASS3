@@ -40,17 +40,28 @@ PAGES = ["README.md", "index.html", "executive-summary.html", "docs/index.html",
 EXPECTED_DOTS = 37654
 
 
+# Geotransform of the organizer sample (.cache/gems_data/sample_submission.tif), recorded 2026-10-28,
+# so the gate also runs where the restored data cache is absent (e.g. CI).
+EXPECTED_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
+
+
 def format_gate() -> dict:
     checks: dict[str, bool] = {}
-    with rasterio.open(LWST) as s, rasterio.open(SAMPLE) as ref:
+    ref_available = SAMPLE.exists()
+    with rasterio.open(LWST) as s:
         a = s.read(1)
         checks["single_band"] = s.count == 1
         checks["dtype_float32"] = s.dtypes[0] == "float32"
         checks["crs_epsg_32611"] = s.crs is not None and s.crs.to_epsg() == 32611
         checks["shape_rows_cols_3730x3292"] = s.shape == (3730, 3292)  # rows x cols, as in the organizer sample
-        checks["shape_matches_organizer_sample"] = s.shape == ref.shape
+        if ref_available:
+            with rasterio.open(SAMPLE) as ref:
+                checks["shape_matches_organizer_sample"] = s.shape == ref.shape
+                ref_tf = tuple(ref.transform)[:6]
+        else:
+            ref_tf = EXPECTED_TRANSFORM
         checks["geotransform_matches_sample"] = tuple(round(v, 9) for v in s.transform)[:6] == tuple(
-            round(v, 9) for v in ref.transform
+            round(v, 9) for v in ref_tf
         )[:6]
         checks["all_finite"] = bool(np.isfinite(a).all())
         checks["values_in_0_1"] = bool(np.isfinite(a).all() and a.min() >= 0.0 and a.max() <= 1.0)
@@ -59,6 +70,7 @@ def format_gate() -> dict:
         checks["zero_or_one_only"] = bool(np.isin(a, [0.0, 1.0]).all())
         meta = {
             "crs": str(s.crs),
+            "sample_reference": "organizer sample" if ref_available else "recorded EXPECTED_TRANSFORM",
             "width": s.width,
             "height": s.height,
             "transform": list(s.transform)[:6],
