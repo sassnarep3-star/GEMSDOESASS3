@@ -1,0 +1,45 @@
+[audit] 0 rasters compared (3s)
+[audit] 25 rasters compared (30s)
+[audit] 50 rasters compared (58s)
+[audit] 75 rasters compared (89s)
+[audit] 100 rasters compared (120s)
+[audit] 125 rasters compared (148s)
+[audit] 150 rasters compared (179s)
+[audit] 175 rasters compared (208s)
+[audit] 200 rasters compared (241s)
+[audit] 225 rasters compared (273s)
+[audit] 250 rasters compared (300s)
+[audit] 275 rasters compared (328s)
+[audit] 300 rasters compared (355s)
+[audit] 325 rasters compared (382s)
+[audit] 350 rasters compared (411s)
+[audit] 375 rasters compared (439s)
+[audit] 400 rasters compared (468s)
+[audit] 425 rasters compared (494s)
+[audit] 450 rasters compared (523s)
+{
+  "candidate": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
+  "candidate_sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
+  "candidate_n_dots": 37654,
+  "sibling_dir": "/tmp/sib",
+  "n_rasters_compared": 473,
+  "n_rasters_skipped": 13,
+  "thresholds": {
+    "within3_max_frac": 0.7,
+    "abs_spearman_max": 0.9,
+    "radius_px": 3.0
+  },
+  "max_within3": {
+    "path": "x_g24/GEMSDOE24-main/data/external/audit_sources/tiger_road_distance_m.tif",
+    "frac": 0.999973
+  },
+  "max_abs_spearman": {
+    "path": "x_g32/GEMSDOE32-main/docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif",
+    "rho": 0.135425
+  },
+  "identical_dot_sets": [],
+  "passes_rule_1": false,
+  "spearman_note": "sampled on 300000 uniform random pixels (seed=20261028); approximation of full-grid rank correlation",
+  "runtime_s": 546.7
+}
+wrote /tmp/indep_uniq_lwst.json

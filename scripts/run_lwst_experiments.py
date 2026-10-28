@@ -18,6 +18,7 @@ from __future__ import annotations
 import gc
 import hashlib
 import json
+import os
 import sys
 import time
 import zipfile
@@ -347,14 +348,17 @@ def main() -> int:
         raise RuntimeError(f"Leakage canary failed on {canary_rep['worst_channel']}!")
 
     print("[LWST] Step 3/6: Evaluating 0.2778 B=2 Champion baseline on HIDE-RECOVER-v3.0 & SGMC-CAL-v3.0...")
-    d28_path = Path("/tmp/ref_repos/GEMSDOE25/docs/downloads/gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif")
-    b2_champ_path = Path("/tmp/ref_repos/GEMSDOE32/docs/downloads/gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif")
-    with rasterio.open(d28_path) as ds_d28:
-        d28_mask = (ds_d28.read(1) > 0) & ctx.foot
+    # FIX 2026-10-28 (review finding): the HR baseline previously loaded the D2.8 parent
+    # (GEMSDOE25 e56ea318af89, owner-reported 0.2600) while labelling it "Champion 0.2778".
+    # The baseline is now the true champion e5eb6e7e (GEMSDOE32, owner-reported 0.2778).
+    # Caveat (Protocol Rule 2): the champion's dots were built from the full catalogue, so its
+    # static HIDE-RECOVER value is not leak-free; treat it as a reference, not a clean baseline.
+    sib_root = Path(os.environ.get("GEMS_SIB_ROOT", "/tmp/ref_repos"))
+    b2_champ_path = sib_root / "GEMSDOE32/docs/downloads/gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif"
     with rasterio.open(b2_champ_path) as ds_b2:
         b2_champ_mask = (ds_b2.read(1) > 0) & ctx.foot
 
-    base_hr = holdout.evaluate_hide_and_recover(d28_mask, ctx, b_visible_px=B_VISIBLE_PX, name="GEMSDOE32_B2_Champion_0.2778_proxy")
+    base_hr = holdout.evaluate_hide_and_recover(b2_champ_mask, ctx, b_visible_px=B_VISIBLE_PX, name="GEMSDOE32_B2_Champion_0.2778")
     base_sg = holdout.evaluate_sgmc_with_ci(b2_champ_mask, ctx, name="GEMSDOE32_B2_Champion_0.2778")
     print(f"[LWST] Champion baseline: HR={base_hr['pooled_dti']:.6f} {base_hr['ci95_cluster_bootstrap']}, SGMC_cal={base_sg['sgmc_prevalence_calibrated_dti']:.6f}")
 
