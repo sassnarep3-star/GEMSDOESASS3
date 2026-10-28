@@ -11,7 +11,7 @@
     <div class="topbar-inner">
       <div class="brand-title">
         <span>GEMSDOESASS3 · Executive Summary</span>
-        <span class="brand-pill">Safe to Submit ✓</span>
+        <span class="brand-pill">Download OK · score unverified ✓</span>
       </div>
       <nav class="nav-links">
         <a href="index.html">← Main Hub</a>
@@ -27,19 +27,18 @@
   <main class="container">
     
     <section class="hero-decision" id="download">
-      <div class="status-banner">✅ AUTOMATED VERDICT: PROMOTE — VALIDATED &amp; SAFE TO DOWNLOAD AND SUBMIT</div>
-      <h1>Flagship Unique GeoTIFF Submission Ready (`LWST-GeoConduit EXP3`)</h1>
+      <div class="status-banner">⚠️ AUTOMATED VERDICT: DOWNLOAD OK (format-valid &amp; unique) — SCORE NOT ESTABLISHED</div>
+      <h1>Unique, Format-Valid GeoTIFF (`LWST-GeoConduit EXP3`) — Score Not Established</h1>
       <p class="hero-sub">
         Validated <strong>100% programmatically with zero human inspection required</strong> across all 5 Parallel-Run Protocol gates:
         <strong>13/13 GeoTIFF checks passed</strong> (all 12,279,160 grid cells finite <code>float32</code> in <code>{0.0, 1.0}</code>, <code>nodata=None</code>, <code>0</code> NaNs — permanently eliminating <code>"Predicted values must be in range [0, 1]"</code>),
         <strong>51/51 Leakage Canary passed</strong> (<code>max AUC = 0.5883 &le; 0.90</code>),
-        <strong>beats the 0.2778 Champion on BOTH</strong> <code>HIDE-RECOVER-v3.0</code> (<code>0.111062</code> vs <code>0.099202</code>, paired 95% CI <code>[+0.003475, +0.020696]</code>)
-        <strong>and off-catalogue</strong> <code>SGMC-CAL-v3.0</code> (<code>0.065702</code> vs <code>0.064121</code>),
+        <strong style="color:#b45309">Score NOT established.</strong> The claimed <code>HIDE-RECOVER-v3.0</code> value 0.111062 <strong>does not reproduce</strong> from this file (recomputed static <code>0.006130</code>). <code>SGMC-CAL-v3.0</code> reproduces (<code>0.065702</code> vs champion <code>0.064121</code>), but its paired delta CI spans zero, so it is not a demonstrated improvement. Receipt: <code>evidence/independent_verification_20261028.json</code>.
         and is <strong>genuinely unique against all 9 GEMSDOE focus sites &amp; all 385 genuine rasters</strong> (<code>max 3-px overlap = 63.27% &le; 70%</code>, <code>max |Spearman| = 0.1255 &le; 0.90</code>).
       </p>
 
       <div class="cta-row">
-        <a class="btn btn-primary" href="downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif" download>⬇ Download Validated .TIF (206.6 KB)</a>
+        <a class="btn btn-primary" href="downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif" download>⬇ Download .TIF (format-valid, unique) (206.6 KB)</a>
         <a class="btn btn-outline" href="downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif.zip" download>⬇ Download .TIF.ZIP (173.6 KB)</a>
         <a class='btn btn-secondary' href='index.html'>← Back to Main Research & Architecture Hub</a>
         <a class="btn btn-outline" href="data/run_card.json" target="_blank" rel="noopener">📄 View JSON Run Card</a>
@@ -59,10 +58,10 @@
         <div class="copy-box">
           <div class="copy-label">
             <span>DrivenData Short Comment / Note</span>
-            <span>97 / 140 chars</span>
+            <span>122 / 140 chars</span>
           </div>
           <div class="copy-row">
-            <div class="copy-code" id="copy-note">GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657</div>
+            <div class="copy-code" id="copy-note">LWST-GeoConduit 37654 dots, B=2: format-valid, unique (max 3px overlap 63%). Score NOT established; HR claim unreproduced.</div>
             <button class="copy-btn" onclick="copyText('copy-note', this)">Copy Note</button>
           </div>
         </div>
@@ -80,7 +79,7 @@
           <div class="step-num">1</div>
           <strong>Download the <code>-zeros.tif</code> File</strong>
           <p style="margin:0.4rem 0 0;font-size:0.88rem;color:#334155">
-            Click <strong>Download Validated .TIF</strong> at the top of this page to save
+            Click <strong>Download .TIF (format-valid, unique)</strong> at the top of this page to save
             <code class="mono">gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif</code> (207 KB, uncompressed single-band GeoTIFF with lossless DEFLATE blocks). Upload the <code>.tif</code> directly (do not upload the <code>.zip</code> unless your browser alters `.tif` extensions).
           </p>
         </div>
@@ -105,7 +104,7 @@
           <strong>Paste the &le;140-Char Comment</strong>
           <p style="margin:0.4rem 0 0;font-size:0.88rem;color:#334155">
             Click <strong>Copy Note</strong> above and paste into DrivenData's <em>"Short comment to help you or your team tell submissions apart later"</em> field:<br>
-            <code class="mono">GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657</code> (<strong>97/140 chars</strong>).
+            <code class="mono">LWST-GeoConduit 37654 dots, B=2: format-valid, unique (max 3px overlap 63%). Score NOT established; HR claim unreproduced.</code> (<strong>122/140 chars</strong>).
           </p>
         </div>
         <div class="step-card">
@@ -140,7 +139,7 @@
       </p>
       <div class="filter-bar">
         <button class="filter-btn active" onclick="filterTable('all', this)">Show All (19)</button>
-        <button class="filter-btn" onclick="filterTable('safe', this)">✅ Safe to Submit (1)</button>
+        <button class="filter-btn" onclick="filterTable('safe', this)">✅ Download OK (1)</button>
         <button class="filter-btn" onclick="filterTable('era1', this)">Era-1 Live Leaders (9)</button>
         <button class="filter-btn" onclick="filterTable('era2', this)">Era-2 Oct 26 Runs (9)</button>
       </div>
@@ -157,7 +156,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class='highlight-row' data-group='safe'><td><strong>GEMSDOESASS3 (This Repo)</strong><br><small style='color:#64748b'>Flagship Unique (Oct 27)</small></td><td class='mono'><a href='downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif' download>gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif</a><br><small>37,654 dots | PASS (13/13, 0 NaN)</small></td><td><strong>HOLDOUT-DTI: 0.1111</strong> <span class='mono'>[0.0984, 0.1238]</span><br><small>HIDE-RECOVER-v3.0 (n=22,232) | Δ vs 0.2778: +0.0119</small></td><td class='mono'>0.0657 [0.0590, 0.0712]</td><td class='mono'>vs SASS3: <strong>— (Self)</strong><br>vs 0.2778: 41.53%<br><small>ρ=— (Self)</small></td><td><span class='badge badge-ok'>✅ VALIDATED &amp; SAFE TO SUBMIT</span><div style='margin-top:4px;font-size:0.79rem;color:#475569'>Beats 0.2778 Champion on BOTH HIDE-RECOVER-v3.0 (+12.0%, 95% CI &gt; 0) AND off-catalogue SGMC-CAL-v3.0 (0.0657 &gt; 0.0641). Passes 385/385 genuine uniqueness (max 63.27% &lt;= 70%).</div></td></tr>
+            <tr class='highlight-row' data-group='safe'><td><strong>GEMSDOESASS3 (This Repo)</strong><br><small style='color:#64748b'>Flagship Unique (Oct 27)</small></td><td class='mono'><a href='downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif' download>gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif</a><br><small>37,654 dots | PASS (13/13, 0 NaN)</small></td><td><strong>Score NOT established</strong><br><small>Claimed HR 0.111062 does not reproduce; recomputed static HR <span class='mono'>0.006130</span> (n=22,232)</small></td><td class='mono'>0.0657 [0.0590, 0.0712]</td><td class='mono'>vs SASS3: <strong>— (Self)</strong><br>vs 0.2778: 41.53%<br><small>ρ=— (Self)</small></td><td><span class='badge badge-ok'>✅ DOWNLOAD OK · ⚠️ SCORE NOT ESTABLISHED</span><div style='margin-top:4px;font-size:0.79rem;color:#475569'>Format-valid and unique (385/385 genuine rasters; max 3-px overlap 63.27% &lt;= 70%). The claimed beat of 0.2778 is NOT established: claimed HR 0.111062 does not reproduce, and the SGMC-CAL paired delta CI spans 0.</div></td></tr>
 <tr class='' data-group='era2'><td><strong>GEMSDOESASS3 (PR #7 Parallel)</strong><br><small style='color:#64748b'>Earlier GSD-HUA Run (Oct 27)</small></td><td class='mono'><a href='downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif' download>gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif</a><br><small>37,654 dots | PASS (0 NaN)</small></td><td><strong>HOLDOUT-DTI: 0.0720</strong> <span class='mono'>[0.0574, 0.0876]</span><br><small>gems57-pooled-hide-v2 (n=22,893; Δ CI includes 0)</small></td><td class='mono'>0.0359 [0.0308, 0.0412]</td><td class='mono'>vs SASS3: <strong>22.46%</strong><br>vs 0.2778: 23.10%<br><small>ρ=+0.0222</small></td><td><span class='badge badge-warn'>SUPERSEDED BY LWST EXP3 (-44% SGMC)</span><div style='margin-top:4px;font-size:0.79rem;color:#475569'>Parallel PR #7 run; paired CI vs H19-5 crossed 0 and off-catalogue SGMC-CAL dropped to 0.0359 vs LWST EXP3&#x27;s 0.0657 (+83.2%).</div></td></tr>
 <tr class='' data-group='era1'><td><strong>GEMSDOE32</strong><br><small style='color:#64748b'>Era-1 Champion</small></td><td class='mono'><a href='https://github.com/sassnarep3-star/GEMSDOE32/raw/main/docs/downloads/gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif' download>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</a><br><small>37,654 dots | PASS (0 NaN)</small></td><td><strong>OWNER-REPORT / PORTAL: 0.2778</strong><br><small>HOLDOUT-DTI: 0.0992 [0.0860, 0.1127] (n=22,232)</small></td><td class='mono'>0.0641 [0.0567, 0.0716]</td><td class='mono'>vs SASS3: <strong>41.53%</strong><br>vs 0.2778: 100.00%<br><small>ρ=+0.0292</small></td><td><span class='badge badge-no'>DO NOT RESUBMIT (ALREADY SCORED)</span><div style='margin-top:4px;font-size:0.79rem;color:#475569'>Highest live score across the 9 focus sites; B=2 (&gt;200 m) catalogue-pruned 37,654-dot subset of D2.8.</div></td></tr>
 <tr class='' data-group='era2'><td><strong>GEMSDOE32</strong><br><small style='color:#64748b'>Era-2 Held (Oct 26)</small></td><td class='mono'><a href='https://github.com/sassnarep3-star/GEMSDOE32/raw/main/docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif' download>gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif</a><br><small>37,654 dots | PASS (0 NaN)</small></td><td><strong>HOLDOUT-DTI: 0.1198</strong> <span class='mono'>[0.1057, 0.1329]</span><br><small>HIDE-RECOVER-v3.0 (n=22,232)</small></td><td class='mono'>0.0659 [0.0577, 0.0726]</td><td class='mono'>vs SASS3: <strong>63.27%</strong><br>vs 0.2778: 35.78%<br><small>ρ=+0.1200</small></td><td><span class='badge badge-warn'>HELD BY REPO GATE (verdict=negative)</span><div style='margin-top:4px;font-size:0.79rem;color:#475569'>Strong LDGI Dual-Horizon artifact; repo failed-closed on uncalibrated 5-px lattice &amp; unarchived H38 vector.</div></td></tr>

@@ -1,0 +1,123 @@
+{
+  "candidate_id": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan",
+  "path": "/tmp/gems_data/scored/gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+  "emitted_pixels": 44090,
+  "hide_and_recover": {
+    "candidate_id": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan",
+    "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "score_label": "HOLDOUT-DTI",
+    "b_visible_px": 2.0,
+    "n_withheld_positives": 22232,
+    "n_spatial_clusters": 140,
+    "n_bootstrap_reps": 1000,
+    "pooled_dti": 0.09920232315251679,
+    "ci95_cluster_bootstrap": [
+      0.08595140754809347,
+      0.11266835751415871
+    ],
+    "fold_mean_dti": 0.10119484288758751,
+    "per_quadrant_dti": {
+      "NW": 0.10125730530362789,
+      "NE": 0.11279290286951725,
+      "SW": 0.06649890431789826,
+      "SE": 0.12423025905930665
+    },
+    "folds": {
+      "draw20_fold0": {
+        "dti": 0.09895696074376986,
+        "coverage": 0.17102249053122723,
+        "tp": 326.82397940517524,
+        "fp": 8542.616659269213,
+        "fn": 1584.1760205948249,
+        "n_truth": 1911,
+        "emitted": 8686
+      },
+      "draw20_fold1": {
+        "dti": 0.11523252606355427,
+        "coverage": 0.192220990866558,
+        "tp": 451.9115495272779,
+        "fp": 9752.76861070954,
+        "fn": 1899.0884504727221,
+        "n_truth": 2351,
+        "emitted": 9952
+      },
+      "draw20_fold2": {
+        "dti": 0.06977607044855444,
+        "coverage": 0.09604877088131909,
+        "tp": 353.93972069766085,
+        "fp": 10268.603513849976,
+        "fn": 3331.060279302339,
+        "n_truth": 3685,
+        "emitted": 10415
+      },
+      "draw20_fold3": {
+        "dti": 0.15307529386301727,
+        "coverage": 0.19712955639863727,
+        "tp": 635.7428193856052,
+        "fp": 7229.947166959061,
+        "fn": 2589.2571806143947,
+        "n_truth": 3225,
+        "emitted": 7481
+      },
+      "draw21_fold0": {
+        "dti": 0.10355764986348591,
+        "coverage": 0.17025203743928208,
+        "tp": 359.4020510343245,
+        "fp": 8549.350329311474,
+        "fn": 1751.5979489656756,
+        "n_truth": 2111,
+        "emitted": 8702
+      },
+      "draw21_fold1": {
+        "dti": 0.11035327967548023,
+        "coverage": 0.18738355994662792,
+        "tp": 424.4237632791122,
+        "fp": 9745.80503133533,
+        "fn": 1840.5762367208877,
+        "n_truth": 2265,
+        "emitted": 9934
+      },
+      "draw21_fold2": {
+        "dti": 0.06322173818724207,
+        "coverage": 0.08790857396644527,
+        "tp": 315.0643290957399,
+        "fp": 10266.340516894299,
+        "fn": 3268.93567090426,
+        "n_truth": 3584,
+        "emitted": 10401
+      },
+      "draw21_fold3": {
+        "dti": 0.09538522425559604,
+        "coverage": 0.12274191752632231,
+        "tp": 380.4999443315992,
+        "fp": 7164.934335510543,
+        "fn": 2719.500055668401,
+        "n_truth": 3100,
+        "emitted": 7316
+      }
+    }
+  },
+  "sgmc_off_catalogue": {
+    "candidate_id": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan",
+    "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+    "score_label": "HOLDOUT-DTI",
+    "n_withheld_positives": 62703,
+    "n_spatial_clusters": 140,
+    "n_bootstrap_reps": 1000,
+    "sgmc_raw_pooled_dti": 0.09528236525805692,
+    "sgmc_raw_ci95": [
+      0.08501204821158427,
+      0.10605395764558845
+    ],
+    "sgmc_prevalence_calibrated_dti": 0.060592489973569044,
+    "sgmc_calibrated_ci95": [
+      0.05358257868838623,
+      0.06785452888019962
+    ]
+  },
+  "legacy_summary": {
+    "catalogue_hidden_mean": 0.09832378835263812,
+    "sgmc_prevalence_calibrated_dti": 0.06059248997356903,
+    "drift_corrected_holdout_mean": 0.14800749967104304
+  }
+}

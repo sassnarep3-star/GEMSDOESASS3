@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-10-28",
+  "purpose": "Recompute headline claims from bytes + restored inputs; no stored JSON trusted (Protocol Rules 3 and 5)",
+  "data_dir": "/tmp/gems_data",
+  "shipped_format_checks": {
+    "count": 1,
+    "dtype": "float32",
+    "nodata": null,
+    "crs": "EPSG:32611",
+    "shape": [
+      3730,
+      3292
+    ],
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "single_band": true,
+    "float32": true,
+    "crs_is_EPSG_32611": true,
+    "shape_matches_prepared_grid": true,
+    "transform_matches_prepared_grid": true,
+    "nan_count": 0,
+    "inf_count": 0,
+    "finite_min": 0.0,
+    "finite_max": 1.0,
+    "all_finite_values_in_0_1": true,
+    "positive_pixels": 37654,
+    "sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
+    "bytes": 211511
+  },
+  "format_checks_all_pass": true,
+  "shipped_proxies": {
+    "file": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
+    "sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
+    "n_dots_in_footprint": 37654,
+    "hide_recover_pooled_dti": 0.006129822099392871,
+    "hide_recover_ci95": [
+      0.0051747367243663595,
+      0.007122668787303196
+    ],
+    "hide_recover_withheld_positives": 22232,
+    "sgmc_cal_dti": 0.06570231430849702,
+    "sgmc_cal_ci95": [
+      0.05899206995492947,
+      0.07124034012798368
+    ],
+    "sgmc_raw_dti": 0.09851386703754361,
+    "sgmc_withheld_positives": 62703
+  },
+  "champion_0p2778_proxies": {
+    "file": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+    "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+    "n_dots_in_footprint": 37654,
+    "hide_recover_pooled_dti": 0.00451537871535044,
+    "hide_recover_ci95": [
+      0.0038164175817344387,
+      0.005261598301920283
+    ],
+    "hide_recover_withheld_positives": 22232,
+    "sgmc_cal_dti": 0.0641209376417646,
+    "sgmc_cal_ci95": [
+      0.056730181217206584,
+      0.0716486609703412
+    ],
+    "sgmc_raw_dti": 0.09606004283619354,
+    "sgmc_withheld_positives": 62703
+  },
+  "d28_gems25_proxies_used_as_hr_baseline": {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+    "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+    "n_dots_in_footprint": 44090,
+    "hide_recover_pooled_dti": 0.09920232315251679,
+    "hide_recover_ci95": [
+      0.08595140754809347,
+      0.11266835751415871
+    ],
+    "hide_recover_withheld_positives": 22232,
+    "sgmc_cal_dti": 0.060592489973569044,
+    "sgmc_cal_ci95": [
+      0.05358257868838623,
+      0.06785452888019962
+    ],
+    "sgmc_raw_dti": 0.09528236525805692,
+    "sgmc_withheld_positives": 62703
+  },
+  "comparisons": {
+    "hide_recover_claimed_for_shipped": {
+      "claimed": 0.111062,
+      "recomputed_static": 0.006129822099392871,
+      "status": "NOT_REPRODUCED",
+      "note": "Claimed value comes from per-fold OOF cell masks (run_lwst_experiments.py exp3_cell_masks), not from the shipped raster."
+    },
+    "champion_hide_recover_baseline_claimed_0p099202": {
+      "claimed": 0.099202,
+      "recomputed_static_D2p8_file": 0.09920232315251679,
+      "recomputed_static_champion_file": 0.00451537871535044,
+      "status": "MISLABELED",
+      "note": "0.099202 equals the static hide-and-recover score of the GEMSDOE25 D2.8 raster, not the 0.2778 champion."
+    },
+    "sgmc_cal_claimed_for_shipped": {
+      "claimed": 0.065702,
+      "recomputed_static": 0.06570231430849702,
+      "status": "REPRODUCED"
+    },
+    "sgmc_cal_champion_claimed_0p064121": {
+      "claimed": 0.064121,
+      "recomputed_static": 0.0641209376417646,
+      "status": "REPRODUCED"
+    },
+    "sgmc_paired_delta_ci_includes_zero": {
+      "claimed_delta_ci95": [
+        -0.005523,
+        0.008911
+      ],
+      "status": "NOT_SIGNIFICANT"
+    }
+  },
+  "labels": {
+    "HOLDOUT-DTI": "evaluator version, withheld positives and 95% CI are stated in each proxy block",
+    "ORGANIZER-CONFIRMED": "none exists for the shipped file; no submission receipt has been recorded"
+  }
+}

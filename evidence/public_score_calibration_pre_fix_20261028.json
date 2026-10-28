@@ -1,0 +1,507 @@
+{
+ "label": "CALIBRATION (OWNER-REPORT public scores from session listing; not organizer receipts)",
+ "evaluator": "src/gems32/holdout.py (B-visible=2 px); static masks",
+ "summary": {
+  "n_calibration_points": 27,
+  "spearman_public_vs_static_HR": 0.0717666827728217,
+  "kendall_public_vs_static_HR": 0.008583699771085366,
+  "spearman_public_vs_SGMC_cal": 0.8083676991474852,
+  "kendall_public_vs_SGMC_cal": 0.6666673488876301,
+  "spearman_public_vs_static_HR_ci95": [
+   -0.3790227273718551,
+   0.45183675468354906
+  ],
+  "spearman_public_vs_SGMC_cal_ci95": [
+   0.5304087277197296,
+   0.9566999048797099
+  ]
+ },
+ "rows": [
+  {
+   "token": "989f59505db1",
+   "site": "GEMSDOE24",
+   "public": 0.2477,
+   "file": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "n_dots": 60069,
+   "static_HR_dti": 0.09720385946561562,
+   "static_HR_ci95": [
+    0.08411403431092085,
+    0.11106569814941615
+   ],
+   "SGMC_cal_dti": 0.057932246070648355,
+   "SGMC_cal_ci95": [
+    0.05112656686015078,
+    0.0652165822506664
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "e56ea318af89",
+   "site": "GEMSDOE25",
+   "public": 0.26,
+   "file": "gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+   "n_dots": 44090,
+   "static_HR_dti": 0.09920232315251679,
+   "static_HR_ci95": [
+    0.08595140754809347,
+    0.11266835751415871
+   ],
+   "SGMC_cal_dti": 0.060592489973569044,
+   "SGMC_cal_ci95": [
+    0.05358257868838623,
+    0.06785452888019962
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "5512495c6bd1",
+   "site": "GEMSDOE27",
+   "public": 0.2449,
+   "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+   "n_dots": 61328,
+   "static_HR_dti": 0.09677777415544304,
+   "static_HR_ci95": [
+    0.08389152196166949,
+    0.11040609226946944
+   ],
+   "SGMC_cal_dti": 0.05826237030075181,
+   "SGMC_cal_ci95": [
+    0.051476178073377704,
+    0.06553368995679887
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "511898747886",
+   "site": "GEMSDOE27",
+   "public": 0.219,
+   "file": "gems27-h29-hydrothermal-piedmont-celf-20261025-511898747886-allfinite.tif",
+   "n_dots": 37654,
+   "static_HR_dti": 0.013967417811359436,
+   "static_HR_ci95": [
+    0.011399250590349595,
+    0.016601425422462953
+   ],
+   "SGMC_cal_dti": 0.05581521294826572,
+   "SGMC_cal_ci95": [
+    0.04851230687837598,
+    0.06304992017312022
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "cf8e1bbef244",
+   "site": "GEMSDOE27",
+   "public": 0.225,
+   "file": "gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-allfinite.tif",
+   "n_dots": 37654,
+   "static_HR_dti": 0.014339776769446658,
+   "static_HR_ci95": [
+    0.012033745846857085,
+    0.016711783467587574
+   ],
+   "SGMC_cal_dti": 0.06046554691893304,
+   "SGMC_cal_ci95": [
+    0.05355214747405788,
+    0.06671004649029268
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "8acb75e1f2cc",
+   "site": "GEMSDOE28",
+   "public": 0.2708,
+   "file": "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+   "n_dots": 40199,
+   "static_HR_dti": 0.03005741418614669,
+   "static_HR_ci95": [
+    0.02520494879134809,
+    0.03580210219679912
+   ],
+   "SGMC_cal_dti": 0.06300952965550723,
+   "SGMC_cal_ci95": [
+    0.055780891540621436,
+    0.07039487831429346
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "31e35eee884e",
+   "site": "GEMSDOE28",
+   "public": 0.2649,
+   "file": "gems28-h32-1-prethin-tip-euler-d2-8-20261003-31e35eee884e-allfinite.tif",
+   "n_dots": 42294,
+   "static_HR_dti": 0.060907786101861455,
+   "static_HR_ci95": [
+    0.0528480813090726,
+    0.06893931894573622
+   ],
+   "SGMC_cal_dti": 0.06175666339514615,
+   "SGMC_cal_ci95": [
+    0.05469717578274583,
+    0.06909743390056608
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "b531dae0a36f",
+   "site": "GEMSDOE28",
+   "public": 0.271,
+   "file": "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+   "n_dots": 37660,
+   "static_HR_dti": 0.028931932859002654,
+   "static_HR_ci95": [
+    0.024521720710806313,
+    0.03393805025911763
+   ],
+   "SGMC_cal_dti": 0.06296746868114517,
+   "SGMC_cal_ci95": [
+    0.05571910069273813,
+    0.07037502524536735
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "56a9f473edc7",
+   "site": "GEMSDOE28",
+   "public": 0.2707,
+   "file": "gems28-h38-1-hf-euler-r30-r1-20261003-56a9f473edc7-allfinite.tif",
+   "n_dots": 37860,
+   "static_HR_dti": 0.028866271207726012,
+   "static_HR_ci95": [
+    0.024453927635135417,
+    0.03385704899803808
+   ],
+   "SGMC_cal_dti": 0.06304334738289143,
+   "SGMC_cal_ci95": [
+    0.055799230032307204,
+    0.07038256465003352
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "3e95505c011a",
+   "site": "GEMSDOE28",
+   "public": 0.0217,
+   "file": "gems28-s18-mxtp-20261025-3e95505c011a-allfinite.tif",
+   "n_dots": 11082,
+   "static_HR_dti": 0.0018254004347198188,
+   "static_HR_ci95": [
+    0.001407364309097606,
+    0.002286485820358147
+   ],
+   "SGMC_cal_dti": 0.015093967164093948,
+   "SGMC_cal_ci95": [
+    0.01251058487077492,
+    0.017774665258185024
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "16bbf281ba9b",
+   "site": "GEMSDOE28",
+   "public": 0.0206,
+   "file": "gems28-s21-puhgb-20261026-16bbf281ba9b-allfinite.tif",
+   "n_dots": 37654,
+   "static_HR_dti": 0.03264430861280185,
+   "static_HR_ci95": [
+    0.030294449576117082,
+    0.034956275948152093
+   ],
+   "SGMC_cal_dti": 0.04196688354825123,
+   "SGMC_cal_ci95": [
+    0.03486459732359205,
+    0.05111957195727734
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "91eae1ca",
+   "site": "GEMSDOE30",
+   "public": 0.26,
+   "file": "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+   "n_dots": 44090,
+   "static_HR_dti": 0.09920232315251679,
+   "static_HR_ci95": [
+    0.08595140754809347,
+    0.11266835751415871
+   ],
+   "SGMC_cal_dti": 0.060592489973569044,
+   "SGMC_cal_ci95": [
+    0.05358257868838623,
+    0.06785452888019962
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "e7856ec3f14a",
+   "site": "GEMSDOE30",
+   "public": 0.1462,
+   "file": "gems30-MSDB1-edge44090-20261025-e7856ec3f14a.tif",
+   "n_dots": 44090,
+   "static_HR_dti": 0.10159147479031191,
+   "static_HR_ci95": [
+    0.0887136357090998,
+    0.11337382054016495
+   ],
+   "SGMC_cal_dti": 0.049231562627065927,
+   "SGMC_cal_ci95": [
+    0.04348663844124069,
+    0.05572588930767732
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "8acb75e1-",
+   "site": "GEMSDOE31",
+   "public": 0.2708,
+   "file": "gemsdoe31-add-arm-d28-20261004-8acb75e1-allfinite.tif",
+   "n_dots": 55304,
+   "static_HR_dti": 0.03871350456922054,
+   "static_HR_ci95": [
+    0.032122485867341344,
+    0.04551600026129206
+   ],
+   "SGMC_cal_dti": 0.057723945609304876,
+   "SGMC_cal_ci95": [
+    0.05116476717941474,
+    0.06479365770411791
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "e5eb6e7e",
+   "site": "GEMSDOE32",
+   "public": 0.2778,
+   "file": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+   "n_dots": 37654,
+   "static_HR_dti": 0.00451537871535044,
+   "static_HR_ci95": [
+    0.0038164175817344387,
+    0.005261598301920283
+   ],
+   "SGMC_cal_dti": 0.0641209376417646,
+   "SGMC_cal_ci95": [
+    0.056730181217206584,
+    0.0716486609703412
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "cb490425926e",
+   "site": "GEMSDOE33",
+   "public": 0.2632,
+   "file": "GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
+   "n_dots": 41865,
+   "static_HR_dti": 0.05068985435361664,
+   "static_HR_ci95": [
+    0.04440468116486247,
+    0.05714431230738448
+   ],
+   "SGMC_cal_dti": 0.06255070275978937,
+   "SGMC_cal_ci95": [
+    0.05531125719222555,
+    0.06998567406425855
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "3463540a7e02",
+   "site": "GEMSDOE33",
+   "public": 0.0963,
+   "file": "gemsdoe33-s33-seisdil-strain-seismicity-37654-20261026-3463540a7e02-nan.tif",
+   "n_dots": 37654,
+   "static_HR_dti": 0.002054436923686354,
+   "static_HR_ci95": [
+    0.001608718553397944,
+    0.0025218413342854517
+   ],
+   "SGMC_cal_dti": 0.05410010581810288,
+   "SGMC_cal_ci95": [
+    0.04311024866661807,
+    0.06472353471442958
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "9b9ea4e6",
+   "site": "GEMSDOE36",
+   "public": 0.275,
+   "file": "gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-nan.tif",
+   "n_dots": 38854,
+   "static_HR_dti": 0.004576730703979592,
+   "static_HR_ci95": [
+    0.0038915913728424577,
+    0.005300784778329944
+   ],
+   "SGMC_cal_dti": 0.06444361006575842,
+   "SGMC_cal_ci95": [
+    0.057086576831896246,
+    0.07195818932689524
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "fc869911e88c",
+   "site": "GEMSDOE36",
+   "public": 0.1647,
+   "file": "gemsdoe36-kpl36-exp3-20261026-fc869911e88c-zeros.tif",
+   "n_dots": 37654,
+   "static_HR_dti": 0.003086240838040983,
+   "static_HR_ci95": [
+    0.0023657388895720203,
+    0.0038602307311150228
+   ],
+   "SGMC_cal_dti": 0.04445823243724784,
+   "SGMC_cal_ci95": [
+    0.035833020217645305,
+    0.052743320719781855
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "abe8e51c719d",
+   "site": "GEMSDOE24",
+   "public": 0.0859,
+   "file": "gems24-gvc1-negative-geothermal-lineament-submod-20261025-abe8e51c719d-nan.tif",
+   "n_dots": 37654,
+   "static_HR_dti": 0.022197269011965344,
+   "static_HR_ci95": [
+    0.019859656497441213,
+    0.02445291692730069
+   ],
+   "SGMC_cal_dti": 0.04883566826308088,
+   "SGMC_cal_ci95": [
+    0.04273491924577842,
+    0.05549791445298228
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "da617550a0e9",
+   "site": "GEMSDOE25",
+   "public": 0.0742,
+   "file": "gems25-h66-mgd-flank-sapd3-0-k3p5-20261025-da617550a0e9-nan.tif",
+   "n_dots": 44832,
+   "static_HR_dti": 0.005755613509877323,
+   "static_HR_ci95": [
+    0.005037288864586909,
+    0.006480557547195113
+   ],
+   "SGMC_cal_dti": 0.06274939089045482,
+   "SGMC_cal_ci95": [
+    0.05493965059652799,
+    0.07103762731427721
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "df20f65e",
+   "site": "GEMSDOE16",
+   "public": 0.1855,
+   "file": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+   "n_dots": 123939,
+   "static_HR_dti": 0.07259569532091399,
+   "static_HR_ci95": [
+    0.06151144972289259,
+    0.08566147497194819
+   ],
+   "SGMC_cal_dti": 0.04900300619748864,
+   "SGMC_cal_ci95": [
+    0.04281313981184233,
+    0.05536965892873635
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "691e4dfa",
+   "site": "GEMSDOE19",
+   "public": 0.1894,
+   "file": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+   "n_dots": 123779,
+   "static_HR_dti": 0.0738125761025971,
+   "static_HR_ci95": [
+    0.06263171818898686,
+    0.08661349767522966
+   ],
+   "SGMC_cal_dti": 0.04632622687647366,
+   "SGMC_cal_ci95": [
+    0.040333392551856855,
+    0.052417897477916905
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "e27054cf",
+   "site": "GEMSDOE19",
+   "public": 0.1922,
+   "file": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif",
+   "n_dots": 121131,
+   "static_HR_dti": 0.07342354624497222,
+   "static_HR_ci95": [
+    0.062350088338253444,
+    0.0860477183306207
+   ],
+   "SGMC_cal_dti": 0.044072527055937755,
+   "SGMC_cal_ci95": [
+    0.03839311646537306,
+    0.05018992183224019
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "6452ae1d00",
+   "site": "GEMSDOE10",
+   "public": 0.128,
+   "file": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+   "n_dots": 174232,
+   "static_HR_dti": 0.17144024473784245,
+   "static_HR_ci95": [
+    0.15521932395209967,
+    0.1869170418001368
+   ],
+   "SGMC_cal_dti": 0.03426000912820391,
+   "SGMC_cal_ci95": [
+    0.029887028695025835,
+    0.03914295568651854
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "7f00890a",
+   "site": "GEMSDOE-ens12",
+   "public": 0.1563,
+   "file": "gemsdoe-ens12-adopted-7f00890a.tif",
+   "n_dots": 172974,
+   "static_HR_dti": 0.09012535784187528,
+   "static_HR_ci95": [
+    0.07758301709355835,
+    0.10299046051945145
+   ],
+   "SGMC_cal_dti": 0.040421474657155385,
+   "SGMC_cal_ci95": [
+    0.03544304932334273,
+    0.0454959816286172
+   ],
+   "status": "EVALUATED"
+  },
+  {
+   "token": "2314b599",
+   "site": "GEMSDOE9",
+   "public": 0.0107,
+   "file": "gemsdoe9-PLACEHOLDER-2314b599.tif",
+   "n_dots": 147684,
+   "static_HR_dti": 0.017744493583782512,
+   "static_HR_ci95": [
+    0.012649541962339484,
+    0.023042551356567808
+   ],
+   "SGMC_cal_dti": 0.013741311094760528,
+   "SGMC_cal_ci95": [
+    0.009195483075662833,
+    0.01890446336035823
+   ],
+   "status": "EVALUATED"
+  }
+ ]
+}

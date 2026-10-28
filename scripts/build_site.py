@@ -13,6 +13,11 @@ def _load(rel: str) -> dict:
     return json.loads((ROOT / rel).read_text())
 
 
+def _indep() -> dict:
+    """Recomputed claim receipt (scripts/independent_verify.py). Never retype these numbers."""
+    return _load("evidence/independent_verification_20261028.json")
+
+
 def _build_focus_rows_data(focus9: dict, rc: dict) -> list[dict]:
     """Assemble structured table rows covering GEMSDOESASS3 + all 9 Focus Sites (Era-1 & Era-2)."""
     by_name = {x["name"]: x for x in focus9["focus9_benchmarks"]}
@@ -60,9 +65,10 @@ def _build_focus_rows_data(focus9: dict, rc: dict) -> list[dict]:
             "dl_url": f"downloads/{sub_name}",
             "dots": 37654,
             "score_html": (
-                f"<strong>HOLDOUT-DTI: {hr_p['pooled_dti']:.4f}</strong> "
-                f"<span class='mono'>[{hr_p['ci95_spatial_block_bootstrap'][0]:.4f}, {hr_p['ci95_spatial_block_bootstrap'][1]:.4f}]</span><br>"
-                f"<small>HIDE-RECOVER-v3.0 (n=22,232) | Δ vs 0.2778: +{hr_p['paired_delta_vs_champion']:.4f}</small>"
+                "<strong>Score NOT established</strong><br>"
+                f"<small>Claimed HR 0.111062 does not reproduce; recomputed static HR "
+                f"<span class='mono'>{_indep()['shipped_proxies']['hide_recover_pooled_dti']:.6f}</span> "
+                f"(n=22,232)</small>"
             ),
             "sgmc_str": f"{sg_p['prevalence_calibrated_dti']:.4f} [{sg_p['prevalence_calibrated_ci95'][0]:.4f}, {sg_p['prevalence_calibrated_ci95'][1]:.4f}]",
             "ov_sass3": "— (Self)",
@@ -70,8 +76,8 @@ def _build_focus_rows_data(focus9: dict, rc: dict) -> list[dict]:
             "ov_02778": "41.53%",
             "finite_01": "PASS (13/13, 0 NaN)",
             "status_cls": "badge-ok",
-            "status_text": "✅ VALIDATED & SAFE TO SUBMIT",
-            "notes": "Beats 0.2778 Champion on BOTH HIDE-RECOVER-v3.0 (+12.0%, 95% CI > 0) AND off-catalogue SGMC-CAL-v3.0 (0.0657 > 0.0641). Passes 385/385 genuine uniqueness (max 63.27% <= 70%).",
+            "status_text": "✅ DOWNLOAD OK · ⚠️ SCORE NOT ESTABLISHED",
+            "notes": "Format-valid and unique (385/385 genuine rasters; max 3-px overlap 63.27% <= 70%). The claimed beat of 0.2778 is NOT established: claimed HR 0.111062 does not reproduce, and the SGMC-CAL paired delta CI spans 0.",
         },
         {
             "site": "GEMSDOESASS3 (PR #7 Parallel)",
@@ -255,19 +261,18 @@ def _hero_block_html(rc: dict, ledger: dict, is_subpage: bool = False) -> str:
 
     return f"""
     <section class="hero-decision" id="download">
-      <div class="status-banner">✅ AUTOMATED VERDICT: PROMOTE — VALIDATED &amp; SAFE TO DOWNLOAD AND SUBMIT</div>
-      <h1>Flagship Unique GeoTIFF Submission Ready (`LWST-GeoConduit EXP3`)</h1>
+      <div class="status-banner">⚠️ AUTOMATED VERDICT: DOWNLOAD OK (format-valid &amp; unique) — SCORE NOT ESTABLISHED</div>
+      <h1>Unique, Format-Valid GeoTIFF (`LWST-GeoConduit EXP3`) — Score Not Established</h1>
       <p class="hero-sub">
         Validated <strong>100% programmatically with zero human inspection required</strong> across all 5 Parallel-Run Protocol gates:
         <strong>13/13 GeoTIFF checks passed</strong> (all 12,279,160 grid cells finite <code>float32</code> in <code>{{0.0, 1.0}}</code>, <code>nodata=None</code>, <code>0</code> NaNs — permanently eliminating <code>"Predicted values must be in range [0, 1]"</code>),
         <strong>51/51 Leakage Canary passed</strong> (<code>max AUC = 0.5883 &le; 0.90</code>),
-        <strong>beats the 0.2778 Champion on BOTH</strong> <code>HIDE-RECOVER-v3.0</code> (<code>{hr['pooled_dti']:.6f}</code> vs <code>{hr['champion_02778_baseline_dti']:.6f}</code>, paired 95% CI <code>[+{hr['paired_delta_ci95'][0]:.6f}, +{hr['paired_delta_ci95'][1]:.6f}]</code>)
-        <strong>and off-catalogue</strong> <code>SGMC-CAL-v3.0</code> (<code>{sg['prevalence_calibrated_dti']:.6f}</code> vs <code>{sg['champion_02778_calibrated_dti']:.6f}</code>),
+        <strong style="color:#b45309">Score NOT established.</strong> The claimed <code>HIDE-RECOVER-v3.0</code> value 0.111062 <strong>does not reproduce</strong> from this file (recomputed static <code>{_indep()['shipped_proxies']['hide_recover_pooled_dti']:.6f}</code>). <code>SGMC-CAL-v3.0</code> reproduces (<code>{_indep()['shipped_proxies']['sgmc_cal_dti']:.6f}</code> vs champion <code>{_indep()['champion_0p2778_proxies']['sgmc_cal_dti']:.6f}</code>), but its paired delta CI spans zero, so it is not a demonstrated improvement. Receipt: <code>evidence/independent_verification_20261028.json</code>.
         and is <strong>genuinely unique against all 9 GEMSDOE focus sites &amp; all 385 genuine rasters</strong> (<code>max 3-px overlap = 63.27% &le; 70%</code>, <code>max |Spearman| = 0.1255 &le; 0.90</code>).
       </p>
 
       <div class="cta-row">
-        <a class="btn btn-primary" href="downloads/{html.escape(sub_name)}" download>⬇ Download Validated .TIF ({tif_kb} KB)</a>
+        <a class="btn btn-primary" href="downloads/{html.escape(sub_name)}" download>⬇ Download .TIF (format-valid, unique) ({tif_kb} KB)</a>
         <a class="btn btn-outline" href="downloads/{html.escape(zip_name)}" download>⬇ Download .TIF.ZIP ({zip_kb} KB)</a>
         {guide_btn}
         <a class="btn btn-outline" href="data/run_card.json" target="_blank" rel="noopener">📄 View JSON Run Card</a>
@@ -352,7 +357,7 @@ def build_index_html(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) 
     <div class="topbar-inner">
       <div class="brand-title">
         <span>GEMSDOESASS3</span>
-        <span class="brand-pill">Validated Promote ✓</span>
+        <span class="brand-pill">Download OK · Score unverified</span>
       </div>
       <nav class="nav-links">
         <a href="#download" class="active">Download .TIF</a>
@@ -378,8 +383,8 @@ def build_index_html(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) 
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Gate G2a · HIDE-RECOVER-v3.0</div>
-        <div class="kpi-val" style="color:#059669">{hr['pooled_dti']:.6f}</div>
-        <div class="kpi-note">HOLDOUT-DTI vs 0.099202 Champ (+12.0%, CI &gt; 0)</div>
+        <div class="kpi-val" style="color:#b45309">{_indep()['shipped_proxies']['hide_recover_pooled_dti']:.6f} (recomputed)</div>
+        <div class="kpi-note">Claimed 0.111062 NOT reproduced (static HR). Champion recomputed: {_indep()['champion_0p2778_proxies']['hide_recover_pooled_dti']:.6f}</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Gate G2b · SGMC-CAL-v3.0</div>
@@ -408,7 +413,7 @@ def build_index_html(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) 
       </p>
       <div class="filter-bar">
         <button class="filter-btn active" onclick="filterTable('all', this)">Show All (19)</button>
-        <button class="filter-btn" onclick="filterTable('safe', this)">✅ Safe to Submit (1)</button>
+        <button class="filter-btn" onclick="filterTable('safe', this)">✅ Download OK (1)</button>
         <button class="filter-btn" onclick="filterTable('era1', this)">Era-1 Live Leaders (9)</button>
         <button class="filter-btn" onclick="filterTable('era2', this)">Era-2 Oct 26 Runs (9)</button>
       </div>
@@ -662,7 +667,7 @@ def build_exec_summary_html(rc: dict, ledger: dict, rows: list[dict]) -> str:
     <div class="topbar-inner">
       <div class="brand-title">
         <span>GEMSDOESASS3 · Executive Summary</span>
-        <span class="brand-pill">Safe to Submit ✓</span>
+        <span class="brand-pill">Download OK · score unverified ✓</span>
       </div>
       <nav class="nav-links">
         <a href="index.html">← Main Hub</a>
@@ -688,7 +693,7 @@ def build_exec_summary_html(rc: dict, ledger: dict, rows: list[dict]) -> str:
           <div class="step-num">1</div>
           <strong>Download the <code>-zeros.tif</code> File</strong>
           <p style="margin:0.4rem 0 0;font-size:0.88rem;color:#334155">
-            Click <strong>Download Validated .TIF</strong> at the top of this page to save
+            Click <strong>Download .TIF (format-valid, unique)</strong> at the top of this page to save
             <code class="mono">{html.escape(sub_name)}</code> (207 KB, uncompressed single-band GeoTIFF with lossless DEFLATE blocks). Upload the <code>.tif</code> directly (do not upload the <code>.zip</code> unless your browser alters `.tif` extensions).
           </p>
         </div>
@@ -748,7 +753,7 @@ def build_exec_summary_html(rc: dict, ledger: dict, rows: list[dict]) -> str:
       </p>
       <div class="filter-bar">
         <button class="filter-btn active" onclick="filterTable('all', this)">Show All (19)</button>
-        <button class="filter-btn" onclick="filterTable('safe', this)">✅ Safe to Submit (1)</button>
+        <button class="filter-btn" onclick="filterTable('safe', this)">✅ Download OK (1)</button>
         <button class="filter-btn" onclick="filterTable('era1', this)">Era-1 Live Leaders (9)</button>
         <button class="filter-btn" onclick="filterTable('era2', this)">Era-2 Oct 26 Runs (9)</button>
       </div>
@@ -802,6 +807,11 @@ def build_exec_summary_html(rc: dict, ledger: dict, rows: list[dict]) -> str:
 
 
 def build_readme_md(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) -> str:
+    _ih = _indep()["shipped_proxies"]
+    _ic = _indep()["champion_0p2778_proxies"]
+    _ihr_lo, _ihr_hi = _ih["hide_recover_ci95"]
+    _isg_lo, _isg_hi = _ih["sgmc_cal_ci95"]
+    _d_sg = _ih["sgmc_cal_dti"] - _ic["sgmc_cal_dti"]
     sub_name = rc["submission_name"]
     note = rc["submission_note"]
     sha = rc["raster_sha256"]
@@ -835,22 +845,31 @@ def build_readme_md(rc: dict, ledger: dict, rows: list[dict], ir_ledger: dict) -
 
     return f"""# GEMSDOESASS3 — DOE GEMS Prize Research, Validation & Submission Hub
 
-## ✅ CURRENT AUTOMATED VERDICT: `PROMOTE` — VALIDATED & SAFE TO DOWNLOAD AND SUBMIT
+## ⚠️ CURRENT VERDICT: `download_ok_score_unverified` — DOWNLOAD OK (format-valid, unique) · SCORE NOT ESTABLISHED
 
 | Field | Verified Value |
 |---|---|
-| **Submission Status** | **✅ VALIDATED & SAFE TO DOWNLOAD AND SUBMIT (`verdict: "promote"`, `ok_to_submit: true`)** — 100% programmatic verification (zero human inspection required) |
+| **Submission Status** | **✅ OK to download and submit as a format-valid, unique candidate (`verdict: \"download_ok_score_unverified\"`, `ok_to_submit: true`). ⚠️ Score NOT established (see the two HOLDOUT rows).** — programmatic verification, zero human inspection required |
 | **Primary Download (`.tif`)** | [**`docs/downloads/{sub_name}`**](docs/downloads/{sub_name}) (`207 KB`, single-band `float32`, `EPSG:32611`, `3730 × 3292`, `nodata=None`) |
 | **Archive Download (`.tif.zip`)** | [**`docs/downloads/{zip_name}`**](docs/downloads/{zip_name}) (`174 KB` DEFLATE bundle) |
 | **Unique Submission Filename** | `{sub_name}` |
 | **DrivenData Short Note (`{len(note)}/140` chars)** | `{note}` |
 | **GeoTIFF SHA-256** | `{sha}` |
-| **Primary `HOLDOUT-DTI` (`GEMSDOE32-HIDE-RECOVER-v3.0`)** | **`{hr['pooled_dti']:.6f}`** (`95% CI [{hr['ci95_spatial_block_bootstrap'][0]:.6f}, {hr['ci95_spatial_block_bootstrap'][1]:.6f}]`, `n = 22,232` withheld positives) vs `0.2778` Champion `0.099202` (**Paired Δ = `+{hr['paired_delta_vs_champion']:.6f}` `[+{hr['paired_delta_ci95'][0]:.6f}, +{hr['paired_delta_ci95'][1]:.6f}]`**, `P(Δ > 0) = {hr['prob_beats_champion']:.3f}`) |
-| **Off-Catalogue `HOLDOUT-DTI` (`GEMSDOE32-SGMC-CAL-v3.0`)** | **`{sg['prevalence_calibrated_dti']:.6f}`** (`95% CI [{sg['prevalence_calibrated_ci95'][0]:.6f}, {sg['prevalence_calibrated_ci95'][1]:.6f}]`, `raw = {sg['raw_pooled_dti']:.6f}`, `n = 62,703` off-catalogue USGS SGMC faults `> 300 m` off `labels.tif`) vs `0.2778` Champion `0.064121` (**`+{sg['paired_delta_calibrated_vs_champion']:.6f}`**) |
+| **Primary `HOLDOUT-DTI` (`GEMSDOE32-HIDE-RECOVER-v3.0`)** | **Claimed `0.111062` — NOT REPRODUCED.** Recomputed from the shipped bytes: **`{_ih['hide_recover_pooled_dti']:.6f}`** `[{_ihr_lo:.6f}, {_ihr_hi:.6f}]` (`n = 22,232` withheld positives). Champion recomputed: `{_ic['hide_recover_pooled_dti']:.6f}`. The `0.099202` previously labelled as the champion baseline is the **GEMSDOE25 D2.8** raster's static score (mislabel). Receipt: [`evidence/independent_verification_20261028.json`](evidence/independent_verification_20261028.json) |
+| **Off-Catalogue `HOLDOUT-DTI` (`GEMSDOE32-SGMC-CAL-v3.0`)** | **`{_ih['sgmc_cal_dti']:.6f}`** `[{_isg_lo:.6f}, {_isg_hi:.6f}]` — **reproduced**. Champion `{_ic['sgmc_cal_dti']:.6f}`. Paired Δ `{_d_sg:+.6f}` — **its CI spans zero: not a demonstrated improvement** (`n = 62,703` off-catalogue SGMC faults) |
 | **Leakage Canary (Protocol Rule 4)** | **PASS (`51 / 51` channels `<= 0.90`)** — max symmetric AUC = `curv_s2` at `0.5883` ([`evidence/leakage_canary_report.json`](evidence/leakage_canary_report.json)) |
 | **Uniqueness Audit (Protocol Rule 1)** | **PASS across all 9 focus sites (`378/378` rasters) & all `385/385` genuine rasters** — pre-placement surface `max |Spearman| = 0.1255 <= 0.90`; final dots `max |Spearman| = 0.1200 <= 0.90`; `max within-3px overlap = 63.27% <= 70.0%` (`41.53%` vs `0.2778` Champion) ([`evidence/uniqueness_audit_386.json`](evidence/uniqueness_audit_386.json)) |
 | **`[0, 1]` GeoTIFF Gate (Fixes Portal Error)** | **PASS (`13 / 13` checks)** — `12,279,160 / 12,279,160` finite pixels in `{{0.0, 1.0}}`, `0` `NaN` inside or outside footprint, `0` on-catalogue positives, permanently eliminating `"Predicted values must be in range [0, 1]"` |
 | **GitHub Pages UI & Submission Guide** | [**`docs/index.html`**](docs/index.html) (Main Research Hub) · [**`docs/executive-summary.html`**](docs/executive-summary.html) (Step-by-Step Contest Upload Guide) |
+
+---
+
+## 🎯 Core Values (focal point of every session)
+
+1. **Maximize P(Win).** Every decision is judged by its effect on the probability of finishing first on the DrivenData GEMS leaderboard, not by how good a document looks. Ship only what can be checked; prefer a verified small gain to an unverified large one.
+2. **Own the Outcome.** Report negative results and irregularities plainly, correct claims that do not reproduce, and state exactly what remains unknown. Nothing is labelled a score unless it is reproduced or organizer-confirmed.
+
+**Standing prompt (read at the start of every session):** [`docs/research/standing-prompt-as-recorded-20261027.md`](docs/research/standing-prompt-as-recorded-20261027.md) · Review of 2026-10-28: [`docs/research/review-20261028.md`](docs/research/review-20261028.md)
 
 ---
 

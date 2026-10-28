@@ -1,0 +1,56 @@
+{
+ "champion_vs_shipped": {
+  "overlap_a_within_3px_of_b": 0.35316301056992616,
+  "n_a": 37654,
+  "n_b": 37654,
+  "xor_positive_pixels": 72574
+ },
+ "champion_vs_GEMSDOE36_anderson_zeros": {
+  "overlap_a_within_3px_of_b": 1.0,
+  "n_a": 37654,
+  "n_b": 38854,
+  "xor_positive_pixels": 1200
+ },
+ "champion_vs_GEMSDOE28_h36-1_allfinite": {
+  "overlap_a_within_3px_of_b": 0.9987517926382323,
+  "n_a": 37654,
+  "n_b": 37660,
+  "xor_positive_pixels": 22818
+ },
+ "champion_vs_GEMSDOE31_h27-4_allfinite": {
+  "overlap_a_within_3px_of_b": 1.0,
+  "n_a": 37654,
+  "n_b": 55304,
+  "xor_positive_pixels": 17650
+ },
+ "champion_vs_GEMSDOE33_h33d_zeros_or_plain": {
+  "overlap_a_within_3px_of_b": 0.9998406543793488,
+  "n_a": 37654,
+  "n_b": 41865,
+  "xor_positive_pixels": 16291
+ },
+ "champion_vs_GEMSDOE25_h31": {
+  "overlap_a_within_3px_of_b": 0.33220906145429435,
+  "n_a": 37654,
+  "n_b": 43771,
+  "xor_positive_pixels": 79207
+ },
+ "champion_vs_GEMSDOE27_topo_gap_allfinite": {
+  "overlap_a_within_3px_of_b": 1.0,
+  "n_a": 37654,
+  "n_b": 61328,
+  "xor_positive_pixels": 47948
+ },
+ "champion_vs_GEMSDOE30_d28_offcat": {
+  "overlap_a_within_3px_of_b": 1.0,
+  "n_a": 37654,
+  "n_b": 44090,
+  "xor_positive_pixels": 6436
+ },
+ "shipped_vs_GEMSDOE24_h25-1_d1-5_nan": {
+  "overlap_a_within_3px_of_b": 0.48313592181441545,
+  "n_a": 37654,
+  "n_b": 60069,
+  "xor_positive_pixels": 93871
+ }
+}
