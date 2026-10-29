@@ -16,6 +16,7 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
+from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -26,6 +27,15 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def _footprint_mask():
+    """Finite cells of the organizer sample_submission.tif (the scored region), or None if the data is absent."""
+    for cand in (ROOT / ".cache/gems_data/sample_submission.tif", Path("/tmp/gems_data/sample_submission.tif")):
+        if cand.is_file():
+            with rasterio.open(cand) as src:
+                return np.isfinite(src.read(1))
+    return None
 
 
 def verify() -> dict:
@@ -63,6 +73,34 @@ def verify() -> dict:
             check("all_values_finite", bool(np.isfinite(arr).all()))
             check("all_values_in_0_1", bool(arr.min() >= 0 and arr.max() <= 1))
             check("positive_cell_count_matches_audit", int((arr > 0).sum()) == card["validator_output"]["positive_cells"])
+    # Competition rules (page 967): "data outside the bounds is null or nan". Zeros outside are the convention of the
+    # owner-scored files (IR-SASS3-27), so only NON-ZERO finite cells outside the footprint fail. Pending without data.
+    # Added 2026-10-29 (IR-SASS3-42, 44): the format checks above do not test this rule, so it gates approval below.
+    footprint = _footprint_mask() if tif.is_file() else None
+    if tif.is_file() and footprint is not None:
+        with rasterio.open(tif) as src:
+            raw = src.read(1)
+        outside = raw[~footprint]
+        n_nonzero_out = int(np.count_nonzero(np.isfinite(outside) & (outside != 0)))
+        check("outside_bounds_null_or_zero", n_nonzero_out == 0, f"{n_nonzero_out} non-zero cells outside the competition bounds")
+    else:
+        check("outside_bounds_null_or_zero", False, "PENDING_DATA: competition footprint absent; outside-bounds rule not checked")
+
+    # Literal lattice rule measured on THIS file (<= 70% of its positive cells inside the footprint within 3 px of the
+    # pinned 13GEMSDOE calibration lattice). Pending without the data.
+    lattice_path = ROOT / ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
+    if tif.is_file() and footprint is not None and lattice_path.is_file():
+        with rasterio.open(tif) as src:
+            cand_pos = src.read(1) > 0.0
+        with rasterio.open(lattice_path) as lat_ds:
+            lat = np.nan_to_num(lat_ds.read(1), nan=0.0) > 0.0
+        inside = cand_pos & footprint
+        n_inside = int(inside.sum())
+        frac = float((ndi.distance_transform_edt(~lat)[inside] <= 3.0).mean()) if n_inside else 1.0
+        check("literal_lattice_inside_footprint", frac <= 0.70, f"within-3px fraction inside footprint = {frac:.4f} (limit 0.70)")
+    else:
+        check("literal_lattice_inside_footprint", False, "PENDING_DATA: lattice or footprint absent; literal lattice rule not measured")
+
     zip_path = tif.with_suffix(".tif.zip")
     check("zip_exists", zip_path.is_file(), f"missing {zip_path}")
     if zip_path.is_file():
@@ -96,11 +134,14 @@ def verify() -> dict:
         "zip_exists", "zip_sha256_matches", "zip_contains_one_matching_tif",
         "uniqueness_receipt_matches_candidate", "one_witness_metric_is_under_threshold",
         "submission_note_length", "archive_only_ui", "candidate_not_promoted"))
-    approved = format_ok and checks["complete_uniqueness_gate"] and checks["holdout_gate"] and checks["canary_gate"]
+    competition_rules_ok = checks["outside_bounds_null_or_zero"] and checks["literal_lattice_inside_footprint"]
+    approved = (format_ok and competition_rules_ok and checks["complete_uniqueness_gate"]
+                and checks["holdout_gate"] and checks["canary_gate"])
     failed = [name for name, passed in checks.items() if not passed]
     return {
         "ok": bool(approved and card.get("ok_to_submit") is True),
         "format_and_record_integrity": format_ok,
+        "competition_rules_outside_bounds_and_literal_lattice": competition_rules_ok,
         "ok_to_download": False,
         "ok_to_download_for_analysis": bool(card.get("ok_to_download_for_analysis")),
         "ok_to_submit": approved and card.get("ok_to_submit") is True,
