@@ -19,6 +19,23 @@ Metrics (per sibling raster S, candidate raster C)
                        |rho| must be <= 0.90. Sampling is an approximation of the full-grid rank
                        correlation and is recorded as such in the output.
 
+Registry scope (fixed 2026-10-28)
+---------------------------------
+Each compared raster is tagged with a scope, and the protocol rule is applied only to
+the registry scopes:
+
+* ``submission``  : any raster under a ``docs/downloads/`` or ``archive/legacy_candidates/``
+                    folder of a sibling repository (a previously published or archived submission).
+* ``calibration`` : any raster under ``inputs/calibration/`` (the literal "any registry raster"
+                    reading includes these; the calibration lattice is the case in point).
+* ``other``       : everything else on the grid, e.g. ``data/external`` feature layers such as
+                    distance-to-road or geology rasters. These are NOT submissions. Before this fix
+                    the first audit counted them, which produced a false 100% overlap
+                    (``tiger_road_distance_m.tif``). They are listed, not gated.
+
+``passes_rule_1`` = the literal rule over ``submission`` + ``calibration``.
+``passes_submission_scope_only`` = the rule over ``submission`` alone.
+
 Only single-band rasters on the competition grid (3730 rows x 3292 cols, float32 or
 float64-compatible) are compared, so unrelated feature layers (uint8 external layers,
 calibration probes on other grids) are skipped and listed in the output.
@@ -78,6 +95,32 @@ def within_radius_fraction(a_dots: np.ndarray, dist_to_b: np.ndarray, radius: fl
     return float((dist_to_b[a_dots] <= radius).mean())
 
 
+def scope_of(rel_path: str) -> str:
+    """Classify a sibling raster path (relative to the sibling directory) into a registry scope."""
+    p = "/" + rel_path.replace(os.sep, "/")
+    if "/docs/downloads/" in p or "/archive/legacy_candidates/" in p:
+        return "submission"
+    if "/inputs/calibration/" in p:
+        return "calibration"
+    return "other"
+
+
+def scope_summary(results: list[dict], scopes: tuple[str, ...]) -> dict:
+    rs = [r for r in results if r["scope"] in scopes]
+    if not rs:
+        return {"n": 0, "max_within3": None, "max_abs_spearman": None, "n_over_70pct": 0, "passes": False}
+    m = max(rs, key=lambda r: r["within3_frac"])
+    sp = [r for r in rs if r["spearman_sampled"] is not None]
+    s = max(sp, key=lambda r: abs(r["spearman_sampled"])) if sp else None
+    return {
+        "n": len(rs),
+        "max_within3": {"path": m["path"], "frac": m["within3_frac"]},
+        "max_abs_spearman": {"path": s["path"], "rho": s["spearman_sampled"]} if s else None,
+        "n_over_70pct": sum(1 for r in rs if r["within3_frac"] > 0.70),
+        "passes": bool(m["within3_frac"] <= 0.70 and (s is None or abs(s["spearman_sampled"]) <= 0.90)),
+    }
+
+
 def audit(candidate: Path, sibling_dir: Path, n_sample: int, seed: int) -> dict:
     t0 = time.time()
     cand_arr, cand_dots = load_submission(candidate)
@@ -130,6 +173,7 @@ def audit(candidate: Path, sibling_dir: Path, n_sample: int, seed: int) -> dict:
             print(f"[audit] {len(results)} rasters compared ({time.time() - t0:.0f}s)", flush=True)
         results.append({
             "path": str(p.relative_to(sibling_dir)),
+            "scope": scope_of(str(p.relative_to(sibling_dir))),
             "sha256": sha256_file(p),
             "n_dots": int(sib_dots.sum()),
             "within3_frac": round(within, 6),
@@ -152,11 +196,15 @@ def audit(candidate: Path, sibling_dir: Path, n_sample: int, seed: int) -> dict:
         "max_within3": {"path": max_w["path"], "frac": max_w["within3_frac"]} if max_w else None,
         "max_abs_spearman": {"path": max_rho["path"], "rho": max_rho["spearman_sampled"]} if max_rho else None,
         "identical_dot_sets": [r["path"] for r in results if r["xor_dots"] == 0 and r["n_dots"] > 0],
-        "passes_rule_1": bool(
-            results
-            and max_w["within3_frac"] <= 0.70
-            and abs(max_rho["spearman_sampled"] or 0.0) <= 0.90
-        ),
+        "by_scope": {
+            "submission": scope_summary(results, ("submission",)),
+            "calibration": scope_summary(results, ("calibration",)),
+            "other_not_gated": {"n": sum(1 for r in results if r["scope"] == "other")},
+        },
+        "literal_registry_scope": ["submission", "calibration"],
+        "passes_submission_scope_only": scope_summary(results, ("submission",))["passes"],
+        # Protocol Rule 1 applies to the literal registry (submission + calibration) only.
+        "passes_rule_1": scope_summary(results, ("submission", "calibration"))["passes"],
         "spearman_note": f"sampled on {min(n_sample, flat_n)} uniform random pixels (seed={seed}); approximation of full-grid rank correlation",
         "runtime_s": round(time.time() - t0, 1),
     }

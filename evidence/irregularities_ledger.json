@@ -373,6 +373,48 @@
       "title": "Independent review says LWST is 'OK to upload' but the literal lattice rule fails it",
       "finding": "evidence/independent_review_20261028.json (H-SASS3-E section) records the LWST verdict 'review: OK to upload (format+uniqueness), not promoted to a slot'. The measured lattice overlap inside the footprint is 99.78% against the 70% limit (evidence/candidate_format_audit_20261029.json). The review applies a like-for-like reading that the protocol does not state (IR-SASS3-35).",
       "resolution": "The gate governs. LWST is NOT OK to download or submit until the owner records a decision (Option A, B or C in docs/research/lattice-decision-20261028.md)."
+    },
+    {
+      "id": "IR-SASS3-54",
+      "severity": "HIGH (FIXED 2026-10-28)",
+      "title": "Shared uniqueness auditor counted non-submission feature layers as registry rasters",
+      "finding": "scripts/independent_uniqueness_audit.py compared every same-grid float raster in a sibling checkout, including data/external feature layers. GEMSDOE24/data/external/audit_sources/tiger_road_distance_m.tif is a continuous distance field, so nearly every pixel is a 'dot' and it reported a false 100% overlap for both candidates.",
+      "resolution": "FIXED in the shared tool: each raster is tagged submission / calibration / other. Protocol Rule 1 is applied to submission + calibration only. 'other' rasters are listed but not gated. Both candidates were rerun: evidence/uniqueness_scoped_lwst_20261028.json and evidence/uniqueness_scoped_sardeconf_20261028.json."
+    },
+    {
+      "id": "IR-SASS3-55",
+      "severity": "HIGH",
+      "title": "sar-deconf candidate fails the 70% rule against a submitted GEMSDOE30 raster; earlier 67.4% figure used a narrower scope",
+      "finding": "Recomputed from pinned sibling downloads: 76.26% of the 37,654 sar-deconf dots lie within 3 px of GEMSDOE30 docs/downloads/gemsdoe30-g30s20-disc-60000dots-20261025T224159Z-24de17a6fa-nan.tif (60,000 dots). 15 of 453 submitted rasters exceed 70%. evidence/gsd_hua_experiments.json reports 67.4% against a 42-raster inventory, which did not include this file.",
+      "resolution": "The file is NOT OK to download or submit. The GSD-HUA 'surface_unique' and 'dots_unique' flags are stale for the full sibling set. The gsdhua3 JSON 'validation_class' already says it is not organizer acceptance or uniqueness clearance."
+    },
+    {
+      "id": "IR-SASS3-56",
+      "severity": "MEDIUM",
+      "title": "registry/registry_index and the 386/451 audit lists omit files that exist in the sibling repositories",
+      "finding": "evidence/registry_index.json lists 43 rasters. The pinned sibling checkouts contain 454 submission-scope rasters (registry/sibling_registry_manifest_20261028.json). Files such as GEMSDOE30 g30s20/g30s19 (60,000 dots) are absent from the index.",
+      "resolution": "Scope now comes from the pinned-commit manifest. The index and the 386-raster audit should be regenerated, not trusted as the complete registry. Ownership of the 60k-dot GEMSDOE30 files (not on the owner-reported score list) needs owner confirmation."
+    },
+    {
+      "id": "IR-SASS3-57",
+      "severity": "MEDIUM",
+      "title": "Calibration-lattice footprint count does not match the earlier record",
+      "finding": "Recomputed from the 13GEMSDOE lattice raster (SHA-256 pinned in the review): 5,167,373 finite footprint pixels; 6,649 of them are more than 3 px from any lattice dot (earlier record: 5,379). The conclusion is unchanged: 37,654 dots cannot reach the 70% limit (11,297 would have to lie outside the buffer).",
+      "resolution": "Owner or next session should check which footprint definition the earlier 5,379 figure used. Repo text now uses the recomputed value. A literal-compliant file needs at most about 22,000 dots (6,649 / 0.30), and its score is unknown."
+    },
+    {
+      "id": "IR-SASS3-58",
+      "severity": "HIGH",
+      "title": "Lane method paragraph is missing from the prompt; no holdout can be reproduced in this checkout",
+      "finding": "The PARALLEL-RUN PROTOCOL says the lane is 'the single method paragraph below'. No such paragraph appears in the request or in docs/research/standing-prompt-as-recorded-20261027.md. The cached feature stack (.cache/gems_data) is absent, so evaluate_holdout cannot be run here.",
+      "resolution": "No new experiment was run and no new raster was generated in this session. The owner must supply the lane paragraph and authorise restoring the feature stack (the owner mirror is integrity-pinned, not organizer-authenticated)."
+    },
+    {
+      "id": "IR-SASS3-59",
+      "severity": "MEDIUM",
+      "title": "Leaderboard figures in the request conflict and cannot be verified from this sandbox",
+      "finding": "The request cites a GEMSDOE leaderboard high of 0.4413, a 'highest score right now' of 0.3195, and the repo review cites a live public top of 0.4544 labelled ORGANIZER-CONFIRMED. drivendata.org is not in the sandbox's allowed hosts, so none of these can be checked here. The sibling 'owner-reported' scores are typed reports, not organizer receipts.",
+      "resolution": "Treat every leaderboard number as UNVERIFIED until a receipt is pasted from the DrivenData submission page. No estimated leaderboard score is written for any file."
     }
   ]
 }

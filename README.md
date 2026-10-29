@@ -17,6 +17,8 @@
 
 **Owner decision needed (not an agent action):** the literal lattice rule blocks every focus-site file. Options in [docs/research/lattice-decision-20261028.md](docs/research/lattice-decision-20261028.md): **A (recommended)** the like-for-like reading that the shared template already implements, which excludes halo-saturated lattices (`vendor/gems57/uniqueness.py` line 353) from the dot-overlap test; **B** keep the literal rule (nothing eligible); **C** an edge-only rule (not produced, not endorsed). Option A does not clear any file for the outside-bounds rule, which needs its own fix.
 
+Scoped uniqueness recheck (2026-10-28, [audit note](docs/research/uniqueness-scope-audit-20261028.md), IR-SASS3-54..59): against 453 pinned submitted GEMSDOE rasters and 6 calibration lattices, LWST passes the submissions-only rule (max 66.53%) and fails the lattice rule (99.78%); sar-deconf fails both (76.26% and 99.97%); BGK-PBE and unique-structural pass the literal rule but have no holdout and are not approved. No estimated leaderboard score is given for any file.
+
 Executive summary and submission guide: [docs/executive-summary.html](docs/executive-summary.html) · Site: [docs/index.html](docs/index.html) · Per-site table: [docs/research/focus-site-candidates-20261028.md](docs/research/focus-site-candidates-20261028.md) · Independent review: [docs/research/independent-review-20261028.md](docs/research/independent-review-20261028.md) · Decision memo: [docs/research/lattice-decision-20261028.md](docs/research/lattice-decision-20261028.md) · Protocol amendment (PROPOSED, not applied): [docs/research/protocol-amendments.md](docs/research/protocol-amendments.md)
 
 ## Standing prompt (verbatim, as recorded 2026-10-27)

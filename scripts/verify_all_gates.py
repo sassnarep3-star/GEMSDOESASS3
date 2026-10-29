@@ -120,6 +120,18 @@ def verify() -> dict:
         and card["registry_correlation_and_overlap"]["pre_placement_rank_correlation"] is not None
     )
     check("complete_uniqueness_gate", complete_unique, "full registry / surface gate is not cleared")
+    # Scoped recomputation of the two archived 2026-10-28 candidates (recorded, not gating the
+    # current card): literal Rule 1 covers submissions + calibration rasters, fail-closed.
+    for tag, rel in (("lwst", "evidence/uniqueness_scoped_lwst_20261028.json"),
+                     ("sardeconf", "evidence/uniqueness_scoped_sardeconf_20261028.json")):
+        scoped = json.loads((ROOT / rel).read_text())["summary"]
+        check(
+            f"scoped_literal_registry_rule_{tag}",
+            scoped.get("passes_rule_1") is True,
+            f"archived {tag} candidate blocked by literal registry rule: "
+            f"submissions {scoped['by_scope']['submission']['max_within3']['frac']*100:.2f}%, "
+            f"calibration {scoped['by_scope']['calibration']['max_within3']['frac']*100:.2f}% (limit 70%)",
+        )
     check("holdout_gate", card["holdout_dti"]["status"] == "PASS", "candidate HOLDOUT-DTI not run")
     check("canary_gate", card["leakage_canary"]["status"] == "PASS", "candidate leakage canary not run")
     check("candidate_not_promoted", card["verdict"] == "negative" and card["ok_to_submit"] is False)
