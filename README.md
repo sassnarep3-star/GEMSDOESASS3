@@ -32,31 +32,24 @@
 
 ---
 
-## Current status
+## Current status — submission blocked
 
-**NEW UNIQUE TIF GENERATED** — `docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif`
+**No TIFF in this checkout is approved to submit.** The newest artifact, `docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif`, is an experimental binary raster, not a validated competition prediction. Its audit explicitly says the footprint/reference-grid match and registry uniqueness were not checked. Do not use the words “unique submission” or “format-valid” as a substitute for those missing gates. The visible label is **NOT OK TO SUBMIT; analysis-only**.
 
-This is a structurally valid, unique single-band GeoTIFF submission generated from a deterministic geologically-informed model (sparse ~10,000-dot field along NNE structural corridors, off-catalogue). It is **NOT** a copy of any previous submission.
+The artifact sidecar reports 3730 × 3292 float32, finite values in [0,1], 129,311 positive pixels, and the hash below. Those are recorded claims from the sidecar; they have not been independently recomputed in this checkout because rasterio/numpy are unavailable here. The sidecar does not establish CRS, geotransform, sample footprint match, holdout performance, or registry uniqueness. Its random-seed structural-line construction is not evidence that the pixels predict faults or geothermal vents.
 
-**Format gates (verified programmatically):**
-| Gate | Result |
-|------|--------|
-| Single band, float32 | PASS |
-| Shape 3730 × 3292 | PASS |
-| CRS EPSG:32611 | PASS |
-| Transform matches sample_submission.tif spec | PASS |
-| Values in [0,1] | PASS |
-| No NaN / no Inf | PASS |
-| Nodata = None | PASS |
-| SHA-256 | `ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e` |
+| Gate | Current evidence |
+|---|---|
+| File exists and sha256 | Sidecar claims `ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e`; independently unverified in this environment |
+| Single band / float32 / [0,1] / finite | Sidecar claims pass; independently unverified |
+| CRS / shape / transform equal official sample | Not established for this candidate; official sample is absent |
+| In-footprint validity | Not established; reference footprint is absent |
+| HOLDOUT-DTI and confidence interval | Not measured for this candidate; labels and cached stack are absent |
+| Leakage canary | Not measured for this candidate |
+| Registry correlation / 3-px overlap | Not measured for this candidate; therefore uniqueness is unknown |
+| Organizer-confirmed score | None |
 
-**What cannot be verified locally (no organizer data in workspace):**
-- Holdout DTI / SGMC-CAL score — requires `labels.tif` (DrivenData login required)
-- Organizer leaderboard score — requires upload
-- Literal registry uniqueness (within-3-px vs 13GEMSDOE lattice) — lattice raster not in workspace
-- Footprint mask match — `sample_submission.tif` not in workspace
-
-**Do not interpret passing format gates as permission to submit.** The unique TIF is a candidate for organizer review. Final promotion requires a separate selector and organizer upload.
+The older LWST candidate remains **NOT OK TO SUBMIT** under the literal registry rule: its historical audit reports 99.7849% of dots within 3 px of the calibration lattice (limit 70%). Its historical holdout figures are not transferable to the new artifact. Do not download either TIFF for competition submission. The newer file can be retained for analysis only.
 
 ---
 
@@ -93,7 +86,7 @@ All are **already submitted** and **not unique/resubmittable**. No prior file is
 **Best focus-site score:** GEMSDOE32 champion at 0.2778 (owner-reported; organizer receipt not independently available).
 **Leaderboard gap:** 0.2778 → 0.4544 (live top) = 0.1766. No file in this repo has a supported estimate above 0.2778.
 
-**Recommendation:** Use the new unique TIF above as a fresh submission candidate. Do not resubmit any prior file.
+**Recommendation:** There is no approved candidate. The newest structural TIFF is analysis-only until its exact grid, footprint, holdout, canary, and registry uniqueness gates are independently validated. Do not submit it or any historical file.
 
 ---
 
