@@ -1,0 +1,76 @@
+{
+  "lane_id": "GEMSDOESASS3-H-BGK-PBE-EXP1",
+  "branch": "arena/84fd876f-gemsdoesass3",
+  "hypothesis": "H-BGK-PBE-EXP1: Blind Great Basin geothermal conduit faults missed by subaerial USGS/INGENIOUS mapping exhibit coincident basement-density gravity-gradient steps, radiometric potassium (K / K-over-eTh) alteration enrichment, and geodetic dilatation at the piedmont-to-basin transition. NNE-trending normal-fault orientation (Basin-and-Range, psi_ext ~115 WNW-ESE). No magnetics, no tilt, no dotted-ridge H19-5 family, no catalogue tracing.",
+  "mechanism": "Multiplicative combination of (a) |grad isostatic gravity anomaly| (concealed basement density step), (b) radiometric K and K/eTh anomaly (hydrothermal argillic/magnetite-destruction cap), (c) GPS dilatation rate at piedmont-basin transition, masked to low-slope basin interiors and >200 m off catalogue. Emitted as sparse NNE-trending 300 m triangular-kernel dots.",
+  "mimic": "Plutonic intrusive margins (Cretaceous granodiorite vs Mesozoic metasediment) create steep gravity gradients with zero Quaternary slip; suppressed where depth_to_base_surf indicates shallow bedrock cover (< 100 m) and USGS geologic map shows plutonic contacts.",
+  "holdout_dti": {
+    "note": "NOT RUN — competition rasters (training_features.tif, labels.tif, sample_submission.tif) absent from this sandbox (DrivenData login required). Holdout-DTI, 95% CI, and registry-overlap gates cannot be computed here.",
+    "score_label": "PENDING_DATA",
+    "pooled_dti": null,
+    "ci95": null,
+    "withheld_positives": null
+  },
+  "leakage_canary": {
+    "note": "NOT RUN — requires holdout labels. Single-feature AUC of gravity-gradient, K raster, and dilatation rate expected <= 0.90 (all non-catalogue-derived continuous fields).",
+    "passed": null,
+    "worst_symmetric_auc": null
+  },
+  "registry_correlation_and_overlap": {
+    "note": "NOT RUN — registry rasters absent. Format-valid raster generated; must be checked against all registry rasters (rank correlation <= 0.90, within-3-px overlap <= 70%) before submission.",
+    "registry_rasters_checked": 0,
+    "passed": null
+  },
+  "raster_sha256": "7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f",
+  "zip_sha256": "965be47e20a7d84dd9874bacc45d7e1a8dbf36b6ecfad99aa4fb5735bedd5c5c",
+  "validator_output": {
+    "filename": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+    "crs": "EPSG:32611",
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "shape": [
+      3730,
+      3292
+    ],
+    "dtype": "float32",
+    "nodata": null,
+    "min": 0.0,
+    "max": 1.0,
+    "n_nan": 0,
+    "n_inf": 0,
+    "n_positive_dots": 6178,
+    "n_soft_pixels": 8794,
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "geotransform_exact": true,
+      "nodata_none": true,
+      "zero_nan": true,
+      "zero_inf": true,
+      "no_sentinel": true,
+      "range_0_1": true,
+      "all_finite": true
+    },
+    "all_checks_passed": true
+  },
+  "submission_name": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+  "submission_note": "GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh x dilatation blind-fault locator, NNE faults, unscored",
+  "ok_to_download": true,
+  "ok_to_submit": false,
+  "verdict": "format_valid_pending_data",
+  "download_path": "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+  "status_reason": "Format gate PASSED (CRS/shape/transform/[0,1]/NaN verified). Holdout-DTI and registry-overlap gates NOT RUN: competition rasters absent from sandbox. DO NOT SUBMIT until those gates pass on a data-equipped machine. Unique by construction (not a copy of any GEMSDOE24-36 file).",
+  "generated_utc": "20261029T000321Z",
+  "method": "BGK-PBE Hypothesis 1 (Rank #1 per docs/research/hypotheses_ranked_20261028.md)",
+  "unique_vs_focus9": true,
+  "unique_note": "Not derived from any GEMSDOE24/25/27/28/30/31/32/33/36 submission; no shared dots, no dotted-ridge/H19-5 lineage.",
+  "submission_note_correction": "2026-10-29: main (PR #16) note was truncated ('...'); replaced with a complete note of <=140 characters (IR-SASS3-31)."
+}

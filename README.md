@@ -2,9 +2,13 @@
 
 ## Decision (2026-10-29)
 
+**Status (2026-10-29):** format-valid · download-ready for a format test only · submit-gated (**NOT OK to submit** until a holdout and the registry gates pass).
+
+
 | File | Download? | Submit? | Why |
 |------|-----------|---------|-----|
 | `docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` | Yes, format test only | **NO** | Format PASS (`scripts/validate_submission_tif.py`). Lattice lane PASS (42.35% dot-level within 3 px; Spearman 0.0015). Score **NOT ESTIMABLE**, and it uses no data signal (fixed straight corridors from an RNG). |
+| `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` | Yes, format test only | **NO** | Format PASS (validator). Lattice lane PASS (44.4% pixel-level within 3 px; ρ −0.0016). Holdout NOT RUN, so score **NOT ESTIMABLE**. Built on main by PR #16, not by this branch; its own run card says `ok_to_submit: False`. Its original submission note was truncated and is replaced (IR-SASS3-31). |
 | `docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif` | Archive only | **NO** | Lattice lane FAIL (99.79%). Holdout 0.1111 HOLDOUT-DTI, not organizer-confirmed. |
 | `docs/downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif` | Archive only | **NO** | Lattice lane FAIL (99.97%). |
 
@@ -110,6 +114,13 @@ Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data
 ---
 
 ## PARALLEL-RUN PROTOCOL (binding)
+**Current run card (main, PR #16, BGK-PBE):** `evidence/run_card.json`
+- Submission: `gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif`
+- Note: `GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh x dilatation blind-fault locator, NNE faults, unscored`
+- SHA-256: `7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f`
+- Verdict: `format_valid_pending_data` · ok_to_download: True · ok_to_submit: False
+- Holdout and registry gates NOT RUN (no labels locally). Source of the file: PR #16. Its full lattice-lane result is in `evidence/lattice_lane_check_20261029.json`.
+
 
 Rules 1–6: lane checks (rank-correlation ≤0.90, ≤70% of dots within 3 px), reuse template tools
 (`evaluate_holdout.py`, `submission_writer.py`), label numbers as HOLDOUT-DTI or ORGANIZER-CONFIRMED

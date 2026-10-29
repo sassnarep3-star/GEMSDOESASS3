@@ -205,6 +205,27 @@
       "title": "Legacy build scripts overwrite README and site pages",
       "finding": "scripts/build_site.py (writes README.md, docs/*.html, index.html, executive-summary.html and run-card JSON), scripts/build_docs_pages.py and scripts/build_review_site.py write the same pages from older templates. Running any of them reverts the 2026-10-29 corrections.",
       "resolution": "Flagged. README instructs not to run them. Templates must be updated before they are used again. Owner review required."
+    },
+    {
+      "id": "IR-SASS3-30",
+      "severity": "MEDIUM",
+      "title": "Dot-level lattice measure is not meaningful for line-like or soft rasters",
+      "finding": "Connected-component dots (value==1) of the BGK-PBE TIF (main, PR #16) form only 10 blobs because its hard dots are NNE line-like. The dot-level 50% figure is not a dot-count measure. The soft halo (values 0.034 to 0.4) is excluded at ==1.",
+      "resolution": "scripts/check_lattice_lane.py now reports both the dot-level and the pixel-level (value>0) within-3-px fraction and requires both <=70%. Both pass for BGK (44.4% pixel) and for the structural file (42.4%)."
+    },
+    {
+      "id": "IR-SASS3-31",
+      "severity": "MEDIUM",
+      "title": "BGK-PBE submission note on main was truncated",
+      "finding": "evidence/run_card.json and evidence/current_run_card.json on main (PR #16) have submission_note ending in '...' ('NNE-trendi...'), exactly 140 characters. It is a cut-off, not a finished note.",
+      "resolution": "Replaced in every run-card copy with a complete 115-character note. The README sync test relies on that note. A complete note must still be checked before any upload."
+    },
+    {
+      "id": "IR-SASS3-32",
+      "severity": "MEDIUM",
+      "title": "Merge conflict with main (PR #16) resolved in favour of the corrected pages",
+      "finding": "main (PR #16) and this branch both rewrote README.md, index.html, executive-summary.html and docs copies. The merge kept this branch's corrected pages and added the BGK-PBE row. main's BGK method prose (hypothesis text) was not carried over into the pages.",
+      "resolution": "Method prose remains in main history (commit bdc695e). Owner review recommended."
     }
   ]
 }

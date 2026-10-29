@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "recorded_utc": "2026-10-29T00:10:53Z",
+ "recorded_utc": "2026-10-29T00:13:50Z",
  "lattice": {
   "path": ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
   "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
@@ -12,11 +12,22 @@
  },
  "results": [
   {
+   "file": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+   "same_grid": true,
+   "positive_pixels": 6178,
+   "blobs_dots": 10,
+   "within3_dot_fraction": 0.5,
+   "within3_pixel_fraction_all_positive": 0.444053,
+   "spearman_vs_lattice_sampled": -0.00163,
+   "pass": true
+  },
+  {
    "file": "gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif",
    "same_grid": true,
    "positive_pixels": 37654,
    "blobs_dots": 23029,
    "within3_dot_fraction": 0.999696,
+   "within3_pixel_fraction_all_positive": 0.999708,
    "spearman_vs_lattice_sampled": 0.007735,
    "pass": false
   },
@@ -26,6 +37,7 @@
    "positive_pixels": 37654,
    "blobs_dots": 34241,
    "within3_dot_fraction": 0.997897,
+   "within3_pixel_fraction_all_positive": 0.997849,
    "spearman_vs_lattice_sampled": -0.000749,
    "pass": false
   },
@@ -35,6 +47,7 @@
    "positive_pixels": 129311,
    "blobs_dots": 9664,
    "within3_dot_fraction": 0.423531,
+   "within3_pixel_fraction_all_positive": 0.424341,
    "spearman_vs_lattice_sampled": 0.00147,
    "pass": true
   }

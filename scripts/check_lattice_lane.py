@@ -4,6 +4,7 @@
 For each candidate GeoTIFF given on the command line (default: every .tif in docs/downloads):
   * the candidate's dots are its connected positive blobs (8-connectivity, value == 1),
     each represented by its centroid rounded to the nearest pixel;
+  * both the dot-level and the pixel-level (all value>0) within-3-px fractions must be <= 0.70;
   * a dot is "within 3 px" if the nearest calibration-lattice positive pixel is <= 3 px away;
   * reports the within-3-px fraction (limit 0.70) and the Spearman rank correlation with the
     lattice over finite cells (limit 0.90, sampled).
@@ -48,18 +49,23 @@ def check(path: Path, lat: np.ndarray, dist: np.ndarray, lat_crs, lat_shape, lat
     cent = np.round(np.array(ndi.center_of_mass(m, lab, range(1, n + 1)))).astype(int)
     d = dist[cent[:, 0], cent[:, 1]]
     within3 = float((d <= 3.0).mean())
+    # Pixel-level measure: every positive pixel (value > 0). Needed for line-like or soft rasters,
+    # where 8-connected blobs merge into a few components and the dot-level number is meaningless.
+    pos = ca > 0
+    within3_px = float((dist[pos] <= 3.0).mean()) if pos.any() else 0.0
     finite = np.isfinite(lat)
     idx = np.flatnonzero(finite.ravel())
     rng = np.random.default_rng(0)
     s = rng.choice(idx, size=min(300_000, idx.size), replace=False)
     rho = float(spearmanr(ca.ravel()[s], lat.ravel()[s]).correlation)
-    ok = bool(same_grid and within3 <= LIMIT_WITHIN3 and abs(rho) <= LIMIT_RHO)
+    ok = bool(same_grid and within3 <= LIMIT_WITHIN3 and within3_px <= LIMIT_WITHIN3 and abs(rho) <= LIMIT_RHO)
     return {
         "file": path.name,
         "same_grid": bool(same_grid),
         "positive_pixels": int(m.sum()),
         "blobs_dots": int(n),
         "within3_dot_fraction": round(within3, 6),
+        "within3_pixel_fraction_all_positive": round(within3_px, 6),
         "spearman_vs_lattice_sampled": round(rho, 6),
         "pass": ok,
     }
