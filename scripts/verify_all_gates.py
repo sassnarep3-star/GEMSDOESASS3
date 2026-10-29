@@ -30,11 +30,36 @@ def sha256(path: Path) -> str:
 
 
 def _footprint_mask():
-    """Finite cells of the organizer sample_submission.tif (the scored region), or None if the data is absent."""
+    """Finite cells of the organizer sample_submission.tif (the scored region).
+
+    Falls back to the packed mask in evidence/organizer_footprint_mask.npz (exported from the sample by
+    scripts/export_footprint_mask.py) so that a fresh checkout without .cache/ can still check the rule.
+    Returns None only if neither is available.
+    """
     for cand in (ROOT / ".cache/gems_data/sample_submission.tif", Path("/tmp/gems_data/sample_submission.tif")):
         if cand.is_file():
             with rasterio.open(cand) as src:
                 return np.isfinite(src.read(1))
+    packed = ROOT / "evidence/organizer_footprint_mask.npz"
+    if packed.is_file():
+        z = np.load(packed)
+        shape = tuple(int(x) for x in z["shape"])
+        bits = np.unpackbits(z["packed"])[: shape[0] * shape[1]]
+        return bits.reshape(shape).astype(bool)
+    return None
+
+
+def _lattice_mask():
+    """Positive cells of the 13GEMSDOE calibration lattice, or None. Falls back to evidence/calibration_lattice_mask.npz."""
+    cand = ROOT / ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
+    if cand.is_file():
+        with rasterio.open(cand) as lat_ds:
+            return np.nan_to_num(lat_ds.read(1), nan=0.0) > 0.0
+    packed = ROOT / "evidence/calibration_lattice_mask.npz"
+    if packed.is_file():
+        z = np.load(packed)
+        shape = tuple(int(x) for x in z["shape"])
+        return np.unpackbits(z["packed"])[: shape[0] * shape[1]].reshape(shape).astype(bool)
     return None
 
 
@@ -92,12 +117,10 @@ def verify() -> dict:
 
     # Literal lattice rule measured on THIS file (<= 70% of its positive cells inside the footprint within 3 px of the
     # pinned 13GEMSDOE calibration lattice). Pending without the data.
-    lattice_path = ROOT / ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
-    if tif.is_file() and footprint is not None and lattice_path.is_file():
+    lat = _lattice_mask() if (tif.is_file() and footprint is not None) else None
+    if tif.is_file() and footprint is not None and lat is not None:
         with rasterio.open(tif) as src:
             cand_pos = src.read(1) > 0.0
-        with rasterio.open(lattice_path) as lat_ds:
-            lat = np.nan_to_num(lat_ds.read(1), nan=0.0) > 0.0
         inside = cand_pos & footprint
         n_inside = int(inside.sum())
         frac = float((ndi.distance_transform_edt(~lat)[inside] <= 3.0).mean()) if n_inside else 1.0
