@@ -620,7 +620,7 @@ def render_md(r: dict) -> str:
     A(f"- Archived SGMC-CAL comparator: champion point 0.064121; paired delta {paired_delta.get('paired_delta_calibrated_vs_champion', 0.001581):+.6f} {_ci_text(paired_delta.get('paired_delta_calibrated_ci95'))}. The paired interval includes zero.")
     A("- **Outperformance status: NOT DEMONSTRATED.** These are archived HOLDOUT-DTI proxies, not organizer scores or leaderboard predictions.")
     A("")
-    A("The earlier 0.111062 HIDE-RECOVER claim is withdrawn as the shipped raster's score: it was an OOF/per-fold result using a mislabeled parent baseline. The archived static-file evaluation above is the relevant proxy record, and still does not predict a competition score. The prompt's 0.4413 and 0.4544 leaderboard-top claims conflict; neither is treated here as a current verified benchmark because the leaderboard was not checked in this review.")
+    A("The earlier 0.111062 HIDE-RECOVER claim is withdrawn as the shipped raster's score: it was an OOF/per-fold result using a mislabeled parent baseline. The archived static-file evaluation above is the relevant proxy record, and still does not predict a competition score. The task prompt gives conflicting 0.3195 and 0.4413 leaderboard snapshots; later repository notes record a 0.4544 public-board read. This review did not fetch the live leaderboard, so none is asserted as today's value, and no public-board snapshot is an organizer receipt for a particular site file.")
     A("")
     A("### Nine-site executive summary")
     A("")
@@ -761,15 +761,9 @@ def main() -> int:
     OUT_JSON.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text(render_md(result), encoding="utf-8")
-    card_json = json.dumps(card, indent=2, ensure_ascii=False) + "\n"
-    for path in [
-        ROOT / "evidence/current_run_card.json",
-        ROOT / "evidence/run_card.json",
-        ROOT / "docs/data/current_run_card.json",
-        ROOT / "docs/data/run_card.json",
-    ]:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(card_json, encoding="utf-8")
+    # This report concerns an archived LWST raster. Keep its run card nested in
+    # the dated review receipt; never overwrite the repository's canonical
+    # current-candidate cards (which may describe a different, later artifact).
     print(json.dumps({
         "verdict": verdict,
         "format_pass": fmt["all_pass"],

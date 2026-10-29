@@ -98,14 +98,15 @@ def test_nine_sites_h19_5_set_algebra_invariants() -> None:
 
 
 def test_emitted_geotiff_and_all_automated_gates() -> None:
-    """Audit archive integrity separately from the blocked submission decision."""
+    """Inspect the archive-only diagnostic and require holdout/uniqueness to fail closed."""
     res = verify_all()
-    assert res["ok"] is True, res["problems"]
-    assert res["ok_to_download"] is True  # archive/research only
+    assert res["ok"] is False
+    assert "complete_uniqueness_gate" in res["problems"]
+    assert "holdout_gate" in res["problems"]
+    assert res["ok_to_download"] is False  # not approved as a submission download
+    assert res["ok_to_download_for_analysis"] is True
     assert res["ok_to_submit"] is False
     assert res["verdict"] == "negative"
-    assert any("calibration-lattice" in blocker for blocker in res["submission_blockers"])
-    assert any("full-registry" in blocker for blocker in res["submission_blockers"])
 
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
     tif_path = ROOT / card["download_path"]
@@ -119,7 +120,7 @@ def test_emitted_geotiff_and_all_automated_gates() -> None:
         assert np.isfinite(arr).all()
         assert float(arr.min()) >= 0.0
         assert float(arr.max()) <= 1.0
-        assert int((arr > 0).sum()) == 37_654
+        assert int((arr > 0).sum()) == 8_794
 
 
 def test_space_filling_witness_does_not_get_a_protocol_exemption():

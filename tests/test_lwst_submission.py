@@ -1,128 +1,81 @@
-"""Automated end-to-end verification tests for GEMSDOESASS3 GeoTIFF, Evidence & Protocol Gates."""
+"""Current candidate must remain an archive-only negative until all gates exist."""
 from __future__ import annotations
 
 import hashlib
 import json
-import zipfile
+import subprocess
+import sys
 from pathlib import Path
 
 import numpy as np
 import rasterio
-from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = Path("/tmp/gems_data")
+CANDIDATE = ROOT / "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif"
 
 
-def test_run_card_and_protocol_schema():
-    rc_path = ROOT / "evidence" / "run_card.json"
-    assert rc_path.exists(), "Missing evidence/run_card.json"
-    rc = json.loads(rc_path.read_text())
-
-    required_keys = {
-        "hypothesis",
-        "mechanism",
-        "non_fault_mimic",
-        "holdout_dti",
-        "leakage_canary",
-        "registry_correlation_and_overlap",
-        "raster_sha256",
-        "validator_output",
-        "submission_name",
-        "submission_note",
-        "verdict",
-        "ok_to_download",
-        "ok_to_submit",
-    }
-    assert required_keys.issubset(rc.keys())
-    assert len(rc["submission_note"]) <= 140
+def test_current_run_card_labels_missing_evidence_and_negative_verdict():
+    rc = json.loads((ROOT / "evidence/current_run_card.json").read_text())
     assert rc["verdict"] == "negative"
-    assert rc["ok_to_download"] is True  # analysis/archive only
     assert rc["ok_to_submit"] is False
-    assert rc["slot_spent"] is False
-    assert rc["new_candidate_generated_this_review"] is False
-
-    # Every proxy result is provenance-complete; no unsupported win is asserted.
-    hr = rc["holdout_dti"]["archived_lwst_hide_and_recover"]
-    sg = rc["holdout_dti"]["archived_lwst_sgmc_cal"]
-    assert hr["score_label"] == "HOLDOUT-DTI"
-    assert hr["evaluator_version"] == "GEMSDOE32-HIDE-RECOVER-v3.0"
-    assert hr["withheld_positive_pixels"] == 22232
-    assert 0.00612 < hr["pooled_dti"] < 0.00614
-    assert len(hr["ci95"]) == 2
-
-    assert sg["score_label"] == "HOLDOUT-DTI"
-    assert sg["evaluator_version"] == "GEMSDOE32-SGMC-CAL-v3.0"
-    assert sg["withheld_positive_pixels"] == 62703
-    assert 0.0656 < sg["prevalence_calibrated_dti"] < 0.0658
-    assert len(sg["ci95"]) == 2
-    assert rc["holdout_dti"]["organizer_score"] is None
+    assert rc["holdout_dti"]["status"] == "NOT RUN"
+    assert rc["holdout_dti"]["pooled_dti"] is None
+    assert rc["leakage_canary"]["status"] == "NOT RUN for this raster"
+    assert rc["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
+    assert rc["submission_name"] + ".tif" == CANDIDATE.name
+    assert len(rc["submission_note"]) <= 140
+    assert rc["submission_note"] in (ROOT / "README.md").read_text()
 
 
-def test_leakage_canary_and_uniqueness_gates():
-    canary = json.loads((ROOT / "evidence" / "leakage_canary_report.json").read_text())
+def test_historical_canary_and_uniqueness_artifacts_are_not_marked_current_approval():
+    canary = json.loads((ROOT / "evidence/leakage_canary_report.json").read_text())
     assert canary["all_passed"] is True
     assert canary["n_channels_tested"] == 51
-    assert canary["worst_symmetric_auc"] <= 0.90
+    assert "NOT RUN for this raster" in json.loads((ROOT / "evidence/current_run_card.json").read_text())["leakage_canary"]["status"]
 
-    # The prior 386-raster checks are archival, and the literal calibration
-    # lattice blocks the candidate. They must not be treated as a current pass.
-    card = json.loads((ROOT / "evidence" / "run_card.json").read_text())
-    uniq = card["registry_correlation_and_overlap"]
-    assert uniq["recomputed_this_run"] is False
-    assert uniq["current_registry_clearance"] is False
-    assert uniq["preplacement_surface_currently_cleared"] is False
-    assert uniq["final_dots_currently_cleared"] is False
-    assert uniq["archived_literal_lattice_result"]["within3_fraction"] > 0.70
-    assert uniq["archived_literal_lattice_result"]["pass"] is False
-    assert uniq["archived_final_dot_scan_451_downloads"]["archived_subset_pass"] is True
+    audit = json.loads((ROOT / "evidence/uniqueness_audit_386.json").read_text())
+    assert audit["total_valid_registry_rasters_checked"] == 386
+    witness = audit["space_filling_calibration_lattices"][0]
+    assert witness["within_3px_fraction"] > 0.70
+    assert witness["literal_duplicate"] is True
+    assert json.loads((ROOT / "evidence/current_run_card.json").read_text())["ok_to_submit"] is False
 
 
-def test_geotiff_automated_validation_gate_and_zip():
-    rc = json.loads((ROOT / "evidence" / "run_card.json").read_text())
-    tif_path = ROOT / "docs" / "downloads" / rc["submission_name"]
-    zip_path = tif_path.with_suffix(".tif.zip")
-    assert tif_path.exists(), f"Missing GeoTIFF {tif_path}"
-    assert zip_path.exists(), f"Missing ZIP {zip_path}"
+def test_current_archive_geotiff_format_and_sha():
+    card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
+    assert CANDIDATE.is_file()
+    assert hashlib.sha256(CANDIDATE.read_bytes()).hexdigest() == card["raster_sha256"]
+    with rasterio.open(CANDIDATE) as src:
+        assert src.count == 1
+        assert src.dtypes[0] == "float32"
+        assert str(src.crs) == "EPSG:32611"
+        assert src.shape == (3730, 3292)
+        assert tuple(src.transform)[:6] == (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
+        assert src.nodata is None
+        arr = src.read(1)
+    assert np.isfinite(arr).all()
+    assert float(arr.min()) >= 0.0 and float(arr.max()) <= 1.0
+    assert int((arr > 0).sum()) == 8794
 
-    # Verify SHA-256 matches run_card
-    actual_sha = hashlib.sha256(tif_path.read_bytes()).hexdigest()
-    assert actual_sha == rc["raster_sha256"]
 
-    # Verify ZIP contains byte-identical GeoTIFF
-    with zipfile.ZipFile(zip_path, "r") as zf:
-        assert zf.namelist() == [tif_path.name]
-        zip_inner_sha = hashlib.sha256(zf.read(tif_path.name)).hexdigest()
-        assert zip_inner_sha == actual_sha
+def test_one_lattice_witness_is_not_a_complete_uniqueness_certificate():
+    audit = json.loads((ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").read_text())
+    assert audit["result"]["all_positive_cells"]["fraction"] == 0.444053
+    assert audit["result"]["one_witness_result_below_threshold"] is True
+    assert audit["result"]["complete_registry_uniqueness_pass"] is False
+    assert audit["verdict"] == "negative; archive only; do not submit"
 
-    # Programmatic GeoTIFF inspection (runs both locally with /tmp/gems_data and in lightweight GitHub Actions CI)
-    with rasterio.open(tif_path) as sub_ds:
-        assert sub_ds.count == 1
-        assert sub_ds.dtypes[0] == "float32"
-        assert str(sub_ds.crs) == "EPSG:32611"
-        assert (sub_ds.height, sub_ds.width) == (3730, 3292)
-        assert tuple(round(float(x), 6) for x in list(sub_ds.transform)[:6]) == (
-            100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0
-        )
-        assert sub_ds.nodata is None
-        arr = sub_ds.read(1)
 
-    # Whole-grid finite [0.0, 1.0] guarantee (fixes "Predicted values must be in range [0, 1]")
-    assert np.isfinite(arr).all(), "GeoTIFF contains NaN or Inf!"
-    assert float(arr.min()) >= 0.0, f"Min {arr.min()} < 0.0!"
-    assert float(arr.max()) <= 1.0, f"Max {arr.max()} > 1.0!"
-
-    dots = arr > 0.0
-    assert int(dots.sum()) == 37654
-
-    if (DATA_DIR / "sample_submission.tif").exists() and (DATA_DIR / "labels.tif").exists():
-        with rasterio.open(DATA_DIR / "sample_submission.tif") as ref_ds:
-            assert sub_ds.crs == ref_ds.crs
-            assert sub_ds.transform == ref_ds.transform
-            foot = np.isfinite(ref_ds.read(1))
-        with rasterio.open(DATA_DIR / "labels.tif") as lbl_ds:
-            labels = (lbl_ds.read(1) > 0) & foot
-        assert float(np.abs(arr[~foot]).max()) == 0.0
-        assert int((dots & labels).sum()) == 0
-        dist_lbl = ndi.distance_transform_edt(~labels)
-        assert float(dist_lbl[dots].min()) > 2.0
+def test_fail_closed_cli():
+    proc = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/verify_all_gates.py"), "--expect-blocked"],
+        cwd=ROOT, text=True, capture_output=True,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    result = json.loads(proc.stdout)
+    assert result["format_and_record_integrity"] is True
+    assert result["ok_to_download"] is False
+    assert result["ok_to_download_for_analysis"] is True
+    assert result["ok_to_submit"] is False
+    assert result["checks"]["complete_uniqueness_gate"] is False
+    assert result["checks"]["holdout_gate"] is False

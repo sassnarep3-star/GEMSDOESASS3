@@ -34,7 +34,7 @@ The archived LWST record reports:
 - Archived SGMC-CAL comparator: champion point 0.064121; paired delta +0.001581 [-0.005523, 0.008911]. The paired interval includes zero.
 - **Outperformance status: NOT DEMONSTRATED.** These are archived HOLDOUT-DTI proxies, not organizer scores or leaderboard predictions.
 
-The earlier 0.111062 HIDE-RECOVER claim is withdrawn as the shipped raster's score: it was an OOF/per-fold result using a mislabeled parent baseline. The archived static-file evaluation above is the relevant proxy record, and still does not predict a competition score. The prompt's 0.4413 and 0.4544 leaderboard-top claims conflict; neither is treated here as a current verified benchmark because the leaderboard was not checked in this review.
+The earlier 0.111062 HIDE-RECOVER claim is withdrawn as the shipped raster's score: it was an OOF/per-fold result using a mislabeled parent baseline. The archived static-file evaluation above is the relevant proxy record, and still does not predict a competition score. The task prompt gives conflicting 0.3195 and 0.4413 leaderboard snapshots; later repository notes record a 0.4544 public-board read. This review did not fetch the live leaderboard, so none is asserted as today's value, and no public-board snapshot is an organizer receipt for a particular site file.
 
 ### Nine-site executive summary
 

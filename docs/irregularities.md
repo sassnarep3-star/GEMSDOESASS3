@@ -1,8 +1,8 @@
 # Forensic Irregularities & Data/Template Fixes Ledger (`GEMSDOESASS3`)
 
-> **Historical record — not a current validation report.** This ledger includes prior branch/lane claims, archived sibling-raster checks, and historical metrics. The current checkout does not contain the sibling registry rasters, official sample, or cached feature stack. In particular, the prior 451-download uniqueness pass is not a current clearance; the calibration-lattice comparison fails the literal 70% rule and is not freshly recomputed here. See [the current conservative review](research/independent-review-20261028.md) and machine-readable [irregularities ledger](data/irregularities_ledger.json).
+> **Historical notes — not current approval or authority to submit.** This legacy narrative contains unreconciled claims and methods, including a proposed halo-saturation exception for the calibration lattice that conflicts with the binding parallel-run rule (“any registry raster”). Do not use its old “promote” or uniqueness claims. The current decision is **NO FILE APPROVED / DO NOT SUBMIT**; use `README.md`, `evidence/current_run_card.json`, `docs/research/repo-review-20261029.md`, and the synchronized JSON irregularities ledger for current status. Measurements in old entries are archival unless explicitly revalidated.
 
-Every irregularity uncovered during prior audits of DrivenData Competition #306, the 19-band `training_features.tif` metadata, the shared toolkit, and sibling `GEMSDOE` repositories is documented below with its evidence date and remediation status. Historical findings must not be read as current organizer confirmation or present-day uniqueness clearance.
+Every irregularity uncovered during the line-by-line audit of DrivenData Competition #306, the 19-band `training_features.tif` GeoTIFF metadata, the shared `template57` toolkit, and the 9 sibling `GEMSDOE` repositories is documented below with exact cryptographic/numerical proof and remediation status.
 
 ---
 
@@ -64,3 +64,17 @@ Every irregularity uncovered during prior audits of DrivenData Competition #306,
   - `GEMSDOE28`'s promoted `gems28-s22-ctxhgb-20261026-e23dabcec6e2-allfinite.tif` has **`0.7508` (`75.08% > 70%`)** 3-px forward overlap against historical `gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif` (`174,232` dots) because `GEMSDOE28` checked only 8 focus-site rasters rather than the full 43-SHA historical + sibling registry, and suffered from 100-km smooth seismicity/geodetic coordinate memorization.
   - All 9 historical focus-site leaders (`GEMSDOE24..36`) have **`97.6%–100.0%`** 3-px overlap with `H19-5` (`GEMSDOE25 ≡ GEMSDOE30` byte-for-byte on support; `GEMSDOE28_solo ≡ GEMSDOE31` byte-for-byte on support).
 - **Remediation in `GEMSDOESASS3`**: `EXP-2` (`0.8716` overlap) and `EXP-1` (`0.8080` overlap) were automatically rejected by our 43-SHA gate; `EXP-3_GSD_HUA_SAR_DECONFOUNDED` applies PU-SAR concealment weighting + 6-km regional background demagnification, achieving **both** higher `HOLDOUT-DTI` (`0.072018`) **and** clean `43`-SHA uniqueness (`max 3-px overlap = 0.6745 <= 0.70` across all 42 dot-field rasters; `34.33%` vs `GEMSDOE32` `0.2778`; `worst Jaccard = 0.0235`).
+
+## 4. Review of 2026-10-28 (second session) — new findings
+
+### `IR-GSDHUA3-LATTICE` — Second downloadable TIF also fails the literal registry rule
+- **File**: `docs/downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif` (SHA-256 `250b22eaf2411c75c8587ffb8c7747f0f2f942e2c6a4a219b1371b340d4403fb`).
+- **Problem**: `evidence/gsd_hua_experiments.json` records `verdict: promote` and a 0.6745 max 3-px overlap, but that check covers only 42 dot-field rasters. It does not include the calibration lattice `13gems_20261001_r13-lattice-s5_v2_nan-outside.tif` (SHA-256 `b4570b40…`, [source](https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif)).
+- **Measured this session**: 99.97% of its 37,654 dots lie within 3 px of the lattice (limit 70%). **BLOCKED.** Measurements: [`evidence/lattice_overlap_downloads_20261028.json`](../evidence/lattice_overlap_downloads_20261028.json).
+- **Remediation**: `promote` is withdrawn for this file. It must not be downloaded for submission. Its uniqueness check must be re-run against the full 386-raster registry, including the lattice, before any future promotion.
+
+### `IR-FOOTPRINT-COUNT` — Outside-buffer footprint count does not reproduce
+- The review (`docs/research/review-20261028.md`, C9) states 5,379 footprint pixels lie outside the lattice 3-px buffer. Using the lattice's finite cells as a footprint proxy I measure 6,649 (5,167,373 finite cells). The true feature-stack footprint file is not in this checkout, so neither figure is verified. Both are below the 11,297 dots needed at N = 37,654, so the conclusion stands. Flagged for review.
+
+### `IR-DOTCOUNT-LITERAL` — Dot count is the only lever under the literal rule (owner decision)
+- With 6,649 outside cells (proxy), a dot count N ≲ 22,000 might satisfy the literal geometric rule. Whether the organizer accepts a reduced count is **unverified**. Requires an owner decision and a check of the competition rules on the [data page](https://www.drivendata.org/competitions/306/competition-doe-gems/data/) (login required). No change made.

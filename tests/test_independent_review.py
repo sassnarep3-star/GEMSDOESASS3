@@ -11,15 +11,50 @@ sys.path.insert(0, str(ROOT / "scripts"))
 PAGES = ["README.md", "index.html", "executive-summary.html", "docs/index.html", "docs/executive-summary.html"]
 
 
-def test_format_gate_recomputed_from_raster_passes():
+def test_current_archive_candidate_format_recomputed_from_raster():
+    import numpy as np
+    import rasterio
+
+    path = ROOT / "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif"
+    with rasterio.open(path) as src:
+        data = src.read(1)
+        assert src.count == 1
+        assert src.dtypes[0] == "float32"
+        assert str(src.crs) == "EPSG:32611"
+        assert src.shape == (3730, 3292)
+        assert tuple(src.transform)[:6] == (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
+        assert src.nodata is None
+    assert np.isfinite(data).all()
+    assert data.min() >= 0.0 and data.max() <= 1.0
+    # Synthetic BGK diagnostic has 8,794 positive cells, including soft halo pixels.
+    assert int((data > 0).sum()) == 8794
+
+
+def test_historical_lwst_format_gate_is_not_current_candidate():
     import independent_review
 
     fmt = independent_review.format_gate()
-    failed = [k for k, v in fmt["checks"].items() if not v]
-    assert fmt["all_pass"], f"format checks failed: {failed}"
+    assert fmt["all_pass"]
     assert fmt["meta"]["dots"] == 37654
     assert fmt["meta"]["crs"] == "EPSG:32611"
-    assert fmt["meta"]["min"] >= 0.0 and fmt["meta"]["max"] <= 1.0
+
+
+def test_archived_lwst_review_never_overwrites_current_candidate_card(tmp_path, monkeypatch):
+    import independent_review as ir
+
+    current_path = ROOT / "evidence/current_run_card.json"
+    before = json.loads(current_path.read_text())
+    archived_review = tmp_path / "archived-review.json"
+    archived_review.write_text((ROOT / "evidence/independent_review_20261028.json").read_text())
+    monkeypatch.setattr(ir, "OUT_JSON", archived_review)
+    monkeypatch.setattr(ir, "OUT_MD", tmp_path / "archived-review.md")
+
+    assert ir.main() == 0
+    after = json.loads(current_path.read_text())
+    result = json.loads(archived_review.read_text())
+    assert after == before
+    assert result["run_card"]["submission_name"].startswith("gemsdoesass3-lwst-")
+    assert result["run_card"]["ok_to_submit"] is False
 
 
 def test_uniqueness_audit_is_labeled_as_archived_subset_only():
@@ -30,6 +65,36 @@ def test_uniqueness_audit_is_labeled_as_archived_subset_only():
     assert uq["archived_pass"] is True
     assert uq["recomputed_this_run"] is False
     assert uq["pass"] is False  # fail closed without source rasters and surface scan
+
+
+def test_current_candidate_is_fail_closed_and_not_a_score_claim():
+    card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
+    audit = json.loads((ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").read_text())
+    assert card["verdict"] == "negative"
+    assert card["ok_to_submit"] is False
+    assert card["holdout_dti"]["status"] == "NOT RUN"
+    assert card["holdout_dti"]["pooled_dti"] is None
+    assert card["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
+    assert audit["candidate_sha256"] == card["raster_sha256"]
+    assert audit["result"]["all_positive_cells"]["fraction"] == 0.444053
+    assert audit["result"]["output_raster_vs_lattice_sampled_spearman"] == -0.00163
+    assert audit["result"]["complete_registry_uniqueness_pass"] is False
+    assert 0 < len(card["submission_note"]) <= 140
+
+
+def test_fail_closed_verifier_reports_format_integrity_but_no_approval():
+    import subprocess
+
+    proc = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/verify_all_gates.py"), "--expect-blocked"],
+        cwd=ROOT, text=True, capture_output=True,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    result = json.loads(proc.stdout)
+    assert result["format_and_record_integrity"] is True
+    assert result["ok_to_submit"] is False
+    assert result["checks"]["complete_uniqueness_gate"] is False
+    assert result["checks"]["holdout_gate"] is False
 
 
 def test_experiment_e1_is_negative_and_spends_no_slot():
@@ -106,15 +171,17 @@ def test_missing_lattice_witness_reuses_only_archived_measurement(tmp_path, monk
 
 
 def test_pages_state_block_and_link_review():
-    for rel in ["README.md"]:
-        txt = (ROOT / rel).read_text()
-        assert "Do not submit" in txt
-        assert "independent-review-20261028.md" in txt
-        assert "Maximize P(Win)" in txt and "Own the Outcome" in txt
+    readme = (ROOT / "README.md").read_text()
+    assert "NO FILE IS APPROVED FOR COMPETITION SUBMISSION" in readme
+    assert "independent-review-20261028.md" in readme
+    assert "Maximize P(Win)" in readme and "Own the Outcome" in readme
+    assert "Verbatim standing task prompt" in readme
+    assert "MUST GENERATE A UNIQUE TIF SUBMISSION" in readme
     for rel in ["index.html", "docs/index.html"]:
         txt = (ROOT / rel).read_text()
-        assert "Do not submit the archived LWST GeoTIFF" in txt, rel
-        assert "ARCHIVED ONLY" in txt, rel
+        assert "NO APPROVED FILE" in txt, rel
+        assert "Independent review (2026-10-28)" in txt, rel
+        assert "synthetic" in txt.lower(), rel
     for rel in ["executive-summary.html", "docs/executive-summary.html"]:
         assert "BLOCKED" in (ROOT / rel).read_text(), rel
 
@@ -129,8 +196,11 @@ def test_ledger_copies_identical_and_retractions_recorded():
     assert "IR-SASS3-18" in ids
     assert "IR-SASS3-19" in ids
     assert "IR-SASS3-20" in ids
-    assert "current uniqueness gate closed" in ids["IR-SASS3-19"]["resolution"]
-    assert "do not use either value" in ids["IR-SASS3-18"]["resolution"].lower()
+    # A later repository board-read is not a per-file organizer receipt, and
+    # conflicting task-prompt snapshots must remain explicitly source-labelled.
+    assert "0.4413" in ids["IR-SASS3-25"]["finding"]
+    assert "0.4544" in ids["IR-SASS3-25"]["finding"]
+    assert "not a valid selector" in ids["IR-SASS3-20"]["resolution"].lower()
 
 
 def test_lwst_baseline_is_true_champion_not_d28_parent():
