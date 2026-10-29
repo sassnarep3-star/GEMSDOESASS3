@@ -34,22 +34,15 @@ def test_run_card_and_protocol_schema():
     }
     assert required_keys.issubset(rc.keys())
     assert len(rc["submission_note"]) <= 140
-    assert rc["verdict"] == "negative"
+    assert rc["verdict"] == "not_recommended"
     assert rc["ok_to_submit"] is False
+    assert rc["ok_to_download"] is True
 
-    # Strict score labeling check (Protocol Rule 3)
-    hr = rc["holdout_dti"]["primary_hide_and_recover"]
+    # Holdout-DTI: SGMC measured; hide-and-recover not run (see README blockers)
+    assert rc["holdout_dti"]["score_label"] == "HOLDOUT-DTI"
     sg = rc["holdout_dti"]["secondary_off_catalogue_sgmc"]
-    assert hr["score_label"] == "HOLDOUT-DTI"
-    assert hr["evaluator_version"] == "GEMSDOE32-HIDE-RECOVER-v3.0"
-    assert hr["withheld_positive_pixels"] == 22232
-    assert hr["pooled_dti"] > hr["champion_02778_baseline_dti"]
-    assert hr["paired_delta_ci95"][0] > 0.0
-
-    assert sg["score_label"] == "HOLDOUT-DTI"
-    assert sg["evaluator_version"] == "GEMSDOE32-SGMC-CAL-v3.0"
-    assert sg["off_catalogue_positive_pixels"] == 62703
-    assert sg["prevalence_calibrated_dti"] > sg["champion_02778_calibrated_dti"]
+    assert sg["prevalence_calibrated_dti"] < sg["champion_02778_calibrated_dti"]
+    assert rc["holdout_dti"]["primary_hide_and_recover"]["score_label"] == "NOT RUN"
 
 
 def test_leakage_canary_and_uniqueness_gates():
@@ -107,7 +100,8 @@ def test_geotiff_automated_validation_gate_and_zip():
     assert float(arr.max()) <= 1.0, f"Max {arr.max()} > 1.0!"
 
     dots = arr > 0.0
-    assert int(dots.sum()) == 37654
+    n_dots = int(dots.sum())
+    assert n_dots == int(rc["validator_output"]["n_soft_pixels"]), f"dots={n_dots}"
 
     if (DATA_DIR / "sample_submission.tif").exists() and (DATA_DIR / "labels.tif").exists():
         with rasterio.open(DATA_DIR / "sample_submission.tif") as ref_ds:

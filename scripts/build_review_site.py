@@ -14,7 +14,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 e = html.escape
 
-card = json.loads((ROOT / "evidence/current_run_card.json").read_text())          # blocked LWST file
+card = json.loads((ROOT / "evidence/archive/run_card_lwst_archived_20261027.json").read_text())  # archived LWST file (blocked)
+bgk = json.loads((ROOT / "evidence/run_card_bgk_pbe.json").read_text())
+uni = json.loads((ROOT / "evidence/run_card_unique_structural_20261029.json").read_text())
+cur = json.loads((ROOT / "evidence/run_card.json").read_text())                  # current candidate
 lit = json.loads((ROOT / "evidence/run_card_literal.json").read_text())           # compliant file
 hold = json.loads((ROOT / "evidence/literal_candidates_sgmc.json").read_text())
 base = json.loads((ROOT / "evidence/literal_audit_lwst_baseline.json").read_text())
@@ -69,7 +72,7 @@ rev_items = (
     f"{LWST_LAT*100:.2f}% of its dots within 3 px. Reproduced on fresh bytes.</li>"
 )
 
-hero_ok = f'''<section class="hero ok"><p class="label">START HERE · DOWNLOAD THIS FILE</p>
+hero_ok = f'''<section class="hero ok"><p class="label">START HERE · DOWNLOAD-READY FILE (format-valid, literal-rule compliant)</p>
 <h1>Download the unique, format-valid TIF</h1>
 <p><strong>File:</strong> <code>{e(LIT_NAME)}</code><br>
 <strong>Note to paste (≤140 characters):</strong> <code>{e(LIT_NOTE)}</code><br>
@@ -87,7 +90,15 @@ table_ok = f'''<section><h2>Which file to use: summary table</h2>
 <td>HOLDOUT-DTI {lit_val:.6f} [{lit_ci[0]:.6f}, {lit_ci[1]:.6f}]</td>
 <td><strong>YES.</strong> Lattice overlap {LIT_WORST*100:.4f}% (&lt;70%); worst non-lattice {LIT_WORST_NONLAT*100:.2f}%.</td>
 <td><strong>YES</strong></td><td><strong>Allowed by rule. Not recommended:</strong> proxy below champion.</td></tr>
-<tr><td><code>{e(card['submission_name'])}</code> (37,654 dots)</td>
+<tr><td><code>{e(bgk['submission_name'])}</code> (main, BGK-PBE)</td>
+<td>Not scored: fail-closed. Holdout is not run once uniqueness fails.</td>
+<td><strong>NO.</strong> Lattice overlap {bgk['literal_audit_2026_10_29']['worst_within_3px_fraction_final_dots']*100:.2f}%. 4,911 non-zero values outside the footprint.</td>
+<td><strong>NO</strong></td><td><strong>NOT OK to submit.</strong></td></tr>
+<tr><td><code>{e(uni['submission_name'])}</code> (main, unique-structural)</td>
+<td>Not scored: fail-closed.</td>
+<td><strong>NO.</strong> Lattice overlap {uni['literal_audit_2026_10_29']['worst_within_3px_fraction_final_dots']*100:.2f}%. 74,418 non-zero values outside the footprint.</td>
+<td><strong>NO</strong></td><td><strong>NOT OK to submit.</strong></td></tr>
+<tr><td><code>{e(card['submission_name'])}</code> (37,654 dots, archived)</td>
 <td>HOLDOUT-DTI {lwst['value']:.6f} [{lwst['ci95'][0]:.6f}, {lwst['ci95'][1]:.6f}]</td>
 <td><strong>NO.</strong> Lattice overlap {LWST_LAT*100:.2f}% (limit 70%).</td>
 <td><strong>NO</strong></td><td><strong>NO</strong> (blocked; needs owner ruling on the lattice)</td></tr>
@@ -140,7 +151,7 @@ blocked_archive = f'''<section class="hero"><p class="label">BLOCKED · DO NOT D
 <h2>Archived 37,654-dot LWST file</h2>
 <p>It passes the format check, but the literal uniqueness rule fails: <strong>{LWST_LAT*100:.2f}%</strong> of its dots lie within 3 px of the registered calibration lattice (limit 70%).</p>
 <p>Archive: <code>{e(card['submission_name'])}</code><br>SHA-256: <code>{e(card['raster_sha256'])}</code><br>Historical note: <code>{e(card['submission_note'])}</code></p>
-<p><a href="downloads/{e(card['submission_name'])}">Historical TIF for analysis only</a> · <a href="data/current_run_card.json">Run card</a></p></section>'''
+<p><a href="downloads/{e(card['submission_name'])}">Historical TIF for analysis only</a> · <a href="data/run_card_lwst_archived.json">Archived run card</a></p></section>'''
 
 body = f'''{hero_ok}
 {table_ok}
@@ -176,4 +187,7 @@ shutil.copyfile(ROOT / "evidence/run_card_literal.json", ROOT / "docs/data/run_c
 shutil.copyfile(ROOT / "evidence/lattice_gap_check.json", ROOT / "docs/data/lattice_gap_check.json")
 shutil.copyfile(ROOT / "evidence/literal_candidates_sgmc.json", ROOT / "docs/data/literal_holdout_sgmc.json")
 shutil.copyfile(ROOT / "evidence/irregularities_ledger.json", ROOT / "docs/data/irregularities_ledger.json")
+shutil.copyfile(ROOT / "evidence/archive/run_card_lwst_archived_20261027.json", ROOT / "docs/data/run_card_lwst_archived.json")
+shutil.copyfile(ROOT / "evidence/run_card_bgk_pbe.json", ROOT / "docs/data/run_card_bgk_pbe.json")
+shutil.copyfile(ROOT / "evidence/run_card_unique_structural_20261029.json", ROOT / "docs/data/run_card_unique_structural.json")
 print("built docs/index.html, docs/executive-summary.html, and root copies")

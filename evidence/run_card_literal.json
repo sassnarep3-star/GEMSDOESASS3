@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-29T00:13:58.489275+00:00",
+ "generated_utc": "2026-10-29T00:24:40.328041+00:00",
  "lane": "H-LIT-DISP: literal-rule-compliant LWST-GeoConduit dot set (21,012 dots)",
  "hypothesis": "Retaining 14,498 LWST dots by farthest-point spacing plus 6,514 density-ordered gap dots keeps most of the LWST off-catalogue signal while meeting the literal 70% lattice-overlap limit.",
  "mechanism": "Redundancy-aware retention: spacing the kept dots reduces duplicate dots on one predicted segment; gap dots fill the only footprint pixels more than 3 px from every lattice dot (label-free ordering by LWST density).",

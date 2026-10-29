@@ -1,139 +1,79 @@
 {
-  "lane_id": "GEMSDOESASS3-H-SASS3-A-LWST-GeoConduit",
-  "branch": "arena/f26651b4-gemsdoesass3",
-  "hypothesis": "H-SASS3-A (LWST-GeoConduit): Unmapped Quaternary and concealed Great Basin geothermal conduit faults missed by subaerial USGS mapping exhibit sharp 3-D Source Parameter Imaging (SPI) local-wavenumber crests (kappa_SPI = ||grad_H arctan(dF/dz / ||grad_H F||)||), contrast-invariant Wijns Theta-map contact ridges (cos theta) concordant across RTP magnetics and isostatic gravity, 150 m upward-continuation persistence, basement detachment flexure, and transtensional slip/dilation + hydrothermal alteration/upflow plumes.",
-  "mechanism": "Two-stage 300 m triangular-kernel CELF submodular allocation (`gems32.emitter.emit`) pairing 52.0% (19,584 dots) spatially-collared Dual-Objective HistGradientBoosting (Binary Classifier + 300 m Triangular-Kernel Regressor) 51-channel OOF structural/piedmont crests with 48.0% (18,070 dots) residual thalweg-vetoed LWST subsurface SPI/Theta and GDR #1391 strike-anisotropic geothermal conduit crests (37,654 total B=2 dots > 200 m off catalogue).",
-  "mimic": "V-shaped drainage stream thalwegs (`curv_s1 = gaussian_laplace(dem) > 0`) and sharp ridge-summit divides (`tophat >> 0`) vetoed on rectilinear planar scarps, anthropogenic US Census TIGER highway/railroad cut-and-fill embankments (< 150 m of centerlines lacking subsurface SPI support), flat Pleistocene Lake Lahontan shoreline contours / saline playa clay pans (deconfounded from Band 17 MT conductivity via slope/relief gating), and shallow volcanic float boulders (suppressed via +150 m upward-continued TMI persistence).",
-  "holdout_dti": {
-    "primary_hide_and_recover": {
-      "score_label": "HOLDOUT-DTI",
-      "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
-      "withheld_positive_pixels": 22232,
-      "pooled_dti": 0.111062,
-      "ci95_spatial_block_bootstrap": [
-        0.098423,
-        0.123755
-      ],
-      "champion_02778_baseline_dti": 0.099202,
-      "champion_02778_ci95": [
-        0.085951,
-        0.112668
-      ],
-      "paired_delta_vs_champion": 0.01186,
-      "paired_delta_ci95": [
-        0.003475,
-        0.020696
-      ],
-      "prob_beats_champion": 0.995
-    },
-    "secondary_off_catalogue_sgmc": {
-      "score_label": "HOLDOUT-DTI",
-      "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
-      "off_catalogue_positive_pixels": 62703,
-      "prevalence_calibrated_dti": 0.065702,
-      "prevalence_calibrated_ci95": [
-        0.058992,
-        0.07124
-      ],
-      "raw_pooled_dti": 0.098514,
-      "raw_ci95": [
-        0.088935,
-        0.107969
-      ],
-      "champion_02778_calibrated_dti": 0.064121,
-      "paired_delta_calibrated_vs_champion": 0.001581,
-      "paired_delta_calibrated_ci95": [
-        -0.005523,
-        0.008911
-      ]
-    },
-    "ablation_summary": {
-      "EXP1_LWST_UNSUP_CONDUIT": {
-        "hide_recover_dti": 0.045596,
-        "sgmc_calibrated_dti": 0.075215
-      },
-      "EXP2_LWST_SARPU_DUAL_OOF": {
-        "hide_recover_dti": 0.11669,
-        "sgmc_calibrated_dti": 0.050066
-      },
-      "EXP3_LWST_DUAL_HORIZON_CONDUIT": {
-        "hide_recover_dti": 0.111062,
-        "sgmc_calibrated_dti": 0.065702
-      }
-    }
+ "lane_id": "GEMSDOESASS3-H-LIT-DISP",
+ "branch": "arena/16a108e5-gemsdoesass3",
+ "hypothesis": "Retaining 14,498 LWST dots by farthest-point spacing plus 6,514 density-ordered gap dots keeps most of the LWST off-catalogue signal while meeting the literal 70% lattice-overlap limit.",
+ "mechanism": "Redundancy-aware retention: spacing the kept dots reduces duplicate dots on one predicted segment; gap dots fill the only footprint pixels more than 3 px from every lattice dot (label-free ordering by LWST density).",
+ "mimic": "Non-fault linear artefacts that LWST density also picks up (basin-margin relief, drainage or survey-line striping). Gap dots are placed by LWST density, so they can sit on these artefacts.",
+ "holdout_dti": {
+  "score_label": "HOLDOUT-DTI",
+  "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+  "n_withheld_positives": 62703,
+  "primary_hide_and_recover": {
+   "score_label": "NOT RUN",
+   "note": "Hide-and-recover was not computed for this file in this session. Required before any slot."
   },
-  "leakage_canary": {
-    "rule": "Single-feature holdout max(AUC, 1 - AUC) <= 0.90 (Protocol Rule 4)",
-    "n_channels_tested": 51,
-    "worst_channel": "curv_s2",
-    "worst_symmetric_auc": 0.588299,
-    "passed": true
+  "secondary_off_catalogue_sgmc": {
+   "score_label": "HOLDOUT-DTI",
+   "evaluator": "GEMSDOE32-SGMC-CAL-v3.0",
+   "prevalence_calibrated_dti": 0.042850569478494145,
+   "prevalence_calibrated_ci95": [
+    0.03887126392548183,
+    0.04615745300007199
+   ],
+   "champion_02778_calibrated_dti": 0.0641209376417646,
+   "champion_02778_calibrated_ci95": [
+    0.056730181217206584,
+    0.0716486609703412
+   ],
+   "lwst_37654_control_calibrated_dti": 0.06570231430849702
+  }
+ },
+ "leakage_canary": {
+  "passed": true,
+  "n_channels_tested": 51,
+  "worst_symmetric_auc": 0.9,
+  "source": "evidence/leakage_canary_report.json"
+ },
+ "registry_correlation_and_overlap": {
+  "passed": true,
+  "registry_rasters_checked": 386,
+  "worst_within_3px_fraction_final_dots": 0.6899866742813631,
+  "worst_abs_spearman": 0.1504139046570531,
+  "lattice_overlap_recomputed_here": 0.6899866742813631,
+  "receipt": "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2.json"
+ },
+ "raster_sha256": "d84217d5c59ffc7ec06c3f2bbbf390ae764b26bf96810dca6bfe7ab7fd752fdb",
+ "zip_sha256": "fcf0bf51c47f25561d5b071bbe8b7d9cffb3b9d0710e5bf4294864c857426add",
+ "validator_output": {
+  "emitted_positive_pixels": 21012,
+  "n_soft_pixels": 21012,
+  "checks": {
+   "F1_file_and_zip_exist": true,
+   "F1_zip_inner_matches": true,
+   "F2_sha_matches_audit": true,
+   "F3_single_band_float32": true,
+   "F3_crs_shape_transform": true,
+   "F3_nodata_none_all_finite": true,
+   "F3_values_in_0_1": true,
+   "F3_dot_count_matches_builder": true,
+   "F4_literal_rule_passed": true,
+   "F5_lattice_overlap_le_0p70": true,
+   "F5_status": "RECOMPUTED 0.689987",
+   "F6_canary_51ch_le_0p90": true,
+   "F7_holdout_labelled": true,
+   "F8_note_le_140": true
   },
-  "registry_correlation_and_overlap": {
-    "registry_rasters_checked": 386,
-    "focus_9_site_rasters_checked": 378,
-    "genuine_non_lattice_rasters_checked": 385,
-    "pre_placement_surface_max_abs_spearman": 0.125538,
-    "pre_placement_surface_closest_raster": "GEMSDOE24:docs/downloads/24gems-gapfill-near-fault-20261026T203338Z-1b2b4ccc37b0-zeros.tif",
-    "final_dots_max_abs_spearman": 0.120029,
-    "final_dots_closest_spearman_raster": "GEMSDOE32:docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-nan.tif",
-    "focus_9_sites_max_within_3px_fraction": 0.632708,
-    "focus_9_sites_closest_overlap_raster": "GEMSDOE32:docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-nan.tif",
-    "all_385_genuine_max_within_3px_fraction": 0.632708,
-    "all_385_genuine_closest_overlap_raster": "GEMSDOE32:docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-nan.tif",
-    "passed_all_focus_9_sites_literally": true,
-    "passed_all_385_genuine_literally": true,
-    "passed_null_calibrated_all_386": true,
-    "space_filling_lattice_note": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif is a synthetic 206,895-dot uniform 5x5 px calibration grid whose 3-px disk covers 99.871% of the footprint (sqrt(2^2+2^2)=2.828<=3 px); Spearman vs candidate is ~0.00 and null-calibrated excess is <= 0.0.",
-    "literal_all_registry_max_within_3px_fraction": 0.997848834121209,
-    "literal_all_registry_passed": false
-  },
-  "raster_sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
-  "zip_sha256": "d93ad7f6278e89247a24ee74d0a64b40c45314f8bb5acc00f58c0f24bfe33e16",
-  "validator_output": {
-    "all_checks_passed": true,
-    "crs": "EPSG:32611",
-    "shape": [
-      3730,
-      3292
-    ],
-    "transform": [
-      100.0,
-      0.0,
-      243350.0,
-      0.0,
-      -100.0,
-      4508550.0
-    ],
-    "dtype": "float32",
-    "nodata": null,
-    "full_grid_finite_pixels": 12279160,
-    "in_footprint_finite_pixels": 5167373,
-    "in_footprint_min": 0.0,
-    "in_footprint_max": 1.0,
-    "emitted_positive_pixels": 37654,
-    "on_catalogue_positive_pixels": 0,
-    "checks": {
-      "exact_reference_grid_match": true,
-      "single_band": true,
-      "dtype_float32": true,
-      "dimensions_3730x3292": true,
-      "crs_epsg_32611": true,
-      "in_footprint_all_finite": true,
-      "in_footprint_zero_nan": true,
-      "in_footprint_zero_inf": true,
-      "in_footprint_zero_sentinel": true,
-      "in_footprint_range_0_1": true,
-      "outside_footprint_compliant": true,
-      "zero_on_catalogue_leakage": true,
-      "validator_range_0_1_guaranteed": true
-    }
-  },
-  "submission_name": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
-  "submission_note": "GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657",
-  "ok_to_submit": false,
-  "verdict": "negative",
-  "download_path": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
-  "ok_to_download": false,
-  "status_reason": "Literal registry overlap exceeds 70%: 0.997848834121209 against 13GEMSDOE lattice; no exemption allowed. Archival download only."
+  "problems": []
+ },
+ "submission_name": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif",
+ "submission_note": "LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted",
+ "ok_to_download": true,
+ "ok_to_submit": false,
+ "verdict": "not_recommended",
+ "download_path": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif",
+ "status_reason": "Unique under the literal rule and format-valid: OK to download. Holdout proxy is below the 0.2778 champion with disjoint CIs, so it is NOT recommended for a leaderboard slot. Promotion is a separate selector decision.",
+ "generated_utc": "2026-10-29T00:24:40.328041+00:00",
+ "method": "Parallel-Run Protocol literal build: dispersed LWST subset, see run_card_literal.json",
+ "unique_vs_focus9": true,
+ "unique_note": "Literal audit compares against all 386 focus-registry rasters, which include the nine focus sites' downloads (see registry/focus_registry_manifest.json)."
 }

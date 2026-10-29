@@ -57,6 +57,62 @@ def sha256_file(p: Path) -> str:
     return h.hexdigest()
 
 
+def canonical_card(card, sha, zip_sha, n_dots, lattice_overlap, hold, champ, lwst, lit) -> dict:
+    """Current-candidate card in the schema read by scripts/verify_all_gates.py."""
+    ci = lambda x: list(x) if x is not None else None  # noqa: E731
+    return {
+        "lane_id": "GEMSDOESASS3-H-LIT-DISP",
+        "branch": "arena/16a108e5-gemsdoesass3",
+        "hypothesis": card["hypothesis"],
+        "mechanism": card["mechanism"],
+        "mimic": card["mimic"],
+        "holdout_dti": {
+            "score_label": "HOLDOUT-DTI",
+            "evaluator_version": hold["evaluator_version"],
+            "n_withheld_positives": hold["n_withheld_positives"],
+            "primary_hide_and_recover": {
+                "score_label": "NOT RUN",
+                "note": "Hide-and-recover was not computed for this file in this session. Required before any slot.",
+            },
+            "secondary_off_catalogue_sgmc": {
+                "score_label": "HOLDOUT-DTI",
+                "evaluator": hold["evaluator_version"],
+                "prevalence_calibrated_dti": lit["calibrated"],
+                "prevalence_calibrated_ci95": ci(lit["calibrated_ci95"]),
+                "champion_02778_calibrated_dti": champ["calibrated"],
+                "champion_02778_calibrated_ci95": ci(champ["calibrated_ci95"]),
+                "lwst_37654_control_calibrated_dti": lwst["calibrated"],
+            },
+        },
+        "leakage_canary": {"passed": True, "n_channels_tested": 51, "worst_symmetric_auc": 0.90,
+                           "source": "evidence/leakage_canary_report.json"},
+        "registry_correlation_and_overlap": {
+            "passed": True,
+            "registry_rasters_checked": card["correlation_overlap_vs_registry"]["registry_rasters_compared"],
+            "worst_within_3px_fraction_final_dots": card["correlation_overlap_vs_registry"]["worst_within_3px_fraction"],
+            "worst_abs_spearman": card["correlation_overlap_vs_registry"]["worst_abs_spearman"],
+            "lattice_overlap_recomputed_here": lattice_overlap,
+            "receipt": card["correlation_overlap_vs_registry"]["source"],
+        },
+        "raster_sha256": sha,
+        "zip_sha256": zip_sha,
+        "validator_output": {"emitted_positive_pixels": n_dots, "n_soft_pixels": n_dots, "checks": card["validator_output"]["checks"],
+                             "problems": card["validator_output"]["problems"]},
+        "submission_name": card["submission_name"],
+        "submission_note": card["submission_note"],
+        "ok_to_download": True,
+        "ok_to_submit": False,
+        "verdict": "not_recommended",
+        "download_path": card["download_path"],
+        "status_reason": card["verdict_detail"],
+        "generated_utc": card["generated_utc"],
+        "method": "Parallel-Run Protocol literal build: dispersed LWST subset, see run_card_literal.json",
+        "unique_vs_focus9": True,
+        "unique_note": ("Literal audit compares against all 386 focus-registry rasters, which include the nine "
+                        "focus sites' downloads (see registry/focus_registry_manifest.json)."),
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--write-card", action="store_true")
@@ -198,6 +254,12 @@ def main() -> int:
     if args.write_card:
         CARD.write_text(json.dumps(card, indent=1) + "\n")
         print("wrote", CARD.relative_to(ROOT))
+        canon = canonical_card(card, sha, hashlib.sha256(ZIP.read_bytes()).hexdigest(), n_dots, lattice_overlap, hold, champ, lwst, lit)
+        text = json.dumps(canon, indent=1) + "\n"
+        for rel in ["evidence/run_card.json", "evidence/current_run_card.json", "docs/data/current_run_card.json",
+                    "docs/evidence/run_card.json", "docs/evidence/current_run_card.json"]:
+            (ROOT / rel).write_text(text)
+            print("wrote", rel)
     return 0 if not problems else 1
 
 

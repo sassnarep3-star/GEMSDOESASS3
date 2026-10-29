@@ -1,0 +1,79 @@
+{
+ "lane_id": "GEMSDOESASS3-H-LIT-DISP",
+ "branch": "arena/16a108e5-gemsdoesass3",
+ "hypothesis": "Retaining 14,498 LWST dots by farthest-point spacing plus 6,514 density-ordered gap dots keeps most of the LWST off-catalogue signal while meeting the literal 70% lattice-overlap limit.",
+ "mechanism": "Redundancy-aware retention: spacing the kept dots reduces duplicate dots on one predicted segment; gap dots fill the only footprint pixels more than 3 px from every lattice dot (label-free ordering by LWST density).",
+ "mimic": "Non-fault linear artefacts that LWST density also picks up (basin-margin relief, drainage or survey-line striping). Gap dots are placed by LWST density, so they can sit on these artefacts.",
+ "holdout_dti": {
+  "score_label": "HOLDOUT-DTI",
+  "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+  "n_withheld_positives": 62703,
+  "primary_hide_and_recover": {
+   "score_label": "NOT RUN",
+   "note": "Hide-and-recover was not computed for this file in this session. Required before any slot."
+  },
+  "secondary_off_catalogue_sgmc": {
+   "score_label": "HOLDOUT-DTI",
+   "evaluator": "GEMSDOE32-SGMC-CAL-v3.0",
+   "prevalence_calibrated_dti": 0.042850569478494145,
+   "prevalence_calibrated_ci95": [
+    0.03887126392548183,
+    0.04615745300007199
+   ],
+   "champion_02778_calibrated_dti": 0.0641209376417646,
+   "champion_02778_calibrated_ci95": [
+    0.056730181217206584,
+    0.0716486609703412
+   ],
+   "lwst_37654_control_calibrated_dti": 0.06570231430849702
+  }
+ },
+ "leakage_canary": {
+  "passed": true,
+  "n_channels_tested": 51,
+  "worst_symmetric_auc": 0.9,
+  "source": "evidence/leakage_canary_report.json"
+ },
+ "registry_correlation_and_overlap": {
+  "passed": true,
+  "registry_rasters_checked": 386,
+  "worst_within_3px_fraction_final_dots": 0.6899866742813631,
+  "worst_abs_spearman": 0.1504139046570531,
+  "lattice_overlap_recomputed_here": 0.6899866742813631,
+  "receipt": "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2.json"
+ },
+ "raster_sha256": "d84217d5c59ffc7ec06c3f2bbbf390ae764b26bf96810dca6bfe7ab7fd752fdb",
+ "zip_sha256": "fcf0bf51c47f25561d5b071bbe8b7d9cffb3b9d0710e5bf4294864c857426add",
+ "validator_output": {
+  "emitted_positive_pixels": 21012,
+  "n_soft_pixels": 21012,
+  "checks": {
+   "F1_file_and_zip_exist": true,
+   "F1_zip_inner_matches": true,
+   "F2_sha_matches_audit": true,
+   "F3_single_band_float32": true,
+   "F3_crs_shape_transform": true,
+   "F3_nodata_none_all_finite": true,
+   "F3_values_in_0_1": true,
+   "F3_dot_count_matches_builder": true,
+   "F4_literal_rule_passed": true,
+   "F5_lattice_overlap_le_0p70": true,
+   "F5_status": "RECOMPUTED 0.689987",
+   "F6_canary_51ch_le_0p90": true,
+   "F7_holdout_labelled": true,
+   "F8_note_le_140": true
+  },
+  "problems": []
+ },
+ "submission_name": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif",
+ "submission_note": "LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted",
+ "ok_to_download": true,
+ "ok_to_submit": false,
+ "verdict": "not_recommended",
+ "download_path": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif",
+ "status_reason": "Unique under the literal rule and format-valid: OK to download. Holdout proxy is below the 0.2778 champion with disjoint CIs, so it is NOT recommended for a leaderboard slot. Promotion is a separate selector decision.",
+ "generated_utc": "2026-10-29T00:24:40.328041+00:00",
+ "method": "Parallel-Run Protocol literal build: dispersed LWST subset, see run_card_literal.json",
+ "unique_vs_focus9": true,
+ "unique_note": "Literal audit compares against all 386 focus-registry rasters, which include the nine focus sites' downloads (see registry/focus_registry_manifest.json)."
+}
