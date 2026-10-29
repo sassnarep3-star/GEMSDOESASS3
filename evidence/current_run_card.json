@@ -134,6 +134,6 @@
   "ok_to_submit": false,
   "verdict": "negative",
   "download_path": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
-  "ok_to_download": true,
+  "ok_to_download": false,
   "status_reason": "Literal registry overlap exceeds 70%: 0.997848834121209 against 13GEMSDOE lattice; no exemption allowed. Archival download only."
 }

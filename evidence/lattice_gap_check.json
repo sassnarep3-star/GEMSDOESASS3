@@ -1,0 +1,20 @@
+{
+ "footprint_pixels": 5167373,
+ "lattice_dots": 206895,
+ "radius_px": {
+  "<=3.0": {
+   "footprint_uncovered_px": 6649,
+   "footprint_uncovered_px_not_labels": 6514
+  },
+  "<3.0": {
+   "footprint_uncovered_px": 7992,
+   "footprint_uncovered_px_not_labels": 7828
+  }
+ },
+ "review_claim_footprint_px_outside_lattice_buffer": 5379,
+ "review_claim_status": "NOT REPRODUCED: the review's 5,379 differs from every radius tested; the conclusion (a 37,654-dot file cannot pass Rule 1) holds for all three counts.",
+ "max_dots_passing_rule1_if_gap_used_fully": {
+  "formula": "N <= G / 0.30 with G = not-label uncovered pixels at <=3 px",
+  "value": 21713
+ }
+}

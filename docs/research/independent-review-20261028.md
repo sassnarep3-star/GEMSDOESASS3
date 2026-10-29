@@ -161,3 +161,15 @@ Ranking is by expected DTI improvement and implementation cost. "Untried" means 
   "verdict": "negative for H-SASS3-E; review: OK to upload (format+uniqueness), not promoted to a slot"
 }
 ```
+
+## Erratum and status update (2026-10-29)
+
+The sections above are kept as written. The corrections below supersede them where they conflict.
+
+- **C10 — lattice gap count.** The 5,379 footprint pixels outside the 3 px lattice buffer (section "lattice_gate_literal") do not reproduce. Recomputed from the lattice raster: 6,649 pixels (≤3 px), 7,992 (<3 px), 6,514 (≤3 px, after excluding catalogue labels). The conclusion stands: a 37,654-dot file cannot pass the literal rule, and the maximum compliant dot count is about 21,713. Source: `evidence/lattice_gap_check.json`, from `scripts/lattice_gap_check.py`.
+- **C11 — two measures of lattice coverage.** `footprint_fraction_within_3px_of_lattice` (0.99896) is footprint coverage. The dot-level figure for the 37,654-dot file is 99.7849% (`evidence/literal_audit_lwst_baseline.json`). The gate uses the dot-level figure.
+- **C12 — holdout gates (IR-SASS3-20).** The two holdout gates previously passed on withdrawn baselines. They now require the reproduced HIDE-RECOVER value (0.006130) and paired CIs that exclude zero. Expected blockers are unchanged: HIDE-RECOVER, SGMC, and the literal lattice rule.
+- **C13 — card contradiction (IR-SASS3-21).** `ok_to_download` in the archived 37,654-dot card is now `false`, matching the gate. The verdict is unchanged: NOT OK to submit.
+- **New candidate.** `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif` (21,012 dots, SHA-256 `d84217d5c59ffc7ec06c3f2bbbf390ae764b26bf96810dca6bfe7ab7fd752fdb`) passes the literal rule (lattice 68.9987%, non-lattice max 55.2%, |Spearman| 0.150). Its HOLDOUT-DTI is 0.042851 [0.038871, 0.046157], below the champion control 0.064121 [0.056730, 0.071649] with disjoint CIs. Verdict: **OK to download; NOT recommended for a leaderboard slot.** Run card: `evidence/run_card_literal.json`.
+- **Open:** the owner's decision on whether the synthetic calibration lattice counts as a registry raster (IR-SASS3-22); `scripts/independent_review.py` still cannot run in this checkout (IR-SASS3-25); the leaderboard figures in the request conflict with the live page (IR-SASS3-26).
+- **Experiment budget (IR-SASS3-28).** The run card records 3 literal candidate experiments (dense, random, dispersed), with controls not counted. E1 (H-SASS3-E) is a separate lane and was recorded as "1 of 3". If the 3-experiment cap applies to all lanes together, the total is 4 and the cap was exceeded by one. The owner must decide whether E1 counts. No further experiments run without that decision.

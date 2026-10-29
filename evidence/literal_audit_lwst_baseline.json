@@ -1,0 +1,187 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-29T00:07:03.931245+00:00",
+ "candidate": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
+ "candidate_sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
+ "candidate_dots": 37654,
+ "footprint_pixels": 5167373,
+ "rule": "literal Protocol Rule 1: |Spearman|<=0.90 AND within-3px<=0.70 vs EVERY registry raster; no exemption",
+ "thresholds": {
+  "max_within_3px": 0.7,
+  "max_abs_spearman": 0.9,
+  "radius_px": 3
+ },
+ "registry_rasters_compared": 386,
+ "registry_malformed_or_missing": 0,
+ "surface_stage": {
+  "passed": true,
+  "note": "pre-placement continuous surface not retained; the emitted binary surface is used (weaker test)",
+  "worst_abs_spearman": 0.12002850791264359,
+  "worst_raster": "GEMSDOE32:docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-nan.tif",
+  "worst_rows": [
+   {
+    "repo": "GEMSDOE32",
+    "path": "docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-nan.tif",
+    "spearman": 0.12002850791264359
+   },
+   {
+    "repo": "GEMSDOE32",
+    "path": "docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif",
+    "spearman": 0.12002850791264359
+   },
+   {
+    "repo": "GEMSDOE32",
+    "path": "docs/downloads/gemsdoe32-h38g1-lidar-geodawn-gdr-celf37654-20261026T013500Z-35859e28-nan.tif",
+    "spearman": 0.111307177951239
+   },
+   {
+    "repo": "GEMSDOE32",
+    "path": "docs/downloads/gemsdoe32-h38g1-lidar-geodawn-gdr-celf37654-20261026T013500Z-35859e28-zeros.tif",
+    "spearman": 0.111307177951239
+   },
+   {
+    "repo": "GEMSDOE32",
+    "path": "docs/downloads/gemsdoe32-h46-trhv-tworegime-ventconduit-37654-20261026T173000Z-6437b275-nan.tif",
+    "spearman": 0.1067324926033857
+   }
+  ]
+ },
+ "final_dots_stage": {
+  "literal_rule_passed": false,
+  "worst_within_3px_fraction": 0.997848834121209,
+  "worst_within_3px_raster": "HISTORICAL_SCORED:scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "worst_abs_spearman": 0.12002850791264268,
+  "worst_spearman_raster": "GEMSDOE32:docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-nan.tif",
+  "literal_duplicates": [
+   {
+    "repo": "HISTORICAL_SCORED",
+    "path": "scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "within_3px_fraction": 0.997848834121209,
+    "footprint_coverage_3px": 0.9987132726822701,
+    "space_filling": false
+   }
+  ],
+  "worst_rows": [
+   {
+    "repo": "HISTORICAL_SCORED",
+    "path": "scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "within_3px_fraction": 0.997848834121209,
+    "spearman": -0.00014644339123098658,
+    "footprint_coverage_3px": 0.9987132726822701
+   },
+   {
+    "repo": "GEMSDOE32",
+    "path": "docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-nan.tif",
+    "within_3px_fraction": 0.6327083443990015,
+    "spearman": 0.12002850791264268,
+    "footprint_coverage_3px": 0.13824451999110574
+   },
+   {
+    "repo": "GEMSDOE32",
+    "path": "docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-zeros.tif",
+    "within_3px_fraction": 0.6327083443990015,
+    "spearman": 0.12002850791264268,
+    "footprint_coverage_3px": 0.13824451999110574
+   },
+   {
+    "repo": "GEMSDOE30",
+    "path": "docs/downloads/gemsdoe30-sgmc-hedge-d10-85k-20261003-ac08b41e-zeros.tif",
+    "within_3px_fraction": 0.5794337918946194,
+    "spearman": 0.014548965296025599,
+    "footprint_coverage_3px": 0.3188835023134579
+   },
+   {
+    "repo": "GEMSDOE30",
+    "path": "docs/downloads/gemsdoe30-sgmc-hedge-d10-85k-20261003-ac08b41e.tif",
+    "within_3px_fraction": 0.5794337918946194,
+    "spearman": 0.014548965296025599,
+    "footprint_coverage_3px": 0.3188835023134579
+   },
+   {
+    "repo": "HISTORICAL_SCORED",
+    "path": "scored/8GEMSDOE_Hedge-v2_submission.tif",
+    "within_3px_fraction": 0.5736707919477346,
+    "spearman": 0.02042019673204158,
+    "footprint_coverage_3px": 0.2835643952933144
+   },
+   {
+    "repo": "GEMSDOE32",
+    "path": "docs/downloads/gemsdoe32-arena8a-mdrc-crestbar-b2-44090-20261026T011955Z-ce1abd39-nan.tif",
+    "within_3px_fraction": 0.5598873957614064,
+    "spearman": 0.07131419072397305,
+    "footprint_coverage_3px": 0.15923719847589868
+   },
+   {
+    "repo": "GEMSDOE32",
+    "path": "docs/downloads/gemsdoe32-arena8a-mdrc-crestbar-b2-44090-20261026T011955Z-ce1abd39-zeros.tif",
+    "within_3px_fraction": 0.5598873957614064,
+    "spearman": 0.07131419072397305,
+    "footprint_coverage_3px": 0.15923719847589868
+   },
+   {
+    "repo": "HISTORICAL_SCORED",
+    "path": "scored/gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+    "within_3px_fraction": 0.5552132575556382,
+    "spearman": 0.030233399224568018,
+    "footprint_coverage_3px": 0.263110481863802
+   },
+   {
+    "repo": "GEMSDOE32",
+    "path": "docs/downloads/gemsdoe32-h46-trhv-tworegime-ventconduit-37654-20261026T173000Z-6437b275-nan.tif",
+    "within_3px_fraction": 0.5497689488500558,
+    "spearman": 0.10673249260338488,
+    "footprint_coverage_3px": 0.1347589964958984
+   }
+  ]
+ },
+ "format_validator": {
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_match": true,
+   "shape_match": true,
+   "transform_match": true,
+   "no_nan_inside_footprint": true,
+   "values_in_0_1_inside_footprint": true,
+   "outside_footprint_zero": true,
+   "no_inf": true,
+   "all_passed": true
+  },
+  "template": {
+   "crs": "EPSG:32611",
+   "shape": [
+    3730,
+    3292
+   ],
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "dtype": "float32"
+  },
+  "candidate": {
+   "count": 1,
+   "crs": "EPSG:32611",
+   "shape": [
+    3730,
+    3292
+   ],
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "dtype": "float32",
+   "nodata": null
+  }
+ },
+ "literal_rule_passed": false,
+ "verdict_uniqueness": "FAIL (literal)"
+}

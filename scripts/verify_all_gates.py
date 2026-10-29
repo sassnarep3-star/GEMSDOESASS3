@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import sys
 import zipfile
 from pathlib import Path
@@ -128,18 +129,29 @@ def verify_all() -> dict:
     # Dual-Evaluator Holdout wins vs 0.2778 Champion
     hr = card["holdout_dti"]["primary_hide_and_recover"]
     sg = card["holdout_dti"]["secondary_off_catalogue_sgmc"]
+    # Claim checks are strict (IR-SASS3-20). A claim passes only if the card value matches the value an
+    # independent recomputation reproduced AND the paired 95% CI excludes zero on the correct baseline.
+    # The 2026-10-28 independent review withdrew the earlier "beats 0.2778" claims (C1-C3), so both fail.
+    indep = json.loads((ROOT / "evidence/independent_review_20261028.json").read_text())
+    m_hr = re.search(r"HOLDOUT-DTI ([0-9.]+) \[", indep["holdout_summary"]["lwst"]["hide_recover"])
+    indep_hr = float(m_hr.group(1)) if m_hr else None
+    hr_reproduced = indep_hr is not None and abs(float(hr["pooled_dti"]) - indep_hr) < 1e-6
     record(
         "holdout_hide_recover_beats_02778_ci95_gt_0",
-        hr["score_label"] == "HOLDOUT-DTI"
+        hr_reproduced
+        and hr["score_label"] == "HOLDOUT-DTI"
         and hr["pooled_dti"] > hr["champion_02778_baseline_dti"]
         and hr["paired_delta_ci95"][0] > 0.0,
-        f"HR={hr['pooled_dti']} vs {hr['champion_02778_baseline_dti']}",
+        f"NOT DEMONSTRATED: card HR {hr['pooled_dti']} is a per-fold OOF value; the independent static HR is {indep_hr} "
+        f"(review C2). Baseline {hr['champion_02778_baseline_dti']} is the D2.8 parent (review C3).",
     )
     record(
         "holdout_sgmc_beats_02778",
         sg["score_label"] == "HOLDOUT-DTI"
-        and sg["prevalence_calibrated_dti"] > sg["champion_02778_calibrated_dti"],
-        f"SGMC={sg['prevalence_calibrated_dti']} vs {sg['champion_02778_calibrated_dti']}",
+        and sg["prevalence_calibrated_dti"] > sg["champion_02778_calibrated_dti"]
+        and sg["paired_delta_calibrated_ci95"][0] > 0.0,
+        f"NOT DEMONSTRATED: point {sg['prevalence_calibrated_dti']} > {sg['champion_02778_calibrated_dti']}, but paired CI "
+        f"{sg['paired_delta_calibrated_ci95']} contains 0 (review section 5).",
     )
 
     # Protocol applies to every registry raster, including space-filling ones.
@@ -216,7 +228,15 @@ def main() -> int:
     print(f"  OK TO DOWNLOAD  : {'YES (APPROVED)' if res['ok_to_download'] else 'NO (BLOCKED)'}")
     print(f"  OK TO SUBMIT    : {'YES (VERDICT: PROMOTE)' if res['ok_to_submit'] else 'NO'}")
     print("=" * 78)
-    return 0 if res["ok"] or ("--expect-blocked" in sys.argv and not res["ok_to_submit"] and res["problems"] == ["literal_registry_overlap_all_rasters: Registry lattice overlaps 99.7849% of candidate dots; protocol limit is 70%"] and res["verdict"] == "negative") else 1
+    # Documented, expected blockers for the 37,654-dot LWST file (IR-SASS3-19/20). Any OTHER failure is fatal.
+    expected_blockers = {
+        "literal_registry_overlap_all_rasters",
+        "holdout_hide_recover_beats_02778_ci95_gt_0",
+        "holdout_sgmc_beats_02778",
+    }
+    failed = {p.split(":", 1)[0] for p in res["problems"]}
+    only_expected = bool(failed) and failed <= expected_blockers
+    return 0 if res["ok"] or ("--expect-blocked" in sys.argv and not res["ok_to_submit"] and only_expected and res["verdict"] == "negative") else 1
 
 
 if __name__ == "__main__":
