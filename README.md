@@ -22,6 +22,27 @@ Scoped uniqueness recheck (2026-10-28, [audit note](docs/research/uniqueness-sco
 
 Executive summary and submission guide: [docs/executive-summary.html](docs/executive-summary.html) · Site: [docs/index.html](docs/index.html) · Per-site table: [docs/research/focus-site-candidates-20261028.md](docs/research/focus-site-candidates-20261028.md) · Independent review: [docs/research/independent-review-20261028.md](docs/research/independent-review-20261028.md) · Decision memo: [docs/research/lattice-decision-20261028.md](docs/research/lattice-decision-20261028.md) · Protocol amendment (PROPOSED, not applied): [docs/research/protocol-amendments.md](docs/research/protocol-amendments.md)
 
+## Verification addendum (2026-10-29, this branch)
+
+Checks run on this branch, all reproducible from the scripts named. They support the decision above and add the points below.
+
+- **Footprint re-check (correction).** Earlier in this session the structural file was described as "format-valid, download for review". That was incomplete: the footprint rule was not run. Re-run against `evidence/organizer_footprint_mask.npz` (finite cells of the official sample, exported on `main`), the file has **74,418 positive cells outside the scored region** (54,893 inside). Its run card, `evidence/structural_candidate_card.json`, now records footprint **FAIL**, `ok_to_download: false`, `ok_to_submit: false`.
+- **Full-pool uniqueness sweep** (`scripts/independent_uniqueness_audit.py`, 2,862 rasters, the repo's own published copy excluded; pool listed in `registry/sibling_pool_manifest.json`, 2,915 files, SHA-256):
+  - literal rule, all rasters: **FAIL** (100 % within 3 px of `GEMSDOE48/gemsdoe48-ds48-mtheta.tif`, which is positive in every cell);
+  - sparse (dot-type) rasters only: **PASS** (max 42.43 %, the calibration lattice; max |ρ| 0.0766);
+  - 35 dense rasters: one over 70 % (the GEMSDOE48 raster above); the next highest is 42.67 %.
+  - Coverage gaps: two historical rasters have no GitHub copy; 12 GEMSDOE75/63 entries (11 + 1) are git symlinks, not rasters (IR-2029-06, IR-2029-14).
+- **LWST lattice overlap recomputed** with the same audit tool on the SHA-verified calibration lattice: **0.997849**, matching the recorded 99.78 %.
+- **Exact file names** for the nine focus sites, each matched by SHA-256 to its GitHub copy: `evidence/focus9_file_table.json`. Owner-reported scores are typed in the prompt and are not organizer receipts.
+- **Duplicate pair:** GEMSDOE25 (`…-zeros.tif`) and GEMSDOE30 (`…-91eae1ca.tif`) are pixel-identical (44,090 positive cells each; xor = 0) with different file hashes, and both owner scores are 0.2600 (IR-2029-11).
+- **Competition inputs in sibling repos:** `labels.tif` and `sample_submission.tif` are committed in several GEMSDOE repos, and their hashes match this workspace's restore receipt. They were not used for scoring (IR-2029-02, IR-2029-15). Owner decision needed.
+- **Leaderboard** (fetched 2026-10-29): #1 0.4544, #2 0.3916, #3 0.3911, #4 0.3724, #5 0.3635 (op01).
+- **Tests:** `pytest -q` on the merged tree: 48 passed, 3 skipped.
+
+**Decision still needed (owner):** how to treat dense rasters in the lane rule (keep the literal rule, exclude dense rasters from the overlap test, or redefine dots for them). Whichever is chosen, the structural file fails the footprint rule and cannot be downloaded or submitted as it stands.
+
+---
+
 ## Standing prompt (verbatim, as recorded 2026-10-27)
 
 The full standing prompt is at [docs/research/standing-prompt-as-recorded-20261027.md](docs/research/standing-prompt-as-recorded-20261027.md). Read it each session.
