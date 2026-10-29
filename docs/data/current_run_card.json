@@ -62,7 +62,7 @@
     "all_checks_passed": true
   },
   "submission_name": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
-  "submission_note": "GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh radiometric enrichment x geodetic dilatation blind-fault locator. NNE-trendi...",
+  "submission_note": "GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh x dilatation blind-fault locator, NNE faults, unscored",
   "ok_to_download": true,
   "ok_to_submit": false,
   "verdict": "format_valid_pending_data",

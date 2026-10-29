@@ -1,0 +1,66 @@
+{
+ "schema_version": 1,
+ "label": "HOLDOUT-DTI vs OWNER-REPORT concordance (not organizer-confirmed)",
+ "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0 (as recorded in docs/data/focus9_executive_audit.json)",
+ "source_files": [
+  "docs/data/focus9_executive_audit.json",
+  "registry/owner_reported_scores_focus.json"
+ ],
+ "rows": [
+  {
+   "site": "GEMSDOE24",
+   "owner_reported_score": 0.2477,
+   "holdout_dti_hr_static": 0.0932
+  },
+  {
+   "site": "GEMSDOE25",
+   "owner_reported_score": 0.26,
+   "holdout_dti_hr_static": 0.0967
+  },
+  {
+   "site": "GEMSDOE27",
+   "owner_reported_score": 0.2449,
+   "holdout_dti_hr_static": 0.0927
+  },
+  {
+   "site": "GEMSDOE28 h36",
+   "owner_reported_score": 0.271,
+   "holdout_dti_hr_static": 0.0294
+  },
+  {
+   "site": "GEMSDOE28 solo",
+   "owner_reported_score": 0.2708,
+   "holdout_dti_hr_static": 0.0305
+  },
+  {
+   "site": "GEMSDOE30",
+   "owner_reported_score": 0.26,
+   "holdout_dti_hr_static": 0.0967
+  },
+  {
+   "site": "GEMSDOE31",
+   "owner_reported_score": 0.2708,
+   "holdout_dti_hr_static": 0.0305
+  },
+  {
+   "site": "GEMSDOE32",
+   "owner_reported_score": 0.2778,
+   "holdout_dti_hr_static": 0.0045
+  },
+  {
+   "site": "GEMSDOE33",
+   "owner_reported_score": 0.2632,
+   "holdout_dti_hr_static": 0.052
+  },
+  {
+   "site": "GEMSDOE36",
+   "owner_reported_score": 0.275,
+   "holdout_dti_hr_static": 0.0046
+  }
+ ],
+ "spearman_rho": -0.8896,
+ "spearman_p": 0.0006,
+ "kendall_tau": -0.7674,
+ "reading": "Holdout ordering does not reproduce the leaderboard ordering. The 0.2778 champion has the second-lowest holdout DTI. The holdout is NOT validated as a proxy for the leaderboard.",
+ "recorded_utc": "2026-10-29"
+}

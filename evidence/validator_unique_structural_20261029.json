@@ -1,0 +1,24 @@
+{
+ "file": "gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
+ "sha256": "ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e",
+ "bytes": 193208,
+ "checks": {
+  "single_band": true,
+  "dtype_float32": true,
+  "crs_epsg_32611": true,
+  "shape_3730x3292": true,
+  "transform_matches_training_grid": true,
+  "no_nan_or_inf": true,
+  "values_in_0_1": true
+ },
+ "stats": {
+  "min": 0.0,
+  "max": 1.0,
+  "positive_pixels": 129311,
+  "unique_values": 2
+ },
+ "notes": [
+  "footprint check NOT run: sample_submission.tif is not in this workspace (login-walled)"
+ ],
+ "all_hard_checks_pass": true
+}

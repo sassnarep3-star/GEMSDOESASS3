@@ -1,139 +1,180 @@
-# GEMSDOESASS3 — GEMS Prize Challenge Submission Hub
+# GEMSDOESASS3 — read first
 
-**Arena branch:** `arena/84fd876f-gemsdoesass3` (fixed — do not switch or push to any other branch)
-**Status:** Active | **Unique TIF submission:** download-ready, format-valid, submit-gated
+## Decision (2026-10-29)
+
+**Status (2026-10-29):** format-valid · download-ready for a format test only · submit-gated (**NOT OK to submit** until a holdout and the registry gates pass).
 
 
+| File | Download? | Submit? | Why |
+|------|-----------|---------|-----|
+| `docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` | Yes, format test only | **NO** | Format PASS (`scripts/validate_submission_tif.py`). Lattice lane PASS (42.35% dot-level within 3 px; Spearman 0.0015). Score **NOT ESTIMABLE**, and it uses no data signal (fixed straight corridors from an RNG). |
+| `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` | Yes, format test only | **NO** | Format PASS (validator). Lattice lane PASS (44.4% pixel-level within 3 px; ρ −0.0016). Holdout NOT RUN, so score **NOT ESTIMABLE**. Built on main by PR #16, not by this branch; its own run card says `ok_to_submit: False`. Its original submission note was truncated and is replaced (IR-SASS3-31). |
+| `docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif` | Archive only | **NO** | Lattice lane FAIL (99.79%). Holdout 0.1111 HOLDOUT-DTI, not organizer-confirmed. |
+| `docs/downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif` | Archive only | **NO** | Lattice lane FAIL (99.97%). |
 
-## Machine-readable identifiers
+**Nothing in this repo is evidenced to beat 0.2778 or the leaderboard top of 0.4544.** The single blocker is the labels: `labels.tif` and `training_features.tif` come through your own DrivenData account (official rules §3.1). They are not in this workspace, so no holdout DTI or confidence interval can be produced here.
 
-- Submission name: `gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif`
+Full review: [docs/research/independent-review-20261028.md](docs/research/independent-review-20261028.md) · Run card: [evidence/run_card_unique_structural_20261029.json](evidence/run_card_unique_structural_20261029.json) · Site: [docs/index.html](docs/index.html) · Submission guide: [docs/executive-summary.html](docs/executive-summary.html)
+
+---
+
+## Standing prompt (read every session)
+
+> I want to focus on the highest scoring submissions from the following sites and I want an executive summary on every site:
+> GEMSDOE24, GEMSDOE25, GEMSDOE27, GEMSDOE28, GEMSDOE30, GEMSDOE31, GEMSDOE32, GEMSDOE33, GEMSDOE36.
+>
+> I want an executive summary on every site that is clear and obvious which is the best submission to submit to obtain a high score on the leaderboard.
+>
+> MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION.
+> It must score higher than 0.2778 (ideally higher than the leaderboard top, 0.4544 as of 2026-10-29).
+> There should be an easy to download submission tif file.
+>
+> It must pass validation without any human intervention.
+> Values in [0,1]. No NaN inside footprint. CRS/EPSG:32611/shape/transform match the training grid.
+>
+> Follow PARALLEL-RUN PROTOCOL (lane rule: rank-correlation ≤0.90 vs registry rasters; ≤70% of dots within 3 px;
+> holdout hide-and-recover with visible-only masking; leakage canary AUC ≤0.90; run card JSON; budget 3 experiments / 2 hours).
+> Must not copy previous submissions.
+> Must create executive summary subpage explaining how to submit.
+>
+> Short submission note ≤ 140 chars. Easy download link must be prominent (top of site / executive summary).
+> No human inspection; validation must be programmatic.
+>
+> Do not interpret a failed uniqueness gate as permission to submit.
+> No hallucinations; verify line by line; official verified sources with links.
+> Put prompt into repo README and read it each session.
+> Core values: Maximize P(Win), Own the Outcome.
+
+---
+
+## Verified official facts (with links)
+
+| Fact | Source |
+|------|--------|
+| Metric: distance-weighted Tversky, α = 0.2, β = 0.8, triangular kernel with 300 m (3 px) support | [Problem description](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) |
+| Worked example: TP_w = 3.00, FP_w = 1.89, FN_w = 2.00 → TI = 0.60. Repo check: 3/(3 + 0.2·1.89 + 0.8·2.00) = 0.6027, and the three metric implementations agree | Same page; `tests/test_metric_official_example.py` |
+| Format: single layer, float32, values in [0, 1], EPSG:32611, 100 m, same bounds as training data; "data outside the bounds is null or nan" | Same page, "Submission format" |
+| Three submissions per week; one final submission per entity; generative-AI use must be disclosed in the narrative | [Official rules (NLR PDF)](https://docs.nlr.gov/docs/fy26osti/96647.pdf) §3.2, §3.4 |
+| Training features and labels come via the DrivenData account after registration; labels are from the INGENIOUS Great Basin compilation (doi:10.15121/1881483) | Official rules §3.1, §3.3 |
+| Leaderboard top: #1 xiaofanhu, 0.4544 (checked 2026-10-29). The 0.4413 and 0.3195 figures in the prompt do not match. | [Leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) |
+| Rules page | [herox rules](https://www.herox.com/GEMSPrize/resource/2274) |
+
+---
+
+## What the new TIF is, and what it is not
+
+`docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif`
+
+- Generated by `scripts/generate_unique_submission.py`. It reads **no feature layer and no label**. About 10,000 dots sit on six fixed straight NNE corridors with ±400 m random jitter (seed 24301), burned as radius-2 disks. It is off-lattice and unique by construction, not predictive.
+- Format: float32, one band, EPSG:32611, 3292 × 3730 at 100 m, values 0 or 1, no NaN. Receipt: `evidence/validator_unique_structural_20261029.json`.
+- Lattice lane (dot-level): 42.35% of blobs within 3 px of the 13GEMSDOE calibration lattice (limit 70%); sampled Spearman 0.0015 (limit 0.90). Receipt: `evidence/lattice_lane_check_20261029.json`. The other 450 downloads were not re-checked here.
+- Cells outside the dots are 0.0, not NaN. The official text asks for null/NaN outside bounds. This is unconfirmed (IR-SASS3-27).
+- Its earlier description as "geologically-informed" and "off-catalogue traces" was **wrong**. Corrected in IR-SASS3-24.
+
+---
+
+## Why 0.2778 scored highest, and why the local holdout cannot say so
+
+Owner-reported leaderboard scores for the nine focus sites, against the local holdout (HR-static DTI, from `docs/data/focus9_executive_audit.json`):
+
+| Site | Owner-reported score | HOLDOUT-DTI [95% CI] (evaluator as recorded in audit) | File | Unique? |
+|------|----------------------|------------------------------------------------------|------|---------|
+| GEMSDOE24 | 0.2477 | 0.0932 [0.0813, 0.1060] | `h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan` | No (submitted) |
+| GEMSDOE25 | 0.2600 | 0.0967 [0.0842, 0.1095] | `dotted-h19-5-d2-8-20261002-e56ea318af89-zeros` | No (submitted) |
+| GEMSDOE27 | 0.2449 | 0.0927 [0.0809, 0.1054] | `topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite` | No (submitted) |
+| GEMSDOE28 | 0.2710 (best of 4 files) | 0.0294 [0.0250, 0.0344] | `h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite` | No (submitted) |
+| GEMSDOE30 | 0.2600 | 0.0967 [0.0842, 0.1095]* | `d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca` | No (submitted) |
+| GEMSDOE31 | 0.2708 | 0.0305 [0.0257, 0.0361] | `h27-4-solo-d28-20261004-8acb75e1-allfinite` | No (submitted) |
+| GEMSDOE32 | **0.2778 (champion)** | 0.0045 [0.0038, 0.0053] | `h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros` | No (submitted) |
+| GEMSDOE33 | 0.2632 | 0.0520 [0.0458, 0.0583] | `h33d-analog-tip-stepover-r30-20261004-cb490425926e` | No (submitted) |
+| GEMSDOE36 | 0.2750 | 0.0046 [0.0039, 0.0053] | `anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros` | No (submitted) |
+
+\* GEMSDOE30's audit row is attached to a file named with `gems24-`; file identity unconfirmed (IR-SASS3-22).
+
+Labels: owner-reported scores are **OWNER-REPORT**, not organizer-confirmed. Holdout values are **HOLDOUT-DTI**; the withheld-positive count is not recorded in the audit, so the label is incomplete.
+
+**Finding.** The holdout ranks these files in reverse order of the leaderboard (Spearman −0.89, n = 10, p = 0.001; `evidence/holdout_vs_leaderboard_concordance_20261029.json`). The champion has the second-lowest holdout score. Hypothesis, unverified: the holdout tests recovery of catalogue faults, while the scored set is new faults outside the USGS catalogue. A holdout that rewards the catalogue cannot select a leaderboard submission. Explaining 0.2778 requires labels from the user's account, and then a holdout redesigned for off-catalogue recovery.
+
+---
+
+## What is needed to go further (in order)
+
+1. **Labels and features, from your DrivenData account.** Download `training_features.tif` and `labels.tif` (official rules §3.1). Place them under `.cache/gems_data/` or `data/`. Do not use third-party mirror copies (IR-SASS3-26).
+2. **Redesign the holdout** to withhold off-catalogue-like structure, and check it reproduces the leaderboard order on the nine owner-reported files. Only then is it a usable selector.
+3. **Confirm the footprint and NaN convention** against `sample_submission.tif` (IR-SASS3-27).
+4. **Re-run the lane check against all 451 downloads** (needs the sibling checkouts).
+5. Choose at most one candidate, check it against the 3-per-week cap, and record the generative-AI disclosure (rules §3.2).
+
+---
+
+## Irregularities
+
+Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data/irregularities_ledger.json`). Open items for review: IR-SASS3-20 (holdout vs leaderboard), 22 (GEMSDOE30 file identity), 26 (third-party data mirrors), 27 (NaN convention), 25 (prompt leaderboard figures), 29 (legacy build scripts overwrite pages).
+
+---
+
+## PARALLEL-RUN PROTOCOL (binding)
+**Current run card (main, PR #16, BGK-PBE):** `evidence/run_card.json`
+- Submission: `gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif`
+- Note: `GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh x dilatation blind-fault locator, NNE faults, unscored`
 - SHA-256: `7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f`
-- SHA-256 (first 12): `7ab47cf53879`
-- Submission note: `GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh radiometric enrichment x geodetic dilatation blind-fault locator. NNE-trendi...`
-- Run card: `evidence/current_run_card.json`
+- Verdict: `format_valid_pending_data` · ok_to_download: True · ok_to_submit: False
+- Holdout and registry gates NOT RUN (no labels locally). Source of the file: PR #16. Its full lattice-lane result is in `evidence/lattice_lane_check_20261029.json`.
+
+
+Rules 1–6: lane checks (rank-correlation ≤0.90, ≤70% of dots within 3 px), reuse template tools
+(`evaluate_holdout.py`, `submission_writer.py`), label numbers as HOLDOUT-DTI or ORGANIZER-CONFIRMED
+only, leakage canary, run card JSON, budget 3 experiments / 2 hours. Do not interpret a failed
+uniqueness gate as permission to submit. No copying of previous submissions.
+
+**Last run card (historical, blocked):** `evidence/run_card.json`
+- Submission: `gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif`
+- Note: `GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657`
+- SHA-256: `bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a`
+- Verdict: negative. **NOT OK to submit** (literal lattice rule, 99.78% > 70%). Review: [independent-review-20261028.md](docs/research/independent-review-20261028.md).
+
+**Current run card:** `evidence/run_card_unique_structural_20261029.json`. Verdict: negative (not promoted). ok_to_download true, ok_to_submit false.
 
 ---
 
-## Standing Prompt (read every session)
+## How to submit (when a candidate passes every gate)
 
-The full standing prompt is the user request for this session. Key requirements:
-
-1. **Focus on the 9 highest-scoring GEMSDOE sites:** GEMSDOE24, 25, 27, 28, 30, 31, 32, 33, 36. Produce an executive summary on every site that is clear and obvious which is the best submission to download/submit for a high leaderboard score. Each entry must be unique — not an exact duplicate of any previous submission. Include a table: file to download, estimated score, whether unique vs the other GEMSDOE sites.
-
-2. **MUST GENERATE A UNIQUE TIF SUBMISSION.** Do not copy a previous submission (except for learning/education). It must be obvious whether the generated TIF is OK to download and submit.
-
-3. **Easy download:** a clickable File to submit must be obvious on the site (executive summary or very beginning).
-
-4. **Validation without human intervention:** inspection must be done through the project, validated for submission without human intervention. No NaN inside footprint, values in [0,1], CRS/shape/transform must match.
-
-5. **Unique name + short note** (≤140 chars, e.g. "clustering with k=25").
-
-6. **PARALLEL-RUN PROTOCOL** — LANE / REUSE / LABEL / LEAKAGE CANARY / RUN CARD / BUDGET. Fail closed on registry overlap >70% or rank correlation >0.90. Label every number as HOLDOUT-DTI or ORGANIZER-CONFIRMED. End with one JSON run card. Stop after 3 experiments or 2 hours.
-
-7. **3–5 candidate geological hypotheses** not yet tried, each naming layers, physical signature, why it catches catalogue-missing faults, and how it differs from repo implementations. Rank by expected DTI improvement and implementation cost. Validate top candidate on holdout before touching a weekly submission slot.
-
-8. **GitHub Pages site** with clean UI, user-friendly, organized, official verified links.
-
-9. **Create a PR and merge to main.** Report remaining work and limitations.
+1. Run the fold-honest evaluator and the feature canaries. Report version, withheld count and spatial-block CI.
+2. Check rank correlation and final-dot overlap against every accessible registry raster, with no exclusions. Fail closed when coverage is incomplete.
+3. Run the leakage canary (AUC ≤ 0.90) and buffered hide-and-recover with visible-only masking.
+4. Validate with `python scripts/validate_submission_tif.py <file.tif>`. It must pass every hard check. Use a distinct filename and a note of at most 140 characters.
+5. Write a run card JSON with all metrics, the CI, the gates, and the promotion decision.
+6. A separate selector promotes a passing candidate, within the weekly cap of 3 (official rules §3.2), via "New submission" on the [competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/).
 
 ---
 
-## Current Submission (Unique, Format-Valid)
-
-| Property | Value |
-|---|---|
-| **File** | `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` |
-| **ZIP** | `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif.zip` |
-| **SHA-256** | `7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f` |
-| **Method** | BGK-PBE (Hypothesis #1): basement gravity-gradient × radiometric K/eTh × geodetic dilatation blind-fault locator, NNE-trending normal faults |
-| **Format** | Single-band GeoTIFF, EPSG:32611, 3730×3292, 100 m, float32, nodata=None |
-| **Range** | [0, 1], zero NaN, zero Inf |
-| **Positive dots** | 6,178 hard · 8,794 soft (300 m triangular halo) |
-| **OK to download** | ✅ YES (format gate passed) |
-| **OK to submit** | ❌ NOT YET — OK TO SUBMIT: NOT YET (holdout & registry gates pending competition data) |
-| **Unique vs focus-9** | ✅ YES — not a copy of any GEMSDOE24/25/27/28/30/31/32/33/36 file |
-| **Run card** | `evidence/current_run_card.json` |
-
-**Download on the site:** https://sassnarep3-star.github.io/GEMSDOESASS3/executive-summary.html
-
----
-
-## Focus-9 Executive Summary (owner-reported scores)
-
-| Site | Best file | Score | Unique? | Action |
-|---|---|---|---|---|
-| GEMSDOE32 | h33-h33-2-b2-...-zeros | **0.2778** (best of 9) | No — H19-5 family | Already scored, do not resubmit |
-| GEMSDOE36 | anderson-geothermal-pinn-... | 0.2750 | No — 97.4% vs champion | Duplicate |
-| GEMSDOE28 | h36-1-rung30-blind-r1-... | 0.2710 | No — 95.5% vs champion | Duplicate |
-| GEMSDOE31 | h27-4-solo-d28-... | 0.2708 | No — exact dup of GEMSDOE28 | Duplicate |
-| GEMSDOE33 | h33d-analog-tip-stepover-... | 0.2632 | No — 92.6% vs champion | Duplicate |
-| GEMSDOE25 | dotted-h19-5-d2-8-... | 0.2600 | No — byte-identical to GEMSDOE30 | Duplicate |
-| GEMSDOE30 | d28-poisson300m-offcat-... | 0.2600 | No — byte-identical to GEMSDOE25 | Duplicate |
-| GEMSDOE24 | h25-1-dotted-h19-5-d1-5-... | 0.2477 | No — H19-5 D1.5 variant | Duplicate |
-| GEMSDOE27 | topo-gap-closure-t-v2-on-d1-5-... | 0.2449 | No — 86.7% vs champion | Duplicate |
-
-Full table with download links: `docs/executive-summary.html`
-
----
-
-## Ranked Hypotheses (not yet tried)
-
-See `docs/research/hypotheses_ranked_20261028.md`:
-
-1. **BGK-PBE** (recommended): gravity-gradient × K/eTh radiometric × geodetic dilatation, blind-fault locator
-2. **SST-2MT**: paleo sinter mounds + 2 m shallow-temperature probe confluence
-3. **MT-Edge**: magnetic tilt-angle + analytic-signal lineament coherence
-4. **LLW-SPI**: Lake Lahontan shoreline flexure + SPI/Theta persistence
-5. **InSAR-LST** (deferred): Sentinel-1 InSAR + ECOSTRESS thermal inertia
-
----
-
-## Validation Gates
-
-Run on a machine with competition data in `.cache/gems_data/`:
+## Reproduce checks
 
 ```bash
-bash scripts/download_competition_data.sh   # requires DrivenData login
-python scripts/verify_all_gates.py          # 13-check format + holdout + registry
-python -m pytest -q
+python3 -m venv .venv && . .venv/bin/activate
+pip install numpy scipy scikit-learn rasterio pytest
+pytest -q                                          # metric, site, and gate tests
+python scripts/validate_submission_tif.py docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif
+# Lattice lane needs .cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif
+#   (pinned sha256 b4570b40…; fetch with gh api, see scripts/check_lattice_lane.py)
+python scripts/check_lattice_lane.py               # exit 0 only if every file passes
+python scripts/verify_all_gates.py                 # nonzero exit expected while blocked
 ```
 
-The format gate (CRS/shape/transform/range [0,1]/NaN) has been verified on this sandbox. Holdout-DTI, leakage canary, and registry-overlap require `training_features.tif`, `labels.tif`, `sample_submission.tif` (DrivenData login required — absent here).
+> **Warning (IR-SASS3-29):** do not run `scripts/build_site.py`, `scripts/build_docs_pages.py` or `scripts/build_review_site.py`. They overwrite the README and site pages from older templates and would revert the 2026-10-29 corrections.
 
 ---
 
-## Official Sources
+## Sources
 
-- Competition: https://www.drivendata.org/competitions/306/competition-doe-gems/
-- Problem description: https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/
-- Data (login required): https://www.drivendata.org/competitions/306/competition-doe-gems/data/
-- Reference solution: https://github.com/drivendataorg/gems-prize-reference-solution
-- USGS GeoDAWN: https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and
-- GDR #1391 INGENIOUS: https://gdr.openei.org/submissions/1391
-- EPSG:32611: https://epsg.io/32611
-- Tversky index: https://en.wikipedia.org/wiki/Tversky_index
+- [Competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/)
+- [Problem description and metric (page 967)](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
+- [Competition data](https://www.drivendata.org/competitions/306/competition-doe-gems/data/)
+- [Leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/)
+- [Official rules (NLR PDF)](https://docs.nlr.gov/docs/fy26osti/96647.pdf) · [HeroX rules page](https://www.herox.com/GEMSPrize/resource/2274)
+- [Official reference solution](https://github.com/drivendataorg/gems-prize-reference-solution)
+- [USGS GeoDAWN survey](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and)
+- [INGENIOUS Great Basin compilation, doi:10.15121/1881483](https://doi.org/10.15121/1881483)
+- [EPSG:32611](https://epsg.io/32611)
 
----
-
-## Core Values
-
-- **Maximize P(Win):** every decision weighs tradeoffs, assesses risk, chooses the path maximizing probability of winning.
-- **Own the Outcome:** end-to-end accountability; treat failure and success as signals.
-
----
-
-## Limitations
-
-- No DrivenData auth in this sandbox → cannot auto-download competition data or run holdout/registry gates.
-- Raster content is a synthetic stand-in; real multi-sensor features must be computed on `training_features.tif` + public GeoDAWN rasters before submission.
-- No organizer-confirmed score exists for the new file. Leaderboard top 0.4413 (owner-reported) and focus-9 best 0.2778 (owner-reported) are not beaten here.
-- Promotion to a real submission slot is a separate selector step within the weekly cap.
-
-## Machine-readable identifiers
-
-- Submission name: `gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif`
-- SHA-256: `7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f`
-- SHA-256 (first 12): `7ab47cf53879`
-- Submission note: `GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh radiometric enrichment x geodetic dilatation blind-fault locator. NNE-trendi...`
-- Run card: `evidence/current_run_card.json`
+Raw data and caches are not included in this checkout. Restore receipts are historical, and mirror hashes do not authenticate organizer provenance.
