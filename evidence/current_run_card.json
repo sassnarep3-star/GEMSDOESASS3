@@ -27,7 +27,13 @@
       "hard_cells_fraction": 0.4349303982,
       "hard_cells_within_3px": 2687,
       "hard_cells_count": 6178,
-      "threshold": 0.7
+      "threshold": 0.7,
+      "blob_dots_count": 10,
+      "blob_dots_within_3px_fraction": 0.5,
+      "sampled_spearman_output_raster_vs_witness": -0.00163,
+      "sampled_spearman_n_pixels": 300000,
+      "method_receipt": "evidence/lattice_lane_check_selected_20261029.json",
+      "interpretation": "Passes the one-witness lattice check only. Output-raster correlation is not the required pre-placement-surface/full-footprint check."
     },
     "pinned_lattice_sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52c4d697f0647dc9b2",
     "full_registry_audit": "NOT RUN: full registry unavailable in this checkout.",

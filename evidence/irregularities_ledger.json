@@ -135,6 +135,97 @@
       "title": "Independent uniqueness audit excluded the calibration lattice; literal rule blocks the file",
       "finding": "The 2026-10-28 downloads audit compared 451 submitted rasters and reported max within-3 px overlap 66.53%, so it reported the file as unique. The audit excluded non-download rasters, including inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif. Protocol Rule 1 says \"any registry raster\". Recomputed here: 99.7849% of the 37,654 dots lie within 3 px of the lattice (SHA-256 b4570b40... matches the pin on main; same CRS, shape and transform). This fails the 70% limit. Main's review (docs/research/review-20261028.md) reaches the same block. Coverage analysis: 99.90% of the footprint lies within 3 px of a lattice positive, leaving 5,379 footprint pixels outside the buffer. Passing at 37,654 dots needs at least 11,297 dots there, so the literal rule cannot be met at this dot count by any raster.",
       "resolution": "Verdict corrected to NOT OK to submit under the literal rule (scripts/independent_review.py, lattice_gate). Whether the synthetic lattice should count is a protocol decision for the owner; no exemption is applied here. The owner must decide whether synthetic calibration probes count under Rule 1. Without an amendment, no file with this dot budget can pass."
+    },
+    {
+      "id": "IR-SASS3-20",
+      "severity": "CRITICAL",
+      "title": "Local holdout is anti-correlated with the leaderboard",
+      "finding": "Across the nine focus sites (10 owner-reported rows), Spearman rho between holdout HR-static DTI (docs/data/focus9_executive_audit.json) and owner-reported leaderboard scores is -0.89 (p=0.001, Kendall -0.77). The 0.2778 champion (GEMSDOE32) has holdout DTI 0.0045, among the lowest.",
+      "resolution": "Recorded in evidence/holdout_vs_leaderboard_concordance_20261029.json. Hypothesis (unverified): the holdout withholds catalogue faults, while the scored test set is new faults not in the USGS database (official problem description). Holdout is NOT a valid selector until redesigned and checked against labels in an authorised account."
+    },
+    {
+      "id": "IR-SASS3-21",
+      "severity": "HIGH",
+      "title": "README HOLDOUT-DTI values copied across sites",
+      "finding": "README nine-site table listed 0.0967 [0.0842, 0.1095] for GEMSDOE24, 25 and 30. The audit gives GEMSDOE25 = 0.0967 and GEMSDOE24 = 0.0932 [0.0813, 0.1060].",
+      "resolution": "README table rebuilt from the audit file. Values labelled HOLDOUT-DTI (evaluator version as recorded in the audit; withheld-positive count not recorded there)."
+    },
+    {
+      "id": "IR-SASS3-22",
+      "severity": "HIGH",
+      "title": "GEMSDOE30 audit row points at a GEMSDOE24-named file",
+      "finding": "docs/data/focus9_executive_audit.json lists GEMSDOE30_hist_0.2600 with file gems24-h25-1-dotted-h19-5-d2-8-...-zeros.tif, while the owner list names GEMSDOE30 d28-poisson300m-offcat-44090. The file identity for GEMSDOE30 is therefore unconfirmed.",
+      "resolution": "Flagged. Not resolved without the GEMSDOE30 repository file (not in this workspace)."
+    },
+    {
+      "id": "IR-SASS3-23",
+      "severity": "HIGH",
+      "title": "Audit flagship marked ok_to_submit=true while run card says false",
+      "finding": "docs/data/focus9_executive_audit.json (generated 2026-10-27) sets flagship_candidate.ok_to_submit = true for the LWST file. The run card and the 2026-10-28 review set ok_to_submit = false (literal lattice rule, 99.78%).",
+      "resolution": "Superseded. The run card and the lattice gate control. The audit flag is stale and must not be read as permission to submit."
+    },
+    {
+      "id": "IR-SASS3-24",
+      "severity": "CRITICAL",
+      "title": "Unique TIF described as geologically informed; it uses no data",
+      "finding": "docs/executive-summary.html and README described the 2026-10-29 unique TIF as a 'geologically-informed model' with 'off-catalogue traces'. scripts/generate_unique_submission.py reads no feature layer: it draws dots on six fixed straight NNE corridors from an RNG (seed 24301).",
+      "resolution": "Corrected on both pages. Run card records ok_to_submit=false, verdict negative, holdout DTI NOT MEASURED, and estimated score NOT ESTIMABLE."
+    },
+    {
+      "id": "IR-SASS3-25",
+      "severity": "MEDIUM",
+      "title": "Leaderboard figures in the task prompt do not match the official page",
+      "finding": "Task prompt cites 0.4413 and 0.3195 as the current leaderboard high. The DrivenData leaderboard page, read 2026-10-29, shows #1 = 0.4544 (xiaofanhu).",
+      "resolution": "README and exec summary use 0.4544, with the source link. The prompt figures are noted as unverified."
+    },
+    {
+      "id": "IR-SASS3-26",
+      "severity": "MEDIUM",
+      "title": "Restore path depends on third-party GitHub mirrors for competition data",
+      "finding": "registry/data_manifest.json pulls training_features, labels and sample_submission from buffedlizard55-lab sibling repositories. Official rules §3.1 say training data is provided to registered DrivenData competitors. Mirror copies are not authoritative and may not be licensed for this use.",
+      "resolution": "Flagged for owner review. Use only copies downloaded from the user's own DrivenData account. Mirror hashes do not establish organizer provenance."
+    },
+    {
+      "id": "IR-SASS3-27",
+      "severity": "MEDIUM",
+      "title": "Outside-footprint convention is unconfirmed (0.0 vs NaN)",
+      "finding": "The official text asks for data outside the bounds to be null or NaN. Current unique TIF has 0.0 everywhere outside its dots and nodata=None. sample_submission.tif is login-walled and not in this workspace, so the footprint convention cannot be checked.",
+      "resolution": "Open. scripts/validate_submission_tif.py reports the convention but does not gate on it. Check against sample_submission.tif from the user's DrivenData account before any upload."
+    },
+    {
+      "id": "IR-SASS3-28",
+      "severity": "MEDIUM",
+      "title": "Three repo tests failed on main (fixed in this session)",
+      "finding": "tests/test_site_and_links.py and tests/test_independent_review.py failed: docs/index.html had a broken relative link (docs/research/... inside docs/), the README lacked the current run-card note and the independent-review link.",
+      "resolution": "Links fixed (docs copies have docs/ prefix removed); README rebuilt with the required references. Test suite re-run."
+    },
+    {
+      "id": "IR-SASS3-29",
+      "severity": "HIGH",
+      "title": "Legacy build scripts overwrite README and site pages",
+      "finding": "scripts/build_site.py (writes README.md, docs/*.html, index.html, executive-summary.html and run-card JSON), scripts/build_docs_pages.py and scripts/build_review_site.py write the same pages from older templates. Running any of them reverts the 2026-10-29 corrections.",
+      "resolution": "Flagged. README instructs not to run them. Templates must be updated before they are used again. Owner review required."
+    },
+    {
+      "id": "IR-SASS3-30",
+      "severity": "MEDIUM",
+      "title": "Dot-level lattice measure is not meaningful for line-like or soft rasters",
+      "finding": "Connected-component dots (value==1) of the BGK-PBE TIF (main, PR #16) form only 10 blobs because its hard dots are NNE line-like. The dot-level 50% figure is not a dot-count measure. The soft halo (values 0.034 to 0.4) is excluded at ==1.",
+      "resolution": "scripts/check_lattice_lane.py now reports both the dot-level and the pixel-level (value>0) within-3-px fraction and requires both <=70%. Both pass for BGK (44.4% pixel) and for the structural file (42.4%)."
+    },
+    {
+      "id": "IR-SASS3-31",
+      "severity": "MEDIUM",
+      "title": "BGK-PBE submission note on main was truncated",
+      "finding": "evidence/run_card.json and evidence/current_run_card.json on main (PR #16) have submission_note ending in '...' ('NNE-trendi...'), exactly 140 characters. It is a cut-off, not a finished note.",
+      "resolution": "Replaced in every run-card copy with a complete 115-character note. The README sync test relies on that note. A complete note must still be checked before any upload."
+    },
+    {
+      "id": "IR-SASS3-32",
+      "severity": "MEDIUM",
+      "title": "Merge conflict with main (PR #16) resolved in favour of the corrected pages",
+      "finding": "main (PR #16) and this branch both rewrote README.md, index.html, executive-summary.html and docs copies. The merge kept this branch's corrected pages and added the BGK-PBE row. main's BGK method prose (hypothesis text) was not carried over into the pages.",
+      "resolution": "Method prose remains in main history (commit bdc695e). Owner review recommended."
     }
   ]
 }

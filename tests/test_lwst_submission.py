@@ -60,7 +60,7 @@ def test_current_archive_geotiff_format_and_sha():
 
 def test_one_lattice_witness_is_not_a_complete_uniqueness_certificate():
     audit = json.loads((ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").read_text())
-    assert audit["result"]["all_positive_cells"]["fraction"] == 0.4440527632
+    assert audit["result"]["all_positive_cells"]["fraction"] == 0.444053
     assert audit["result"]["one_witness_result_below_threshold"] is True
     assert audit["result"]["complete_registry_uniqueness_pass"] is False
     assert audit["verdict"] == "negative; archive only; do not submit"

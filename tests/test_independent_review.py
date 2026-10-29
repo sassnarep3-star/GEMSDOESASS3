@@ -56,7 +56,8 @@ def test_current_candidate_is_fail_closed_and_not_a_score_claim():
     assert card["holdout_dti"]["pooled_dti"] is None
     assert card["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
     assert audit["candidate_sha256"] == card["raster_sha256"]
-    assert audit["result"]["all_positive_cells"]["fraction"] == 0.4440527632
+    assert audit["result"]["all_positive_cells"]["fraction"] == 0.444053
+    assert audit["result"]["output_raster_vs_lattice_sampled_spearman"] == -0.00163
     assert audit["result"]["complete_registry_uniqueness_pass"] is False
     assert 0 < len(card["submission_note"]) <= 140
 

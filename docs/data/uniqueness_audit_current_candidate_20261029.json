@@ -15,13 +15,34 @@
   },
   "method": "For each candidate positive pixel, compute Euclidean distance in pixels to nearest positive lattice pixel; report fraction <= 3 px. Hard cells are candidate values >0.5; all positive cells are >0.",
   "result": {
-    "all_positive_cells": {"within_3px": 3905, "total": 8794, "fraction": 0.4440527632},
-    "hard_cells": {"within_3px": 2687, "total": 6178, "fraction": 0.4349303982},
-    "threshold": 0.70,
+    "all_positive_cells": {
+      "within_3px": 3905,
+      "total": 8794,
+      "fraction": 0.444053
+    },
+    "hard_cells": {
+      "within_3px": 2687,
+      "total": 6178,
+      "fraction": 0.43493
+    },
+    "threshold": 0.7,
     "one_witness_result_below_threshold": true,
     "complete_registry_uniqueness_pass": false,
-    "reason": "This one witness check is not a complete registry audit. The registry and official footprint are absent; pre-placement surface rank correlation was not computed. The raster itself uses synthetic fields and footprint."
+    "reason": "This one witness check is not a complete registry audit. The registry and official footprint are absent; pre-placement surface rank correlation was not computed. The raster itself uses synthetic fields and footprint.",
+    "output_raster_vs_lattice_sampled_spearman": -0.00163,
+    "spearman_sample_size": 300000,
+    "spearman_scope": "All finite raster cells sampled; not a pre-placement surface comparison over the official active footprint.",
+    "blob_dot_overlap": {
+      "blobs": 10,
+      "within_3px_fraction": 0.5,
+      "definition": "8-connected value==1 components represented by rounded centroid; unsuitable for line-like merged blobs, shown alongside all-pixel measure."
+    }
   },
-  "holdout": {"status": "NOT RUN", "score_estimate": null, "reason": "Competition training features and labels are absent."},
-  "verdict": "negative; archive only; do not submit"
+  "holdout": {
+    "status": "NOT RUN",
+    "score_estimate": null,
+    "reason": "Competition training features and labels are absent."
+  },
+  "verdict": "negative; archive only; do not submit",
+  "method_receipt": "evidence/lattice_lane_check_selected_20261029.json"
 }
