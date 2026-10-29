@@ -40,8 +40,8 @@ EXPECTED_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
 DENSE_FRAC = 0.10  # a raster with more than 10 % of grid cells positive is treated as dense
 LIMIT_WITHIN3 = 0.70
 LIMIT_RHO = 0.90
-NOTE = ("GEMSDOESASS3 unique structural prior 10k dots; UNVALIDATED - download for review, "
-        "do not submit (no holdout)")
+NOTE = ("GEMSDOESASS3 unique structural prior 10k dots; NOT VALID - footprint FAIL, "
+        "do not submit")
 
 
 def sha256_file(p: Path) -> str:
@@ -82,6 +82,35 @@ def validate(path: Path) -> dict:
     meta["connected_blobs_8conn"] = int(n_blobs)
     checks["all_checks_passed"] = all(checks.values())
     return {"checks": checks, "meta": meta}
+
+
+FOOTPRINT_MASK = ROOT / "evidence" / "organizer_footprint_mask.npz"
+
+
+def footprint_check(path: Path) -> dict:
+    """Official outside-bounds rule: cells outside the scored region must be null/NaN, not 0 or a value.
+
+    The scored region is the finite cells of the organizer sample_submission.tif, exported as a packed
+    mask by scripts/export_footprint_mask.py (evidence/organizer_footprint_mask.npz). The sample itself is
+    not used here.
+    """
+    z = np.load(FOOTPRINT_MASK)
+    shape = tuple(int(x) for x in z["shape"])
+    foot = np.unpackbits(z["packed"])[: shape[0] * shape[1]].reshape(shape).astype(bool)
+    with rasterio.open(path) as ds:
+        arr = ds.read(1)
+    pos = arr > 0
+    outside_pos = int((pos & ~foot).sum())
+    return {
+        "mask_file": "evidence/organizer_footprint_mask.npz",
+        "mask_footprint_pixels": int(foot.sum()),
+        "mask_footprint_pixels_recorded": int(z["footprint_pixels"]),
+        "positive_cells_inside_footprint": int((pos & foot).sum()),
+        "positive_cells_outside_footprint": outside_pos,
+        "zero_cells_outside_footprint": int(((arr == 0) & ~foot).sum()),
+        "status": "PASS" if outside_pos == 0 else "FAIL",
+        "rule": "official: data outside the bounds is null or NaN (page/967, Format section)",
+    }
 
 
 def worst(rows: list[dict], key: str = "within3_frac") -> dict | None:
@@ -140,6 +169,7 @@ def main() -> int:
         key = x["reason"].split(":")[0]
         skipped_reasons[key] = skipped_reasons.get(key, 0) + 1
 
+    fp = footprint_check(tif)
     card = {
         "lane_id": "GEMSDOESASS3-UNIQUE-STRUCTURAL-PRIOR-20261029",
         "hypothesis": (
@@ -201,26 +231,27 @@ def main() -> int:
         "raster_sha256": digest,
         "raster_bytes": tif.stat().st_size,
         "validator_output": {"checks": val["checks"], "meta": val["meta"]},
-        "footprint_check": ("NOT RUN: sample_submission.tif is not used here, so the footprint cannot be "
-                            "compared. The file is zero outside the 10k dots over the full grid."),
+        "footprint_check": fp,
         "submission_name": tif.name,
         "submission_note": NOTE,
         "download_path": TIF_REL,
-        "ok_to_download_for_review": bool(val["checks"]["all_checks_passed"]),
+        "ok_to_download": False,
         "ok_to_submit": False,
-        "verdict": "hold",
+        "verdict": "negative",
         "verdict_reason": (
-            "Format checks pass and the file is already published in this repo. The literal uniqueness rule FAILS "
-            "because of a dense sibling raster, so the file is not cleared as a unique submission. It is not cleared "
-            "for submission: no holdout score exists, the expected leaderboard score is unknown, and the protocol forbids "
-            "spending a slot on an unvalidated file. Failing uniqueness is never permission to submit."
+            f"The footprint rule FAILS: {fp['positive_cells_outside_footprint']:,} positive cells lie outside the "
+            "official scored region, where the rules require null or NaN. The file is therefore not valid for "
+            "download or submission. The literal uniqueness rule also FAILS (one dense sibling raster), and no "
+            "holdout score exists. Failing a gate is never permission to submit. This matches "
+            "docs/data/run_card_unique_structural_20261029.json on main."
         ),
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(card, indent=1) + "\n")
     print(f"wrote {args.out}")
     print(f"literal={literal_pass} sparse_only={sparse_pass} dense_excluded={dense_excl_pass} "
-          f"format={val['checks']['all_checks_passed']} note_len={len(NOTE)}")
+          f"format={val['checks']['all_checks_passed']} footprint={fp['status']} "
+          f"outside_pos={fp['positive_cells_outside_footprint']} note_len={len(NOTE)}")
     return 0
 
 

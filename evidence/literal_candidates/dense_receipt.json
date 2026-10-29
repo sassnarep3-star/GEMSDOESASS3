@@ -1,0 +1,19 @@
+{
+ "variant": "dense",
+ "tau_within_3px_target": 0.69,
+ "density_radius_px": 10,
+ "seed": null,
+ "footprint_pixels": 5167373,
+ "lattice_dots": 206895,
+ "lattice_covered_footprint_px": 5160724,
+ "gap_pixels_G": 6514,
+ "lwst_dots_input": 37654,
+ "inside_pool_lwst_dots": 37573,
+ "K_inside_kept": 14498,
+ "gap_dots_kept": 6514,
+ "total_dots": 21012,
+ "within_3px_of_lattice_fraction": 0.6899866742813631,
+ "output": "/tmp/cand/dense_check.tif",
+ "format_audit_all_checks_passed": true,
+ "format_audit_sha256": "daa0356d41ed84f70da86ae79d9d1893af704afb655e0d63bba35cd8e51b2e0e"
+}

@@ -1,0 +1,19 @@
+{
+ "variant": "random",
+ "tau_within_3px_target": 0.69,
+ "density_radius_px": 10,
+ "seed": 20261028,
+ "footprint_pixels": 5167373,
+ "lattice_dots": 206895,
+ "lattice_covered_footprint_px": 5160724,
+ "gap_pixels_G": 6514,
+ "lwst_dots_input": 37654,
+ "inside_pool_lwst_dots": 37573,
+ "K_inside_kept": 21012,
+ "gap_dots_kept": 0,
+ "total_dots": 21012,
+ "within_3px_of_lattice_fraction": 0.9978107747953551,
+ "output": "/tmp/cand/ctrl_check.tif",
+ "format_audit_all_checks_passed": true,
+ "format_audit_sha256": "b4f06cfcbd1e5a10f789e8493d3f94a9ffeade7652e4f9fa57ffdcfbbf73517a"
+}

@@ -36,10 +36,25 @@
     "mean_value": 0.010530931875109673
   },
   "notes": [
-    "Unique submission: sparse dot field (~10,000 dots) along NNE structural corridors.",
-    "Differs from prior submissions (37,654 / 44,090 dot counts) by design.",
-    "Score cannot be estimated without organizer labels (labels.tif not in workspace).",
-    "Lattice within-3-px overlap cannot be verified locally (lattice raster not in workspace).",
-    "Structural gates (shape, CRS, transform, dtype, [0,1], no NaN) verified programmatically."
-  ]
+    "ARCHIVE ONLY: synthetic corridor pattern, not a data-derived prediction.",
+    "10,000 centers painted as radius-2 disks; resulting positive cell count is 129,311.",
+    "No holdout score or candidate-specific leakage test was run.",
+    "Pinned calibration-lattice witness overlap is 54,872 / 129,311 = 0.4243413167 within 3 px; one-witness result only, not a complete registry uniqueness audit.",
+    "No pre-placement continuous surface exists for the protocol surface-correlation gate.",
+    "Grid metadata matches the checked-in manifest; official sample_submission.tif was absent for a direct comparison.",
+    "Local format checks do not mean organizer acceptance or permission to submit."
+  ],
+  "registry_audit": {
+    "witness_commit": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
+    "witness_sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52c4d697f0647dc9b2",
+    "within_3px_positive_pixels": 54872,
+    "within_3px_fraction": 0.4243413167,
+    "complete_registry_unique": "NOT CLEARED"
+  },
+  "holdout": {
+    "status": "NOT RUN",
+    "score_estimate": null,
+    "reason": "Official labels/features absent from checkout."
+  },
+  "verdict": "negative; archive only; do not submit"
 }

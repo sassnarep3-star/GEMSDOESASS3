@@ -118,12 +118,21 @@
    "connected_blobs_8conn": 9664
   }
  },
- "footprint_check": "NOT RUN: sample_submission.tif is not used here, so the footprint cannot be compared. The file is zero outside the 10k dots over the full grid.",
+ "footprint_check": {
+  "mask_file": "evidence/organizer_footprint_mask.npz",
+  "mask_footprint_pixels": 5167373,
+  "mask_footprint_pixels_recorded": 5167373,
+  "positive_cells_inside_footprint": 54893,
+  "positive_cells_outside_footprint": 74418,
+  "zero_cells_outside_footprint": 7037369,
+  "status": "FAIL",
+  "rule": "official: data outside the bounds is null or NaN (page/967, Format section)"
+ },
  "submission_name": "gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
- "submission_note": "GEMSDOESASS3 unique structural prior 10k dots; UNVALIDATED - download for review, do not submit (no holdout)",
+ "submission_note": "GEMSDOESASS3 unique structural prior 10k dots; NOT VALID - footprint FAIL, do not submit",
  "download_path": "docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
- "ok_to_download_for_review": true,
+ "ok_to_download": false,
  "ok_to_submit": false,
- "verdict": "hold",
- "verdict_reason": "Format checks pass and the file is already published in this repo. The literal uniqueness rule FAILS because of a dense sibling raster, so the file is not cleared as a unique submission. It is not cleared for submission: no holdout score exists, the expected leaderboard score is unknown, and the protocol forbids spending a slot on an unvalidated file. Failing uniqueness is never permission to submit."
+ "verdict": "negative",
+ "verdict_reason": "The footprint rule FAILS: 74,418 positive cells lie outside the official scored region, where the rules require null or NaN. The file is therefore not valid for download or submission. The literal uniqueness rule also FAILS (one dense sibling raster), and no holdout score exists. Failing a gate is never permission to submit. This matches docs/data/run_card_unique_structural_20261029.json on main."
 }

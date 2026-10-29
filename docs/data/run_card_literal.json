@@ -1,0 +1,108 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-29T00:38:29.160636+00:00",
+ "lane": "H-LIT-DISP: literal-rule-compliant LWST-GeoConduit dot set (21,012 dots)",
+ "hypothesis": "Retaining 14,498 LWST dots by farthest-point spacing plus 6,514 density-ordered gap dots keeps most of the LWST off-catalogue signal while meeting the literal 70% lattice-overlap limit.",
+ "mechanism": "Redundancy-aware retention: spacing the kept dots reduces duplicate dots on one predicted segment; gap dots fill the only footprint pixels more than 3 px from every lattice dot (label-free ordering by LWST density).",
+ "mimic": "Non-fault linear artefacts that LWST density also picks up (basin-margin relief, drainage or survey-line striping). Gap dots are placed by LWST density, so they can sit on these artefacts.",
+ "holdout_dti": {
+  "score_label": "HOLDOUT-DTI",
+  "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+  "n_withheld_positives": 62703,
+  "value": 0.042850569478494145,
+  "ci95": [
+   0.03887126392548183,
+   0.04615745300007199
+  ],
+  "controls": {
+   "champion_0.2778_file": {
+    "value": 0.0641209376417646,
+    "ci95": [
+     0.056730181217206584,
+     0.0716486609703412
+    ]
+   },
+   "lwst_37654_blocked_file": {
+    "value": 0.06570231430849702,
+    "ci95": [
+     0.05899206995492947,
+     0.07124034012798368
+    ]
+   },
+   "same_count_random_no_lattice_constraint": {
+    "value": 0.05131727241482219,
+    "ci95": [
+     0.046172927196295704,
+     0.05583616105847035
+    ]
+   },
+   "literal_random": {
+    "value": 0.03808678347987576,
+    "ci95": [
+     0.03435031186585344,
+     0.041507504475150225
+    ]
+   },
+   "literal_dense": {
+    "value": 0.030218240646449877,
+    "ci95": [
+     0.02551881508941008,
+     0.034936689276231336
+    ]
+   }
+  }
+ },
+ "correlation_overlap_vs_registry": {
+  "registry_rasters_compared": 386,
+  "worst_within_3px_fraction": 0.6899866742813631,
+  "worst_within_3px_raster": "HISTORICAL_SCORED:scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "worst_abs_spearman": 0.1504139046570531,
+  "limit_within_3px": 0.7,
+  "limit_abs_spearman": 0.9,
+  "lattice_overlap_recomputed_here": 0.6899866742813631,
+  "source": "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json"
+ },
+ "raster_sha256": "7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a",
+ "validator_output": {
+  "checks": {
+   "F1_file_and_zip_exist": true,
+   "F1_zip_inner_matches": true,
+   "F2_sha_matches_audit": true,
+   "F3_single_band_float32": true,
+   "F3_crs_shape_transform": true,
+   "F3_nodata_nan_official": true,
+   "F3_finite_count_equals_footprint": true,
+   "F3_values_in_0_1_finite": true,
+   "F3_dot_count_matches_builder": true,
+   "F4_literal_rule_passed": true,
+   "F5_lattice_overlap_le_0p70": true,
+   "F5_status": "RECOMPUTED 0.689987",
+   "F6_canary_51ch_le_0p90": true,
+   "F7_holdout_labelled": true,
+   "F8_note_le_140": true
+  },
+  "problems": []
+ },
+ "download_path": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+ "submission_name": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+ "submission_note": "LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted",
+ "note_length": 104,
+ "verdict": "negative",
+ "verdict_detail": "Unique under the literal rule and format-valid: OK to download. Holdout proxy is below the 0.2778 champion with disjoint CIs, so it is NOT recommended for a leaderboard slot. Promotion is a separate selector decision.",
+ "summary": {
+  "candidate": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+  "sha256": "7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a",
+  "dots": 21012,
+  "download_ok": true,
+  "unique_literal_rule": true,
+  "proxy_beats_champion_nonoverlapping_ci": false,
+  "recommended_for_leaderboard_slot": false,
+  "promotion": "NOT SET (separate selector step, Protocol Rule 6)"
+ },
+ "budget": {
+  "candidate_experiments": 3,
+  "controls": 4,
+  "cap_candidate_experiments": 3,
+  "note": "E1 dense, E2 random, E3 dispersed; controls are reproductions and an ablation"
+ }
+}

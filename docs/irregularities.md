@@ -1,5 +1,7 @@
 # Forensic Irregularities & Data/Template Fixes Ledger (`GEMSDOESASS3`)
 
+> **Historical notes — not current approval or authority to submit.** This legacy narrative contains unreconciled claims and methods, including a proposed halo-saturation exception for the calibration lattice that conflicts with the binding parallel-run rule (“any registry raster”). Do not use its old “promote” or uniqueness claims. The current decision is **NO FILE APPROVED / DO NOT SUBMIT**; use `README.md`, `evidence/current_run_card.json`, `docs/research/repo-review-20261029.md`, and the synchronized JSON irregularities ledger for current status. Measurements in old entries are archival unless explicitly revalidated.
+
 Every irregularity uncovered during the line-by-line audit of DrivenData Competition #306, the 19-band `training_features.tif` GeoTIFF metadata, the shared `template57` toolkit, and the 9 sibling `GEMSDOE` repositories is documented below with exact cryptographic/numerical proof and remediation status.
 
 ---
@@ -108,15 +110,15 @@ Every irregularity uncovered during the line-by-line audit of DrivenData Competi
 - `gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif` and `gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif` are in the manifest as "HISTORICAL_SCORED" but were not found in any listed repository at the paths checked. The uniqueness pool is therefore **incomplete by two files**.
 
 ### `IR-2029-07` — The uniqueness rule is this project's protocol, not an organizer rule
-- The [problem page](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) defines the metric and format. It does not forbid similar or duplicate submissions. "Unique" here means the repo's Protocol Rule 1 (rank-correlation ≤ 0.90 and ≤ 70 % of dots within 3 px).
-- The organizer page also states that a participant selects **one** submission for both prize rounds.
+- The [problem page](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/), fetched 2026-10-29, defines the metric, the features and the single-submission rule. I did not find a duplicate-submission rule on it. "Unique" here means the repo's Protocol Rule 1 (rank correlation ≤ 0.90 and ≤ 70 % of dots within 3 px).
+- The page states that competitors "must choose a **single** submission for scoring across both rounds before the deadline".
 
 ### `IR-2029-08` — "10,000 dots" is a placement count, not a raster count
 - The unique structural file places 10,000 dot centres (9,999 unique). They become 9,664 connected blobs and 129,311 positive pixels after the radius-2 disks. The audit's `candidate_n_dots` is the pixel count. The regenerated array is identical to the committed file.
 
-### `IR-2029-09` — The CI-recorded test failures and stale pages were fixed in this session
-- Three tests failed at the start of the session: a broken link path in `docs/index.html`, a README that no longer carried the blocked candidate's run-card note, and a Pages-sync gate. The gate report also still pointed to the blocked LWST file while the README named a different file as current.
-- **Remediation:** the pages are regenerated from the evidence files. The README carries both the blocked and the new candidate with their real hashes. The gate is not weakened; the literal-registry failure for the blocked file is still reported.
+### `IR-2029-09` — Test failures and stale pages at the start of the session
+- At the start of this session three tests failed: a broken link path in `docs/index.html`, a README that no longer carried the blocked candidate's run-card note, and a Pages-sync gate. The gate report also pointed to the blocked LWST file while the README named a different file as current.
+- **Remediation on this branch:** the link was fixed and the pages were regenerated. During the merge with `main` (PRs #17–#22), `main`'s README, pages and generator were adopted, because they carry the later decisions. After the merge, 48 tests pass and 3 skip. The literal-registry failure for the blocked file is still reported, and the gate was not weakened.
 
 ### `IR-2029-10` — Owner-report scores are not organizer receipts
 - Every per-file score in the nine-site table is `OWNER-REPORT`. It came from the user's prompt and cannot be checked on the public leaderboard, which shows only the top rows. The `LLI-PROJECTION` values in the nine-site audit (for example 0.2860 for GEMSDOE32) are projections, not scores, and are labelled that way.

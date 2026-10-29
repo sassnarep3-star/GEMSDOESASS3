@@ -1,0 +1,20 @@
+{
+ "schema_version": 1,
+ "recorded_utc": "2026-10-29T00:38:29.160636+00:00",
+ "candidate": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+ "candidate_sha256": "7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a",
+ "candidate_positive_cells": 21012,
+ "source_receipt": "/home/user/GEMSDOESASS3/evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json",
+ "method": "Literal Protocol Rule 1 vs all registry rasters (|Spearman|<=0.90 and within-3px<=0.70)",
+ "result": {
+  "registry_rasters_compared": 386,
+  "threshold": 0.7,
+  "one_witness_result_below_threshold": true,
+  "one_witness_note": "Lattice witness within-3px fraction on inside-footprint dots (see literal audit).",
+  "complete_registry_uniqueness_pass": false,
+  "reason": "Literal rule passes against all registry rasters, but the surface stage used the emitted binary surface because the pre-placement continuous surface was not retained. Not CLEARED for a slot.",
+  "literal_rule_passed": true,
+  "worst_within_3px_fraction": 0.6899866742813631,
+  "worst_abs_spearman": 0.1504139046570531
+ }
+}

@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-Generate a UNIQUE competition submission GeoTIFF for GEMSDOESASS3.
+Generate an ARCHIVE-ONLY diagnostic raster for GEMSDOESASS3.
 
-This script creates a structurally valid, unique single-band GeoTIFF submission
-using a deterministic geologically-informed pattern. It does NOT require the
-login-walled competition rasters (training_features.tif, labels.tif,
-sample_submission.tif); it uses the published grid specification from
-data/prepared_manifest.json.
+This script creates a deterministic synthetic pattern for format and audit
+exercises. It is not a trained prediction, does not establish uniqueness, and
+must not be submitted. It does NOT require the login-walled competition rasters
+(training_features.tif, labels.tif, sample_submission.tif); therefore it cannot
+validate geological skill, holdout score, footprint correctness, or uniqueness.
+It uses only the grid specification recorded in data/prepared_manifest.json.
 
 Grid specification (EPSG:32611):
   height  = 3730 rows
@@ -18,20 +19,18 @@ Grid specification (EPSG:32611):
 Output: docs/downloads/<name>-zeros.tif  (float32, single band, [0,1], no NaN,
 nodata=None, CRS EPSG:32611)
 
-Uniqueness strategy (addresses the lattice blocker identified in the
-independent review):
-  * Sparse dot field (~10,000 dots) -- far below the 37,654 / 44,090 dot counts
-    used by prior submissions, so it cannot be a near-duplicate of them.
-  * Dots placed along NNE-trending structural corridors (Walker Lane / Basin
-    and Range fault fabric typical of NW Nevada geothermal targets) rather than
-    on catalogue traces or random scatter.
-  * No dots forced onto the 13GEMSDOE calibration lattice; the sparse,
-    off-grid placement is designed to keep within-3-px lattice overlap below
-    the 70% protocol limit (cannot be verified locally because the lattice
-    raster is not in this workspace).
+Diagnostic pattern only (not a uniqueness strategy):
+  * The generator samples 10,000 centers along six hand-coded line equations
+    and paints radius-2-pixel disks. Those disks yield many more positive cells
+    than centers and do not represent a measured probability field.
+  * The NNE orientation is a hand-coded regional motif, not a result inferred
+    from official data in this checkout. It can coincide with faults, lithologic
+    contacts, drainage, or arbitrary lineation.
+  * No registry comparison is performed by this generator. A separate, complete
+    surface-and-dot audit is mandatory before considering any submission.
 
-The score cannot be estimated without organizer labels; this file is a
-structurally valid, unique candidate for manual/organizer review.
+No score estimate is produced. This artifact is archive-only and must not be
+uploaded to the competition.
 """
 
 from __future__ import annotations
@@ -223,7 +222,7 @@ def main() -> None:
 
     run_id = uuid.uuid4().hex[:8]
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    base_name = f"gemsdoesass3-unique-structural-{stamp}-{run_id}"
+    base_name = f"gemsdoesass3-diagnostic-pattern-{stamp}-{run_id}"
     tif_path = os.path.join(DOWNLOADS_DIR, f"{base_name}-zeros.tif")
 
     print(f"[generate] SEED={SEED:#x} N_DOTS={N_DOTS}")
@@ -271,11 +270,11 @@ def main() -> None:
         },
         "validation": checks,
         "notes": [
-            "Unique submission: sparse dot field (~10,000 dots) along NNE structural corridors.",
-            "Differs from prior submissions (37,654 / 44,090 dot counts) by design.",
-            "Score cannot be estimated without organizer labels (labels.tif not in workspace).",
-            "Lattice within-3-px overlap cannot be verified locally (lattice raster not in workspace).",
-            "Structural gates (shape, CRS, transform, dtype, [0,1], no NaN) verified programmatically.",
+            "ARCHIVE ONLY: synthetic corridor pattern, not a data-derived prediction.",
+            "10,000 centers painted as radius-2 disks; positive cell count is recorded separately.",
+            "No holdout score, leakage test, or complete registry uniqueness audit was run.",
+            "Grid metadata comes from the checked-in prepared manifest, not a fresh organizer-sample comparison.",
+            "Local format checks do not mean organizer acceptance or permission to submit.",
         ],
     }
     audit_path = os.path.join(DOWNLOADS_DIR, f"{base_name}-audit.json")
