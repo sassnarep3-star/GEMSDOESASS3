@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-10-29T00:01:30Z",
+  "candidate": "docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
+  "candidate_sha256": "ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e",
+  "candidate_positive_pixels": 129311,
+  "method": "Final positive pixels within Euclidean distance 3 raster pixels from a positive lattice cell; distance transform recomputed from the pinned public GitHub artifact.",
+  "witness": {
+    "repo": "buffedlizard55-lab/GEMSDOE24",
+    "commit": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
+    "path": "inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "url": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52c4d697f0647dc9b2",
+    "same_crs_shape_transform": true
+  },
+  "result": {
+    "within_3px_positive_pixels": 54872,
+    "within_3px_fraction": 0.4243413167,
+    "threshold": 0.70,
+    "this_witness_threshold_pass": true,
+    "complete_registry_uniqueness_pass": false,
+    "reason": "The complete 386-raster registry and pre-placement continuous surface were not available. A pass against one witness is not a uniqueness certificate."
+  },
+  "holdout": {
+    "status": "NOT RUN",
+    "reason": "Competition feature/label rasters are absent from this checkout."
+  },
+  "verdict": "negative; archive only, do not submit"
+}
