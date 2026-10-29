@@ -35,10 +35,10 @@ No leaderboard estimate is written. The holdout proxy is on a different scale fr
 
 ## Corrections to earlier figures
 
-- **Scope bug (IR-SASS3-20).** The earlier audit counted feature layers. `tiger_road_distance_m.tif` produced a false 100% overlap. Fixed in the shared tool; both candidates rerun.
-- **sar-deconf 67.4% (IR-SASS3-21).** That figure came from a 42-raster inventory. The full submitted set reaches 76.26%.
-- **Registry index incomplete (IR-SASS3-22).** `evidence/registry_index.json` lists 43 rasters; the pinned repositories contain 454 submission-scope TIFs.
-- **Lattice footprint count (IR-SASS3-23).** Measured 6,649, not 5,379. The conclusion is unchanged at 37,654 dots.
+- **Scope bug (IR-SASS3-33).** The earlier audit counted feature layers. `tiger_road_distance_m.tif` produced a false 100% overlap. Fixed in the shared tool; both candidates rerun.
+- **sar-deconf 67.4% (IR-SASS3-34).** That figure came from a 42-raster inventory. The full submitted set reaches 76.26%.
+- **Registry index incomplete (IR-SASS3-35).** `evidence/registry_index.json` lists 43 rasters; the pinned repositories contain 454 submission-scope TIFs.
+- **Lattice footprint count (IR-SASS3-36).** Measured 6,649, not 5,379. The conclusion is unchanged at 37,654 dots.
 
 ## Coverage notes
 
@@ -54,10 +54,10 @@ No leaderboard estimate is written. The holdout proxy is on a different scale fr
 
 ## Irregularities for review
 
-IR-SASS3-20 to IR-SASS3-25 in `evidence/irregularities_ledger.json`. Key items:
+IR-SASS3-33 to IR-SASS3-38 in `evidence/irregularities_ledger.json`. Key items:
 
-- **IR-SASS3-24.** The lane method paragraph referred to by the protocol does not appear in the request or the recorded prompt. The feature stack is absent, so the holdout cannot be reproduced here. No new experiment or raster was generated in this session.
-- **IR-SASS3-25.** The leaderboard figures in the request (0.3195, 0.4413, 0.4544) conflict and cannot be checked from this sandbox. Treat them as unverified.
+- **IR-SASS3-37.** The lane method paragraph referred to by the protocol does not appear in the request or the recorded prompt. The feature stack is absent, so the holdout cannot be reproduced here. No new experiment or raster was generated in this session.
+- **IR-SASS3-38.** The leaderboard figures in the request (0.3195, 0.4413, 0.4544) conflict and cannot be checked from this sandbox. Treat them as unverified.
 
 ## Next steps for the next session
 
@@ -65,3 +65,14 @@ IR-SASS3-20 to IR-SASS3-25 in `evidence/irregularities_ledger.json`. Key items:
 2. Owner supplies the lane paragraph and authorises restoring the cached feature stack (`scripts/restore_data.py`; mirror pins are not organizer-authenticated).
 3. If a literal-compliant file is wanted, generate one with at most about 22,000 dots, validate its holdout with the pinned evaluator and a leakage canary, and rerun the scoped audit against all 454 submission-scope TIFs.
 4. Paste the current DrivenData leaderboard and submission-page receipts so that any score can be labelled ORGANIZER-CONFIRMED.
+
+## Newer archived files on `main` (rechecked the same day)
+
+The `main` branch added two synthetic TIFs after this branch was cut. Both were recomputed with the same scoped auditor against the same 453 submitted rasters and 6 calibration lattices (`evidence/uniqueness_scoped_bgk_pbe_20261029.json`, `evidence/uniqueness_scoped_unique_structural_20261029.json`).
+
+| File | Dots | Submissions max within-3 px | Calibration-lattice max | Literal rule | Holdout | OK to submit? |
+|---|---|---|---|---|---|---|
+| `gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-…-af121062-zeros.tif` (SHA-256 `7ab47cf5…`) | 8,794 | 18.90% (GEMSDOE31 `rbu31-regimeunion`) | 44.41% | PASS | NOT MEASURED (synthetic placeholder) | NO |
+| `gemsdoesass3-unique-structural-…-e3ecb47c-zeros.tif` (SHA-256 `ae1626fc…`) | 129,311 | 13.33% (GEMSDOE30 `sgmc-hedge-d10-85k`) | 42.43% | PASS | NOT MEASURED (random corridors, no signal) | NO |
+
+Uniqueness passing does not make either file submittable. The protocol also requires a passing holdout and a leakage canary, and `main`'s verifier requires both before approval. Neither file has them. Both were generated without the geological or feature inputs, so they are archive-only.

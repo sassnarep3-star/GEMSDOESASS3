@@ -11,15 +11,32 @@ sys.path.insert(0, str(ROOT / "scripts"))
 PAGES = ["README.md", "index.html", "executive-summary.html", "docs/index.html", "docs/executive-summary.html"]
 
 
-def test_format_gate_recomputed_from_raster_passes():
+def test_current_archive_candidate_format_recomputed_from_raster():
+    import numpy as np
+    import rasterio
+
+    path = ROOT / "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif"
+    with rasterio.open(path) as src:
+        data = src.read(1)
+        assert src.count == 1
+        assert src.dtypes[0] == "float32"
+        assert str(src.crs) == "EPSG:32611"
+        assert src.shape == (3730, 3292)
+        assert tuple(src.transform)[:6] == (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
+        assert src.nodata is None
+    assert np.isfinite(data).all()
+    assert data.min() >= 0.0 and data.max() <= 1.0
+    # Synthetic BGK diagnostic has 8,794 positive cells, including soft halo pixels.
+    assert int((data > 0).sum()) == 8794
+
+
+def test_historical_lwst_format_gate_is_not_current_candidate():
     import independent_review
 
     fmt = independent_review.format_gate()
-    failed = [k for k, v in fmt["checks"].items() if not v]
-    assert fmt["all_pass"], f"format checks failed: {failed}"
+    assert fmt["all_pass"]
     assert fmt["meta"]["dots"] == 37654
     assert fmt["meta"]["crs"] == "EPSG:32611"
-    assert fmt["meta"]["min"] >= 0.0 and fmt["meta"]["max"] <= 1.0
 
 
 def test_uniqueness_audit_passes_on_submitted_rasters():
@@ -28,6 +45,36 @@ def test_uniqueness_audit_passes_on_submitted_rasters():
     assert len(subs) >= 400, "audit should cover the submitted rasters"
     assert max(r["within3_frac"] for r in subs) <= 0.70
     assert max(abs(r["spearman_sampled"]) for r in subs) <= 0.90
+
+
+def test_current_candidate_is_fail_closed_and_not_a_score_claim():
+    card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
+    audit = json.loads((ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").read_text())
+    assert card["verdict"] == "negative"
+    assert card["ok_to_submit"] is False
+    assert card["holdout_dti"]["status"] == "NOT RUN"
+    assert card["holdout_dti"]["pooled_dti"] is None
+    assert card["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
+    assert audit["candidate_sha256"] == card["raster_sha256"]
+    assert audit["result"]["all_positive_cells"]["fraction"] == 0.444053
+    assert audit["result"]["output_raster_vs_lattice_sampled_spearman"] == -0.00163
+    assert audit["result"]["complete_registry_uniqueness_pass"] is False
+    assert 0 < len(card["submission_note"]) <= 140
+
+
+def test_fail_closed_verifier_reports_format_integrity_but_no_approval():
+    import subprocess
+
+    proc = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/verify_all_gates.py"), "--expect-blocked"],
+        cwd=ROOT, text=True, capture_output=True,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    result = json.loads(proc.stdout)
+    assert result["format_and_record_integrity"] is True
+    assert result["ok_to_submit"] is False
+    assert result["checks"]["complete_uniqueness_gate"] is False
+    assert result["checks"]["holdout_gate"] is False
 
 
 def test_experiment_e1_is_negative_and_spends_no_slot():

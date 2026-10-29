@@ -1,0 +1,37 @@
+{
+ "schema_version": 1,
+ "recorded_utc": "2026-10-29T00:17:33Z",
+ "lattice": {
+  "path": ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
+  "source": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
+ },
+ "limits": {
+  "within3_dot_fraction_max": 0.7,
+  "abs_spearman_max": 0.9
+ },
+ "results": [
+  {
+   "file": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+   "same_grid": true,
+   "positive_pixels": 6178,
+   "blobs_dots": 10,
+   "within3_dot_fraction": 0.5,
+   "within3_pixel_fraction_all_positive": 0.444053,
+   "spearman_vs_lattice_sampled": -0.00163,
+   "pass": true
+  },
+  {
+   "file": "gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
+   "same_grid": true,
+   "positive_pixels": 129311,
+   "blobs_dots": 9664,
+   "within3_dot_fraction": 0.423531,
+   "within3_pixel_fraction_all_positive": 0.424341,
+   "spearman_vs_lattice_sampled": 0.00147,
+   "pass": true
+  }
+ ],
+ "all_pass": true,
+ "scope_note": "Lattice only. Other registry rasters (451 downloads audit) are NOT covered by this file."
+}

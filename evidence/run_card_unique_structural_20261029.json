@@ -1,0 +1,57 @@
+{
+ "schema_version": 1,
+ "run_card_id": "GEMSDOESASS3-UNIQUE-STRUCTURAL-20261029",
+ "date_utc": "2026-10-29",
+ "hypothesis": "Placeholder candidate: a deterministic sparse field of ~10,000 dots along six NNE-trending straight corridors with +/-400 m perpendicular jitter. It is generated to be off-lattice and unique, not to be predictive.",
+ "mechanism": "No feature layer is read. Dots are placed by numpy RNG (seed 24301) on fixed corridor intercepts (linspace 4,480,000 to 4,500,000 m northing, slope tan 60 deg), burned as radius-2 disks. Source: scripts/generate_unique_submission.py.",
+ "named_non_fault_process_that_could_mimic_it": "None is modelled. Straight corridors would coincide with any linear NNE feature (roads, power lines, aligned drainages) only by chance; no signal is used to choose them.",
+ "holdout_dti": {
+  "status": "NOT MEASURED",
+  "label": "HOLDOUT-DTI",
+  "reason": "labels.tif is login-walled (DrivenData account). No labels in this workspace, so no withheld-positive count and no 95% CI can be produced.",
+  "estimated_score": "NOT ESTIMABLE from local evidence"
+ },
+ "leakage_canary": {
+  "status": "NOT RUN",
+  "reason": "Requires feature stack and labels; the file uses no features, so leakage is not possible but this is not a validated result."
+ },
+ "correlation_overlap_vs_registry": {
+  "lattice_lane_check": "evidence/lattice_lane_check_20261029.json",
+  "lattice_dot_within3_fraction": 0.423531,
+  "lattice_limit": 0.7,
+  "lattice_spearman_sampled": 0.00147,
+  "spearman_limit": 0.9,
+  "lattice_result": "PASS",
+  "other_registry_rasters": "NOT CHECKED in this session (451-download audit needs sibling checkouts that are absent)"
+ },
+ "raster_sha256": "ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e",
+ "validator": {
+  "script": "scripts/validate_submission_tif.py",
+  "receipt": "evidence/validator_unique_structural_20261029.json",
+  "all_hard_checks_pass": true,
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "shape_3730x3292": true,
+   "transform_matches_training_grid": true,
+   "no_nan_or_inf": true,
+   "values_in_0_1": true
+  },
+  "footprint_check": "NOT RUN (sample_submission.tif not present)",
+  "nan_outside_bounds_convention": "NOT CONFIRMED: cells outside the dot footprint are 0.0, not NaN. Official text asks for null/NaN outside bounds. Flag for organizer or sample-file check."
+ },
+ "submission_name": "gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
+ "submission_note": "GEMSDOESASS3 unique-structural: 10k NNE corridor dots, no data input, lattice lane pass 42.4%, unscored",
+ "budget": {
+  "experiments_used": 0,
+  "limit": 3,
+  "hours_used_estimate": "<1",
+  "limit_hours": 2
+ },
+ "ok_to_download": true,
+ "ok_to_submit": false,
+ "verdict": "negative",
+ "verdict_reason": "Format and lattice-lane gates pass, but there is no measured or estimated score, and the file uses no data signal. Spending one of 3 weekly slots on it cannot be justified as a path to beat 0.2778 or 0.4544. Use only as a format test if the user chooses.",
+ "promotion": "Not promoted. Promotion is a separate selector step within the weekly cap (3 per week, official rules section 3.2)."
+}
