@@ -6,8 +6,8 @@ Every value in the card is read from a receipt or recomputed from the raster; no
 Checks (exit 0 only if all pass):
   F1  file exists; zip bundle holds exactly the same bytes
   F2  SHA-256 equals the literal audit receipt
-  F3  format: single band, float32, EPSG:32611, 3730x3292, organizer transform, nodata None,
-      all pixels finite, values in [0, 1], dot count equals the builder receipt
+  F3  format: single band, float32, EPSG:32611, 3730x3292, organizer transform, nodata NaN (as the organizer
+      sample), finite exactly on the footprint, values in [0, 1], dot count equals the builder receipt
   F4  literal uniqueness receipt: literal_rule_passed == True (surface and final dots, 386 registry rasters
       plus the calibration lattice; no exemption)
   F5  lattice overlap recomputed from the raster when .cache/gems_data is present (else reported SKIPPED)
@@ -35,10 +35,10 @@ import rasterio
 from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
-CAND_NAME = "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif"
+CAND_NAME = "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif"
 CAND = ROOT / "docs/downloads" / CAND_NAME
 ZIP = CAND.with_suffix(".tif.zip")
-AUDIT = ROOT / "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2.json"
+AUDIT = ROOT / "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json"
 BUILD = ROOT / "evidence/literal_candidates/dispersed_receipt.json"
 HOLDOUT = ROOT / "evidence/literal_candidates_sgmc.json"
 CANARY = ROOT / "evidence/leakage_canary_report.json"
@@ -145,8 +145,10 @@ def main() -> int:
     rec("F3_single_band_float32", fmt["count"] == 1 and fmt["dtype"] == "float32", str(fmt))
     rec("F3_crs_shape_transform", fmt["crs"] == "EPSG:32611" and tuple(fmt["shape"]) == EXPECT_SHAPE
         and tuple(fmt["transform"]) == EXPECT_TRANSFORM, str(fmt))
-    rec("F3_nodata_none_all_finite", fmt["nodata"] is None and bool(np.isfinite(arr).all()), "nodata or non-finite pixels")
-    rec("F3_values_in_0_1", float(arr.min()) >= 0.0 and float(arr.max()) <= 1.0, f"range {arr.min()}..{arr.max()}")
+    fin = np.isfinite(arr)
+    rec("F3_nodata_nan_official", fmt["nodata"] is not None and bool(np.isnan(fmt["nodata"])), f"nodata={fmt['nodata']}")
+    rec("F3_finite_count_equals_footprint", int(fin.sum()) == audit["footprint_pixels"], f"finite={int(fin.sum())} footprint={audit['footprint_pixels']}")
+    rec("F3_values_in_0_1_finite", float(np.nanmin(arr)) >= 0.0 and float(np.nanmax(arr)) <= 1.0, f"range {np.nanmin(arr)}..{np.nanmax(arr)}")
     n_dots = int((arr > 0).sum())
     build = json.loads(BUILD.read_text())
     rec("F3_dot_count_matches_builder", n_dots == build["total_dots"], f"{n_dots} != {build['total_dots']}")

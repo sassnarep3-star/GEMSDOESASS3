@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-29T00:22:34.134955+00:00",
+ "generated_utc": "2026-10-29T00:34:33.436517+00:00",
  "candidate": "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
  "candidate_sha256": "7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f",
  "candidate_dots": 3883,
@@ -143,9 +143,10 @@
    "transform_match": true,
    "no_nan_inside_footprint": true,
    "values_in_0_1_inside_footprint": true,
-   "outside_footprint_zero": false,
+   "outside_null_or_nan_official": false,
    "no_inf": true,
-   "all_passed": false
+   "all_passed": false,
+   "outside_zero_or_nan_owner_variant": false
   },
   "template": {
    "crs": "EPSG:32611",

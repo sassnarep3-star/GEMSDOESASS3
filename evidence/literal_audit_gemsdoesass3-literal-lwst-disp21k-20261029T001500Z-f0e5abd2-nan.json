@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-29T00:12:41.683605+00:00",
- "candidate": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif",
- "candidate_sha256": "d84217d5c59ffc7ec06c3f2bbbf390ae764b26bf96810dca6bfe7ab7fd752fdb",
+ "generated_utc": "2026-10-29T00:34:35.688594+00:00",
+ "candidate": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+ "candidate_sha256": "7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a",
  "candidate_dots": 21012,
  "footprint_pixels": 5167373,
  "rule": "literal Protocol Rule 1: |Spearman|<=0.90 AND within-3px<=0.70 vs EVERY registry raster; no exemption",
@@ -135,9 +135,10 @@
    "transform_match": true,
    "no_nan_inside_footprint": true,
    "values_in_0_1_inside_footprint": true,
-   "outside_footprint_zero": true,
+   "outside_null_or_nan_official": true,
    "no_inf": true,
-   "all_passed": true
+   "all_passed": true,
+   "outside_zero_or_nan_owner_variant": true
   },
   "template": {
    "crs": "EPSG:32611",
@@ -171,7 +172,7 @@
     4508550.0
    ],
    "dtype": "float32",
-   "nodata": null
+   "nodata": NaN
   }
  },
  "literal_rule_passed": true,

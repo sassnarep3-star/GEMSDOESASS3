@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-29T00:07:03.931245+00:00",
+ "generated_utc": "2026-10-29T00:34:36.033982+00:00",
  "candidate": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
  "candidate_sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
  "candidate_dots": 37654,
@@ -143,9 +143,10 @@
    "transform_match": true,
    "no_nan_inside_footprint": true,
    "values_in_0_1_inside_footprint": true,
-   "outside_footprint_zero": true,
+   "outside_null_or_nan_official": false,
    "no_inf": true,
-   "all_passed": true
+   "all_passed": false,
+   "outside_zero_or_nan_owner_variant": true
   },
   "template": {
    "crs": "EPSG:32611",

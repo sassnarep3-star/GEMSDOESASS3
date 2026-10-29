@@ -79,6 +79,8 @@ def main() -> int:
     ap.add_argument("--no-gap", action="store_true",
                     help="CONTROL ONLY: random same-count subset of all LWST dots, no lattice constraint")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--outside", choices=["nan", "zeros"], default="nan",
+                    help="value outside the footprint: nan (official rule: data outside the bounds is null or nan; default) or zeros (owner-variant convention)")
     ap.add_argument("--receipt", default=None)
     args = ap.parse_args()
 
@@ -134,12 +136,13 @@ def main() -> int:
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     profile = tpl_profile.copy()
-    profile.update(driver="GTiff", dtype="float32", count=1, nodata=None, compress="deflate",
+    profile.update(driver="GTiff", dtype="float32", count=1, nodata=(np.nan if args.outside == "nan" else None), compress="deflate",
                    predictor=3, zlevel=9, tiled=True, blockxsize=256, blockysize=256)
-    arr = np.where(foot, out, 0.0).astype(np.float32)
+    fill = np.nan if args.outside == "nan" else 0.0
+    arr = np.where(foot, out, fill).astype(np.float32)
     with rasterio.open(out_path, "w", **profile) as dst:
         dst.write(arr, 1)
-    audit = audit_geotiff(out_path, foot, labels, mode="zeros", template_tif=TEMPLATE)
+    audit = audit_geotiff(out_path, foot, labels, mode=args.outside, template_tif=TEMPLATE)
 
     receipt = {
         "variant": args.variant,

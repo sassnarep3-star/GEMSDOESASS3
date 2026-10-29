@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-29T00:22:33.159588+00:00",
+ "generated_utc": "2026-10-29T00:34:35.407720+00:00",
  "candidate": "docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
  "candidate_sha256": "ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e",
  "candidate_dots": 54893,
@@ -143,9 +143,10 @@
    "transform_match": true,
    "no_nan_inside_footprint": true,
    "values_in_0_1_inside_footprint": true,
-   "outside_footprint_zero": false,
+   "outside_null_or_nan_official": false,
    "no_inf": true,
-   "all_passed": false
+   "all_passed": false,
+   "outside_zero_or_nan_owner_variant": false
   },
   "template": {
    "crs": "EPSG:32611",

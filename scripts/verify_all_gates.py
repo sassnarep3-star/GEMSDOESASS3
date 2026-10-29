@@ -30,6 +30,8 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_CRS = "EPSG:32611"
 EXPECTED_SHAPE = (3730, 3292)
 EXPECTED_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
+# Organizer footprint (finite cells of data/sample_submission.tif): 5,167,373 cells; 7,111,787 cells are NaN outside.
+EXPECTED_FOOTPRINT = 5167373
 EXPECTED_BLOCKERS = {
     "holdout_hide_recover_beats_02778_ci95_gt_0",
     "holdout_sgmc_beats_02778",
@@ -112,11 +114,13 @@ def verify_all() -> dict:
         record("tif_shape_3730x3292", shape == EXPECTED_SHAPE, f"shape={shape}")
         record("tif_crs_epsg_32611", crs_str == EXPECTED_CRS, f"crs={crs_str}")
         record("tif_geotransform_exact", tr == EXPECTED_TRANSFORM, f"transform={tr}")
-        record("tif_nodata_none", nodata is None, f"nodata={nodata}")
-        record("tif_zero_nan", int(np.isnan(arr).sum()) == 0, "NaN pixels present")
+        record("tif_nodata_nan_as_organizer_sample", nodata is not None and bool(np.isnan(nodata)), f"nodata={nodata}")
+        fin = np.isfinite(arr)
+        record("tif_finite_count_equals_footprint", int(fin.sum()) == EXPECTED_FOOTPRINT,
+               f"finite={int(fin.sum())} expected {EXPECTED_FOOTPRINT}")
         record("tif_zero_inf", int(np.isinf(arr).sum()) == 0, "Inf pixels present")
-        record("tif_no_float32_sentinel", int((np.abs(arr) > 1e30).sum()) == 0, "Sentinel present")
-        fmin, fmax = float(arr.min()), float(arr.max())
+        record("tif_no_float32_sentinel", int((np.abs(arr[fin]) > 1e30).sum()) == 0, "Sentinel present")
+        fmin, fmax = float(np.nanmin(arr)), float(np.nanmax(arr))
         record("tif_strict_range_0_1", 0.0 <= fmin and fmax <= 1.0 and fmax > 0.0, f"range=[{fmin}, {fmax}]")
         cand_dots = arr > 0.0
         n_pos = int(cand_dots.sum())
@@ -125,8 +129,10 @@ def verify_all() -> dict:
         if SAMPLE.exists():
             with rasterio.open(SAMPLE) as t:
                 foot = np.isfinite(t.read(1))
-            record("tif_zero_outside_footprint", int((arr[~foot] != 0).sum()) == 0,
-                   f"{int((arr[~foot] != 0).sum())} non-zero values outside the organizer footprint")
+            record("tif_outside_footprint_null_or_nan", bool(np.isnan(arr[~foot]).all()),
+                   f"{int((~np.isnan(arr[~foot])).sum())} non-null values outside the organizer footprint (rule: null or nan)")
+            record("tif_footprint_matches_organizer_sample", bool(np.array_equal(fin, foot)),
+                   "finite cells differ from the organizer sample footprint")
 
     if zip_path.exists():
         record("zip_sha256_matches_run_card", sha256_file(zip_path) == card["zip_sha256"], "Zip SHA256 mismatch")

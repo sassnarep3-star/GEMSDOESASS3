@@ -90,10 +90,13 @@ def format_checks(cand: Path) -> dict:
         "transform_match": got["transform"] == tpl["transform"],
         "no_nan_inside_footprint": bool(np.isfinite(inside).all()),
         "values_in_0_1_inside_footprint": bool(inside.size and inside.min() >= 0.0 and inside.max() <= 1.0),
-        "outside_footprint_zero": bool(np.all(arr[~foot] == 0.0)),
+        "outside_null_or_nan_official": bool(np.all(np.isnan(arr[~foot]))),
         "no_inf": bool(np.isfinite(arr).all() or np.isnan(arr).any()) and not bool(np.isinf(arr).any()),
     }
+    # Informational only (not a pass criterion): owner-variant convention with zeros outside the footprint.
+    info = {"outside_zero_or_nan_owner_variant": bool(np.all((arr[~foot] == 0.0) | np.isnan(arr[~foot])))}
     checks["all_passed"] = all(checks.values())
+    checks.update(info)
     return {"checks": checks, "template": tpl, "candidate": got}
 
 

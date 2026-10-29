@@ -40,10 +40,10 @@
   "worst_within_3px_fraction_final_dots": 0.6899866742813631,
   "worst_abs_spearman": 0.1504139046570531,
   "lattice_overlap_recomputed_here": 0.6899866742813631,
-  "receipt": "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2.json"
+  "receipt": "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json"
  },
- "raster_sha256": "d84217d5c59ffc7ec06c3f2bbbf390ae764b26bf96810dca6bfe7ab7fd752fdb",
- "zip_sha256": "fcf0bf51c47f25561d5b071bbe8b7d9cffb3b9d0710e5bf4294864c857426add",
+ "raster_sha256": "7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a",
+ "zip_sha256": "1625a1a7167aed9995a9bb75eb1a410b0136c1f3ccab16ff0e0a39628f07c97a",
  "validator_output": {
   "emitted_positive_pixels": 21012,
   "n_soft_pixels": 21012,
@@ -53,8 +53,9 @@
    "F2_sha_matches_audit": true,
    "F3_single_band_float32": true,
    "F3_crs_shape_transform": true,
-   "F3_nodata_none_all_finite": true,
-   "F3_values_in_0_1": true,
+   "F3_nodata_nan_official": true,
+   "F3_finite_count_equals_footprint": true,
+   "F3_values_in_0_1_finite": true,
    "F3_dot_count_matches_builder": true,
    "F4_literal_rule_passed": true,
    "F5_lattice_overlap_le_0p70": true,
@@ -65,14 +66,14 @@
   },
   "problems": []
  },
- "submission_name": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif",
+ "submission_name": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
  "submission_note": "LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted",
  "ok_to_download": true,
  "ok_to_submit": false,
  "verdict": "not_recommended",
- "download_path": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif",
+ "download_path": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
  "status_reason": "Unique under the literal rule and format-valid: OK to download. Holdout proxy is below the 0.2778 champion with disjoint CIs, so it is NOT recommended for a leaderboard slot. Promotion is a separate selector decision.",
- "generated_utc": "2026-10-29T00:24:40.328041+00:00",
+ "generated_utc": "2026-10-29T00:34:56.299877+00:00",
  "method": "Parallel-Run Protocol literal build: dispersed LWST subset, see run_card_literal.json",
  "unique_vs_focus9": true,
  "unique_note": "Literal audit compares against all 386 focus-registry rasters, which include the nine focus sites' downloads (see registry/focus_registry_manifest.json)."

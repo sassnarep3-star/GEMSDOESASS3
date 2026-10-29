@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-29T00:24:40.328041+00:00",
+ "generated_utc": "2026-10-29T00:34:56.299877+00:00",
  "lane": "H-LIT-DISP: literal-rule-compliant LWST-GeoConduit dot set (21,012 dots)",
  "hypothesis": "Retaining 14,498 LWST dots by farthest-point spacing plus 6,514 density-ordered gap dots keeps most of the LWST off-catalogue signal while meeting the literal 70% lattice-overlap limit.",
  "mechanism": "Redundancy-aware retention: spacing the kept dots reduces duplicate dots on one predicted segment; gap dots fill the only footprint pixels more than 3 px from every lattice dot (label-free ordering by LWST density).",
@@ -60,9 +60,9 @@
   "limit_within_3px": 0.7,
   "limit_abs_spearman": 0.9,
   "lattice_overlap_recomputed_here": 0.6899866742813631,
-  "source": "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2.json"
+  "source": "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json"
  },
- "raster_sha256": "d84217d5c59ffc7ec06c3f2bbbf390ae764b26bf96810dca6bfe7ab7fd752fdb",
+ "raster_sha256": "7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a",
  "validator_output": {
   "checks": {
    "F1_file_and_zip_exist": true,
@@ -70,8 +70,9 @@
    "F2_sha_matches_audit": true,
    "F3_single_band_float32": true,
    "F3_crs_shape_transform": true,
-   "F3_nodata_none_all_finite": true,
-   "F3_values_in_0_1": true,
+   "F3_nodata_nan_official": true,
+   "F3_finite_count_equals_footprint": true,
+   "F3_values_in_0_1_finite": true,
    "F3_dot_count_matches_builder": true,
    "F4_literal_rule_passed": true,
    "F5_lattice_overlap_le_0p70": true,
@@ -82,15 +83,15 @@
   },
   "problems": []
  },
- "download_path": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif",
- "submission_name": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif",
+ "download_path": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+ "submission_name": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
  "submission_note": "LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted",
  "note_length": 104,
  "verdict": "negative",
  "verdict_detail": "Unique under the literal rule and format-valid: OK to download. Holdout proxy is below the 0.2778 champion with disjoint CIs, so it is NOT recommended for a leaderboard slot. Promotion is a separate selector decision.",
  "summary": {
-  "candidate": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif",
-  "sha256": "d84217d5c59ffc7ec06c3f2bbbf390ae764b26bf96810dca6bfe7ab7fd752fdb",
+  "candidate": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+  "sha256": "7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a",
   "dots": 21012,
   "download_ok": true,
   "unique_literal_rule": true,
