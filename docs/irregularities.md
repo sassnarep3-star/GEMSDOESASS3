@@ -76,3 +76,68 @@ Every irregularity uncovered during the line-by-line audit of DrivenData Competi
 
 ### `IR-DOTCOUNT-LITERAL` — Dot count is the only lever under the literal rule (owner decision)
 - With 6,649 outside cells (proxy), a dot count N ≲ 22,000 might satisfy the literal geometric rule. Whether the organizer accepts a reduced count is **unverified**. Requires an owner decision and a check of the competition rules on the [data page](https://www.drivendata.org/competitions/306/competition-doe-gems/data/) (login required). No change made.
+
+---
+
+## 5. Review of 2026-10-29 — new findings (all verified from a command or a fetched official page)
+
+### `IR-2029-01` — Prompt leaderboard figures disagree with the live leaderboard
+- **Prompt** cites `0.4413` as the GEMSDOE top and `0.3195` as the "highest right now".
+- **Live page** ([leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/), fetched 2026-10-29): `#1 xiaofanhu 0.4544`, `#2 cfld__ 0.3916`, `#3 Batik Shirt Brothers 0.3911`, `#4 BrandenKMurray 0.3724`, `#5 op01 0.3635`, `#50 jfper21 0.2895`.
+- **Handling:** the live page is treated as the authority. The prompt's numbers are kept as "prompt-cited" and are not used as a benchmark.
+
+### `IR-2029-02` — Competition inputs are publicly hosted in sibling repositories (REVIEW REQUIRED)
+- `buffedlizard55-lab/6GEMSDOE/data/labels.tif` has SHA-256 `7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093`. The repo's own `data/restore_receipt.json` records the same hash for `labels.tif`.
+- `sample_submission.tif` (SHA-256 `2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc`, matching the receipt) is also committed in several GEMSDOE repos. So are `existing_faults.tif` and `example_submission.tif`.
+- **Handling:** these files were excluded from the uniqueness pool and were not used for any score or holdout in this session. Whether public redistribution is permitted under the competition rules must be decided by the owner. See the rules on the [competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/).
+
+### `IR-2029-03` — README HOLDOUT-DTI table did not match the evidence JSON
+- Example: GEMSDOE32 was `0.0045 [0.0038, 0.0053]` in the README. `evidence/nine_sites_executive_audit.json` records `0.003885 [0.003316, 0.004478]`, evaluator `gems57-pooled-hide-v2`, 22,893 withheld.
+- **Remediation:** the README table and the generated pages now read from the JSON. The README table was regenerated from the evidence, not retyped.
+
+### `IR-2029-04` — Filename labels in the prompt are not the GitHub filenames
+- The prompt labels end in `-nan` for several sites. The owner registry (`registry/owner_reported_scores_focus.json`) maps those scores to `-allfinite` or `-zeros` files. Both variants exist on GitHub, and their sizes differ.
+- Affected: GEMSDOE25 (prompt `-nan`, registry `-zeros`), GEMSDOE27 (prompt `-nan`, registry `-allfinite`), GEMSDOE28 (prompt `-nan`, registry `-allfinite`), GEMSDOE31 (prompt `-nan`, registry `-allfinite`). GEMSDOE24's prompt label matches its registry file exactly.
+- **Handling:** the table reports the file the audit hashed (`evidence/focus9_file_table.json`), and every hash matched the audit record. The prompt label is shown beside it. Owner confirmation against the submission receipt is still needed.
+
+### `IR-2029-05` — Eleven listed Pages sites have no `docs/downloads` folder
+- `buffedlizard55-lab/GEMSDOE`, `6GEMSDOE`, `GEMSDOE2`, `GEMSDOE4`, `7GEMSDOE` (`.tif` files live elsewhere; all were swept), and `eugboogieman123-ops/EUGGEMSDOE1..3`, `ginnymcfiner23-ux/GINNYGEMSDOE1..3` (no `.tif` at all in the git tree).
+- Listing: `registry/sibling_repo_status_20261029.txt`.
+
+### `IR-2029-06` — Two historical registry rasters have no GitHub copy
+- `gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif` and `gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif` are in the manifest as "HISTORICAL_SCORED" but were not found in any listed repository at the paths checked. The uniqueness pool is therefore **incomplete by two files**.
+
+### `IR-2029-07` — The uniqueness rule is this project's protocol, not an organizer rule
+- The [problem page](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) defines the metric and format. It does not forbid similar or duplicate submissions. "Unique" here means the repo's Protocol Rule 1 (rank-correlation ≤ 0.90 and ≤ 70 % of dots within 3 px).
+- The organizer page also states that a participant selects **one** submission for both prize rounds.
+
+### `IR-2029-08` — "10,000 dots" is a placement count, not a raster count
+- The unique structural file places 10,000 dot centres (9,999 unique). They become 9,664 connected blobs and 129,311 positive pixels after the radius-2 disks. The audit's `candidate_n_dots` is the pixel count. The regenerated array is identical to the committed file.
+
+### `IR-2029-09` — The CI-recorded test failures and stale pages were fixed in this session
+- Three tests failed at the start of the session: a broken link path in `docs/index.html`, a README that no longer carried the blocked candidate's run-card note, and a Pages-sync gate. The gate report also still pointed to the blocked LWST file while the README named a different file as current.
+- **Remediation:** the pages are regenerated from the evidence files. The README carries both the blocked and the new candidate with their real hashes. The gate is not weakened; the literal-registry failure for the blocked file is still reported.
+
+### `IR-2029-10` — Owner-report scores are not organizer receipts
+- Every per-file score in the nine-site table is `OWNER-REPORT`. It came from the user's prompt and cannot be checked on the public leaderboard, which shows only the top rows. The `LLI-PROJECTION` values in the nine-site audit (for example 0.2860 for GEMSDOE32) are projections, not scores, and are labelled that way.
+
+### `IR-2029-11` — Two sites' best files are pixel-identical (GEMSDOE25 and GEMSDOE30)
+- `gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif` and `gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif` have identical positive-cell sets (xor = 0; 44,090 positive cells each; `np.array_equal` on the values is True). The file bytes differ, so the SHA-256 values differ.
+- Both owner-reported scores are `0.2600`, and both show the same HOLDOUT-DTI `0.100926 [0.090081, 0.111684]`. This is consistent with one raster submitted under two names.
+- **Handling:** flagged in `evidence/focus9_file_table.json` (`pixel_identical_to`) and on the generated pages. The owner must confirm which upload produced each score. Under the lane rule one of them is a duplicate.
+
+### `IR-2029-12` — The literal lane rule is degenerate against dense rasters
+- `buffedlizard55-lab/GEMSDOE48/docs/downloads/gemsdoe48-ds48-mtheta.tif` has positive values in all 12,279,160 cells. Every candidate dot is therefore "within 3 px" of it (100 %). No sparse file can satisfy the literal rule while that raster is in the pool.
+- 35 of the 2,862 compared rasters have more than 10 % of cells positive. Excluding that raster, the worst dense overlap is 42.67 %. Among sparse rasters the worst is 42.43 % (the calibration lattice).
+- **Handling:** the uniqueness result is reported three ways in `evidence/structural_candidate_card.json`. The literal result is FAIL, and the decision is pending the owner (options listed in the card and on the pages). This is not a pass.
+
+### `IR-2029-13` — The candidate is already published on `main`
+- `origin/main` (commit `8b6b11d`, merge of PR #14) already contains `docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` and its audit JSON. The uniqueness audit therefore found the file's own copy in the repo's GitHub pool. That copy is excluded by name and listed in `self_copies_excluded`.
+
+### `IR-2029-14` — Some "rasters" in sibling repos are git symlinks into a private cache
+- Eleven GEMSDOE75 entries (for example `training_features.tif`, `geodawn_rad_u8.tif`, `sgmc_faults_100m.tif`) and one GEMSDOE63 `smoke.tif` are 13–79-byte blobs whose content is a relative path such as `../../.cache/gems_data/training_features.tif`. They are symlinks, not rasters. The audit reports them as unreadable and they are not compared.
+- The same `../../.cache/gems_data/` layout is used by this workspace's restore script, so these symlinks show a sibling checkout that was assembled from this environment's cache.
+
+### `IR-2029-15` — Competition inputs are committed in sibling repositories (extends IR-2029-02)
+- `labels.tif` (SHA-256 `7ba308cc…4093`), `sample_submission.tif` (SHA-256 `2176d08e…35cbc`), `example_submission.tif` and `existing_faults.tif` appear in `buffedlizard55-lab/6GEMSDOE`, `GEMSDOE`, `GEMSDOE2` and `GEMSDOE4` (`data/`, `data/bridge/`). Hashes match this workspace's restore receipt for `labels.tif` and `sample_submission.tif`.
+- These files were excluded from the uniqueness pool and used for nothing else. The owner must decide whether public copies are permitted under the competition rules.

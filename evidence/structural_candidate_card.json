@@ -1,0 +1,129 @@
+{
+ "lane_id": "GEMSDOESASS3-UNIQUE-STRUCTURAL-PRIOR-20261029",
+ "hypothesis": "H-STRUCT-PRIOR (null-control lane): a sparse, label-free placement of 10,000 dot centres along six NNE-trending corridors (line y = tan(60 deg) * x + b, b in 4.48e6..4.50e6 m, perpendicular jitter sigma = 400 m) is a 'structural-corridor' guess. It uses no competition label or raster.",
+ "mechanism": "Each dot is a radius-2-pixel disk (value 1.0) written to a float32 grid; all other cells are 0. No feature, label or catalogue layer is read. Seed 0x5EED. scripts/generate_unique_submission.py regenerates the array exactly (verified).",
+ "mimic": "Any linear NNE-trending feature (roads, pipelines, drainage, the Walker Lane fabric itself) would be scored the same way; the placement cannot tell a fault from a road because it never looked at data.",
+ "holdout_dti": {
+  "status": "NOT RUN",
+  "reason": "competition labels (labels.tif) are not in this workspace; the hide-and-recover evaluator needs them. No HOLDOUT-DTI number exists for this file.",
+  "evidence_class": "none"
+ },
+ "leakage_canary": {
+  "status": "NOT APPLICABLE",
+  "reason": "no feature was fitted to labels"
+ },
+ "registry_correlation_and_overlap": {
+  "tool": "scripts/independent_uniqueness_audit.py (recomputes from pixels)",
+  "audit_file": "evidence/structural_uniqueness_fullpool_20261029.json",
+  "pool": "full sibling pool; rebuilt by scripts/fetch_sibling_registry.py (registry/sibling_repos.txt)",
+  "n_rasters_compared_including_self": 2863,
+  "self_copies_excluded": [
+   "sassnarep3-star__GEMSDOESASS3__gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif"
+  ],
+  "n_rasters_skipped": 52,
+  "skipped_reasons": {
+   "dtype=uint8": 28,
+   "no_positive_dots": 9,
+   "grid_or_band_mismatch": 3,
+   "unreadable": 12
+  },
+  "dense_threshold_frac_of_grid": 0.1,
+  "thresholds": {
+   "within3_max_frac": 0.7,
+   "abs_spearman_max": 0.9,
+   "radius_px": 3.0
+  },
+  "identical_dot_sets_excluding_self": [],
+  "literal_all_rasters": {
+   "n_rasters": 2862,
+   "max_within3_frac": 1.0,
+   "max_within3_raster": "buffedlizard55-lab__GEMSDOE48__gemsdoe48-ds48-mtheta.tif",
+   "max_abs_spearman_sampled": 0.076572,
+   "max_abs_spearman_raster": "buffedlizard55-lab__GEMSDOE68__gems68-autoctx-s3-strands-35000dots-20261020T210000Z-849a0f04-zeros.tif",
+   "pass": false
+  },
+  "sparse_only": {
+   "n_rasters": 2827,
+   "max_within3_frac": 0.424341,
+   "max_within3_raster": "HISTORICAL__13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "max_abs_spearman_sampled": 0.076572,
+   "max_abs_spearman_raster": "buffedlizard55-lab__GEMSDOE68__gems68-autoctx-s3-strands-35000dots-20261020T210000Z-849a0f04-zeros.tif",
+   "pass": true
+  },
+  "dense_rasters": {
+   "n_rasters": 35,
+   "max_within3_frac": 1.0,
+   "max_within3_raster": "buffedlizard55-lab__GEMSDOE48__gemsdoe48-ds48-mtheta.tif",
+   "max_abs_spearman_sampled": 0.008685,
+   "max_abs_spearman_raster": "buffedlizard55-lab__GEMSDOE40__gems40-euler-si0-depthcluster-crossfamily-continuous-20261005-f3e0ed7a.tif",
+   "n_over_limit": 1,
+   "over_limit": [
+    {
+     "path": "buffedlizard55-lab__GEMSDOE48__gemsdoe48-ds48-mtheta.tif",
+     "within3_frac": 1.0,
+     "n_dots": 12279160
+    }
+   ]
+  },
+  "dense_excluded_from_overlap_test_pass": true,
+  "dense_excluded_variant_note": "overlap test on sparse rasters only, rank test on all rasters; dense rasters over the limit are listed in dense_rasters.over_limit",
+  "caveat": "dots are positive pixels (repo convention). Two historical registry entries (gems16 and gems19 scored copies) have no GitHub copy and are not in the pool. GEMSDOE75 'outside' entries are git symlinks into ../../.cache/gems_data, not rasters."
+ },
+ "uniqueness_decision": {
+  "status": "PENDING OWNER DECISION",
+  "literal_rule_result": "FAIL",
+  "why_literal_fails": "1 dense sibling raster(s) exceed 70 % within-3 px; the worst is buffedlizard55-lab__GEMSDOE48__gemsdoe48-ds48-mtheta.tif at 1.0000. A sibling whose positive cells cover the whole grid makes every candidate dot 'within 3 px'.",
+  "options_for_owner": [
+   "keep the literal rule (no sparse file can pass while a full-grid raster is in the pool)",
+   "exclude dense rasters from the overlap test and keep the rank test on all rasters",
+   "redefine dots for dense rasters (for example the top-N cells) and rerun the audit"
+  ]
+ },
+ "raster_sha256": "ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e",
+ "raster_bytes": 193208,
+ "validator_output": {
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "shape_3730x3292": true,
+   "transform_matches_prepared_grid": true,
+   "nodata_none": true,
+   "no_nan": true,
+   "all_finite": true,
+   "in_range_0_1": true,
+   "all_checks_passed": true
+  },
+  "meta": {
+   "epsg": 32611,
+   "height": 3730,
+   "width": 3292,
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "dtype": "float32",
+   "nodata": null,
+   "min": 0.0,
+   "max": 1.0,
+   "unique_values": [
+    0.0,
+    1.0
+   ],
+   "positive_pixels": 129311,
+   "connected_blobs_8conn": 9664
+  }
+ },
+ "footprint_check": "NOT RUN: sample_submission.tif is not used here, so the footprint cannot be compared. The file is zero outside the 10k dots over the full grid.",
+ "submission_name": "gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
+ "submission_note": "GEMSDOESASS3 unique structural prior 10k dots; UNVALIDATED - download for review, do not submit (no holdout)",
+ "download_path": "docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
+ "ok_to_download_for_review": true,
+ "ok_to_submit": false,
+ "verdict": "hold",
+ "verdict_reason": "Format checks pass and the file is already published in this repo. The literal uniqueness rule FAILS because of a dense sibling raster, so the file is not cleared as a unique submission. It is not cleared for submission: no holdout score exists, the expected leaderboard score is unknown, and the protocol forbids spending a slot on an unvalidated file. Failing uniqueness is never permission to submit."
+}
