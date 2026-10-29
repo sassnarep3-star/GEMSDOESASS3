@@ -100,13 +100,13 @@ def test_nine_sites_h19_5_set_algebra_invariants() -> None:
 def test_emitted_geotiff_and_all_automated_gates() -> None:
     """End-to-end automated programmatic inspection of the promoted submission GeoTIFF."""
     res = verify_all()
-    # Corrected 2026-10-28 (IR-SASS3-29, IR-SASS3-31): the format gate did not test the competition's
+    # Corrected 2026-10-28 (IR-SASS3-42, IR-SASS3-44): the format gate did not test the competition's
     # "data outside the bounds is null or nan" rule. The file has non-zero cells outside the footprint, so
     # download is NOT approved. Earlier expectation was ok_to_download True.
     assert res["ok_to_download"] is False
     assert res["checks"]["tif_outside_bounds_null_or_zero"] is False
     assert res["ok_to_submit"] is False    # holdout/registry pending data
-    assert res["verdict"] == "format_valid_pending_data"  # verdict text from the run card, unchanged
+    assert res["verdict"] == "blocked_outside_bounds"  # run card verdict, corrected 2026-10-29
 
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
     tif_path = ROOT / card["download_path"]

@@ -138,115 +138,241 @@
     },
     {
       "id": "IR-SASS3-20",
+      "severity": "CRITICAL",
+      "title": "Local holdout is anti-correlated with the leaderboard",
+      "finding": "Across the nine focus sites (10 owner-reported rows), Spearman rho between holdout HR-static DTI (docs/data/focus9_executive_audit.json) and owner-reported leaderboard scores is -0.89 (p=0.001, Kendall -0.77). The 0.2778 champion (GEMSDOE32) has holdout DTI 0.0045, among the lowest.",
+      "resolution": "Recorded in evidence/holdout_vs_leaderboard_concordance_20261029.json. Hypothesis (unverified): the holdout withholds catalogue faults, while the scored test set is new faults not in the USGS database (official problem description). Holdout is NOT a valid selector until redesigned and checked against labels in an authorised account."
+    },
+    {
+      "id": "IR-SASS3-21",
+      "severity": "HIGH",
+      "title": "README HOLDOUT-DTI values copied across sites",
+      "finding": "README nine-site table listed 0.0967 [0.0842, 0.1095] for GEMSDOE24, 25 and 30. The audit gives GEMSDOE25 = 0.0967 and GEMSDOE24 = 0.0932 [0.0813, 0.1060].",
+      "resolution": "README table rebuilt from the audit file. Values labelled HOLDOUT-DTI (evaluator version as recorded in the audit; withheld-positive count not recorded there)."
+    },
+    {
+      "id": "IR-SASS3-22",
+      "severity": "HIGH",
+      "title": "GEMSDOE30 audit row points at a GEMSDOE24-named file",
+      "finding": "docs/data/focus9_executive_audit.json lists GEMSDOE30_hist_0.2600 with file gems24-h25-1-dotted-h19-5-d2-8-...-zeros.tif, while the owner list names GEMSDOE30 d28-poisson300m-offcat-44090. The file identity for GEMSDOE30 is therefore unconfirmed.",
+      "resolution": "Flagged. Not resolved without the GEMSDOE30 repository file (not in this workspace)."
+    },
+    {
+      "id": "IR-SASS3-23",
+      "severity": "HIGH",
+      "title": "Audit flagship marked ok_to_submit=true while run card says false",
+      "finding": "docs/data/focus9_executive_audit.json (generated 2026-10-27) sets flagship_candidate.ok_to_submit = true for the LWST file. The run card and the 2026-10-28 review set ok_to_submit = false (literal lattice rule, 99.78%).",
+      "resolution": "Superseded. The run card and the lattice gate control. The audit flag is stale and must not be read as permission to submit."
+    },
+    {
+      "id": "IR-SASS3-24",
+      "severity": "CRITICAL",
+      "title": "Unique TIF described as geologically informed; it uses no data",
+      "finding": "docs/executive-summary.html and README described the 2026-10-29 unique TIF as a 'geologically-informed model' with 'off-catalogue traces'. scripts/generate_unique_submission.py reads no feature layer: it draws dots on six fixed straight NNE corridors from an RNG (seed 24301).",
+      "resolution": "Corrected on both pages. Run card records ok_to_submit=false, verdict negative, holdout DTI NOT MEASURED, and estimated score NOT ESTIMABLE."
+    },
+    {
+      "id": "IR-SASS3-25",
+      "severity": "MEDIUM",
+      "title": "Leaderboard figures in the task prompt do not match the official page",
+      "finding": "Task prompt cites 0.4413 and 0.3195 as the current leaderboard high. The DrivenData leaderboard page, read 2026-10-29, shows #1 = 0.4544 (xiaofanhu).",
+      "resolution": "README and exec summary use 0.4544, with the source link. The prompt figures are noted as unverified."
+    },
+    {
+      "id": "IR-SASS3-26",
+      "severity": "MEDIUM",
+      "title": "Restore path depends on third-party GitHub mirrors for competition data",
+      "finding": "registry/data_manifest.json pulls training_features, labels and sample_submission from buffedlizard55-lab sibling repositories. Official rules §3.1 say training data is provided to registered DrivenData competitors. Mirror copies are not authoritative and may not be licensed for this use.",
+      "resolution": "Flagged for owner review. Use only copies downloaded from the user's own DrivenData account. Mirror hashes do not establish organizer provenance."
+    },
+    {
+      "id": "IR-SASS3-27",
+      "severity": "MEDIUM",
+      "title": "Outside-footprint convention is unconfirmed (0.0 vs NaN)",
+      "finding": "The official text asks for data outside the bounds to be null or NaN. Current unique TIF has 0.0 everywhere outside its dots and nodata=None. sample_submission.tif is login-walled and not in this workspace, so the footprint convention cannot be checked.",
+      "resolution": "Open. scripts/validate_submission_tif.py reports the convention but does not gate on it. Check against sample_submission.tif from the user's DrivenData account before any upload."
+    },
+    {
+      "id": "IR-SASS3-28",
+      "severity": "MEDIUM",
+      "title": "Three repo tests failed on main (fixed in this session)",
+      "finding": "tests/test_site_and_links.py and tests/test_independent_review.py failed: docs/index.html had a broken relative link (docs/research/... inside docs/), the README lacked the current run-card note and the independent-review link.",
+      "resolution": "Links fixed (docs copies have docs/ prefix removed); README rebuilt with the required references. Test suite re-run."
+    },
+    {
+      "id": "IR-SASS3-29",
+      "severity": "HIGH",
+      "title": "Legacy build scripts overwrite README and site pages",
+      "finding": "scripts/build_site.py (writes README.md, docs/*.html, index.html, executive-summary.html and run-card JSON), scripts/build_docs_pages.py and scripts/build_review_site.py write the same pages from older templates. Running any of them reverts the 2026-10-29 corrections.",
+      "resolution": "Flagged. README instructs not to run them. Templates must be updated before they are used again. Owner review required."
+    },
+    {
+      "id": "IR-SASS3-30",
+      "severity": "MEDIUM",
+      "title": "Dot-level lattice measure is not meaningful for line-like or soft rasters",
+      "finding": "Connected-component dots (value==1) of the BGK-PBE TIF (main, PR #16) form only 10 blobs because its hard dots are NNE line-like. The dot-level 50% figure is not a dot-count measure. The soft halo (values 0.034 to 0.4) is excluded at ==1.",
+      "resolution": "scripts/check_lattice_lane.py now reports both the dot-level and the pixel-level (value>0) within-3-px fraction and requires both <=70%. Both pass for BGK (44.4% pixel) and for the structural file (42.4%)."
+    },
+    {
+      "id": "IR-SASS3-31",
+      "severity": "MEDIUM",
+      "title": "BGK-PBE submission note on main was truncated",
+      "finding": "evidence/run_card.json and evidence/current_run_card.json on main (PR #16) have submission_note ending in '...' ('NNE-trendi...'), exactly 140 characters. It is a cut-off, not a finished note.",
+      "resolution": "Replaced in every run-card copy with a complete 115-character note. The README sync test relies on that note. A complete note must still be checked before any upload."
+    },
+    {
+      "id": "IR-SASS3-32",
+      "severity": "MEDIUM",
+      "title": "Merge conflict with main (PR #16) resolved in favour of the corrected pages",
+      "finding": "main (PR #16) and this branch both rewrote README.md, index.html, executive-summary.html and docs copies. The merge kept this branch's corrected pages and added the BGK-PBE row. main's BGK method prose (hypothesis text) was not carried over into the pages.",
+      "resolution": "Method prose remains in main history (commit bdc695e). Owner review recommended."
+    },
+    {
+      "id": "IR-SASS3-33",
       "severity": "MEDIUM (CORRECTION 2026-10-28)",
       "title": "Uncovered-cell count 5,379 did not reproduce",
       "finding": "IR-SASS3-19 and the independent review quoted 5,379 footprint cells outside the 3-px lattice buffer and 99.90% coverage. Recomputed by scripts/lattice_bound_audit.py: 6,649 cells outside (Euclidean <=3 px), 7,992 (strict <3 px), 1,846 (7x7 square); coverage 99.8713%. No convention reproduces 5,379.",
       "resolution": "Replaced by the recomputed values in evidence/lattice_bound_audit_20261028.json. The conclusion is unchanged: 37,654 dots cannot pass the literal rule under any convention (max passing dots 22,163 / 26,640 / 6,153)."
     },
     {
-      "id": "IR-SASS3-21",
+      "id": "IR-SASS3-34",
       "severity": "HIGH (OPEN; owner decision)",
       "title": "Literal lattice rule blocks every focus-site file, not only LWST",
       "finding": "scripts/focus_site_candidate_audit.py measured 18 files (9 historical, 9 latest). Lattice overlap within 3 px is 99.05% to 100.00% for every file. The literal Rule 1 therefore blocks the entire focus set.",
       "resolution": "Unresolved. The owner decision is in docs/research/lattice-decision-20261028.md (Options A/B/C). No gate was changed and no file was promoted."
     },
     {
-      "id": "IR-SASS3-22",
+      "id": "IR-SASS3-35",
       "severity": "HIGH (OPEN)",
       "title": "Shared template already implements a like-for-like reading that the reviews did not apply",
       "finding": "vendor/gems57/uniqueness.py classifies halo-saturated lattices (>90% of footprint cells within 3 px, HALO_SATURATION_FRACTION = 0.90) and provides a reading that excludes them from the dot-overlap test. Its docstring keeps the literal reading and leaves the protocol change to the owner.",
       "resolution": "Surfaced as Option A. Under this reading the LWST archive and nine latest candidates pass against the references measured here (latest max overlap 61.6%). Not applied without an owner decision."
     },
     {
-      "id": "IR-SASS3-23",
+      "id": "IR-SASS3-36",
       "severity": "HIGH (OPEN)",
       "title": "Holdout evaluators disagree on the champion and on owner ordering",
       "finding": "gems57-pooled-hide-v2 (nine-site audit) gives GEMSDOE32 champion 0.003885 and GEMSDOE24 0.096653, reversing the owner order (0.2778 vs 0.2477). SGMC-CAL (review section 4) gives 0.064121 and 0.057932, consistent with the owner order (Spearman 0.869, 95% CI [0.606, 0.980], n=21). HIDE-RECOVER Spearman is 0.143.",
       "resolution": "Unresolved. No HOLDOUT-DTI value in the repo is treated as an estimate of an organizer score. The latest-candidate holdout values use pooled-hide-v2 only and are labelled as such. Reconcile before any selection."
     },
     {
-      "id": "IR-SASS3-24",
+      "id": "IR-SASS3-37",
       "severity": "MEDIUM (OPEN)",
       "title": "Protocol lane paragraph missing from the request",
       "finding": "The PARALLEL-RUN PROTOCOL in the request refers to a lane paragraph 'below' that is not in the prompt. The lane is therefore undefined.",
       "resolution": "Unresolved. Lane rule applied as written (rank correlation > 0.90, or > 70% dots within 3 px of a registry raster). Lane paragraph needed from the owner."
     },
     {
-      "id": "IR-SASS3-25",
+      "id": "IR-SASS3-38",
       "severity": "LOW (RESOLVED 2026-10-28)",
       "title": "Leaderboard figures in the request conflict",
       "finding": "The request cites 0.4413 as the high. Another source cites 0.3195 as the highest. The independent review cites 0.4544.",
       "resolution": "Resolved from the live leaderboard page (fetched 2026-10-28): rank 1 xiaofanhu 0.4544; rank 27 kpomazi 0.3195; rank 48 roison 0.2897. 0.3195 is rank 27, not the top. 0.4413 is not on the page."
     },
     {
-      "id": "IR-SASS3-26",
+      "id": "IR-SASS3-39",
       "severity": "MEDIUM (OPEN)",
       "title": "Sibling candidate verdicts are unverified claims",
       "finding": "The nine-site audit records sibling verdicts such as PROMOTE and DO NOT SUBMIT, and a claim that GEMSDOE32 latest beats 0.2778 on holdout. This session did not check any sibling holdout value, and the latest files have no organizer receipts.",
       "resolution": "Recorded as claims only (see docs/research/focus-site-candidates-20261028.md). The overlap and format measurements were recomputed; the verdicts were not accepted."
     },
     {
-      "id": "IR-SASS3-27",
+      "id": "IR-SASS3-40",
       "severity": "MEDIUM (OPEN)",
       "title": "Independent uniqueness scan counted non-submission rasters",
       "finding": "The 451-download scan reported 66.53% max overlap, but the same registry included external layers (for example a road-distance raster and a claim-distance raster) that are not submissions. The scan was not re-run in this session.",
       "resolution": "Restrict the registry to submitted prediction rasters before any uniqueness claim. The literal-rule finding stands because the lattice is a submitted raster."
     },
     {
-      "id": "IR-SASS3-28",
+      "id": "IR-SASS3-41",
       "severity": "MEDIUM (OPEN)",
       "title": "Run card ok_to_download conflicts with the gate verdict",
       "finding": "evidence/current_run_card.json records ok_to_download: true (status_reason 'Archival download only'), while scripts/verify_all_gates.py reports OK TO DOWNLOAD: NO (BLOCKED) for the same file. The two cannot both be right for a download decision.",
       "resolution": "The gate verdict governs. The site and README now say OK TO DOWNLOAD: NO, and the archive is not linked for download. The run card field should be corrected by the owner or by the next run-card writer."
     },
     {
-      "id": "IR-SASS3-29",
+      "id": "IR-SASS3-42",
       "severity": "HIGH (OPEN)",
       "title": "BGK-PBE file on main is not OK to download: non-zero values outside the competition bounds",
       "finding": "docs/downloads/...bgk-pbe...-zeros.tif (main, SHA-256 7ab47cf5...) has 4,911 non-zero cells outside the sample footprint (the competition rule is 'data outside the bounds is null or nan', competition page 967). 3,503 of its 6,178 hard dots and 4,911 of its positive cells lie outside the footprint, where they cannot score. Measured by scripts/candidate_format_audit.py -> evidence/candidate_format_audit_20261029.json.",
       "resolution": "Gate now fails the file (tif_outside_bounds_null_or_zero) and prints OK TO DOWNLOAD: NO (BLOCKED). The run card on main still says ok_to_download true; the owner or the run-card writer must correct it. The file is kept for audit and is not linked as a download."
     },
     {
-      "id": "IR-SASS3-30",
+      "id": "IR-SASS3-43",
       "severity": "HIGH (OPEN)",
       "title": "The BGK-PBE 'literal lattice pass' comes entirely from dots outside the footprint",
       "finding": "Over all positive cells the BGK file's lattice overlap is 44.41%, which passes the 70% limit. Inside the footprint it is 99.59% (hard dots 99.40%), which fails. The outside-bounds cells count as non-overlapping, so the all-cells figure is a placement artefact of the same kind as Option C in docs/research/lattice-decision-20261028.md.",
       "resolution": "Recorded both figures. The literal rule is applied inside the footprint in the audit. Owner decision still required (Options A, B, C)."
     },
     {
-      "id": "IR-SASS3-31",
+      "id": "IR-SASS3-44",
       "severity": "MEDIUM (OPEN)",
       "title": "Gate format checks did not test the outside-bounds rule",
       "finding": "scripts/verify_all_gates.py checked CRS, shape, transform, range, NaN and dot counts, but not the competition's 'data outside the bounds is null or nan' rule. The format gate therefore reported PASS for the BGK file, which fails that rule. Download approval depended only on format checks.",
       "resolution": "Added tif_outside_bounds_null_or_zero (non-zero cells outside the footprint fail; pending without the data). Blocked-state acceptance now requires every failing check to be a documented one. Test run: data present -> exit 1 (BGK run card's doc_sync also failed until the README named it); data absent -> documented pending states only."
     },
     {
-      "id": "IR-SASS3-32",
+      "id": "IR-SASS3-45",
       "severity": "MEDIUM (OPEN)",
       "title": "Gate registry checks read a stored LWST audit, not the current candidate",
       "finding": "verify_all_gates.py's literal_registry_overlap_all_rasters and historical_non_lattice_subset_passed read evidence/uniqueness_audit_386.json (a stored audit with the LWST-era lattice figure of 99.7849%). They do not measure the file named in the run card. For the BGK file registry_rasters_checked is 0, so they stay pending.",
       "resolution": "Unresolved. The current candidate's registry overlap must be measured by the gate itself before any download or submit decision relies on it."
     },
     {
-      "id": "IR-SASS3-33",
+      "id": "IR-SASS3-46",
       "severity": "MEDIUM (OPEN)",
       "title": "Main's README said competition data was absent; it is restored here",
       "finding": "The README on main says the holdout, leakage canary and registry gates cannot run because competition rasters are absent. In this session the restore script fetched 28 files from owner mirrors (data/restore_receipt.json), so the lattice, footprint and LWST checks ran here. The mirrors are not organizer-authenticated.",
       "resolution": "README updated. Holdout-DTI for the BGK file was not run."
     },
     {
-      "id": "IR-SASS3-34",
+      "id": "IR-SASS3-47",
       "severity": "HIGH (OPEN; provenance)",
       "title": "Main's README calls the BGK raster content a synthetic stand-in",
       "finding": "The README on main (Limitations) states 'Raster content is a synthetic stand-in; real multi-sensor features must be computed on training_features.tif'. The run card on main says the file was generated from the BGK-PBE hypothesis. The two statements conflict unless the file is a placeholder.",
       "resolution": "Unresolved. The owner must confirm how the BGK raster was produced (features actually computed from the restored training_features.tif, or a placeholder) before any use."
     },
     {
-      "id": "IR-SASS3-35",
+      "id": "IR-SASS3-48",
       "severity": "LOW (OPEN)",
       "title": "BGK submission note is truncated",
       "finding": "The BGK run card's submission_note ends with 'NNE-trendi...' (a truncated sentence, 140 characters). A submission form may show a cut-off comment.",
       "resolution": "Unresolved. Write a complete note of at most 140 characters before any submission."
+    },
+    {
+      "id": "IR-SASS3-49",
+      "severity": "HIGH (OPEN)",
+      "title": "Unique-structural placeholder on main has 74,418 non-zero cells outside the competition bounds",
+      "finding": "docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif (PR #19 on main) has 74,418 non-zero cells outside the sample footprint, all of them positive dots. The competition rule is 'data outside the bounds is null or nan' (page 967). Its validator receipt (evidence/validator_unique_structural_20261029.json) reports all hard checks PASS because it notes 'footprint check NOT run'. Measured by scripts/candidate_format_audit.py and scripts/validate_submission_tif.py (now fails closed).",
+      "resolution": "The file is not format-valid under the outside-bounds rule. It is blocked for download and submit. The README and pages on main (format test PASS, download yes) are corrected in this branch. The file is not linked as an approved download."
+    },
+    {
+      "id": "IR-SASS3-50",
+      "severity": "HIGH (OPEN)",
+      "title": "Format-only PASS claims for BGK-PBE and the unique file were contradicted by measurement",
+      "finding": "Main's README (PR #19) states 'format PASS' and 'download yes, format test only' for the BGK-PBE and unique-structural files. Those claims rest on checks that omit the outside-bounds rule (see IR-SASS3-42, IR-SASS3-44, IR-SASS3-49). Main's README also says the lattice lane PASSES for both files, but that figure is the all-positive-cell measure; inside the footprint both are above 99%.",
+      "resolution": "Superseded by this branch: both files are NOT download-ready and NOT OK to submit. The lattice figure for each is reported with the inside-footprint value alongside it."
+    },
+    {
+      "id": "IR-SASS3-51",
+      "severity": "MEDIUM (OPEN)",
+      "title": "validate_submission_tif.py did not run the outside-bounds check and passed without it",
+      "finding": "scripts/validate_submission_tif.py reported all_hard_checks_pass true when the footprint was absent and never tested non-zero cells outside the bounds. That is the rule the official text states.",
+      "resolution": "Fixed in this branch: the validator runs the outside-bounds check when the footprint is present, and fails closed (PENDING_DATA) when it is not."
+    },
+    {
+      "id": "IR-SASS3-52",
+      "severity": "MEDIUM (OPEN)",
+      "title": "LWST note's HR=0.1111 is a per-fold out-of-fold value, not the file's hide-and-recover score",
+      "finding": "The LWST submission note (evidence/lwst_experiment_ledger.json) reads 'HR=0.1111'. The independent review's check C2 (docs/research/independent-review-20261028.md, line 42) identifies 0.111062 as a per-fold out-of-fold validation value, not the shipped file's HIDE-RECOVER score. The review's HIDE-RECOVER for the file is 0.006130 [0.005175, 0.007123]; SGMC-CAL is 0.065702 [0.058992, 0.071240] (evidence/independent_review_20261028.json). The LWST file has no run card in evidence/.",
+      "resolution": "Explained by the review (C2). Do not cite 0.1111 as a holdout score for the file; cite the labelled review figures."
+    },
+    {
+      "id": "IR-SASS3-53",
+      "severity": "MEDIUM (OPEN)",
+      "title": "Independent review says LWST is 'OK to upload' but the literal lattice rule fails it",
+      "finding": "evidence/independent_review_20261028.json (H-SASS3-E section) records the LWST verdict 'review: OK to upload (format+uniqueness), not promoted to a slot'. The measured lattice overlap inside the footprint is 99.78% against the 70% limit (evidence/candidate_format_audit_20261029.json). The review applies a like-for-like reading that the protocol does not state (IR-SASS3-35).",
+      "resolution": "The gate governs. LWST is NOT OK to download or submit until the owner records a decision (Option A, B or C in docs/research/lattice-decision-20261028.md)."
     }
   ]
 }

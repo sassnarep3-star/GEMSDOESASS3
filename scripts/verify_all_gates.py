@@ -149,6 +149,21 @@ def verify_all() -> dict:
             record("zip_contains_valid_tif", names == [tif_path.name], f"zip contents={names}")
             record("zip_inner_matches_tif", names == [tif_path.name] and hashlib.sha256(zf.read(tif_path.name)).hexdigest() == card["raster_sha256"], "ZIP bytes differ from TIF")
 
+    # Literal lattice rule measured on THIS file: <=70% of its positive cells inside the footprint lie within 3 px of
+    # the pinned 13GEMSDOE calibration lattice. Positive cells outside the footprint are not scored and are excluded.
+    lattice_path = ROOT / ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
+    footprint_for_lattice = _footprint_mask()
+    if cand_dots is None or footprint_for_lattice is None or not lattice_path.exists():
+        record("literal_lattice_inside_footprint", False, "lattice or footprint absent (PENDING_DATA): literal lattice rule not measured on this file")
+    else:
+        with rasterio.open(lattice_path) as lat_ds:
+            lat = np.nan_to_num(lat_ds.read(1), nan=0.0) > 0.0
+        d_lat = ndi.distance_transform_edt(~lat)
+        inside = cand_dots & footprint_for_lattice
+        n_inside = int(inside.sum())
+        frac = float((d_lat[inside] <= 3.0).mean()) if n_inside else 1.0
+        record("literal_lattice_inside_footprint", frac <= 0.70, f"within-3px fraction inside footprint = {frac:.4f} (limit 0.70)")
+
     # Dual-Evaluator Holdout wins vs 0.2778 Champion (skipped if holdout not run)
     hd = card.get("holdout_dti", {})
     if hd.get("score_label") == "HOLDOUT-DTI":
@@ -217,8 +232,16 @@ def verify_all() -> dict:
     format_ok = all(checks.get(k, False) for k in format_keys)
     # All checks pass only if format + holdout + registry + docs all pass.
     ok = len(problems) == 0
-    # OK to download: format gate passes + card says ok_to_download.
-    ok_download = format_ok and bool(card.get("ok_to_download"))
+    # OK to download (fail closed): format gate passes AND the competition outside-bounds rule passes AND the literal
+    # lattice rule passes on this file AND the registry check passes AND the run card does not withhold download.
+    # Holdout is NOT required to download; it is required to submit.
+    ok_download = (
+        format_ok
+        and checks.get("tif_outside_bounds_null_or_zero", False)
+        and checks.get("literal_lattice_inside_footprint", False)
+        and checks.get("literal_registry_overlap_all_rasters", False)
+        and bool(card.get("ok_to_download"))
+    )
     # OK to submit: everything passes AND verdict is promote.
     ok_submit = ok and bool(card.get("ok_to_submit")) and card.get("verdict") == "promote"
     return {
@@ -261,6 +284,7 @@ def main() -> int:
         "literal_registry_overlap_all_rasters",
         "historical_non_lattice_subset_passed",
         "tif_outside_bounds_null_or_zero",
+        "literal_lattice_inside_footprint",
     }
     pending_only = all(
         any(p.startswith(key + ":") for key in expected_pending) for p in res["problems"]

@@ -106,6 +106,104 @@
         "literal_lattice_rule_on_all_dots": true,
         "literal_lattice_rule_inside_footprint": false
       }
+    },
+    {
+      "path": "docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
+      "sha256": "ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e",
+      "bytes": 193208,
+      "grid": {
+        "crs": "EPSG:32611",
+        "shape": [
+          3730,
+          3292
+        ],
+        "transform": [
+          100.0,
+          0.0,
+          243350.0,
+          0.0,
+          -100.0,
+          4508550.0
+        ],
+        "count": 1,
+        "dtype": "float32",
+        "nodata": null,
+        "grid_ok": true
+      },
+      "footprint": {
+        "nan_inside": 0,
+        "values_0_1_inside": true,
+        "outside_nonnull": 7111787,
+        "outside_nonzero": 74418
+      },
+      "positive_cells": {
+        "total": 129311,
+        "inside_footprint": 54893,
+        "outside_footprint": 74418,
+        "hard_value_1_inside": 54893,
+        "hard_value_1_outside": 74418
+      },
+      "lattice": {
+        "overlap_all_positive_cells": 0.424341,
+        "overlap_inside_footprint": 0.998506,
+        "spearman_vs_lattice_sampled": -0.001275
+      },
+      "verdict": {
+        "format_ok": false,
+        "outside_bounds_null_or_nan_strict": false,
+        "outside_bounds_no_positive_cells": false,
+        "literal_lattice_rule_on_all_dots": true,
+        "literal_lattice_rule_inside_footprint": false
+      }
+    },
+    {
+      "path": "docs/downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif",
+      "sha256": "250b22eaf2411c75c8587ffb8c7747f0f2f942e2c6a4a219b1371b340d4403fb",
+      "bytes": 121706,
+      "grid": {
+        "crs": "EPSG:32611",
+        "shape": [
+          3730,
+          3292
+        ],
+        "transform": [
+          100.0,
+          0.0,
+          243350.0,
+          0.0,
+          -100.0,
+          4508550.0
+        ],
+        "count": 1,
+        "dtype": "float32",
+        "nodata": null,
+        "grid_ok": true
+      },
+      "footprint": {
+        "nan_inside": 0,
+        "values_0_1_inside": true,
+        "outside_nonnull": 7111787,
+        "outside_nonzero": 0
+      },
+      "positive_cells": {
+        "total": 37654,
+        "inside_footprint": 37654,
+        "outside_footprint": 0,
+        "hard_value_1_inside": 37654,
+        "hard_value_1_outside": 0
+      },
+      "lattice": {
+        "overlap_all_positive_cells": 0.999708,
+        "overlap_inside_footprint": 0.999708,
+        "spearman_vs_lattice_sampled": -0.000733
+      },
+      "verdict": {
+        "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
+        "outside_bounds_no_positive_cells": true,
+        "literal_lattice_rule_on_all_dots": false,
+        "literal_lattice_rule_inside_footprint": false
+      }
     }
   ]
 }

@@ -1,0 +1,24 @@
+{
+ "file": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+ "sha256": "7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f",
+ "bytes": 64961,
+ "checks": {
+  "single_band": true,
+  "dtype_float32": true,
+  "crs_epsg_32611": true,
+  "shape_3730x3292": true,
+  "transform_matches_training_grid": true,
+  "no_nan_or_inf": true,
+  "values_in_0_1": true
+ },
+ "stats": {
+  "min": 0.0,
+  "max": 1.0,
+  "positive_pixels": 8794,
+  "unique_values": 7
+ },
+ "notes": [
+  "footprint check NOT run: sample_submission.tif is not in this workspace (login-walled)"
+ ],
+ "all_hard_checks_pass": true
+}

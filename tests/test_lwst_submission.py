@@ -34,9 +34,11 @@ def test_run_card_and_protocol_schema():
     }
     assert required_keys.issubset(rc.keys())
     assert len(rc["submission_note"]) <= 140
-    assert rc["verdict"] == "format_valid_pending_data"
+    # Corrected 2026-10-29 (IR-SASS3-42, IR-SASS3-41): the earlier verdict and ok_to_download True came from a format gate
+    # that did not test the outside-bounds rule. The file fails that rule, so download is not approved.
+    assert rc["verdict"] == "blocked_outside_bounds"
     assert rc["ok_to_submit"] is False
-    assert rc["ok_to_download"] is True
+    assert rc["ok_to_download"] is False
 
     # Holdout-DTI and SGMC not run (pending competition data)
     assert rc["holdout_dti"]["score_label"] == "PENDING_DATA"

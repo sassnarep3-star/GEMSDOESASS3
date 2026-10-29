@@ -42,7 +42,7 @@ an expanded label set that adds faults verified by experts after reviewing submi
 
 Correction: the review and ledger entry IR-SASS3-19 gave 5,379 uncovered cells and a 99.90% footprint coverage. Those
 values did not reproduce under any convention tested. The recomputed values above replace them. The conclusion is
-unchanged. See IR-SASS3-20 in `evidence/irregularities_ledger.json`.
+unchanged. See IR-SASS3-33 in `evidence/irregularities_ledger.json`.
 
 ## 3. Options for the owner
 

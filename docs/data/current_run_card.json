@@ -5,19 +5,19 @@
   "mechanism": "Multiplicative combination of (a) |grad isostatic gravity anomaly| (concealed basement density step), (b) radiometric K and K/eTh anomaly (hydrothermal argillic/magnetite-destruction cap), (c) GPS dilatation rate at piedmont-basin transition, masked to low-slope basin interiors and >200 m off catalogue. Emitted as sparse NNE-trending 300 m triangular-kernel dots.",
   "mimic": "Plutonic intrusive margins (Cretaceous granodiorite vs Mesozoic metasediment) create steep gravity gradients with zero Quaternary slip; suppressed where depth_to_base_surf indicates shallow bedrock cover (< 100 m) and USGS geologic map shows plutonic contacts.",
   "holdout_dti": {
-    "note": "NOT RUN \u2014 competition rasters (training_features.tif, labels.tif, sample_submission.tif) absent from this sandbox (DrivenData login required). Holdout-DTI, 95% CI, and registry-overlap gates cannot be computed here.",
+    "note": "NOT RUN — competition rasters (training_features.tif, labels.tif, sample_submission.tif) absent from this sandbox (DrivenData login required). Holdout-DTI, 95% CI, and registry-overlap gates cannot be computed here.",
     "score_label": "PENDING_DATA",
     "pooled_dti": null,
     "ci95": null,
     "withheld_positives": null
   },
   "leakage_canary": {
-    "note": "NOT RUN \u2014 requires holdout labels. Single-feature AUC of gravity-gradient, K raster, and dilatation rate expected <= 0.90 (all non-catalogue-derived continuous fields).",
+    "note": "NOT RUN — requires holdout labels. Single-feature AUC of gravity-gradient, K raster, and dilatation rate expected <= 0.90 (all non-catalogue-derived continuous fields).",
     "passed": null,
     "worst_symmetric_auc": null
   },
   "registry_correlation_and_overlap": {
-    "note": "NOT RUN \u2014 registry rasters absent. Format-valid raster generated; must be checked against all registry rasters (rank correlation <= 0.90, within-3-px overlap <= 70%) before submission.",
+    "note": "NOT RUN — registry rasters absent. Format-valid raster generated; must be checked against all registry rasters (rank correlation <= 0.90, within-3-px overlap <= 70%) before submission.",
     "registry_rasters_checked": 0,
     "passed": null
   },
@@ -62,14 +62,16 @@
     "all_checks_passed": true
   },
   "submission_name": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
-  "submission_note": "GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh radiometric enrichment x geodetic dilatation blind-fault locator. NNE-trendi...",
-  "ok_to_download": true,
+  "submission_note": "GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh x dilatation blind-fault locator, NNE faults, unscored",
+  "ok_to_download": false,
   "ok_to_submit": false,
-  "verdict": "format_valid_pending_data",
+  "verdict": "blocked_outside_bounds",
   "download_path": "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
   "status_reason": "Format gate PASSED (CRS/shape/transform/[0,1]/NaN verified). Holdout-DTI and registry-overlap gates NOT RUN: competition rasters absent from sandbox. DO NOT SUBMIT until those gates pass on a data-equipped machine. Unique by construction (not a copy of any GEMSDOE24-36 file).",
   "generated_utc": "20261029T000321Z",
   "method": "BGK-PBE Hypothesis 1 (Rank #1 per docs/research/hypotheses_ranked_20261028.md)",
   "unique_vs_focus9": true,
-  "unique_note": "Not derived from any GEMSDOE24/25/27/28/30/31/32/33/36 submission; no shared dots, no dotted-ridge/H19-5 lineage."
+  "unique_note": "Not derived from any GEMSDOE24/25/27/28/30/31/32/33/36 submission; no shared dots, no dotted-ridge/H19-5 lineage.",
+  "ok_to_download_previous": true,
+  "correction_note": "Corrected 2026-10-29: ok_to_download set to false and verdict changed from 'format_valid_pending_data'. The earlier format gate did not test the competition outside-bounds rule; the file has 4,911 non-zero cells outside the footprint (IR-SASS3-42, IR-SASS3-44). Measured by scripts/candidate_format_audit.py."
 }

@@ -195,7 +195,7 @@ lattice_block = (
     f"<li>Cells within 3 px of a lattice dot: {prim['footprint_cells_within_3px_of_lattice']:,} ({lattice_pct:.4f}%). Cells outside the buffer: <strong>{prim['footprint_cells_outside_buffer']:,}</strong> (primary convention).</li>"
     f"<li>Largest dot count that can pass: <strong>{prim['max_dots_that_can_pass']:,}</strong> (primary). Under the strict and 7×7 conventions: {bc['euclidean_lt_3px']['max_dots_that_can_pass']:,} and {bc['square_7x7_neighbourhood']['max_dots_that_can_pass']:,}. None of the three reaches 37,654, the dot count of the files measured here.</li>"
     f"<li>The LWST archive re-measured: {100*lw['forward_overlap_within_3px']:.4f}% of its {lw['dots']:,} dots lie within 3 px of a lattice dot (limit 70%).</li></ul>"
-    "<p>Correction: the earlier figure of 5,379 outside cells did not reproduce under any convention tested. The recomputed figure is shown above. The conclusion is unchanged. See IR-SASS3-19 and IR-SASS3-20 in <code>evidence/irregularities_ledger.json</code>.</p></section>"
+    "<p>Correction: the earlier figure of 5,379 outside cells did not reproduce under any convention tested. The recomputed figure is shown above. The conclusion is unchanged. See IR-SASS3-19 and IR-SASS3-33 in <code>evidence/irregularities_ledger.json</code>.</p></section>"
 )
 
 irr = (
@@ -233,10 +233,10 @@ remaining = (
     "<section><h2>Remaining work</h2><ol>"
     "<li>The owner records Option A, B or C. Draft amendment: docs/research/protocol-amendments.md (PROPOSED, not applied).</li>"
     "<li>If Option A is recorded, re-run the gates with the recorded reading. A separate selector then picks one file within the weekly cap of three.</li>"
-    "<li>Reconcile the two holdout evaluators (pooled-hide-v2 vs SGMC-CAL) on the owner-scored set (ledger IR-SASS3-23).</li>"
+    "<li>Reconcile the two holdout evaluators (pooled-hide-v2 vs SGMC-CAL) on the owner-scored set (ledger IR-SASS3-36).</li>"
     "<li>Compute the SGMC-CAL proxy for the nine latest candidates (not done).</li>"
     "<li>Test hypotheses H-SASS3-F, G and H on the spatially-blocked holdout, within 3 experiments or 2 hours. H-SASS3-E was tested and is negative. This session ran no experiments.</li>"
-    "<li>Obtain the missing lane paragraph from the protocol (ledger IR-SASS3-24).</li>"
+    "<li>Obtain the missing lane paragraph from the protocol (ledger IR-SASS3-37).</li>"
     "</ol></section>"
 )
 
@@ -246,13 +246,17 @@ bgk = fmt_by_name[card["submission_name"]]
 lwst_name = "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif"
 lwst = fmt_by_name[lwst_name]
 LWST_NOTE = "GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657"
+uniq_card = load("evidence/run_card_unique_structural_20261029.json")
+uniq = fmt_by_name[uniq_card["submission_name"]]
+gsd_name = "gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif"
+gsd = fmt_by_name[gsd_name]
 
 
-def _cand_block(title: str, name: str, sha: str, note: str, c: dict, extra: str) -> str:
+def _cand_block(title: str, name: str, sha: str, note: str, c: dict, extra: str, card_line: str = "Run card field ok_to_submit: false.") -> str:
     fp, pos, lat, v = c["footprint"], c["positive_cells"], c["lattice"], c["verdict"]
     return (
         f"<section><h2>{e(title)}</h2>"
-        f"<p><strong>Status: NOT download-ready. OK TO DOWNLOAD: NO (BLOCKED) · OK TO SUBMIT: NO.</strong> Run card field ok_to_submit: false. Format-valid: "
+        f"<p><strong>Status: NOT download-ready. OK TO DOWNLOAD: NO (BLOCKED) · OK TO SUBMIT: NO.</strong> {card_line} Format-valid: "
         f"{'yes' if v['format_ok'] else 'no'}. Measured in scripts/candidate_format_audit.py (REGISTRY-MEASUREMENT).</p>"
         "<ul>"
         f"<li>Outside the competition bounds: {fp['outside_nonzero']:,} non-zero cells and {pos['outside_footprint']:,} positive cells. The rule is \"data outside the bounds is null or nan\". Zeros outside are tolerated (the convention of the owner-scored files); non-zero values are not.</li>"
@@ -268,9 +272,21 @@ historical_files = (
     _cand_block(
         "Current candidate on main: BGK-PBE (not cleared)",
         card["submission_name"], card["raster_sha256"], card["submission_note"], bgk,
-        "Its run card (evidence/current_run_card.json) records ok_to_download: true and status 'Format gate PASSED', and it "
-        "predates this measurement. The gate's format check did not test the outside-bounds rule, which this audit adds. "
+        "Its run card (evidence/current_run_card.json) recorded ok_to_download: true before 2026-10-29. The format gate did not test the "
+        "outside-bounds rule, which this audit adds. The card is corrected to false. "
         "The holdout and registry gates were not run for this file.",
+    )
+    + _cand_block(
+        "Unique-structural placeholder on main (not cleared)",
+        uniq_card["submission_name"], uniq_card["raster_sha256"], uniq_card["submission_note"], uniq,
+        "Its validator receipt (evidence/validator_unique_structural_20261029.json) reports all hard checks PASS but says \"footprint check NOT run\". "
+        "The outside-bounds rule fails. The file reads no data; its run card gives no score (HOLDOUT-DTI NOT MEASURED). The card is corrected to false.",
+    )
+    + _cand_block(
+        "GSDHUA3 SAR file on main (archive, not cleared)",
+        gsd_name, gsd["sha256"], "not recorded in a run card on main", gsd,
+        "Zeros outside the footprint, but the literal lattice rule fails on the inside-footprint dots. Archive only.",
+        card_line="No run card for this file on main.",
     )
     + _cand_block(
         "Archived LWST file (not cleared)",
