@@ -151,6 +151,23 @@ def verify_all() -> dict:
         and 0 <= row["within_3px_fraction"] <= 0.70 for row in lattice),
         "Registry lattice overlaps 99.7849% of candidate dots; protocol limit is 70%")
 
+    # Scoped recomputation (scripts/independent_uniqueness_audit.py, 2026-10-28). Reads the raster
+    # audit output directly; the literal registry rule covers submissions + calibration rasters.
+    for tag, rel in (("lwst", "evidence/uniqueness_scoped_lwst_20261028.json"),
+                     ("sardeconf", "evidence/uniqueness_scoped_sardeconf_20261028.json")):
+        path = ROOT / rel
+        if not path.exists():
+            record(f"scoped_literal_registry_rule_{tag}", False, f"missing {rel}")
+            continue
+        sc = json.loads(path.read_text())["summary"]
+        lit = sc["by_scope"]["submission"]["max_within3"]["frac"], sc["by_scope"]["calibration"]["max_within3"]["frac"]
+        record(
+            f"scoped_literal_registry_rule_{tag}",
+            sc.get("passes_rule_1") is True,
+            f"Literal registry rule BLOCKED ({tag}): max within-3 px overlap submissions {lit[0]*100:.2f}%, "
+            f"calibration lattice {lit[1]*100:.2f}%; limit 70%",
+        )
+
     # 386-Raster Uniqueness + Parallel Sibling GeoTIFF check
     uq = card["registry_correlation_and_overlap"]
     record(
@@ -216,7 +233,10 @@ def main() -> int:
     print(f"  OK TO DOWNLOAD  : {'YES (APPROVED)' if res['ok_to_download'] else 'NO (BLOCKED)'}")
     print(f"  OK TO SUBMIT    : {'YES (VERDICT: PROMOTE)' if res['ok_to_submit'] else 'NO'}")
     print("=" * 78)
-    return 0 if res["ok"] or ("--expect-blocked" in sys.argv and not res["ok_to_submit"] and res["problems"] == ["literal_registry_overlap_all_rasters: Registry lattice overlaps 99.7849% of candidate dots; protocol limit is 70%"] and res["verdict"] == "negative") else 1
+    # --expect-blocked: CI passes only when every problem is a documented literal-registry block.
+    known_blocks = ("literal_registry_overlap_all_rasters", "scoped_literal_registry_rule_")
+    expected_block = bool(res["problems"]) and all(pr.startswith(known_blocks) for pr in res["problems"])
+    return 0 if res["ok"] or ("--expect-blocked" in sys.argv and not res["ok_to_submit"] and expected_block and res["verdict"] == "negative") else 1
 
 
 if __name__ == "__main__":
