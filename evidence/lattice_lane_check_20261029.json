@@ -1,0 +1,44 @@
+{
+ "schema_version": 1,
+ "recorded_utc": "2026-10-29T00:10:53Z",
+ "lattice": {
+  "path": ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
+  "source": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
+ },
+ "limits": {
+  "within3_dot_fraction_max": 0.7,
+  "abs_spearman_max": 0.9
+ },
+ "results": [
+  {
+   "file": "gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif",
+   "same_grid": true,
+   "positive_pixels": 37654,
+   "blobs_dots": 23029,
+   "within3_dot_fraction": 0.999696,
+   "spearman_vs_lattice_sampled": 0.007735,
+   "pass": false
+  },
+  {
+   "file": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
+   "same_grid": true,
+   "positive_pixels": 37654,
+   "blobs_dots": 34241,
+   "within3_dot_fraction": 0.997897,
+   "spearman_vs_lattice_sampled": -0.000749,
+   "pass": false
+  },
+  {
+   "file": "gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
+   "same_grid": true,
+   "positive_pixels": 129311,
+   "blobs_dots": 9664,
+   "within3_dot_fraction": 0.423531,
+   "spearman_vs_lattice_sampled": 0.00147,
+   "pass": true
+  }
+ ],
+ "all_pass": false,
+ "scope_note": "Lattice only. Other registry rasters (451 downloads audit) are NOT covered by this file."
+}
