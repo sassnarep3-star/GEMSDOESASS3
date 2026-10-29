@@ -98,13 +98,14 @@ def test_nine_sites_h19_5_set_algebra_invariants() -> None:
 
 
 def test_emitted_geotiff_and_all_automated_gates() -> None:
-    """End-to-end automated programmatic inspection of the promoted submission GeoTIFF."""
+    """Audit archive integrity separately from the blocked submission decision."""
     res = verify_all()
-    assert res["ok"] is False
-    assert any("literal_registry_overlap_all_rasters" in p for p in res["problems"])
-    assert res["ok_to_download"] is False
+    assert res["ok"] is True, res["problems"]
+    assert res["ok_to_download"] is True  # archive/research only
     assert res["ok_to_submit"] is False
     assert res["verdict"] == "negative"
+    assert any("calibration-lattice" in blocker for blocker in res["submission_blockers"])
+    assert any("full-registry" in blocker for blocker in res["submission_blockers"])
 
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
     tif_path = ROOT / card["download_path"]

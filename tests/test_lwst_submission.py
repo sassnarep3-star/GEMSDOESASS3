@@ -22,7 +22,7 @@ def test_run_card_and_protocol_schema():
     required_keys = {
         "hypothesis",
         "mechanism",
-        "mimic",
+        "non_fault_mimic",
         "holdout_dti",
         "leakage_canary",
         "registry_correlation_and_overlap",
@@ -31,25 +31,32 @@ def test_run_card_and_protocol_schema():
         "submission_name",
         "submission_note",
         "verdict",
+        "ok_to_download",
+        "ok_to_submit",
     }
     assert required_keys.issubset(rc.keys())
     assert len(rc["submission_note"]) <= 140
     assert rc["verdict"] == "negative"
+    assert rc["ok_to_download"] is True  # analysis/archive only
     assert rc["ok_to_submit"] is False
+    assert rc["slot_spent"] is False
+    assert rc["new_candidate_generated_this_review"] is False
 
-    # Strict score labeling check (Protocol Rule 3)
-    hr = rc["holdout_dti"]["primary_hide_and_recover"]
-    sg = rc["holdout_dti"]["secondary_off_catalogue_sgmc"]
+    # Every proxy result is provenance-complete; no unsupported win is asserted.
+    hr = rc["holdout_dti"]["archived_lwst_hide_and_recover"]
+    sg = rc["holdout_dti"]["archived_lwst_sgmc_cal"]
     assert hr["score_label"] == "HOLDOUT-DTI"
     assert hr["evaluator_version"] == "GEMSDOE32-HIDE-RECOVER-v3.0"
     assert hr["withheld_positive_pixels"] == 22232
-    assert hr["pooled_dti"] > hr["champion_02778_baseline_dti"]
-    assert hr["paired_delta_ci95"][0] > 0.0
+    assert 0.00612 < hr["pooled_dti"] < 0.00614
+    assert len(hr["ci95"]) == 2
 
     assert sg["score_label"] == "HOLDOUT-DTI"
     assert sg["evaluator_version"] == "GEMSDOE32-SGMC-CAL-v3.0"
-    assert sg["off_catalogue_positive_pixels"] == 62703
-    assert sg["prevalence_calibrated_dti"] > sg["champion_02778_calibrated_dti"]
+    assert sg["withheld_positive_pixels"] == 62703
+    assert 0.0656 < sg["prevalence_calibrated_dti"] < 0.0658
+    assert len(sg["ci95"]) == 2
+    assert rc["holdout_dti"]["organizer_score"] is None
 
 
 def test_leakage_canary_and_uniqueness_gates():
@@ -58,18 +65,17 @@ def test_leakage_canary_and_uniqueness_gates():
     assert canary["n_channels_tested"] == 51
     assert canary["worst_symmetric_auc"] <= 0.90
 
-    uniq = json.loads((ROOT / "evidence" / "uniqueness_audit_386.json").read_text())
-    assert uniq["total_valid_registry_rasters_checked"] == 386
-    assert uniq["surface_before_placement"]["passed_all_386"] is True
-    assert uniq["surface_before_placement"]["worst_abs_spearman"] <= 0.90
-
-    fd = uniq["final_dots"]
-    assert fd["passed_all_focus_9_sites_literally"] is True
-    assert fd["passed_all_385_genuine_literally"] is True
-    assert fd["passed_null_calibrated_all_386"] is True
-    assert fd["worst_abs_spearman_all_386"] <= 0.90
-    assert fd["worst_within_3px_focus_9_sites"] <= 0.70
-    assert fd["worst_within_3px_385_genuine"] <= 0.70
+    # The prior 386-raster checks are archival, and the literal calibration
+    # lattice blocks the candidate. They must not be treated as a current pass.
+    card = json.loads((ROOT / "evidence" / "run_card.json").read_text())
+    uniq = card["registry_correlation_and_overlap"]
+    assert uniq["recomputed_this_run"] is False
+    assert uniq["current_registry_clearance"] is False
+    assert uniq["preplacement_surface_currently_cleared"] is False
+    assert uniq["final_dots_currently_cleared"] is False
+    assert uniq["archived_literal_lattice_result"]["within3_fraction"] > 0.70
+    assert uniq["archived_literal_lattice_result"]["pass"] is False
+    assert uniq["archived_final_dot_scan_451_downloads"]["archived_subset_pass"] is True
 
 
 def test_geotiff_automated_validation_gate_and_zip():

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Automated zero-human-intervention programmatic inspector & gate verifier for GEMSDOESASS3.
+"""Verify archived-raster integrity and fail-closed submission status.
 
-Runs cleanly in both:
-  - Full workspace mode (with /tmp/gems_data), and
-  - Lightweight GitHub Actions CI mode (inspecting shipped GeoTIFF, ZIP, 51-ch Leakage Canary,
-    386-raster + sibling Uniqueness Audit, Dual-Evaluator Holdout wins, and Pages sync).
+A successful audit run means the local archive and its provenance/status records
+are internally consistent. It does NOT mean the candidate is eligible to submit.
+Current uniqueness remains blocked when the complete registry is unavailable or
+the literal calibration-lattice rule fails.
 """
 from __future__ import annotations
 
@@ -16,7 +16,6 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
-from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_CRS = "EPSG:32611"
@@ -25,170 +24,248 @@ EXPECTED_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
 
 
 def sha256_file(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest()
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _is_metric_record(record: object, *, score_key: str) -> bool:
+    if not isinstance(record, dict):
+        return False
+    ci = record.get("ci95")
+    return (
+        record.get("score_label") == "HOLDOUT-DTI"
+        and isinstance(record.get("evaluator_version"), str)
+        and bool(record.get("evaluator_version"))
+        and isinstance(record.get("withheld_positive_pixels"), int)
+        and record["withheld_positive_pixels"] > 0
+        and isinstance(record.get(score_key), (int, float))
+        and isinstance(ci, list)
+        and len(ci) == 2
+        and all(isinstance(v, (int, float)) for v in ci)
+    )
 
 
 def verify_all() -> dict:
     checks: dict[str, bool] = {}
     problems: list[str] = []
 
-    def record(name: str, cond: bool, msg_if_fail: str) -> None:
-        checks[name] = bool(cond)
-        if not cond:
-            problems.append(f"{name}: {msg_if_fail}")
+    def record(name: str, condition: bool, failure: str) -> None:
+        checks[name] = bool(condition)
+        if not condition:
+            problems.append(f"{name}: {failure}")
 
-    rc_ev = ROOT / "evidence/current_run_card.json"
-    rc_doc = ROOT / "docs/data/current_run_card.json"
-    rc_canon = ROOT / "evidence/run_card.json"
-    record("run_card_exists", rc_ev.exists() and rc_doc.exists() and rc_canon.exists(), "Missing run_card.json")
-    if not (rc_ev.exists() and rc_doc.exists() and rc_canon.exists()):
-        return {"ok": False, "checks": checks, "problems": problems}
+    paths = {
+        "current": ROOT / "evidence/current_run_card.json",
+        "docs_current": ROOT / "docs/data/current_run_card.json",
+        "canonical": ROOT / "evidence/run_card.json",
+        "docs_canonical": ROOT / "docs/data/run_card.json",
+    }
+    cards_exist = all(path.exists() for path in paths.values())
+    record("all_run_cards_exist", cards_exist, "One or more canonical run cards are missing")
+    if not cards_exist:
+        return {
+            "ok": False,
+            "ok_to_download": False,
+            "ok_to_submit": False,
+            "verdict": "negative",
+            "checks_passed": sum(checks.values()),
+            "checks_total": len(checks),
+            "checks": checks,
+            "problems": problems,
+            "submission_blockers": ["Run-card files are incomplete"],
+        }
 
-    card = json.loads(rc_ev.read_text())
-    card_doc = json.loads(rc_doc.read_text())
-    record("run_card_docs_identical", card == card_doc, "evidence/ and docs/data/ run cards diverge")
+    loaded = {key: json.loads(path.read_text(encoding="utf-8")) for key, path in paths.items()}
+    card = loaded["current"]
+    record("run_cards_synchronized", all(value == card for value in loaded.values()), "Run-card copies differ")
 
-    required_keys = [
-        "hypothesis", "mechanism", "mimic", "holdout_dti",
-        "leakage_canary", "registry_correlation_and_overlap",
-        "raster_sha256", "validator_output",
-        "submission_name", "submission_note", "verdict", "download_path",
+    required = [
+        "hypothesis", "mechanism", "non_fault_mimic", "holdout_dti", "leakage_canary",
+        "registry_correlation_and_overlap", "raster_sha256", "zip_sha256", "validator_output",
+        "submission_name", "submission_note", "download_path", "verdict", "ok_to_download",
+        "ok_to_submit", "budget", "official_data_availability",
     ]
-    record(
-        "run_card_required_fields",
-        all(k in card and card[k] not in (None, "") for k in required_keys),
-        "Missing required Run Card fields",
-    )
-    record(
-        "submission_note_le_140_chars",
-        1 <= len(card["submission_note"]) <= 140,
-        f"Submission note length {len(card['submission_note'])} outside [1, 140]",
-    )
+    record("run_card_required_fields", all(key in card for key in required), "Missing required run-card fields")
+    note = card.get("submission_note")
+    record("note_length_le_140", isinstance(note, str) and 1 <= len(note) <= 140, "Submission/archive note exceeds 140 characters or is empty")
+    record("current_lane_unresolved_is_explicit", card.get("assigned_lane_status", "").startswith("UNRESOLVED"), "Lane ambiguity is not disclosed")
+    record("no_new_candidate_claim", card.get("new_candidate_generated_this_review") is False, "Run card incorrectly claims a new candidate was generated")
+    record("slot_not_spent", card.get("slot_spent") is False and card.get("promote_to_real_slot") is False, "Slot/promotion status is not negative")
 
-    ledger = json.loads((ROOT / "evidence/lwst_experiment_ledger.json").read_text())
+    # The prior lane used its allowed experiment budget. No new experiment is run here.
+    budget = card.get("budget", {})
     record(
-        "budget_cap_le_3_experiments_2h",
-        int(ledger["experiment_count"]) <= 3 and float(ledger["elapsed_seconds"]) <= 7200.0,
-        f"Budget exceeded: {ledger['experiment_count']} exps / {ledger['elapsed_seconds']}s",
+        "prior_lane_budget_recorded_and_not_exceeded",
+        isinstance(budget.get("prior_lane_experiments"), int)
+        and isinstance(budget.get("prior_lane_budget_cap"), int)
+        and budget["prior_lane_experiments"] <= budget["prior_lane_budget_cap"]
+        and budget.get("new_experiments_this_review") == 0,
+        "Prior lane budget is missing/overrun or new experiments were not disclosed",
     )
+    ledger_path = ROOT / "evidence/lwst_experiment_ledger.json"
+    if ledger_path.exists():
+        ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+        record(
+            "historical_lane_ledger_within_3_experiments_2h",
+            int(ledger.get("experiment_count", 999)) <= 3 and float(ledger.get("elapsed_seconds", float("inf"))) <= 7200.0,
+            "Historical H-SASS3-A lane exceeds the recorded budget",
+        )
+    else:
+        record("historical_lane_ledger_within_3_experiments_2h", False, "Experiment ledger is missing")
 
-    # Leakage Canary (51 channels)
-    can = json.loads((ROOT / "evidence/leakage_canary_report.json").read_text())
-    record(
-        "leakage_canary_51_channels_le_0p90",
-        bool(can["all_passed"]) and can["n_channels_tested"] == 51 and float(can["worst_symmetric_auc"]) <= 0.90,
-        f"Canary failed: {can.get('worst_symmetric_auc')}",
-    )
-
-    # Direct programmatic GeoTIFF inspection
-    tif_path = ROOT / card["download_path"]
+    # Verify the local archive itself; this is separate from submission eligibility.
+    tif_path = ROOT / str(card.get("download_path", ""))
     zip_path = tif_path.with_suffix(".tif.zip")
-    record("tif_and_zip_exist", tif_path.exists() and zip_path.exists(), f"Missing {tif_path} or {zip_path}")
-
-    cand_dots = None
-    if tif_path.exists():
+    record("tif_and_zip_exist", tif_path.is_file() and zip_path.is_file(), "Archived TIF or ZIP is missing")
+    format_ok = False
+    if tif_path.is_file():
         actual_sha = sha256_file(tif_path)
-        record("tif_sha256_matches_run_card", actual_sha == card["raster_sha256"], f"{actual_sha} != {card['raster_sha256']}")
-
+        record("tif_sha256_matches_card", actual_sha == card.get("raster_sha256"), f"Archive SHA-256 mismatch: {actual_sha}")
         with rasterio.open(tif_path) as src:
             arr = src.read(1)
-            crs_str = str(src.crs)
-            shape = src.shape
-            dtype_str = str(src.dtypes[0])
-            count = src.count
-            nodata = src.nodata
-            tr = tuple(round(float(x), 6) for x in list(src.transform)[:6])
+            transform = tuple(round(float(value), 6) for value in list(src.transform)[:6])
+            structural_checks = {
+                "single_band": src.count == 1,
+                "float32": src.dtypes[0] == "float32",
+                "shape": src.shape == EXPECTED_SHAPE,
+                "crs": str(src.crs) == EXPECTED_CRS,
+                "transform": transform == EXPECTED_TRANSFORM,
+                "no_nodata_sentinel": src.nodata is None,
+                "finite": bool(np.isfinite(arr).all()),
+                "range_0_1": bool(np.isfinite(arr).all() and float(arr.min()) >= 0 and float(arr.max()) <= 1),
+                "binary": bool(np.isin(arr, [0.0, 1.0]).all()),
+                "positive_pixels": int((arr == 1).sum()) == 37_654,
+            }
+        for name, condition in structural_checks.items():
+            record(f"tif_{name}", condition, f"Local GeoTIFF check failed: {name}")
+        format_ok = all(structural_checks.values())
+    else:
+        arr = None
 
-        record("tif_single_band", count == 1, f"count={count}")
-        record("tif_dtype_float32", dtype_str == "float32", f"dtype={dtype_str}")
-        record("tif_shape_3730x3292", shape == EXPECTED_SHAPE, f"shape={shape}")
-        record("tif_crs_epsg_32611", crs_str == EXPECTED_CRS, f"crs={crs_str}")
-        record("tif_geotransform_exact", tr == EXPECTED_TRANSFORM, f"transform={tr}")
-        record("tif_nodata_none", nodata is None, f"nodata={nodata}")
-        record("tif_zero_nan", int(np.isnan(arr).sum()) == 0, "NaN pixels present!")
-        record("tif_zero_inf", int(np.isinf(arr).sum()) == 0, "Inf pixels present!")
-        record("tif_no_float32_sentinel", int((np.abs(arr) > 1e30).sum()) == 0, "Sentinel present!")
-        fmin, fmax = float(arr.min()), float(arr.max())
-        record("tif_strict_range_0_1", 0.0 <= fmin and fmax <= 1.0 and fmax > 0.0, f"range=[{fmin}, {fmax}]")
-        cand_dots = arr > 0.0
-        n_pos = int(cand_dots.sum())
-        record("tif_positive_dots_match_card", n_pos == 37_654, f"positive_dots={n_pos}")
+    if zip_path.is_file():
+        record("zip_sha256_matches_card", sha256_file(zip_path) == card.get("zip_sha256"), "Archive ZIP SHA-256 mismatch")
+        try:
+            with zipfile.ZipFile(zip_path, "r") as archive:
+                names = archive.namelist()
+                record("zip_contains_only_named_tif", names == [tif_path.name], f"Unexpected archive contents: {names}")
+                member_ok = names == [tif_path.name] and hashlib.sha256(archive.read(tif_path.name)).hexdigest() == card.get("raster_sha256")
+                record("zip_tif_matches_archive", member_ok, "TIF inside ZIP does not match the reviewed raster")
+        except (OSError, zipfile.BadZipFile) as exc:
+            record("zip_contains_only_named_tif", False, f"Cannot read ZIP: {exc}")
+            record("zip_tif_matches_archive", False, f"Cannot read ZIP: {exc}")
 
-    if zip_path.exists():
-        record("zip_sha256_matches_run_card", sha256_file(zip_path) == card["zip_sha256"], "Zip SHA256 mismatch")
-        with zipfile.ZipFile(zip_path, "r") as zf:
-            names = zf.namelist()
-            record("zip_contains_valid_tif", names == [tif_path.name], f"zip contents={names}")
-            record("zip_inner_matches_tif", names == [tif_path.name] and hashlib.sha256(zf.read(tif_path.name)).hexdigest() == card["raster_sha256"], "ZIP bytes differ from TIF")
+    validator = card.get("validator_output", {})
+    record("official_sample_absence_disclosed", validator.get("organizer_sample_comparison_available") is False, "Official-sample comparison status missing or misleading")
+    record("archive_download_is_research_only", card.get("ok_to_download") is True and card.get("ok_to_submit") is False, "Download/submission status is not explicit")
 
-    # Dual-Evaluator Holdout wins vs 0.2778 Champion
-    hr = card["holdout_dti"]["primary_hide_and_recover"]
-    sg = card["holdout_dti"]["secondary_off_catalogue_sgmc"]
+    # HOLDOUT metrics are checked for provenance completeness, not for a win.
+    hold = card.get("holdout_dti", {})
+    metric_records = [
+        (hold.get("archived_lwst_hide_and_recover"), "pooled_dti"),
+        (hold.get("archived_lwst_sgmc_cal"), "prevalence_calibrated_dti"),
+        (hold.get("experiment_E1_hide_and_recover"), "pooled_dti"),
+        (hold.get("experiment_E1_sgmc_cal"), "prevalence_calibrated_dti"),
+    ]
     record(
-        "holdout_hide_recover_beats_02778_ci95_gt_0",
-        hr["score_label"] == "HOLDOUT-DTI"
-        and hr["pooled_dti"] > hr["champion_02778_baseline_dti"]
-        and hr["paired_delta_ci95"][0] > 0.0,
-        f"HR={hr['pooled_dti']} vs {hr['champion_02778_baseline_dti']}",
+        "holdout_metrics_have_evaluator_n_and_ci",
+        all(_is_metric_record(item, score_key=key) for item, key in metric_records),
+        "One or more archived HOLDOUT-DTI records lack evaluator, withheld count, or 95% CI",
+    )
+    record("organizer_score_not_claimed_without_receipt", hold.get("organizer_score") is None, "An organizer score is asserted without a receipt")
+
+    canary = card.get("leakage_canary", {})
+    e1_canary = canary.get("E1_single_feature", {})
+    old_canary = canary.get("historical_51_channel_report", {})
+    record(
+        "archived_single_feature_canary_status_disclosed",
+        e1_canary.get("evidence_status", "").startswith("ARCHIVED")
+        and isinstance(e1_canary.get("symmetric_auc"), (int, float))
+        and e1_canary.get("passed") is True,
+        "The historical single-feature canary is missing or mislabeled as fresh",
     )
     record(
-        "holdout_sgmc_beats_02778",
-        sg["score_label"] == "HOLDOUT-DTI"
-        and sg["prevalence_calibrated_dti"] > sg["champion_02778_calibrated_dti"],
-        f"SGMC={sg['prevalence_calibrated_dti']} vs {sg['champion_02778_calibrated_dti']}",
+        "archived_51_channel_canary_status_disclosed",
+        old_canary.get("channels_tested") == 51
+        and isinstance(old_canary.get("worst_symmetric_auc"), (int, float))
+        and old_canary.get("all_passed") is True
+        and old_canary.get("evidence_status", "").startswith("ARCHIVED"),
+        "The prior 51-channel canary is missing or mislabeled as fresh",
     )
 
-    # Protocol applies to every registry raster, including space-filling ones.
-    # Historical receipt has a literal failing row; no null-calibration exemption.
-    audit = json.loads((ROOT / "evidence/uniqueness_audit_386.json").read_text())
-    lattice = audit.get("space_filling_calibration_lattices", [])
-    record("literal_registry_overlap_all_rasters", bool(lattice) and all(
-        isinstance(row.get("within_3px_fraction"), (int, float))
-        and 0 <= row["within_3px_fraction"] <= 0.70 for row in lattice),
-        "Registry lattice overlaps 99.7849% of candidate dots; protocol limit is 70%")
-
-    # 386-Raster Uniqueness + Parallel Sibling GeoTIFF check
-    uq = card["registry_correlation_and_overlap"]
+    # Fail closed on incomplete current uniqueness. Archived pass flags are not current passes.
+    uniq = card.get("registry_correlation_and_overlap", {})
+    lattice = uniq.get("archived_literal_lattice_result", {})
+    archived_dots = uniq.get("archived_final_dot_scan_451_downloads", {})
+    surface = uniq.get("archived_preplacement_surface_scan", {})
     record(
-        "historical_non_lattice_subset_passed",
-        uq["registry_rasters_checked"] == 386
-        and uq["pre_placement_surface_max_abs_spearman"] <= 0.90
-        and uq["final_dots_max_abs_spearman"] <= 0.90
-        and uq["all_385_genuine_max_within_3px_fraction"] <= 0.70
-        and uq["passed_all_focus_9_sites_literally"] is True,
-        f"Uniqueness failure: {uq}",
+        "literal_lattice_failure_correctly_recorded",
+        isinstance(lattice.get("within3_fraction"), (int, float))
+        and lattice["within3_fraction"] > 0.70
+        and lattice.get("pass") is False,
+        "The archived lattice overlap does not demonstrate the literal-rule failure",
+    )
+    record(
+        "historical_download_subset_is_labeled_archived",
+        archived_dots.get("evidence_status", "").startswith("ARCHIVED")
+        and archived_dots.get("archived_subset_pass") is True
+        and isinstance(archived_dots.get("max_within3_fraction"), (int, float))
+        and archived_dots["max_within3_fraction"] <= 0.70,
+        "Historical subset statistics are missing or presented as current clearance",
+    )
+    record(
+        "surface_scan_is_labeled_archived",
+        surface.get("evidence_status", "").startswith("ARCHIVED")
+        and isinstance(surface.get("max_abs_spearman"), (int, float)),
+        "Historical surface scan is missing or presented as current clearance",
+    )
+    record(
+        "current_registry_uniqueness_fails_closed",
+        uniq.get("recomputed_this_run") is False
+        and uniq.get("current_registry_clearance") is False
+        and uniq.get("preplacement_surface_currently_cleared") is False
+        and uniq.get("final_dots_currently_cleared") is False,
+        "Unavailable current registry evidence was not failed closed",
+    )
+    record(
+        "run_card_submission_status_is_blocked",
+        card.get("verdict") == "negative"
+        and card.get("ok_to_submit") is False
+        and card.get("promote_to_real_slot") is False,
+        "Candidate is not marked blocked despite incomplete/failing uniqueness evidence",
     )
 
-    sibling_gsd = ROOT / "docs/downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif"
-    if cand_dots is not None and sibling_gsd.exists():
-        with rasterio.open(sibling_gsd) as s_ds:
-            s_dots = s_ds.read(1) > 0.0
-        d_sib = ndi.distance_transform_edt(~s_dots)
-        ov_sib = float((d_sib[cand_dots] <= 3.0).mean())
-        record("uniqueness_vs_parallel_pr7_gsdhua3", ov_sib <= 0.70, f"ov_vs_gsdhua3={ov_sib:.4f}")
-
-    # Pages synchronization across root / and /docs
-    for doc_rel in ("README.md", "index.html", "executive-summary.html", "docs/index.html", "docs/executive-summary.html"):
-        dp_file = ROOT / doc_rel
-        txt = dp_file.read_text() if dp_file.exists() else ""
-        key_slug = doc_rel.replace("/", "_").replace(".", "_")
+    # Public files should expose archive identity and the truthful archive-only note.
+    pages = [ROOT / rel for rel in ["README.md", "index.html", "executive-summary.html", "docs/index.html", "docs/executive-summary.html"]]
+    for page in pages:
+        text = page.read_text(encoding="utf-8") if page.exists() else ""
+        slug = page.relative_to(ROOT).as_posix().replace("/", "_").replace(".", "_")
         record(
-            f"doc_synced_{key_slug}",
-            (card["submission_name"] in txt) and (card["raster_sha256"][:12] in txt) and (card["submission_note"] in txt),
-            f"{doc_rel} out of sync with current_run_card.json",
+            f"page_sync_{slug}",
+            page.exists()
+            and card.get("submission_name", "") in text
+            and str(card.get("raster_sha256", ""))[:12] in text
+            and str(card.get("submission_note", "")) in text,
+            f"{page.relative_to(ROOT)} does not identify the archived candidate and its status note",
         )
 
-    ok = len(problems) == 0
-    ok_download = ok and bool(card.get("ok_to_download"))
-    ok_submit = ok and bool(card.get("ok_to_submit")) and card.get("verdict") == "promote"
+    ok = not problems
+    blockers = []
+    if not card.get("ok_to_submit"):
+        blockers.append("Candidate is not approved for submission")
+    if lattice.get("pass") is False:
+        blockers.append("Archived literal calibration-lattice comparison exceeds the 70% limit")
+    if not uniq.get("current_registry_clearance"):
+        blockers.append("Current full-registry surface/dot comparisons are unavailable")
+    if not card.get("budget", {}).get("current_lane_resolved"):
+        blockers.append("Method lane is unresolved and the prior lane budget is exhausted")
+
     return {
         "ok": ok,
-        "ok_to_download": ok_download,
-        "ok_to_submit": ok_submit,
+        "ok_to_download": bool(ok and format_ok and card.get("ok_to_download")),
+        "ok_to_submit": bool(ok and card.get("ok_to_submit")),
         "verdict": card.get("verdict"),
         "submission_name": card.get("submission_name"),
         "submission_note": card.get("submission_note"),
@@ -196,27 +273,34 @@ def verify_all() -> dict:
         "checks_total": len(checks),
         "checks": checks,
         "problems": problems,
+        "submission_blockers": blockers,
     }
 
 
 def main() -> int:
-    res = verify_all()
+    result = verify_all()
     print("=" * 78)
-    print(f"GEMSDOESASS3 AUTOMATED GATE INSPECTOR ({res['checks_passed']}/{res['checks_total']} CHECKS PASSED)")
+    print(f"GEMSDOESASS3 ARCHIVE & SUBMISSION-STATUS AUDIT ({result['checks_passed']}/{result['checks_total']} checks consistent)")
     print("=" * 78)
-    for k, v in res["checks"].items():
-        print(f"  [{'PASS' if v else 'FAIL'}] {k}")
-    if res["problems"]:
-        print("\nPROBLEMS:")
-        for p in res["problems"]:
-            print(f"  - {p}")
+    for name, passed in result["checks"].items():
+        print(f"  [{'PASS' if passed else 'FAIL'}] {name}")
+    if result["problems"]:
+        print("\nAUDIT PROBLEMS:")
+        for problem in result["problems"]:
+            print(f"  - {problem}")
+    if result["submission_blockers"]:
+        print("\nSUBMISSION BLOCKERS (expected for this archive):")
+        for blocker in result["submission_blockers"]:
+            print(f"  - {blocker}")
     print("-" * 78)
-    print(f"  SUBMISSION FILE : docs/downloads/{res['submission_name']}")
-    print(f"  SUBMISSION NOTE : {res['submission_note']} ({len(res['submission_note'] or '')}/140 chars)")
-    print(f"  OK TO DOWNLOAD  : {'YES (APPROVED)' if res['ok_to_download'] else 'NO (BLOCKED)'}")
-    print(f"  OK TO SUBMIT    : {'YES (VERDICT: PROMOTE)' if res['ok_to_submit'] else 'NO'}")
+    print(f"  ARCHIVE FILE    : {result['submission_name']}")
+    print(f"  ARCHIVE NOTE    : {result['submission_note']} ({len(result['submission_note'] or '')}/140 chars)")
+    print(f"  DOWNLOAD (ANALYSIS ONLY): {'YES' if result['ok_to_download'] else 'NO'}")
+    print(f"  SUBMIT          : {'YES' if result['ok_to_submit'] else 'NO — BLOCKED'}")
     print("=" * 78)
-    return 0 if res["ok"] or ("--expect-blocked" in sys.argv and not res["ok_to_submit"] and res["problems"] == ["literal_registry_overlap_all_rasters: Registry lattice overlaps 99.7849% of candidate dots; protocol limit is 70%"] and res["verdict"] == "negative") else 1
+    if not result["ok"]:
+        return 1
+    return 0 if "--expect-blocked" in sys.argv or result["ok_to_submit"] else 1
 
 
 if __name__ == "__main__":

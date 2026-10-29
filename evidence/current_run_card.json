@@ -1,99 +1,122 @@
 {
-  "lane_id": "GEMSDOESASS3-H-SASS3-A-LWST-GeoConduit",
-  "branch": "arena/f26651b4-gemsdoesass3",
-  "hypothesis": "H-SASS3-A (LWST-GeoConduit): Unmapped Quaternary and concealed Great Basin geothermal conduit faults missed by subaerial USGS mapping exhibit sharp 3-D Source Parameter Imaging (SPI) local-wavenumber crests (kappa_SPI = ||grad_H arctan(dF/dz / ||grad_H F||)||), contrast-invariant Wijns Theta-map contact ridges (cos theta) concordant across RTP magnetics and isostatic gravity, 150 m upward-continuation persistence, basement detachment flexure, and transtensional slip/dilation + hydrothermal alteration/upflow plumes.",
-  "mechanism": "Two-stage 300 m triangular-kernel CELF submodular allocation (`gems32.emitter.emit`) pairing 52.0% (19,584 dots) spatially-collared Dual-Objective HistGradientBoosting (Binary Classifier + 300 m Triangular-Kernel Regressor) 51-channel OOF structural/piedmont crests with 48.0% (18,070 dots) residual thalweg-vetoed LWST subsurface SPI/Theta and GDR #1391 strike-anisotropic geothermal conduit crests (37,654 total B=2 dots > 200 m off catalogue).",
-  "mimic": "V-shaped drainage stream thalwegs (`curv_s1 = gaussian_laplace(dem) > 0`) and sharp ridge-summit divides (`tophat >> 0`) vetoed on rectilinear planar scarps, anthropogenic US Census TIGER highway/railroad cut-and-fill embankments (< 150 m of centerlines lacking subsurface SPI support), flat Pleistocene Lake Lahontan shoreline contours / saline playa clay pans (deconfounded from Band 17 MT conductivity via slope/relief gating), and shallow volcanic float boulders (suppressed via +150 m upward-continued TMI persistence).",
+  "review_date": "2026-10-28",
+  "review_scope": "Conservative review of an archived candidate; no new experiment or submission was run.",
+  "branch": "arena/16f75a44-gemsdoesass3",
+  "lane_id": null,
+  "assigned_lane_status": "UNRESOLVED: the supplied brief does not identify this checkout's single method paragraph.",
+  "historical_lane_record": "GEMSDOESASS3-H-SASS3-A-LWST-GeoConduit",
+  "hypothesis": "Review-only. The archived LWST-GeoConduit candidate is not re-proposed or promoted. The most recent separate candidate record is H-SASS3-E and is negative.",
+  "mechanism": "No mechanism implemented in this review. Historical candidate descriptions are retained in the archived run card for provenance only.",
+  "non_fault_mimic": "The historical H-SASS3-E test lists sedimentary onlap and paleochannel incision; this is not a validation of the archived LWST candidate.",
   "holdout_dti": {
-    "primary_hide_and_recover": {
+    "archived_lwst_hide_and_recover": {
       "score_label": "HOLDOUT-DTI",
       "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
       "withheld_positive_pixels": 22232,
-      "pooled_dti": 0.111062,
-      "ci95_spatial_block_bootstrap": [
-        0.098423,
-        0.123755
+      "b_visible_px": 2.0,
+      "pooled_dti": 0.006129822099392871,
+      "ci95": [
+        0.0051747367243663595,
+        0.007122668787303196
       ],
-      "champion_02778_baseline_dti": 0.099202,
-      "champion_02778_ci95": [
-        0.085951,
-        0.112668
-      ],
-      "paired_delta_vs_champion": 0.01186,
-      "paired_delta_ci95": [
-        0.003475,
-        0.020696
-      ],
-      "prob_beats_champion": 0.995
+      "evidence_status": "ARCHIVED evaluator record; not recomputed in this review"
     },
-    "secondary_off_catalogue_sgmc": {
+    "archived_lwst_sgmc_cal": {
       "score_label": "HOLDOUT-DTI",
       "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
-      "off_catalogue_positive_pixels": 62703,
-      "prevalence_calibrated_dti": 0.065702,
-      "prevalence_calibrated_ci95": [
-        0.058992,
-        0.07124
+      "withheld_positive_pixels": 62703,
+      "prevalence_calibrated_dti": 0.06570231430849702,
+      "ci95": [
+        0.05899206995492947,
+        0.07124034012798368
       ],
-      "raw_pooled_dti": 0.098514,
-      "raw_ci95": [
-        0.088935,
-        0.107969
-      ],
-      "champion_02778_calibrated_dti": 0.064121,
-      "paired_delta_calibrated_vs_champion": 0.001581,
-      "paired_delta_calibrated_ci95": [
-        -0.005523,
-        0.008911
-      ]
+      "evidence_status": "ARCHIVED evaluator record; not recomputed in this review"
     },
-    "ablation_summary": {
-      "EXP1_LWST_UNSUP_CONDUIT": {
-        "hide_recover_dti": 0.045596,
-        "sgmc_calibrated_dti": 0.075215
-      },
-      "EXP2_LWST_SARPU_DUAL_OOF": {
-        "hide_recover_dti": 0.11669,
-        "sgmc_calibrated_dti": 0.050066
-      },
-      "EXP3_LWST_DUAL_HORIZON_CONDUIT": {
-        "hide_recover_dti": 0.111062,
-        "sgmc_calibrated_dti": 0.065702
-      }
-    }
+    "experiment_E1_hide_and_recover": {
+      "score_label": "HOLDOUT-DTI",
+      "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+      "withheld_positive_pixels": 22232,
+      "b_visible_px": 2.0,
+      "pooled_dti": 0.0015759679413580936,
+      "ci95": [
+        0.00026254042010033306,
+        0.003255123916317332
+      ],
+      "evidence_status": "ARCHIVED negative experiment E1; no slot spent"
+    },
+    "experiment_E1_sgmc_cal": {
+      "score_label": "HOLDOUT-DTI",
+      "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+      "withheld_positive_pixels": 62703,
+      "prevalence_calibrated_dti": 0.0009137119668211215,
+      "ci95": [
+        0.0003304935857405475,
+        0.0016341427069920557
+      ],
+      "evidence_status": "ARCHIVED negative experiment E1; no slot spent"
+    },
+    "organizer_score": null,
+    "organizer_score_status": "No submission-page receipt for the reviewed candidate is in this checkout."
   },
   "leakage_canary": {
-    "rule": "Single-feature holdout max(AUC, 1 - AUC) <= 0.90 (Protocol Rule 4)",
-    "n_channels_tested": 51,
-    "worst_channel": "curv_s2",
-    "worst_symmetric_auc": 0.588299,
-    "passed": true
+    "E1_single_feature": {
+      "feature": "depth_to_base_surf curvature score",
+      "auc_vs_withheld_sgmc": 0.3978966518074437,
+      "symmetric_auc": 0.6021033481925563,
+      "threshold": 0.9,
+      "passed": true,
+      "evidence_status": "ARCHIVED; this is the experiment-specific single-feature canary, not a current rerun"
+    },
+    "historical_51_channel_report": {
+      "channels_tested": 51,
+      "withheld_positive_samples": 11172,
+      "negative_samples": 100000,
+      "worst_channel": "curv_s2",
+      "worst_symmetric_auc": 0.588299,
+      "all_passed": true,
+      "evidence_status": "ARCHIVED; separate prior report, not a fresh validation of this checkout"
+    }
   },
   "registry_correlation_and_overlap": {
-    "registry_rasters_checked": 386,
-    "focus_9_site_rasters_checked": 378,
-    "genuine_non_lattice_rasters_checked": 385,
-    "pre_placement_surface_max_abs_spearman": 0.125538,
-    "pre_placement_surface_closest_raster": "GEMSDOE24:docs/downloads/24gems-gapfill-near-fault-20261026T203338Z-1b2b4ccc37b0-zeros.tif",
-    "final_dots_max_abs_spearman": 0.120029,
-    "final_dots_closest_spearman_raster": "GEMSDOE32:docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-nan.tif",
-    "focus_9_sites_max_within_3px_fraction": 0.632708,
-    "focus_9_sites_closest_overlap_raster": "GEMSDOE32:docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-nan.tif",
-    "all_385_genuine_max_within_3px_fraction": 0.632708,
-    "all_385_genuine_closest_overlap_raster": "GEMSDOE32:docs/downloads/gemsdoe32-h47-ldgi-dualhorizon-corridor-37654-20261026T230609Z-0eb8a25c-nan.tif",
-    "passed_all_focus_9_sites_literally": true,
-    "passed_all_385_genuine_literally": true,
-    "passed_null_calibrated_all_386": true,
-    "space_filling_lattice_note": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif is a synthetic 206,895-dot uniform 5x5 px calibration grid whose 3-px disk covers 99.871% of the footprint (sqrt(2^2+2^2)=2.828<=3 px); Spearman vs candidate is ~0.00 and null-calibrated excess is <= 0.0.",
-    "literal_all_registry_max_within_3px_fraction": 0.997848834121209,
-    "literal_all_registry_passed": false
+    "recomputed_this_run": false,
+    "thresholds": {
+      "within3_max_fraction": 0.7,
+      "absolute_spearman_max": 0.9,
+      "buffer_px": 3
+    },
+    "archived_preplacement_surface_scan": {
+      "registry_rasters_checked": 386,
+      "max_abs_spearman": 0.125538,
+      "closest_raster": "GEMSDOE24:docs/downloads/24gems-gapfill-near-fault-20261026T203338Z-1b2b4ccc37b0-zeros.tif",
+      "evidence_status": "ARCHIVED prior run-card result; not rechecked"
+    },
+    "archived_final_dot_scan_451_downloads": {
+      "submitted_rasters_compared": 451,
+      "max_within3_fraction": 0.665348,
+      "max_abs_sampled_spearman": 0.135425,
+      "archived_subset_pass": true,
+      "evidence_status": "ARCHIVED subset-only result; not a current full-registry clearance"
+    },
+    "archived_literal_lattice_result": {
+      "within3_fraction": 0.997849,
+      "limit": 0.7,
+      "pass": false,
+      "witness_sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
+      "available_in_this_checkout": false,
+      "recomputed_this_run": false,
+      "evidence_status": "archived prior verification; not re-run"
+    },
+    "current_registry_clearance": false,
+    "preplacement_surface_currently_cleared": false,
+    "final_dots_currently_cleared": false
   },
   "raster_sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
   "zip_sha256": "d93ad7f6278e89247a24ee74d0a64b40c45314f8bb5acc00f58c0f24bfe33e16",
   "validator_output": {
-    "all_checks_passed": true,
+    "all_local_checks_passed": true,
+    "organizer_sample_comparison_available": false,
     "crs": "EPSG:32611",
-    "shape": [
+    "shape_rows_cols": [
       3730,
       3292
     ],
@@ -106,34 +129,49 @@
       4508550.0
     ],
     "dtype": "float32",
-    "nodata": null,
-    "full_grid_finite_pixels": 12279160,
-    "in_footprint_finite_pixels": 5167373,
-    "in_footprint_min": 0.0,
-    "in_footprint_max": 1.0,
-    "emitted_positive_pixels": 37654,
-    "on_catalogue_positive_pixels": 0,
+    "finite_range": [
+      0.0,
+      1.0
+    ],
+    "positive_pixels": 37654,
     "checks": {
-      "exact_reference_grid_match": true,
       "single_band": true,
       "dtype_float32": true,
-      "dimensions_3730x3292": true,
       "crs_epsg_32611": true,
-      "in_footprint_all_finite": true,
-      "in_footprint_zero_nan": true,
-      "in_footprint_zero_inf": true,
-      "in_footprint_zero_sentinel": true,
-      "in_footprint_range_0_1": true,
-      "outside_footprint_compliant": true,
-      "zero_on_catalogue_leakage": true,
-      "validator_range_0_1_guaranteed": true
-    }
+      "shape_rows_cols_3730x3292": true,
+      "geotransform_matches_recorded_reference": true,
+      "all_finite": true,
+      "values_in_0_1": true,
+      "dot_count_expected": true,
+      "zero_or_one_only": true
+    },
+    "evidence_status": "Local raster checks freshly rerun; official sample comparison unavailable."
   },
   "submission_name": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
-  "submission_note": "GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657",
-  "ok_to_submit": false,
-  "verdict": "negative",
+  "submission_note": "Archive only: format checked; literal registry uniqueness fails the 3-px rule. Do not submit.",
   "download_path": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
+  "new_candidate_generated_this_review": false,
   "ok_to_download": true,
-  "status_reason": "Literal registry overlap exceeds 70%: 0.997848834121209 against 13GEMSDOE lattice; no exemption allowed. Archival download only."
+  "download_status": "YES for research/archive only; this is not an approved submission.",
+  "ok_to_submit": false,
+  "status_reason": "Blocked: the calibration-lattice overlap is 99.78% (>70%; archived measurement; witness unavailable for recheck); the all-registry uniqueness clearance is also unavailable. No slot was promoted.",
+  "verdict": "negative",
+  "promote_to_real_slot": false,
+  "slot_spent": false,
+  "budget": {
+    "prior_lane": "H-SASS3-A: LWST-GeoConduit",
+    "prior_lane_experiments": 3,
+    "prior_lane_budget_cap": 3,
+    "prior_lane_elapsed_seconds": 297.64,
+    "new_experiments_this_review": 0,
+    "current_lane_resolved": false,
+    "reason_no_new_experiment": "Prior lane budget is exhausted; the current task does not identify an assigned method paragraph."
+  },
+  "official_data_availability": {
+    "cached_feature_stack_present": false,
+    "official_sample_present": false,
+    "local_sibling_registry_present": false,
+    "official_external_data_checked_this_review": false,
+    "status": "Required inputs are absent; no new candidate can be validated or cleared in this checkout."
+  }
 }

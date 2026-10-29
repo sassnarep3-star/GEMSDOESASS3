@@ -1,163 +1,279 @@
-# Independent review of the shipped LWST submission (2026-10-28)
+# Independent review of the archived LWST GeoTIFF — 2026-10-28
 
-Every number is labelled **HOLDOUT-DTI** (evaluator named), **ORGANIZER-CONFIRMED** (none used except the leaderboard top), or **OWNER-REPORT** (typed in the task prompt, not an organizer receipt). Gate results are recomputed from the rasters by `scripts/independent_review.py`, not copied from pipeline JSON.
+> **Decision: DO NOT SUBMIT.** The archived file is available to download for research only. Its literal registry uniqueness gate fails on the archived lattice measurement, current source rasters are missing, and no new candidate was generated or cleared in this review.
 
-## 1. Answers
+## Executive summary
 
-| Question | Answer | Basis (label) |
+- **Download:** Yes, for archive/research only. The file is `docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif`.
+- **Upload/submission:** **NO**. Archived lattice overlap exceeds the 70% limit; current full-registry uniqueness and pre-placement surface comparisons are not available to rerun. No calibration-lattice exemption is applied.
+- **New unique GeoTIFF:** None created in this review. Repackaging or renaming the old file would not make it unique. Generating another raster is blocked by the missing feature stack/registry/sample, the unresolved method lane, and the exhausted prior lane budget.
+- **Slot:** None spent; no promotion decision was made by a selector.
+
+## 1. Evidence status and submission gates
+
+| Check | Result | Evidence and freshness |
 |---|---|---|
-| Is the file OK to download and upload? | **NO** (literal registry-overlap rule fails; format-valid archive only) | Recomputed from the raster (programmatic) |
-| Format valid? | PASS | single band float32, EPSG:32611, 3730 rows x 3292 cols, sample geotransform, values in {0,1}, no NaN, 37,654 dots |
-| Unique on the 451 submitted downloads? | PASS | max within-3 px overlap 66.53% vs 70% limit; max sampled abs Spearman 0.135 vs 0.90 |
-| Unique under the literal rule (any registry raster, incl. calibration lattice)? | **FAIL** | lattice witness `inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif` (SHA-256 verified): 99.78% of dots within 3 px vs 70% limit |
-| Beats the 0.2778 champion? | **NOT DEMONSTRATED** | LWST SGMC-CAL HOLDOUT-DTI 0.065702 [0.058992, 0.071240] vs champion 0.064121 (same evaluator). The CI contains the champion point. |
-| Beats the 0.4544 leader? | **NOT DEMONSTRATED** | No organizer score exists for this file. ORGANIZER-CONFIRMED leader 0.4544 (xiaofanhu). |
-| Promote to a real slot? | **NO** | Protocol Rule 6: promotion is a separate selector step. |
+| Local raster format/range | PASS | Fresh local checks: one float32 band, EPSG:32611, 3730 x 3292, recorded transform, finite values in [0,1], 37,654 positives. Official sample comparison available: **False**. |
+| Historical submitted-download comparison | **ARCHIVED ONLY — not a current clearance** | archived subset scan over 451 downloads: 66.53% max within 3 px; max sampled |Spearman| 0.135; archived subset-only pass=True. Sibling raster files are absent, and this final-dot scan does not verify the required pre-placement surface for the current registry. |
+| Literal rule including calibration lattice | **FAIL CLOSED** | 99.78% within 3 px vs 70% limit; archived prior verification; witness absent from this checkout. Witness hash: `b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2`. |
+| Current all-registry surface and final-dot gates | **NOT VERIFIED** | No complete current registry is present. Surface scan freshness=ARCHIVED prior run-card result; not rechecked; final-dot scan freshness=ARCHIVED subset-only result; not a current full-registry clearance. |
+| Download for analysis / upload to competition | **YES / NO** | Archive download only; no organizer receipt or submission approval exists. |
 
-The earlier statement that the file "beats 0.2778 on both metrics" is withdrawn. Its HIDE-RECOVER figure (0.111062) was a per-fold OOF value compared with a mislabelled D2.8 parent. Section 3 has the details.
+### Archived lattice coverage check
 
-## 2. Per-site executive summary (focus sites)
+The prior witness analysis reports 99.90% of the footprint within 3 px, leaving 5,379 pixels outside the buffer. At 37,654 dots, at least 11,297 would need to be outside to meet the 70% cap, so the archived coverage calculation says the gate is unsatisfiable at that dot count. This is a prior verified calculation, not a fresh measurement in this checkout.
 
-Each file is already scored or belongs to a scored family, so none should be resubmitted. The score column is OWNER-REPORT and is not an estimate for the new file.
+## 2. Score provenance and what can be concluded
 
-| Site | Best owner-reported file | Estimated score (label) | Uniqueness of new LWST vs this file | Holdout SGMC-CAL (label) | Use |
-|---|---|---|---|---|---|
-| GEMSDOE24 | `gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif` (60,069 dots) | OWNER-REPORT 0.2477 (already scored; not an estimate) | overlap 0.4831 (within 3 px, LWST dots near this file) | HOLDOUT-DTI 0.057932 | DO NOT RESUBMIT (already scored; duplicates the family) |
-| GEMSDOE25 | `gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif` (44,090 dots) | OWNER-REPORT 0.2600 (already scored; not an estimate) | overlap 0.4685 (within 3 px, LWST dots near this file) | HOLDOUT-DTI 0.060592 | DO NOT RESUBMIT (already scored; duplicates the family) |
-| GEMSDOE27 | `gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif` (61,328 dots) | OWNER-REPORT 0.2449 (already scored; not an estimate) | overlap 0.4864 (within 3 px, LWST dots near this file) | HOLDOUT-DTI 0.058262 | DO NOT RESUBMIT (already scored; duplicates the family) |
-| GEMSDOE28 | `gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif` (37,660 dots) | OWNER-REPORT 0.2710 (already scored; not an estimate) | overlap 0.4408 (within 3 px, LWST dots near this file) | HOLDOUT-DTI 0.062967 | DO NOT RESUBMIT (already scored; duplicates the family) |
-| GEMSDOE30 | `gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif` (44,090 dots) | OWNER-REPORT 0.2600 (already scored; not an estimate) | overlap 0.4685 (within 3 px, LWST dots near this file) | HOLDOUT-DTI 0.060592 | DO NOT RESUBMIT (already scored; duplicates the family) |
-| GEMSDOE31 | `gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif` (40,199 dots) | OWNER-REPORT 0.2708 (already scored; not an estimate) | overlap 0.4450 (within 3 px, LWST dots near this file) | HOLDOUT-DTI 0.063010 | DO NOT RESUBMIT (already scored; duplicates the family) |
-| GEMSDOE32 | `gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif` (37,654 dots) | OWNER-REPORT 0.2778 (already scored; not an estimate) | overlap 0.4153 (within 3 px, LWST dots near this file) | HOLDOUT-DTI 0.064121 | DO NOT RESUBMIT (already scored; duplicates the family) |
-| GEMSDOE33 | `GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif` (41,865 dots) | OWNER-REPORT 0.2632 (already scored; not an estimate) | overlap 0.4542 (within 3 px, LWST dots near this file) | HOLDOUT-DTI 0.062551 | DO NOT RESUBMIT (already scored; duplicates the family) |
-| GEMSDOE36 | `gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif` (38,854 dots) | OWNER-REPORT 0.2750 (already scored; not an estimate) | overlap 0.4238 (within 3 px, LWST dots near this file) | HOLDOUT-DTI 0.064444 | DO NOT RESUBMIT (already scored; duplicates the family) |
+No organizer submission-page receipt for the candidate or the nine site files is present in this checkout. All site scores below are **OWNER-REPORT** values copied from the archived audit. **HOLDOUT-DTI** is a local proxy evaluation, not a leaderboard estimate or organizer score. **LLI-PROJECTION** is a model-only estimate with a leave-one-out-error band, not a confidence interval and not a score.
 
-**New file (LWST, `gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif`):** estimated score **not available**. Its SGMC-CAL value lies above the maximum of the 21 owner-scored rasters (0.0644), so any number would be an extrapolation and is not reported.
+The archived LWST record reports:
 
-## 3. Corrections to earlier claims
+- HOLDOUT-DTI 0.006130 [0.005175, 0.007123]; evaluator `GEMSDOE32-HIDE-RECOVER-v3.0`, 22,232 withheld positives, B_visible=2.0 px. Archived; not rerun here.
+- HOLDOUT-DTI 0.065702 [0.058992, 0.071240]; evaluator `GEMSDOE32-SGMC-CAL-v3.0`, 62,703 withheld positives. Archived; not rerun here.
+- Archived SGMC-CAL comparator: champion point 0.064121; paired delta +0.001581 [-0.005523, 0.008911]. The paired interval includes zero.
+- **Outperformance status: NOT DEMONSTRATED.** These are archived HOLDOUT-DTI proxies, not organizer scores or leaderboard predictions.
 
-| # | Earlier claim | Status | Evidence |
-|---|---|---|---|
-| C1 | LWST beats 0.2778 on both HOLDOUT-DTI metrics | WRONG (overstated) | SGMC-CAL CI contains the champion point; HR for the catalogue-built champion is not leak-free (Rule 2). |
-| C2 | 0.111062 [0.098423, 0.123755] is the shipped file's HIDE-RECOVER value | WRONG | It is a per-fold OOF value. `evaluate_holdout.py` on the shipped file gives 0.006130 [0.005175, 0.007123]. |
-| C3 | 0.099202 is the 0.2778 champion baseline | WRONG | It is the D2.8 parent e56ea318af89 (owner-reported 0.2600). The true champion e5eb6e7e gives static HR 0.004515. Code fixed in `scripts/run_lwst_experiments.py` (IR-SASS3-08). Artifacts still carry the old value until the pipeline is rerun. |
-| C4 | Sibling repos at sassnarep3-star/GEMSDOE* | WRONG (404) | Rewritten to buffedlizard55-lab. 18 unique targets, all resolved in the sibling checkouts (IR-SASS3-09). The owner should confirm the mapping. |
-| C5 | Uniqueness max 63.27% across 385 rasters | STALE | Current audit: 66.53% across 451 submitted rasters (vs gemsdoe32-h49, newer). Still under 70% on downloads; see C9 for the literal rule. |
-| C9 | This review: file OK to upload, uniqueness PASS | WRONG (corrected) | The audit excluded `inputs/calibration`. That raster is a registry raster under the literal rule. It has 99.78% overlap, which fails the 70% limit. Main's review (`docs/research/review-20261028.md`) reaches the same block. |
-| C6 | Root cause of the portal error is NaN outside the footprint | UNVERIFIED | No portal log exists. The file passes the format gate, so it is safe under the stated rule. |
-| C7 | verify_all_gates 30/30 PASS = independent verification | OVERSTATED | It reads JSON the pipeline wrote. The recomputed gates are in `scripts/independent_review.py` (IR-SASS3-15). |
-| C8 | Leaderboard progression 0.4413 to 0.4544 | CORRECT | Live public top: xiaofanhu 0.4544 (ORGANIZER-CONFIRMED). Public scores may differ from the private final (Rules 3.2). |
+The earlier 0.111062 HIDE-RECOVER claim is withdrawn as the shipped raster's score: it was an OOF/per-fold result using a mislabeled parent baseline. The archived static-file evaluation above is the relevant proxy record, and still does not predict a competition score. The prompt's 0.4413 and 0.4544 leaderboard-top claims conflict; neither is treated here as a current verified benchmark because the leaderboard was not checked in this review.
 
-Irregularities, including the open items, are in `evidence/irregularities_ledger.json` (IR-SASS3-01..18).
+### Nine-site executive summary
 
-## 4. Proxy validation (concordance with owner scores, n = 21)
+The maximum pairwise overlap column compares each historical leader against the other eight historical leaders only. It is not a full-registry uniqueness test. The LWST comparison is a separate archived pairwise scan, not a fresh clearance.
 
-| Proxy (HOLDOUT-DTI) | Spearman vs OWNER-REPORT | 95% bootstrap CI |
+| Site | Best file in archived audit | OWNER-REPORT (no receipt) | ORGANIZER-CONFIRMED file score | LLI-v1-S0 projection (NOT a score) | HOLDOUT-DTI proxy | Max 3-px overlap vs other 8 historic leaders | Archived LWST overlap vs this file |
+|---|---|---:|---|---|---|---|---|
+| GEMSDOE24 | `gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif` | 0.2477 (OWNER-REPORT) | No per-file receipt | 0.267242; LOO-MAE band [0.2452, 0.2893] (not a CI) | HOLDOUT-DTI 0.096653 [0.085535, 0.107455]; gems57-pooled-hide-v2; n=22,893 | 100.00% vs GEMSDOE25 (ARCHIVE) | 48.31% (ARCHIVE) |
+| GEMSDOE25 | `gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif` | 0.2600 (OWNER-REPORT) | No per-file receipt | 0.271090; LOO-MAE band [0.2490, 0.2932] (not a CI) | HOLDOUT-DTI 0.100926 [0.090081, 0.111684]; gems57-pooled-hide-v2; n=22,893 | 100.00% vs GEMSDOE24 (ARCHIVE) | 46.85% (ARCHIVE) |
+| GEMSDOE27 | `gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif` | 0.2449 (OWNER-REPORT) | No per-file receipt | 0.264800; LOO-MAE band [0.2427, 0.2869] (not a CI) | HOLDOUT-DTI 0.096395 [0.085284, 0.107090]; gems57-pooled-hide-v2; n=22,893 | 98.02% vs GEMSDOE24 (ARCHIVE) | 48.64% (ARCHIVE) |
+| GEMSDOE28 | `gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif` | 0.2710 (OWNER-REPORT) | No per-file receipt | 0.279079; LOO-MAE band [0.2570, 0.3011] (not a CI) | HOLDOUT-DTI 0.028218 [0.024626, 0.031798]; gems57-pooled-hide-v2; n=22,893 | 100.00% vs GEMSDOE24 (ARCHIVE) | 44.08% (ARCHIVE) |
+| GEMSDOE30 | `gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif` | 0.2600 (OWNER-REPORT) | No per-file receipt | 0.271090; LOO-MAE band [0.2490, 0.2932] (not a CI) | HOLDOUT-DTI 0.100926 [0.090081, 0.111684]; gems57-pooled-hide-v2; n=22,893 | 100.00% vs GEMSDOE24 (ARCHIVE) | 46.85% (ARCHIVE) |
+| GEMSDOE31 | `gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif` | 0.2708 (OWNER-REPORT) | No per-file receipt | 0.280062; LOO-MAE band [0.2580, 0.3021] (not a CI) | HOLDOUT-DTI 0.029707 [0.026054, 0.033232]; gems57-pooled-hide-v2; n=22,893 | 100.00% vs GEMSDOE24 (ARCHIVE) | 44.50% (ARCHIVE) |
+| GEMSDOE32 | `gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif` | 0.2778 (OWNER-REPORT) | No per-file receipt | 0.285977; LOO-MAE band [0.2639, 0.3080] (not a CI) | HOLDOUT-DTI 0.003885 [0.003316, 0.004478]; gems57-pooled-hide-v2; n=22,893 | 100.00% vs GEMSDOE24 (ARCHIVE) | 41.53% (ARCHIVE) |
+| GEMSDOE33 | `GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif` | 0.2632 (OWNER-REPORT) | No per-file receipt | 0.279729; LOO-MAE band [0.2577, 0.3018] (not a CI) | HOLDOUT-DTI 0.052964 [0.046931, 0.058741]; gems57-pooled-hide-v2; n=22,893 | 99.71% vs GEMSDOE24 (ARCHIVE) | 45.42% (ARCHIVE) |
+| GEMSDOE36 | `gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif` | 0.2750 (OWNER-REPORT) | No per-file receipt | 0.283854; LOO-MAE band [0.2618, 0.3059] (not a CI) | HOLDOUT-DTI 0.004001 [0.003431, 0.004593]; gems57-pooled-hide-v2; n=22,893 | 97.58% vs GEMSDOE27 (ARCHIVE) | 42.38% (ARCHIVE) |
+
+**Cross-site reading:** the archived leader-to-leader overlaps are all above the 70% threshold, so those historical leaders are not unique relative to one another under the specified 3-pixel comparison. The separate old LWST/download scan cannot clear the new/current full registry.
+
+## 3. Prior experiment E1 — negative result
+
+Archived H-SASS3-E (Basement-relief minimum-curvature ridges (depth_to_base_surf) weighted by |grad z|) was marked **NEGATIVE**, with no slot spent. Its metrics were:
+
+- HOLDOUT-DTI 0.001576 [0.000263, 0.003255]; `GEMSDOE32-HIDE-RECOVER-v3.0`, 22,232 withheld positives, B_visible=2.0 px.
+- HOLDOUT-DTI 0.000914 [0.000330, 0.001634]; `GEMSDOE32-SGMC-CAL-v3.0`, 62,703 withheld positives.
+- Single-feature canary: symmetric AUC 0.602103 vs 0.90 limit; pass=True. This is the experiment-specific scalar canary, not the separate 51-channel report.
+- This negative historical result is not a reason to start another experiment: the H-SASS3-A ledger records 3/3 experiments and the current checkout's task brief does not identify the active method lane.
+
+## 4. Ranked geological hypotheses — planning only
+
+Ranks are qualitative expected-value/cost priorities, not measured gains. None is approved or validated; expected DTI improvement is unquantified. The cached feature stack is missing. The official sources below were not checked for current coverage or downloadable files, so these ideas are not currently viable experimental plans.
+
+| Rank | Candidate | Status | Layers | Physical signature / why it may reveal uncatalogued faults | Non-fault mimic | Difference from existing repo work | Cost and data availability |
+|---:|---|---|---|---|---|---|---|
+| 1 | H-SASS3-PLAN-1 | PLANNING ONLY — not implemented or validated | Official GeoDAWN magnetic field plus radiometric K and Th; requires source rasters | Robust paired-flank local residual contrast across a lineament, retained after upward continuation | Lithologic contacts, remanent magnetic bodies, and radiometric facies boundaries | Targets asymmetric alteration around buried fluid pathways rather than scalar SPI/Theta ridge strength or simple ratio fusion. Novelty is a code-inventory hypothesis, not established across sibling repositories. | Moderate; raster alignment, paired-profile statistic, then buffered whole-segment validation. USGS GeoDAWN is the named official source; coverage/download availability was not verified, so not currently viable. Unquantified; qualitative priority only, not a score or projection. |
+| 2 | H-SASS3-PLAN-2 | PLANNING ONLY — not implemented or validated | Competition-provided DEM and gravity anomaly; requires the official data package | Scale-dependent cross-slope asymmetry around gravity-gradient lineaments, evaluated on both basin flanks | Alluvial-fan margins, basin stratigraphy, and asymmetric erosional slopes | Tests a paired basin-flank response rather than existing piedmont/gravity score fusion; any distinction from related repository code still needs a code-level audit. | Moderate; multiscale derivatives and controls, then the shared blocked evaluator. The competition data page is the named official source; local package/cache is absent and external availability was not verified, so not currently viable. Unquantified; qualitative priority only, not a score or projection. |
+| 3 | H-SASS3-PLAN-3 | PLANNING ONLY — not implemented or validated | Multi-height upward continuations of the official GeoDAWN magnetic field | Direction and magnitude of magnetic gradient-ridge migration across continuation heights | Dipping intrusive contacts and depth-varying lithologic boundaries | Focuses on displacement direction of a ridge through scale, not only its persistence or an Euler-style depth cluster; novelty remains unverified outside this checkout. | High; requires trusted grids at multiple heights, synthetic depth controls, and a leakage-safe holdout. USGS GeoDAWN is the named official source; coverage/download availability was not verified, so not currently viable. Unquantified; lowest priority due data and implementation cost; not a score or projection. |
+
+## 5. Current blockers, provenance, and official sources
+
+- Lane/budget: active method lane is unresolved. Prior ledger `H-SASS3-A: LWST-GeoConduit` records 3 of 3 experiments (elapsed 297.64 seconds); no new experiment was run.
+- Data: cached feature stack present=False; official sample present=False; local sibling registry present=False. No current full-registry uniqueness or surface scan is possible from these files.
+- Sibling links on the reviewed public pages: 0 targets; local resolution complete=True; all resolved=True. No sibling file targets were present on the reviewed pages; there was nothing to resolve locally.
+
+| Official/reference source | Status in this review | Intended use |
 |---|---|---|
-| SGMC-CAL (calibrated off-catalogue) | 0.869 | [0.606, 0.980] |
-| SGMC raw | 0.550 | [0.050, 0.878] |
-| HIDE-RECOVER | 0.143 | [-0.378, 0.583] |
+| [GEMS Official Rules (PDF)](https://docs.nlr.gov/docs/fy26osti/96647.pdf) | Cited in the archived review; not fetched again for this edit | File format, scoring disclosure, submission rules; confirm against current organizer page before upload. |
+| [Competition problem/data page](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) · [data download](https://www.drivendata.org/competitions/306/competition-doe-gems/data/) | Not checked in this review; cache absent | Official training data and metric. |
+| [Competition leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) | Not checked in this review; prompt values conflict | No current leaderboard value asserted. An organizer receipt is needed for a per-submission score. |
+| [USGS GeoDAWN](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and) | Named in planning only; coverage and download access not verified | Potential official geophysical layers for hypotheses 1 and 3. |
+| [Reference solution](https://github.com/drivendataorg/gems-prize-reference-solution) | Repository is cited in the archived work; not reaudited in this review | Evaluator and submission conventions; use shared `vendor/gems57` tools where appropriate. |
+| [Archived lattice witness source](https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif) | Previously pinned/hash-checked; local witness missing now | Explains the archived literal uniqueness failure; not a fresh local recheck. |
 
-Reading: SGMC-CAL ranks the owner scores well, so it is the more useful proxy. HIDE-RECOVER does not rank them, and it should not be used for selection.
+## 6. Limitations and required next steps
 
-## 5. Holdout comparison (same evaluator, B_visible = 2 px)
+1. Do not submit or spend a slot. First resolve the lane and whether the synthetic calibration raster is in scope without silently changing the protocol.
+2. Restore authenticated official data, the sample GeoTIFF, cached feature stack, and a complete current registry. Re-run surface correlation and final-dot overlap against every in-scope registry raster; keep archived results separate.
+3. Only after that, and only if the lane budget permits, use the shared `vendor/gems57` evaluator/writer, whole-segment buffered hide-and-recover, single-feature leakage canaries, and report evaluator, withheld positives and 95% CI. No new experiment is authorized by this review.
+4. Generate and validate a distinct GeoTIFF only after its method clears the protocol. Check exact CRS, shape, transform, finite [0,1] range and unique name; write a <=140-character truthful note. A selector—not this report—makes any slot promotion decision.
+5. Preserve negative results. Do not turn OWNER-REPORT, HOLDOUT-DTI, or model projections into organizer-confirmed scores.
 
-- LWST: HIDE-RECOVER HOLDOUT-DTI 0.006130 [0.005175, 0.007123] (GEMSDOE32-HIDE-RECOVER-v3.0, B_visible=2 px, n_withheld 22,232); SGMC-CAL HOLDOUT-DTI 0.065702 [0.058992, 0.071240] (GEMSDOE32-SGMC-CAL-v3.0).
-- Champion e5eb6e7e: HIDE-RECOVER HOLDOUT-DTI 0.004515 (static; NOT leak-free under Rule 2 because the champion was built from the full catalogue); SGMC-CAL HOLDOUT-DTI 0.064121 (same evaluator, same process as the LWST receipt); OWNER-REPORT 0.2778.
-- LWST SGMC-CAL 95% CI [0.059, 0.071] contains the champion point 0.064121: the difference is not significant.
-
-## 6. Why the 0.2778 file scored highest, and what this means (PhD-level reading)
-
-The evidence supports a narrower answer than the prompt implies:
-
-1. The 0.2778 file is the best member of a near-duplicate family. Its neighbours overlap 86.7-100% within 3 px (IR-SASS3-02, from the repo's earlier audit). Its owner-reported score is the highest of the 21 known files.
-2. Across all 21 owner-scored files, SGMC-CAL ranks the owner scores well (rho 0.87). This is consistent with an off-catalogue advantage, but that is an inference, not a test. HIDE-RECOVER does not rank them (rho 0.14), so the static HR value cannot explain the score.
-3. The gap to the leader (0.2778 to 0.4544) is 0.1766. Nothing in this repo shows a route to that gap. The most promising route is probably a different family of method. That is an open question for the user, not a result.
-
-## 7. Experiment E1 (H-SASS3-E, basement minimum-curvature ridges)
-
-- Hypothesis: Basement-relief minimum-curvature ridges (depth_to_base_surf) weighted by |grad z|.
-- HIDE-RECOVER HOLDOUT-DTI 0.001576 [0.000263, 0.003255]; SGMC-CAL HOLDOUT-DTI 0.000914 [0.00033, 0.001634].
-- Single-feature canary: symmetric AUC 0.602 (pass, <= 0.90).
-- Pre-registered criteria failed. Verdict: **NEGATIVE**. Slot spent: False.
-- The E1 candidate was not run against the calibration lattice. The verdict is negative on the holdout, so the lattice check is moot for E1. It would be required before any promotion.
-- Evidence: `evidence/hypothesis_h_sass3_e_experiment.json`, produced by `scripts/hypothesis_h_sass3_e_basement_curvature.py`.
-
-## 8. Ranked untried hypotheses (3 to 5)
-
-Ranking is by expected DTI improvement and implementation cost. "Untried" means not found by a keyword screen of this repo and of the 882 Markdown files in the nine sibling checkouts. It is not exhaustive.
-
-| Rank | ID | Status | Layer(s) | Physical signature | Non-fault mimic | Why new |
-|---|---|---|---|---|---|---|
-| 1 | H-SASS3-E | TESTED - NEGATIVE (experiment E1, 1 of 3 budget; no slot spent) | depth_to_base_surf (cached feature stack) | narrow ridges of the most-negative Hessian eigenvalue, weighted by local relief |grad z| of the basement surface | sedimentary onlap and paleochannel incision along the basement | The phrase 'minimum curvature' and 'watershed' have no hits in the repo or the sibling docs (keyword screen). 'Hessian' is common (119 sibling files), so the novelty is the layer and statistic pairing, not the Hessian itself. |
-| 2 | H-SASS3-F | UNTESTED (candidate for experiment E2) | tmi_hg, iso_grav_anom_hg, geod_shearrate, cond_surf (cached stack) | sharp, lineated boundaries between Gaussian-mixture components of the standardised multi-layer geophysical vector | lithologic contacts and playa-margin conductivity changes | The term 'Gaussian mixture' has no hit in the sibling docs (keyword screen). The repo's EXP1 is an unsupervised tree model, not a mixture boundary. |
-| 3 | H-SASS3-G | UNTESTED | ieq_n100a15, deq_n100a15 (cached stack) | anisotropic point-pattern clustering (Ripley's K) of earthquake epicentres that aligns into linear clusters | aftershock sequences and induced seismicity | Ripley's K has no hit in the sibling docs. Partial overlap with H-SASS3-D (plane fitting of relocated seismicity), so treat it as a variant. |
-| 4 | H-SASS3-H | UNTESTED (lowest priority) | geod_dilaterate (cached stack) | Otsu-thresholded ridges of geodetic dilatation | subsidence and thermal-expansion strain | Otsu has no hit in the sibling docs. Weak physical link to faults; rank last. |
-
-## 9. Official sources (status in this session)
-
-| Source | Status | Use |
-|---|---|---|
-| https://docs.nlr.gov/docs/fy26osti/96647.pdf (GEMS Prize Official Rules, Sept 2026) | Fetched 2026-10-28 | Single GeoTIFF, 100 m; three submissions per week; public vs private scoring; generative-AI disclosure |
-| https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/ | Fetched 2026-10-28 (earlier session) | Metric (distance-weighted Tversky, alpha 0.2, beta 0.8, 300 m kernel); format |
-| https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ | Fetched 2026-10-28 (earlier session) | Leader 0.4544 (ORGANIZER-CONFIRMED) |
-| https://github.com/drivendataorg/gems-prize-reference-solution (commit aebe92f) | Cloned | Metric is not in the notebook |
-| https://github.com/buffedlizard55-lab/GEMSDOE{24,25,27,28,30,31,32,33,36} | Tarballs downloaded and checked | Sibling submissions; champion SHA-256 matches the sibling audit |
-| https://github.com/sassnarep3-star/GEMSDOE* | 404 | Not usable (C4) |
-| https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif (lattice witness) | Checked in the sibling checkout; SHA-256 b4570b40... matches main's pin | Literal registry rule (C9) |
-
-| USGS GeoDAWN (doi 10.5066/P93LGLVQ, cited in the Rules), epsg.io/32611, Tversky index wiki, gbcge.org INGENIOUS, USGS ANSS | NOT fetched in this session | Listed for manual review |
-
-## 10. Limitations
-
-1. The literal registry rule blocks this file (C9). 99.90% of the footprint lies within 3 px of a lattice positive, leaving 5,379 footprint pixels outside the buffer. Passing needs at least 11,297 of the 37,654 dots there. Literal rule is unsatisfiable at this dot count: the uncovered footprint pixels are fewer than the dots needed outside the 3 px buffer. The owner must decide whether the synthetic calibration lattice counts under Rule 1. This review applies no exemption.
-1a. No organizer score for the new file. Only the upload itself can show whether it is accepted or what it scores.
-2. Holdout values are proxies. The HIDE-RECOVER proxy is not leak-free for catalogue-built masks, and it does not rank the owner scores.
-3. Owner scores come from the task prompt, not from organizer receipts.
-4. Uniqueness was checked on final dots only. The surface check that Rule 1 also requires was not re-run. The downloads audit excludes non-download rasters; the literal gate adds the lattice only.
-5. Zeros fill the area outside the footprint. The organizer sample uses NaN nodata. Both are in [0,1], but whether the portal treats them identically is unconfirmed.
-6. Public and private leaderboard scores can differ (Rules 3.2).
-7. Generative-AI use must be disclosed in the submission narrative (Rules 3.2, IR-SASS3-11). This is an owner action.
-8. Training data comes from an owner mirror, not from organizer-authenticated downloads (IR-SASS3-14).
-9. The sibling checkouts are a snapshot taken 2026-10-28. Newer rasters are not covered.
-10. The GitHub Pages site cannot be checked from this sandbox. The local build reproduces the committed pages, but the live site updates only after the merge is published.
-11. `scripts/build_docs_pages.py` is broken and not used (IR-SASS3-10).
-12. Artifacts from `run_lwst_experiments.py` still show the old baseline until the pipeline is rerun (IR-SASS3-08).
-
-## 11. Run card (Protocol Rule 5, review and experiment E1)
+## 7. Run card (Protocol Rule 5)
 
 ```json
 {
-  "review": "independent_review_20261028",
-  "hypothesis": "H-SASS3-E basement minimum-curvature ridges (E1). Review of the shipped LWST file.",
-  "mechanism": "Hessian minimum eigenvalue of depth_to_base_surf weighted by relief (E1)",
-  "non_fault_mimic": "sedimentary onlap / paleochannel incision",
+  "review_date": "2026-10-28",
+  "review_scope": "Conservative review of an archived candidate; no new experiment or submission was run.",
+  "branch": "arena/16f75a44-gemsdoesass3",
+  "lane_id": null,
+  "assigned_lane_status": "UNRESOLVED: the supplied brief does not identify this checkout's single method paragraph.",
+  "historical_lane_record": "GEMSDOESASS3-H-SASS3-A-LWST-GeoConduit",
+  "hypothesis": "Review-only. The archived LWST-GeoConduit candidate is not re-proposed or promoted. The most recent separate candidate record is H-SASS3-E and is negative.",
+  "mechanism": "No mechanism implemented in this review. Historical candidate descriptions are retained in the archived run card for provenance only.",
+  "non_fault_mimic": "The historical H-SASS3-E test lists sedimentary onlap and paleochannel incision; this is not a validation of the archived LWST candidate.",
   "holdout_dti": {
-    "E1_hide_recover": "HOLDOUT-DTI 0.001576 [0.000263, 0.003255]",
-    "E1_sgmc_cal": "HOLDOUT-DTI 0.000914 [0.00033, 0.001634]",
-    "label": "HOLDOUT-DTI"
+    "archived_lwst_hide_and_recover": {
+      "score_label": "HOLDOUT-DTI",
+      "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+      "withheld_positive_pixels": 22232,
+      "b_visible_px": 2.0,
+      "pooled_dti": 0.006129822099392871,
+      "ci95": [
+        0.0051747367243663595,
+        0.007122668787303196
+      ],
+      "evidence_status": "ARCHIVED evaluator record; not recomputed in this review"
+    },
+    "archived_lwst_sgmc_cal": {
+      "score_label": "HOLDOUT-DTI",
+      "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+      "withheld_positive_pixels": 62703,
+      "prevalence_calibrated_dti": 0.06570231430849702,
+      "ci95": [
+        0.05899206995492947,
+        0.07124034012798368
+      ],
+      "evidence_status": "ARCHIVED evaluator record; not recomputed in this review"
+    },
+    "experiment_E1_hide_and_recover": {
+      "score_label": "HOLDOUT-DTI",
+      "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+      "withheld_positive_pixels": 22232,
+      "b_visible_px": 2.0,
+      "pooled_dti": 0.0015759679413580936,
+      "ci95": [
+        0.00026254042010033306,
+        0.003255123916317332
+      ],
+      "evidence_status": "ARCHIVED negative experiment E1; no slot spent"
+    },
+    "experiment_E1_sgmc_cal": {
+      "score_label": "HOLDOUT-DTI",
+      "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+      "withheld_positive_pixels": 62703,
+      "prevalence_calibrated_dti": 0.0009137119668211215,
+      "ci95": [
+        0.0003304935857405475,
+        0.0016341427069920557
+      ],
+      "evidence_status": "ARCHIVED negative experiment E1; no slot spent"
+    },
+    "organizer_score": null,
+    "organizer_score_status": "No submission-page receipt for the reviewed candidate is in this checkout."
   },
-  "correlation_overlap_vs_registry": {
-    "lwst_max_within3": 0.665348,
-    "lwst_max_abs_spearman": 0.135425,
-    "limit_within3": 0.7,
-    "limit_spearman": 0.9
+  "leakage_canary": {
+    "E1_single_feature": {
+      "feature": "depth_to_base_surf curvature score",
+      "auc_vs_withheld_sgmc": 0.3978966518074437,
+      "symmetric_auc": 0.6021033481925563,
+      "threshold": 0.9,
+      "passed": true,
+      "evidence_status": "ARCHIVED; this is the experiment-specific single-feature canary, not a current rerun"
+    },
+    "historical_51_channel_report": {
+      "channels_tested": 51,
+      "withheld_positive_samples": 11172,
+      "negative_samples": 100000,
+      "worst_channel": "curv_s2",
+      "worst_symmetric_auc": 0.588299,
+      "all_passed": true,
+      "evidence_status": "ARCHIVED; separate prior report, not a fresh validation of this checkout"
+    }
+  },
+  "registry_correlation_and_overlap": {
+    "recomputed_this_run": false,
+    "thresholds": {
+      "within3_max_fraction": 0.7,
+      "absolute_spearman_max": 0.9,
+      "buffer_px": 3
+    },
+    "archived_preplacement_surface_scan": {
+      "registry_rasters_checked": 386,
+      "max_abs_spearman": 0.125538,
+      "closest_raster": "GEMSDOE24:docs/downloads/24gems-gapfill-near-fault-20261026T203338Z-1b2b4ccc37b0-zeros.tif",
+      "evidence_status": "ARCHIVED prior run-card result; not rechecked"
+    },
+    "archived_final_dot_scan_451_downloads": {
+      "submitted_rasters_compared": 451,
+      "max_within3_fraction": 0.665348,
+      "max_abs_sampled_spearman": 0.135425,
+      "archived_subset_pass": true,
+      "evidence_status": "ARCHIVED subset-only result; not a current full-registry clearance"
+    },
+    "archived_literal_lattice_result": {
+      "within3_fraction": 0.997849,
+      "limit": 0.7,
+      "pass": false,
+      "witness_sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
+      "available_in_this_checkout": false,
+      "recomputed_this_run": false,
+      "evidence_status": "archived prior verification; not re-run"
+    },
+    "current_registry_clearance": false,
+    "preplacement_surface_currently_cleared": false,
+    "final_dots_currently_cleared": false
   },
   "raster_sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
-  "validator": {
-    "single_band": true,
-    "dtype_float32": true,
-    "crs_epsg_32611": true,
-    "shape_rows_cols_3730x3292": true,
-    "shape_matches_organizer_sample": true,
-    "geotransform_matches_sample": true,
-    "all_finite": true,
-    "values_in_0_1": true,
-    "dot_count_expected": true,
-    "zero_or_one_only": true
+  "zip_sha256": "d93ad7f6278e89247a24ee74d0a64b40c45314f8bb5acc00f58c0f24bfe33e16",
+  "validator_output": {
+    "all_local_checks_passed": true,
+    "organizer_sample_comparison_available": false,
+    "crs": "EPSG:32611",
+    "shape_rows_cols": [
+      3730,
+      3292
+    ],
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "dtype": "float32",
+    "finite_range": [
+      0.0,
+      1.0
+    ],
+    "positive_pixels": 37654,
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "crs_epsg_32611": true,
+      "shape_rows_cols_3730x3292": true,
+      "geotransform_matches_recorded_reference": true,
+      "all_finite": true,
+      "values_in_0_1": true,
+      "dot_count_expected": true,
+      "zero_or_one_only": true
+    },
+    "evidence_status": "Local raster checks freshly rerun; official sample comparison unavailable."
   },
-  "submission_name": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros",
-  "submission_note": "LWST GeoConduit dual-37654 zeros; format and uniqueness gates only",
-  "verdict": "negative for H-SASS3-E; review: OK to upload (format+uniqueness), not promoted to a slot"
+  "submission_name": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
+  "submission_note": "Archive only: format checked; literal registry uniqueness fails the 3-px rule. Do not submit.",
+  "download_path": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
+  "new_candidate_generated_this_review": false,
+  "ok_to_download": true,
+  "download_status": "YES for research/archive only; this is not an approved submission.",
+  "ok_to_submit": false,
+  "status_reason": "Blocked: the calibration-lattice overlap is 99.78% (>70%; archived measurement; witness unavailable for recheck); the all-registry uniqueness clearance is also unavailable. No slot was promoted.",
+  "verdict": "negative",
+  "promote_to_real_slot": false,
+  "slot_spent": false,
+  "budget": {
+    "prior_lane": "H-SASS3-A: LWST-GeoConduit",
+    "prior_lane_experiments": 3,
+    "prior_lane_budget_cap": 3,
+    "prior_lane_elapsed_seconds": 297.64,
+    "new_experiments_this_review": 0,
+    "current_lane_resolved": false,
+    "reason_no_new_experiment": "Prior lane budget is exhausted; the current task does not identify an assigned method paragraph."
+  },
+  "official_data_availability": {
+    "cached_feature_stack_present": false,
+    "official_sample_present": false,
+    "local_sibling_registry_present": false,
+    "official_external_data_checked_this_review": false,
+    "status": "Required inputs are absent; no new candidate can be validated or cleared in this checkout."
+  }
 }
 ```

@@ -1,6 +1,8 @@
 # Forensic Irregularities & Data/Template Fixes Ledger (`GEMSDOESASS3`)
 
-Every irregularity uncovered during the line-by-line audit of DrivenData Competition #306, the 19-band `training_features.tif` GeoTIFF metadata, the shared `template57` toolkit, and the 9 sibling `GEMSDOE` repositories is documented below with exact cryptographic/numerical proof and remediation status.
+> **Historical record — not a current validation report.** This ledger includes prior branch/lane claims, archived sibling-raster checks, and historical metrics. The current checkout does not contain the sibling registry rasters, official sample, or cached feature stack. In particular, the prior 451-download uniqueness pass is not a current clearance; the calibration-lattice comparison fails the literal 70% rule and is not freshly recomputed here. See [the current conservative review](research/independent-review-20261028.md) and machine-readable [irregularities ledger](data/irregularities_ledger.json).
+
+Every irregularity uncovered during prior audits of DrivenData Competition #306, the 19-band `training_features.tif` metadata, the shared toolkit, and sibling `GEMSDOE` repositories is documented below with its evidence date and remediation status. Historical findings must not be read as current organizer confirmation or present-day uniqueness clearance.
 
 ---
 
