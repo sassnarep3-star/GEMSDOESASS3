@@ -135,6 +135,69 @@
       "title": "Independent uniqueness audit excluded the calibration lattice; literal rule blocks the file",
       "finding": "The 2026-10-28 downloads audit compared 451 submitted rasters and reported max within-3 px overlap 66.53%, so it reported the file as unique. The audit excluded non-download rasters, including inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif. Protocol Rule 1 says \"any registry raster\". Recomputed here: 99.7849% of the 37,654 dots lie within 3 px of the lattice (SHA-256 b4570b40... matches the pin on main; same CRS, shape and transform). This fails the 70% limit. Main's review (docs/research/review-20261028.md) reaches the same block. Coverage analysis: 99.90% of the footprint lies within 3 px of a lattice positive, leaving 5,379 footprint pixels outside the buffer. Passing at 37,654 dots needs at least 11,297 dots there, so the literal rule cannot be met at this dot count by any raster.",
       "resolution": "Verdict corrected to NOT OK to submit under the literal rule (scripts/independent_review.py, lattice_gate). Whether the synthetic lattice should count is a protocol decision for the owner; no exemption is applied here. The owner must decide whether synthetic calibration probes count under Rule 1. Without an amendment, no file with this dot budget can pass."
+    },
+    {
+      "id": "IR-SASS3-20",
+      "severity": "MEDIUM (CORRECTION 2026-10-28)",
+      "title": "Uncovered-cell count 5,379 did not reproduce",
+      "finding": "IR-SASS3-19 and the independent review quoted 5,379 footprint cells outside the 3-px lattice buffer and 99.90% coverage. Recomputed by scripts/lattice_bound_audit.py: 6,649 cells outside (Euclidean <=3 px), 7,992 (strict <3 px), 1,846 (7x7 square); coverage 99.8713%. No convention reproduces 5,379.",
+      "resolution": "Replaced by the recomputed values in evidence/lattice_bound_audit_20261028.json. The conclusion is unchanged: 37,654 dots cannot pass the literal rule under any convention (max passing dots 22,163 / 26,640 / 6,153)."
+    },
+    {
+      "id": "IR-SASS3-21",
+      "severity": "HIGH (OPEN; owner decision)",
+      "title": "Literal lattice rule blocks every focus-site file, not only LWST",
+      "finding": "scripts/focus_site_candidate_audit.py measured 18 files (9 historical, 9 latest). Lattice overlap within 3 px is 99.05% to 100.00% for every file. The literal Rule 1 therefore blocks the entire focus set.",
+      "resolution": "Unresolved. The owner decision is in docs/research/lattice-decision-20261028.md (Options A/B/C). No gate was changed and no file was promoted."
+    },
+    {
+      "id": "IR-SASS3-22",
+      "severity": "HIGH (OPEN)",
+      "title": "Shared template already implements a like-for-like reading that the reviews did not apply",
+      "finding": "vendor/gems57/uniqueness.py classifies halo-saturated lattices (>90% of footprint cells within 3 px, HALO_SATURATION_FRACTION = 0.90) and provides a reading that excludes them from the dot-overlap test. Its docstring keeps the literal reading and leaves the protocol change to the owner.",
+      "resolution": "Surfaced as Option A. Under this reading the LWST archive and nine latest candidates pass against the references measured here (latest max overlap 61.6%). Not applied without an owner decision."
+    },
+    {
+      "id": "IR-SASS3-23",
+      "severity": "HIGH (OPEN)",
+      "title": "Holdout evaluators disagree on the champion and on owner ordering",
+      "finding": "gems57-pooled-hide-v2 (nine-site audit) gives GEMSDOE32 champion 0.003885 and GEMSDOE24 0.096653, reversing the owner order (0.2778 vs 0.2477). SGMC-CAL (review section 4) gives 0.064121 and 0.057932, consistent with the owner order (Spearman 0.869, 95% CI [0.606, 0.980], n=21). HIDE-RECOVER Spearman is 0.143.",
+      "resolution": "Unresolved. No HOLDOUT-DTI value in the repo is treated as an estimate of an organizer score. The latest-candidate holdout values use pooled-hide-v2 only and are labelled as such. Reconcile before any selection."
+    },
+    {
+      "id": "IR-SASS3-24",
+      "severity": "MEDIUM (OPEN)",
+      "title": "Protocol lane paragraph missing from the request",
+      "finding": "The PARALLEL-RUN PROTOCOL in the request refers to a lane paragraph 'below' that is not in the prompt. The lane is therefore undefined.",
+      "resolution": "Unresolved. Lane rule applied as written (rank correlation > 0.90, or > 70% dots within 3 px of a registry raster). Lane paragraph needed from the owner."
+    },
+    {
+      "id": "IR-SASS3-25",
+      "severity": "LOW (RESOLVED 2026-10-28)",
+      "title": "Leaderboard figures in the request conflict",
+      "finding": "The request cites 0.4413 as the high. Another source cites 0.3195 as the highest. The independent review cites 0.4544.",
+      "resolution": "Resolved from the live leaderboard page (fetched 2026-10-28): rank 1 xiaofanhu 0.4544; rank 27 kpomazi 0.3195; rank 48 roison 0.2897. 0.3195 is rank 27, not the top. 0.4413 is not on the page."
+    },
+    {
+      "id": "IR-SASS3-26",
+      "severity": "MEDIUM (OPEN)",
+      "title": "Sibling candidate verdicts are unverified claims",
+      "finding": "The nine-site audit records sibling verdicts such as PROMOTE and DO NOT SUBMIT, and a claim that GEMSDOE32 latest beats 0.2778 on holdout. This session did not check any sibling holdout value, and the latest files have no organizer receipts.",
+      "resolution": "Recorded as claims only (see docs/research/focus-site-candidates-20261028.md). The overlap and format measurements were recomputed; the verdicts were not accepted."
+    },
+    {
+      "id": "IR-SASS3-27",
+      "severity": "MEDIUM (OPEN)",
+      "title": "Independent uniqueness scan counted non-submission rasters",
+      "finding": "The 451-download scan reported 66.53% max overlap, but the same registry included external layers (for example a road-distance raster and a claim-distance raster) that are not submissions. The scan was not re-run in this session.",
+      "resolution": "Restrict the registry to submitted prediction rasters before any uniqueness claim. The literal-rule finding stands because the lattice is a submitted raster."
+    },
+    {
+      "id": "IR-SASS3-28",
+      "severity": "MEDIUM (OPEN)",
+      "title": "Run card ok_to_download conflicts with the gate verdict",
+      "finding": "evidence/current_run_card.json records ok_to_download: true (status_reason 'Archival download only'), while scripts/verify_all_gates.py reports OK TO DOWNLOAD: NO (BLOCKED) for the same file. The two cannot both be right for a download decision.",
+      "resolution": "The gate verdict governs. The site and README now say OK TO DOWNLOAD: NO, and the archive is not linked for download. The run card field should be corrected by the owner or by the next run-card writer."
     }
   ]
 }

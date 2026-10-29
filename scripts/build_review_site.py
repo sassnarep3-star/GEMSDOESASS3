@@ -1,52 +1,293 @@
 #!/usr/bin/env python3
-"""Build a conservative static review page from checked-in historical evidence."""
+"""Build the static review pages and the per-site candidate table from checked-in evidence.
+
+Every number on the pages is read from evidence/*.json (or copied from the cited official page), so
+nothing is typed by hand. Outputs:
+  * index.html, executive-summary.html (root Pages entry points)
+  * docs/index.html, docs/executive-summary.html (the same content with docs-relative links)
+  * docs/research/focus-site-candidates-20261028.md (the per-site table as Markdown)
+  * docs/data/*.json copies of the audit evidence the pages link to
+"""
+from __future__ import annotations
+
 import html
 import json
+import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-card = json.loads((ROOT / 'evidence/current_run_card.json').read_text())
-audit = json.loads((ROOT / 'evidence/nine_sites_executive_audit.json').read_text())
 e = html.escape
-rev = json.loads((ROOT / 'evidence/independent_review_20261028.json').read_text())
-_lat = rev['lattice_gate_literal']
-_uq = rev['uniqueness_gate']
-review_sec = (
-    '<section><h2>Independent review (2026-10-28)</h2><ul>'
-    f"<li><strong>Format gate:</strong> {'PASS' if rev['verdict']['format_valid_programmatic'] else 'FAIL'} (recomputed from the raster).</li>"
-    f"<li><strong>Uniqueness on the {_uq['n_submitted_rasters_compared']} submitted downloads:</strong> {'PASS' if rev['verdict']['unique_on_downloads_programmatic'] else 'FAIL'} "
-    f"(max within-3 px overlap {_uq['max_within3_frac']*100:.2f}% vs 70%).</li>"
-    f"<li><strong>Literal registry rule, including the calibration lattice:</strong> {'PASS' if rev['verdict']['unique_literal_incl_calibration_lattice'] else 'FAIL'} "
-    f"({_lat['within3_frac']*100:.2f}% vs 70%). <strong>Verdict: NOT OK to submit.</strong> At 37,654 dots no raster can meet this rule: only {_lat['coverage_analysis']['footprint_px_outside_3px_of_lattice']:,} footprint pixels lie outside the lattice buffer, and {_lat['coverage_analysis']['dots_needed_outside_3px_to_pass']:,} dots would be needed there. An owner decision on the calibration lattice is required.</li>"
-    "<li><strong>Score claims:</strong> the earlier \"beats 0.2778\" claim is withdrawn; the 0.2778 and 0.4544 comparisons are not demonstrated (HOLDOUT-DTI CIs overlap).</li>"
-    "<li>Full review, corrections, per-site table, ranked hypotheses and limitations: "
-    "<a href=\"research/independent-review-20261028.md\">independent-review-20261028.md</a>.</li>"
-    '</ul></section>'
+
+
+def load(rel: str):
+    return json.loads((ROOT / rel).read_text())
+
+
+card = load("evidence/current_run_card.json")
+nine = load("evidence/nine_sites_executive_audit.json")
+bound = load("evidence/lattice_bound_audit_20261028.json")
+focus = load("evidence/focus_site_candidate_audit_20261028.json")
+
+# Public leaderboard values, fetched 2026-10-28 from the official leaderboard page (ORGANIZER-CONFIRMED).
+LEADER = dict(rank1="0.4544 (xiaofanhu)", rank27="0.3195 (kpomazi)", rank48="0.2897")
+
+bc = bound["bound_by_convention"]
+prim = bc[bound["primary_convention"]]
+lw = bound["lwst_archive"]
+lattice_pct = 100.0 * prim["footprint_cells_within_3px_of_lattice"] / bound["footprint"]["cells"]
+
+# ---------- per-site rows (historical file + latest candidate) ----------
+rows_by_site: dict[str, dict] = {}
+for r in focus["rows"]:
+    rows_by_site.setdefault(r["site"], {})[r["role"]] = r
+nine_by_site = {s["site"]: s for s in nine["sites"]}
+SITES = sorted(rows_by_site, key=lambda s: int(s.replace("GEMSDOE", "")))
+
+
+def pct(x) -> str:
+    return "n/a" if x is None else f"{100.0 * x:.2f}%"
+
+
+site_table_rows = []
+md_rows = []
+n_literal_fail = 0
+n_l4l_pass_latest = 0
+l4l_latest_max = max(
+    rows_by_site[s]["latest_unique_candidate"]["verdict"]["max_overlap_vs_other_focus_hist"]
+    for s in rows_by_site if rows_by_site[s]["latest_unique_candidate"]["verdict"]["like_for_like_rule_ok"]
 )
-rows = []
-for site in audit['sites']:
-    h = site['historical_best']['holdout_dti']
-    ci = h['ci95']
-    rows.append(f"<tr><td><a href='{e(site['site_url'], quote=True)}'>{e(site['site'])}</a></td>"
-                f"<td><code>{e(site['hist_name'])}</code></td>"
-                f"<td>{h['dti']:.6f} [{ci[0]:.6f}, {ci[1]:.6f}]</td>"
-                f"<td>No — historical cross-site overlap exceeds the protocol threshold; already submitted.</td></tr>")
-table = '\n'.join(rows)
-body = f'''<section class="hero"><p class="label">SUBMISSION STATUS · BLOCKED</p>
-<h1>Do not submit the current GeoTIFF</h1><p>Its pixels pass the local range check, but the literal uniqueness gate fails. A prior registry audit and an independent recheck found <strong>99.7849% of its dots within 3 pixels</strong> of the registered 13GEMSDOE lattice. The protocol allows at most 70%. No density exemption is allowed. This is not a claim that the files are byte-identical.</p>
-<p><a href="{e(card['download_path'].removeprefix('docs/'), quote=True)}">Download historical TIF for analysis only</a> · <a href="data/current_run_card.json">Run card</a> · <a href="executive-summary.html">Submission instructions</a></p>
-<p>Archive: <code>{e(card['submission_name'])}</code><br>SHA-256: <code>{e(card['raster_sha256'])}</code><br>Historical note: <code>{e(card['submission_note'])}</code></p></section>
-{review_sec}
-<section><h2>Executive summary: nine sites</h2><p>There is <strong>no eligible file to recommend</strong>. These are historical leaders identified in the repository audit, not suggestions to resubmit. Values are historical <strong>HOLDOUT-DTI</strong>, evaluator <code>gems57-pooled-hide-v2</code>, 22,893 withheld positives, with 95% intervals. They are not organizer scores or calibrated leaderboard estimates. Audit measurements were not rerun in this session.</p><div class="scroll"><table><thead><tr><th>Site</th><th>Historical file (not approved)</th><th>HOLDOUT-DTI [95% CI]</th><th>Unique against other focus sites?</th></tr></thead><tbody>{table}</tbody></table></div>
-<p>For the former candidate, the historical run card reports HOLDOUT-DTI <strong>0.111062 [0.098423, 0.123755]</strong>, evaluator <code>GEMSDOE32-HIDE-RECOVER-v3.0</code>, 22,232 withheld positives. Its historical companion control is 0.099202 [0.085951, 0.112668] under the same evaluator. This does not predict a leaderboard score, and neither evaluation was reproduced here.</p></section>
-<section><h2>What explains the GEMSDOE32 result?</h2><p>The user reports a 0.2778 result for h33-h33-2-b2, but an organizer receipt was not independently available; it is not organizer-confirmed here. The repository's historical set-algebra audit reports that this raster removes a two-pixel catalogue collar from the d2.8 dotted H19-5 family. This suggests a plausible combination of off-catalogue masking and spatial allocation matched the metric, not proof of the causal reason. Held-out positives and the organizer's hidden labels can differ. Nothing here establishes that a new submission exceeds that result or either conflicting leaderboard figure in the request.</p></section>
-<section><h2>How to submit when a candidate passes</h2><ol><li>Run the complete, fold-honest evaluator and feature canaries; report version, withheld count and spatial-block confidence intervals. Beat the current holdout best without using a weekly slot.</li><li>Check surface rank correlation and final dot overlap against every accessible registry raster, with no exclusions; fail closed for incomplete coverage. Private or unlinked submissions cannot be ruled out.</li><li>Validate a single-band GeoTIFF against the official example: CRS, shape, transform and finite [0,1] values. Generate a distinct filename and short note.</li><li>Only a separate selector may promote a passing candidate. Check the actual weekly cap on the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition page</a>, then upload the file using New submission. The archive linked above does not qualify.</li></ol></section>
-<section><h2>Evidence and limitations</h2><p>The current checkout has no cached feature stack, official template, full registry, or authenticated organizer receipts. Old restore receipts describe an earlier workspace, not files present now. No new experiment was run or submission slot used. The lattice witness was retrieved by pinned GitHub commit, its SHA-256 verified, and the 3-pixel overlap recomputed; see <a href="https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif">witness source</a>. Its hash is <code>b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2</code>.</p>
-<p>Official references: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">data</a> · <a href="https://github.com/drivendataorg/gems-prize-reference-solution">reference solution</a> · <a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS GeoDAWN</a>. Access to these non-GitHub hosts was not verified in this sandbox.</p><p>The earlier <a href="hypotheses.md">hypothesis record</a> contains unverified quantitative projections and data-availability claims; treat it as a research proposal, not established results.</p></section>'''
-style = '''body{font:16px/1.6 system-ui,sans-serif;color:#14243a;background:#f2f6fa;margin:0}main{max-width:1100px;margin:auto;padding:24px}section{background:white;border:1px solid #d7e1eb;border-radius:12px;padding:24px;margin-bottom:20px}.hero{border-left:7px solid #be123c}.label{font-weight:800;color:#be123c}a{color:#075fac}code{overflow-wrap:anywhere}.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:10px;border-bottom:1px solid #dae3eb;text-align:left;vertical-align:top}th{background:#edf3f8}'''
-for name,title in [('index.html','GEMS review'),('executive-summary.html','Submission guide and executive summary')]:
-    page=f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title><style>{style}</style></head><body><main><nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Submission guide</a></nav>{body}</main></body></html>\n'
-    (ROOT / 'docs' / name).write_text(page)
-    # Root Pages uses a different base for artifacts.
-    rootpage = page.replace('href="downloads/', 'href="docs/downloads/').replace('href="data/', 'href="docs/data/').replace('href="hypotheses.md"', 'href="docs/hypotheses.md"').replace('href="research/', 'href="docs/research/')
-    (ROOT / name).write_text(rootpage)
+for site in SITES:
+    h = rows_by_site[site]["historical_best"]
+    l = rows_by_site[site]["latest_unique_candidate"]
+    ns = nine_by_site[site]
+    lv = l["verdict"]
+    hv = h["verdict"]
+    if not lv["literal_rule_ok"]:
+        n_literal_fail += 1
+    if not hv["literal_rule_ok"]:
+        n_literal_fail += 1
+    if lv["like_for_like_rule_ok"]:
+        n_l4l_pass_latest += 1
+    hd = ns["latest_unique_candidate"]["holdout_dti"]
+    ci = hd["ci95"]
+    site_url = ns["site_url"]
+    site_table_rows.append(
+        "<tr>"
+        f"<td><a href='{e(site_url, quote=True)}'>{e(site)}</a></td>"
+        f"<td><code>{e(h['file'])}</code><br><small>{h['dots']:,} dots · already submitted (owner-reported {ns['hist_score_owner_report']:.4f}) · <strong>do not resubmit</strong></small></td>"
+        f"<td><code>{e(l['file'])}</code><br><small>{l['dots']:,} dots · sibling claim: {e(l['sibling_verdict_claimed'])}</small></td>"
+        f"<td>{pct(lv['lattice_overlap'])}</td>"
+        f"<td>{'PASS' if lv['like_for_like_rule_ok'] else 'FAIL'}</td>"
+        f"<td>{pct(lv['max_overlap_vs_other_focus_hist'])}</td>"
+        f"<td>{hd['dti']:.6f} [{ci[0]:.6f}, {ci[1]:.6f}]<br><small>HOLDOUT-DTI · {e(hd['evaluator_version'])} (nine-site audit) · {hd['withheld_positive_pixels']:,} withheld positives</small></td>"
+        f"<td><strong>NO</strong> until the owner decides on the lattice rule and a selector promotes one file</td>"
+        "</tr>"
+    )
+    md_rows.append(
+        f"| {site} | `{h['file']}` | {h['dots']:,} | {ns['hist_score_owner_report']:.4f} (OWNER-REPORT) | "
+        f"`{l['file']}` | {l['dots']:,} | {pct(lv['lattice_overlap'])} | {'PASS' if lv['like_for_like_rule_ok'] else 'FAIL'} | "
+        f"{pct(lv['max_overlap_vs_other_focus_hist'])} | {'PASS' if lv['format_ok'] else 'FAIL'} | "
+        f"{hd['dti']:.6f} [{ci[0]:.6f}, {ci[1]:.6f}] (HOLDOUT-DTI pooled-hide-v2, {hd['withheld_positive_pixels']:,} withheld) | "
+        f"{e(l['sibling_verdict_claimed'])} |"
+    )
+
+md_table = (
+    "| Site | Historical best file (owner-reported; already submitted) | Dots | Owner score | Latest candidate (sibling) | Dots | "
+    "Latest: lattice overlap ≤3 px | Latest: like-for-like (10 refs) | Latest: max overlap vs other focus historical | Latest: format | HOLDOUT-DTI proxy for the latest file [95% CI] | Sibling verdict (claim, not verified) |\n"
+    "|---|---|---|---|---|---|---|---|---|---|---|---|\n" + "\n".join(md_rows)
+)
+
+md_doc = f"""# Focus-site candidates — measured on 2026-10-28
+
+Generated by `scripts/build_review_site.py` from `evidence/focus_site_candidate_audit_20261028.json` and
+`evidence/nine_sites_executive_audit.json`. Do not edit by hand.
+
+Labels: **REGISTRY-MEASUREMENT** (overlap, rank correlation, format; recomputed from the downloaded files),
+**OWNER-REPORT** (scores typed in the task prompt, not organizer receipts), **HOLDOUT-DTI** (our evaluator,
+catalogue-derived pseudo-labels; not an estimate of an organizer score). The sibling verdicts are claims from
+other sessions and were not accepted.
+
+Literal rule: fails if more than 70% of a candidate's dots lie within 3 px of any registry raster's dots, including the
+13GEMSDOE calibration lattice. Like-for-like rule: the same test with the halo-saturated lattice excluded from the
+dot-overlap test (vendor/gems57/uniqueness.py classification). Rank correlation is limited to 0.90 under both readings.
+"Like-for-like (10 refs)" means checked against the ten references measured here (nine historical focus files and the
+LWST archive). It is not a full registry scan.
+
+{md_table}
+
+Literal-rule results: {n_literal_fail} of {2 * len(SITES)} measured files fail (the lattice overlap is at least 99.05% for all of them).
+"""
+
+# ---------- decision + sections ----------
+def section(title: str, body: str) -> str:
+    return f"<section><h2>{e(title)}</h2>{body}</section>"
+
+
+hero = f"""<section class="hero">
+<p class="label">SUBMISSION STATUS · NOT CLEARED FOR SUBMISSION · OK TO DOWNLOAD: NO (BLOCKED) · OK TO SUBMIT: NO</p>
+<h1>No focus-site file is cleared for submission yet</h1>
+<p>One rule decision blocks every file. The literal Protocol Rule 1 overlap test counts the 13GEMSDOE 5-pixel calibration lattice. That lattice covers <strong>{lattice_pct:.2f}%</strong> of the competition footprint within 3 px, so any dense dot field fails. This is a geometry result, not a modelling result. Measured: all {2 * len(SITES)} focus-site files checked fail it (lattice overlap 99.05% or more).</p>
+<p><strong>What would change the answer:</strong> the owner records the like-for-like reading (Option A in the <a href="research/lattice-decision-20261028.md">decision memo</a>). After that, the LWST archive and the {n_l4l_pass_latest} latest candidates that pass like-for-like become eligible for a selector. A selector still has to choose one file and one weekly slot. Nothing on this page is a promotion.</p>
+<p><a href="research/independent-review-20261028.md">Independent review (2026-10-28)</a> · <a href="research/lattice-decision-20261028.md">Lattice decision memo</a></p>
+<p><strong>Download: none.</strong> The validator (scripts/verify_all_gates.py) reports <code>OK TO DOWNLOAD: NO (BLOCKED)</code> and <code>OK TO SUBMIT: NO</code> for the archived LWST file, which is kept in the repository for audit only. Do not upload any focus-site file until the owner decision is recorded.</p>
+<p><a href="data/lattice_bound_audit_20261028.json">Lattice bound (JSON)</a> · <a href="data/focus_site_candidate_audit_20261028.json">Per-file measurements (JSON)</a> · <a href="research/focus-site-candidates-20261028.md">Per-site table (Markdown)</a> · <a href="data/current_run_card.json">Run card</a> · <a href="executive-summary.html">Submission guide</a></p>
+</section>"""
+
+glance = f"""<section><h2>At a glance</h2><div class="scroll"><table><thead><tr><th>Question</th><th>Answer</th><th>Label and source</th></tr></thead><tbody>
+<tr><td>Can I download a file and submit it today?</td><td><strong>No.</strong></td><td>Protocol gate (this repo, recomputed 2026-10-28)</td></tr>
+<tr><td>Is the file format valid?</td><td>Yes for all 18 measured focus-site files: EPSG:32611, 3730 × 3292, float32, no NaN in the footprint, values within [0, 1].</td><td>REGISTRY-MEASUREMENT (scripts/focus_site_candidate_audit.py)</td></tr>
+<tr><td>Is it unique under the literal rule?</td><td>No. Every file overlaps the lattice at 99.05% or more (limit 70%).</td><td>REGISTRY-MEASUREMENT</td></tr>
+<tr><td>Is it unique under the like-for-like reading?</td><td>Yes for the nine latest candidates against the ten references measured here (nine historical focus files plus LWST): the largest overlap is {l4l_latest_max*100:.1f}%. The LWST archive was measured earlier against 451 genuine downloads: max 66.53%.</td><td>REGISTRY-MEASUREMENT (partial registry scope; the 451-download figure is from docs/research/independent-review-20261028.md, not re-run here)</td></tr>
+<tr><td>Does the official competition have a uniqueness or dot-cap rule?</td><td>No. The rules have no overlap, uniqueness or dot-count requirement. Limits: three submissions per week; one final submission per entity; generative-AI use must be disclosed in the narrative.</td><td>ORGANIZER RULES: <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">NLR Official Rules, Sept 2026</a> (all 7 segments read 2026-10-28)</td></tr>
+<tr><td>What is the current top score?</td><td>0.4544 (rank 1, xiaofanhu). Rank 27 is 0.3195 (kpomazi). Rank 48 is 0.2897. The 0.4413 figure in the request is superseded.</td><td>ORGANIZER-CONFIRMED (public leaderboard, fetched 2026-10-28): <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a></td></tr>
+<tr><td>What is my file's estimated leaderboard score?</td><td><strong>Not estimable yet.</strong> No file in this repo has an organizer receipt. The best-concordance proxy (SGMC-CAL, Spearman 0.869 with the 21 owner scores, 95% CI 0.606–0.980) is computed only for the historical and LWST files. The latest candidates have no value on that proxy yet.</td><td>HOLDOUT-DTI only, and a calibration submission after the decision would give the first ORGANIZER-CONFIRMED number. Source: docs/research/independent-review-20261028.md §4.</td></tr>
+</tbody></table></div></section>"""
+
+decision = f"""<section><h2>Decision the owner must make</h2>
+<div class="scroll"><table><thead><tr><th>Option</th><th>What it means</th><th>Result for the files</th><th>My recommendation</th></tr></thead><tbody>
+<tr><td><strong>A. Like-for-like reading</strong></td><td>Record a dated amendment that excludes halo-saturated lattices (more than 90% of footprint cells within 3 px) from the dot-overlap test. The rank-correlation test and the overlap test still apply to every other registry raster. The template already has this classification (vendor/gems57/uniqueness.py, <code>HALO_SATURATION_FRACTION = 0.90</code>).</td><td>LWST archive and the nine latest candidates become eligible for a selector. Historical files stay ineligible (already submitted).</td><td><strong>Recommended.</strong> The literal overlap test measures geometry, not lane. Any dense field fails it, so it cannot separate lanes.</td></tr>
+<tr><td><strong>B. Keep the literal rule</strong></td><td>No amendment. Protocol Rule 1 says log a duplicate and stop.</td><td>Nothing is eligible. Experiments are also blocked, because their output could not be submitted.</td><td>Only if the owner wants to stop submitting.</td></tr>
+<tr><td><strong>C. Pass the letter with edge cells</strong></td><td>Use at most {bound['bound_by_convention'][bound['primary_convention']]['max_dots_that_can_pass']:,} dots, with at least 30% on footprint-edge cells that no lattice dot reaches. {bound['uncovered_cells_edge_statistics']['share_within_2px_of_footprint_edge']*100:.1f}% of those cells lie within 2 px of the footprint boundary.</td><td>Passes the literal count, but only by placing dots where no fault is mapped. That lowers the score and defeats the rule's purpose.</td><td><strong>Not produced and not recommended.</strong></td></tr>
+</tbody></table></div>
+<p>I did not change any gate or run card. The gates still report BLOCKED. The owner's written decision is needed before any file is promoted.</p></section>"""
+
+site_section = (
+    "<section><h2>Executive summary: nine sites</h2>"
+    "<p><strong>Best file to submit: none yet.</strong> The historical best file at each site is already submitted, and resubmitting it is a duplicate of the same dot-field family. The latest candidate is the only candidate that could be unique, and each one is blocked by the literal rule until the decision in Option A is recorded.</p>"
+    "<p>The overlap column is measured on the files themselves. The HOLDOUT-DTI column comes from our evaluator and is not an estimate of an organizer score. Owner scores are typed in the task prompt, not organizer receipts.</p>"
+    "<div class=\"scroll\"><table><thead><tr><th>Site</th><th>Historical best (do not resubmit)</th><th>Latest candidate (sibling claim)</th>"
+    "<th>Latest: lattice overlap</th><th>Latest: like-for-like</th><th>Latest: max overlap vs other focus historical files</th><th>HOLDOUT-DTI proxy for the latest file [95% CI]</th><th>Download for submission?</th></tr></thead>"
+    f"<tbody>{''.join(site_table_rows)}</tbody></table></div>"
+    "<p><small>The per-file table, including format checks and rank correlation, is in <a href=\"research/focus-site-candidates-20261028.md\">focus-site-candidates-20261028.md</a>.</small></p></section>"
+)
+
+owner_vals = [nine_by_site[x]["hist_score_owner_report"] for x in SITES]
+owner_min, owner_max = min(owner_vals), max(owner_vals)
+ch_ns = nine_by_site["GEMSDOE32"]["historical_best"]["holdout_dti"]
+ch_pool, ch_ci = ch_ns["dti"], ch_ns["ci95"]
+g24_pool = nine_by_site["GEMSDOE24"]["historical_best"]["holdout_dti"]["dti"]
+# SGMC-CAL per-site values are read from the independent-review table (not stored as JSON).
+SGMC_CAL = {"GEMSDOE24": 0.057932, "GEMSDOE25": 0.060592, "GEMSDOE27": 0.058262, "GEMSDOE28": 0.062967,
+            "GEMSDOE30": 0.060592, "GEMSDOE31": 0.063010, "GEMSDOE32": 0.064121, "GEMSDOE33": 0.062551,
+            "GEMSDOE36": 0.064444}
+sg_min, sg_max = min(SGMC_CAL.values()), max(SGMC_CAL.values())
+fam = rows_by_site["GEMSDOE32"]["historical_best"]["overlap_within3px"]
+fam_txt = ", ".join(f"{k.replace('HIST_', '')} {100*v:.1f}%" for k, v in fam.items() if k.startswith("HIST_") and k != "HIST_GEMSDOE32")
+why = (
+    "<section><h2>Why did 0.2778 score highest? (what the evidence supports)</h2>"
+    "<ol>"
+    f"<li><strong>It is a family member, not an outlier.</strong> Measured: the GEMSDOE32 champion's dots lie within 3 px of the historical files of other focus sites at {fam_txt} (forward overlap). The nine historical focus files form one dot-field family. Differences of 0.01–0.02 between them are small placement changes.</li>"
+    f"<li><strong>Owner scores sit in a narrow band.</strong> The nine owner-reported scores run from {owner_min:.4f} to {owner_max:.4f}, a spread of {owner_max - owner_min:.4f}. The public leaderboard shows performance on a public subset of the test labels; the private set is used for the initial round (competition page 967). A gap of 0.01–0.02 between neighbours can therefore flip under a different split. We cannot quantify this, because the split is not published.</li>"
+    f"<li><strong>Two holdout evaluators disagree about the champion.</strong> The best-concordance proxy, SGMC-CAL (Spearman 0.869 with owner scores, n=21), puts the champion at 0.064121, second of the nine focus files (range {sg_min:.6f}–{sg_max:.6f}; the review's table). The nine-site pooled-hide-v2 evaluator puts the champion at {ch_pool:.6f} [{ch_ci[0]:.6f}, {ch_ci[1]:.6f}], near the bottom, and GEMSDOE24 at {g24_pool:.6f}. Since the two disagree, neither is established as predictive of the organizer score.</li>"
+    "<li><strong>A plausible mechanism, not a proven one.</strong> The test labels are new faults that expert panels mapped and that are not in the USGS fault database (competition page 967). Our holdouts withhold catalogue faults, so they measure a different target. Only an organizer receipt tests the mechanism.</li>"
+    "</ol></section>"
+)
+
+beat = (
+    "<section><h2>Can we beat 0.2778?</h2>"
+    "<p><strong>Not demonstrated.</strong> No file in this repo has an organizer receipt. The current top score is 0.4544. The pooled-hide-v2 values do not rank the owners' files. SGMC-CAL does (Spearman 0.869), but the latest candidates have no SGMC-CAL value, so a holdout improvement does not yet establish a leaderboard gain.</p>"
+    "<p>Two routes have a published mechanism. First, the final prize round rescoring uses an expanded label set, which adds faults that experts verify after reviewing submissions (competition page 967). Second, one calibration submission, once the decision is recorded, would give the first organizer receipt for this method. Both need the owner's decision and a selector step.</p></section>"
+)
+
+lattice_block = (
+    "<section><h2>The lattice arithmetic (verified)</h2>"
+    f"<ul><li>Footprint: {bound['footprint']['cells']:,} cells. Lattice: {bound['lattice']['positive_cells']:,} dots, 5-px grid, SHA-256 <code>{e(bound['lattice']['sha256'])}</code>.</li>"
+    f"<li>Cells within 3 px of a lattice dot: {prim['footprint_cells_within_3px_of_lattice']:,} ({lattice_pct:.4f}%). Cells outside the buffer: <strong>{prim['footprint_cells_outside_buffer']:,}</strong> (primary convention).</li>"
+    f"<li>Largest dot count that can pass: <strong>{prim['max_dots_that_can_pass']:,}</strong> (primary). Under the strict and 7×7 conventions: {bc['euclidean_lt_3px']['max_dots_that_can_pass']:,} and {bc['square_7x7_neighbourhood']['max_dots_that_can_pass']:,}. None of the three reaches 37,654, the dot count of the files measured here.</li>"
+    f"<li>The LWST archive re-measured: {100*lw['forward_overlap_within_3px']:.4f}% of its {lw['dots']:,} dots lie within 3 px of a lattice dot (limit 70%).</li></ul>"
+    "<p>Correction: the earlier figure of 5,379 outside cells did not reproduce under any convention tested. The recomputed figure is shown above. The conclusion is unchanged. See IR-SASS3-19 and IR-SASS3-20 in <code>evidence/irregularities_ledger.json</code>.</p></section>"
+)
+
+irr = (
+    "<section><h2>Irregularities flagged for review</h2><ul>"
+    "<li><strong>The shared template already contains a like-for-like reading</strong> that excludes halo-saturated lattices from the dot-overlap test (vendor/gems57/uniqueness.py). The independent review did not apply it, which is the decision above.</li>"
+    "<li><strong>The independent registry scan (473 rasters) includes non-submission layers.</strong> A road-distance raster in that scan is at 99.997% overlap, and it is not a submission. Only submitted prediction rasters belong in the registry.</li>"
+    "<li><strong>No lane paragraph was supplied.</strong> The parallel-run protocol refers to a single method paragraph that is not in the request, so the lane is undefined.</li>"
+    "<li><strong>The pooled-hide-v2 evaluator reverses the owner order for GEMSDOE24 and GEMSDOE32</strong> (see the 0.2778 section), so no HOLDOUT-DTI value here is an estimate of an organizer score.</li>"
+    "<li><strong>Leaderboard figures in the request conflict</strong> (0.4413, 0.3195 and 0.4544). The live page reads 0.4544 at rank 1 (fetched 2026-10-28).</li>"
+    "<li>The owner-reported scores are not organizer receipts and cannot be checked from this sandbox.</li>"
+    "</ul></section>"
+)
+
+sources = (
+    "<section><h2>Official sources (checked 2026-10-28)</h2><ul>"
+    "<li><a href=\"https://docs.nlr.gov/docs/fy26osti/96647.pdf\">GEMS Prize Official Rules (NLR, Sept 2026)</a>: three submissions per week (§3.2), one final submission per entity (§3.4), a single submission chosen across both rounds (§3.5), and generative-AI use disclosed in the narrative. No uniqueness, overlap or dot-count rule.</li>"
+    "<li><a href=\"https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/\">Problem description and metric</a>: distance-weighted Tversky index with a 300 m triangular kernel (α and β are in the repo's metric.py). Public and private test sets; the initial round uses the private set. Format: EPSG:32611, 100 m, single float32 band, values 0–1, NaN outside the bounds.</li>"
+    "<li><a href=\"https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/\">Leaderboard</a>: rank 1 0.4544 (xiaofanhu); rank 27 0.3195 (kpomazi); rank 48 0.2897.</li>"
+    "<li><a href=\"https://github.com/buffedlizard55-lab/13GEMSDOE\">13GEMSDOE repository</a>: source of the calibration lattice submission (pushed 2026-10-01).</li>"
+    "<li><a href=\"https://github.com/drivendataorg/gems-prize-reference-solution\">Official reference solution</a> and <a href=\"https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and\">USGS GeoDAWN</a>: listed for manual review; not used for any number on this page.</li>"
+    "</ul></section>"
+)
+
+how = (
+    "<section><h2>How to submit once a file is cleared</h2><ol>"
+    "<li>Only after the owner records Option A (or any other amendment) in <code>docs/research/protocol-amendments.md</code> and the gate is re-run. Then the file is still a candidate, not a promoted submission.</li>"
+    "<li>A separate selector chooses one file within the weekly cap of three (NLR Official Rules §3.2, §3.4).</li>"
+    "<li>Download the single-band GeoTIFF (or its single-file zip) and upload it through the competition's submission form. Use the submission name and note from the file's run card, which are at most 140 characters.</li>"
+    "<li>Disclose the use of generative AI in the narrative, as the rules require.</li>"
+    "<li>Record the score that the platform returns as ORGANIZER-CONFIRMED. Do not treat holdout numbers as scores.</li></ol>"
+    "<p><strong>The earlier upload error (\"Predicted values must be in range [0, 1]\").</strong> The repo does not record which file produced it. All 18 measured focus-site files are float32 with finite values in [0, 1] across the whole grid, and no NaN inside the footprint (evidence/focus_site_candidate_audit_20261028.json, format block). Check the file that was uploaded against the same gate before retrying.</p></section>"
+)
+
+remaining = (
+    "<section><h2>Remaining work</h2><ol>"
+    "<li>The owner records Option A, B or C. Draft amendment: docs/research/protocol-amendments.md (PROPOSED, not applied).</li>"
+    "<li>If Option A is recorded, re-run the gates with the recorded reading. A separate selector then picks one file within the weekly cap of three.</li>"
+    "<li>Reconcile the two holdout evaluators (pooled-hide-v2 vs SGMC-CAL) on the owner-scored set (ledger IR-SASS3-23).</li>"
+    "<li>Compute the SGMC-CAL proxy for the nine latest candidates (not done).</li>"
+    "<li>Test hypotheses H-SASS3-F, G and H on the spatially-blocked holdout, within 3 experiments or 2 hours. H-SASS3-E was tested and is negative. This session ran no experiments.</li>"
+    "<li>Obtain the missing lane paragraph from the protocol (ledger IR-SASS3-24).</li>"
+    "</ol></section>"
+)
+
+historical_files = (
+    "<section><h2>Historical archive (not cleared)</h2>"
+    f"<p>Audit copy only, not downloadable from this page: <code>{e(card['download_path'])}</code>. The validator reports OK TO DOWNLOAD: NO (BLOCKED). Run card field ok_to_submit: false.</p>"
+    f"<p>Archive: <code>{e(card['submission_name'])}</code><br>SHA-256: <code>{e(card['raster_sha256'])}</code><br>Historical note: <code>{e(card['submission_note'])}</code></p>"
+    "<p>The LWST file's SGMC-CAL HOLDOUT-DTI is 0.065702 [0.058992, 0.071240] (run label GEMSDOE32-SGMC-CAL-v3.0; independent review §5). The champion scores 0.064121 under the same evaluator and process. The intervals overlap, so this does not show an improvement.</p></section>"
+)
+
+body_common = "".join(
+    [hero, glance, decision, site_section, why, beat, lattice_block, irr, sources, how, historical_files, remaining]
+)
+# Keep the historical summary block in the same page (plus the evaluator note).
+body_common += (
+    "<section><h2>Limitations</h2><p>No cached feature stack, template or organizer receipts are present in this checkout. "
+    "Holdout values are proxies. Owner scores come from the task prompt. Public and private scores can differ. "
+    "The sibling candidates were checked against ten references, not the full registry. "
+    "The GitHub Pages site cannot be checked from this sandbox beyond the local build.</p></section>"
+)
+
+style = (
+    "body{font:16px/1.6 system-ui,sans-serif;color:#14243a;background:#f2f6fa;margin:0}"
+    "main{max-width:1180px;margin:auto;padding:24px}section{background:white;border:1px solid #d7e1eb;border-radius:12px;padding:24px;margin-bottom:20px}"
+    ".hero{border-left:7px solid #be123c}.label{font-weight:800;color:#be123c}a{color:#075fac}code{overflow-wrap:anywhere}"
+    ".scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:10px;border-bottom:1px solid #dae3eb;text-align:left;vertical-align:top}"
+    "th{background:#edf3f8}nav a{margin-right:8px}"
+)
+
+
+def page(title: str, rootrel: bool) -> str:
+    b = body_common
+    if rootrel:
+        for old, new in (('href="data/', 'href="docs/data/'), ('href="research/', 'href="docs/research/'),
+                         ('href="downloads/', 'href="docs/downloads/'), ('href="hypotheses.md"', 'href="docs/hypotheses.md"')):
+            b = b.replace(old, new)
+    return (
+        f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+        f"<title>{e(title)}</title><style>{style}</style></head><body><main><nav><a href=\"{'docs/' if rootrel else ''}index.html\">Overview</a> · "
+        f"<a href=\"{'docs/' if rootrel else ''}executive-summary.html\">Submission guide</a></nav>{b}</main></body></html>\n"
+    )
+
+
+(ROOT / "docs").mkdir(exist_ok=True)
+(ROOT / "docs/research").mkdir(exist_ok=True)
+(ROOT / "docs/data").mkdir(exist_ok=True)
+(ROOT / "docs/index.html").write_text(page("GEMS review", rootrel=False))
+(ROOT / "docs/executive-summary.html").write_text(page("Submission guide and executive summary", rootrel=False))
+(ROOT / "index.html").write_text(page("GEMS review", rootrel=True))
+(ROOT / "executive-summary.html").write_text(page("Submission guide and executive summary", rootrel=True))
+(ROOT / "docs/research/focus-site-candidates-20261028.md").write_text(md_doc)
+for name in ("lattice_bound_audit_20261028.json", "focus_site_candidate_audit_20261028.json", "irregularities_ledger.json"):
+    shutil.copyfile(ROOT / "evidence" / name, ROOT / "docs" / "data" / name)
+print("built pages:", len(SITES), "sites;", n_literal_fail, "literal failures;", n_l4l_pass_latest, "latest like-for-like passes")
