@@ -1,72 +1,87 @@
 # Repository review — 2026-10-29
 
-## Executive decision
+## Executive finding
 
-**No submission is approved. Do not upload either checked-in TIFF.** The 2026-10-29 “unique-structural” file has only an unverified sidecar; no reference sample, footprint, labels, or registry data are present in this checkout. The earlier LWST TIFF has a historical literal registry-overlap failure. No leaderboard score or score projection is supported for the new raster.
+**No candidate in the current checkout is approved for a competition slot. Do not submit either checked-in TIF.** The current BGK-PBE GeoTIFF is an archive-only synthetic diagnostic. It has valid local raster properties against a recorded grid specification, but its footprint and geological inputs are synthetic stand-ins; official training rasters, labels, sample raster, and complete registry are absent. The holdout score, leakage canary, pre-placement check, and full registry uniqueness gate were not run. Its leaderboard estimate is therefore **NOT ESTIMABLE**.
 
-This is a documentation and static-source review, not a fresh scientific experiment. It deliberately does not claim that past metrics were reproduced. The provided prompt asks for at most three experiments; this review ran zero experiments and used no submission slot.
+The objective of this review is correctness and fail-closed behavior, not another experiment. No candidate experiment was run and no weekly slot was used.
 
-## What was checked
+## Pass 1 — inspect implementation and evidence
 
-- Repository status and tracked file inventory; current branch is `arena/9b81fdbe-gemsdoesass3`.
-- README, run cards, uniqueness audit/irregularity ledger, page-builder and gate-verifier source, workflow configuration, and available raster artifact sidecars.
-- `python -m compileall -q scripts src vendor` completed successfully (syntax check only; it does not execute imports or validate results).
-- `python -m pytest -q` could not run: `pytest` is not installed.
-- `python scripts/verify_all_gates.py` could not run: `numpy` is not installed. The absence of rasterio and the official reference TIFFs also prevents a new independent raster validation in this checkout.
+- Read the README standing brief; inspected repository status, current/main changes, pages, current run cards, evidence ledgers, feature-band audit, generation scripts, shared template tools, CI, and tests.
+- The working checkout initially had only JSON manifests and receipts under `data/`; no official `training_features.tif`, `labels.tif`, or `sample_submission.tif` and no `.cache/` feature stack. The complete 386-raster registry is also absent.
+- `origin/main` had advanced with PR #16 and introduced a BGK-PBE diagnostic TIF. Its generator explicitly creates an approximate ellipse footprint, sinusoidal “gravity”, filtered random “potassium”, coordinate-derived “dilatation”, and synthetic NNE lines. The generator itself says these are synthetic stand-ins. Thus the result is not a prediction from the competition stack, despite the named geological hypothesis.
+- Independently inspected the BGK TIF with Rasterio: SHA-256 `7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f`; one band, float32, 3730×3292, EPSG:32611, transform `(100,0,243350,0,-100,4508550)`, nodata=None, all values finite in [0,1], 6,178 values >0.5 and 8,794 values >0. These checks are against recorded metadata; no official sample raster or footprint mask was available.
+- Retrieved the calibration-lattice witness from pinned public commit `07345ea0604953d7efb858d9cfbc21e20c7aca0b`; recomputed and verified its SHA-256 `b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52c4d697f0647dc9b2`. CRS, shape, and transform match the BGK file. The selected-file script reported BGK final dot centroids 50.0% within 3 px (10 line-merged blobs; not a meaningful independent dot count), positive-cell overlap 3,905/8,794 = **44.4053%**, hard-cell overlap 2,687/6,178 = **43.4930%**, and sampled output-raster Spearman -0.00163 (300,000 finite pixels). Structural diagnostic: centroid overlap 42.3531%, positive-cell overlap 42.4341%, sampled rho +0.00147. Both pass the limits against this one lattice only. These are not complete-registry checks or the required pre-placement correlation over the official footprint.
+- The earlier `unique-structural` diagnostic is also synthetic. Its 10,000 hand-placed centers expand to 129,311 positive raster cells after radius-2 disks; it too remains archive-only. Its separate one-witness record is preserved as historical evidence.
 
-## Findings (ordered by risk)
+## Pass 2 — defects and assumptions found
 
-1. **Critical — newest download has not passed uniqueness or official-grid validation.** The sidecar `docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-audit.json` explicitly records that its registry overlap and footprint/sample match could not be checked. It describes generated NNE corridors, not output from the requested cached-feature/holdout pipeline. Its “unique” filename and prior README wording overstated what is established. README now labels it analysis-only and says not to submit.
-2. **Critical — legacy run card/verifier target a different artifact.** `evidence/current_run_card.json` names the LWST TIFF, whose historical card sets `ok_to_submit: false`; `scripts/verify_all_gates.py` checks that named file and historical JSON, not the newest structural TIFF. Thus even a successful verifier run would not validate the newest TIFF. It also returns success under `--expect-blocked` for its one expected literal lattice finding, which is a CI assertion of a known blocked state—not approval to submit.
-3. **High — absent source data prevents the requested experiment.** `data/` contains small audit/manifest JSON only, not competition rasters, labels, official sample, or the cached feature stack. Consequently no new HOLDOUT-DTI estimate, confidence interval, leakage canary, candidate-vs-registry correlation, or dot overlap can be recomputed here. The user's score values are inputs/owner reports, not organizer receipts unless a receipt is present.
-4. **High — conflicting and stale evidence needs a single source of truth.** `README.md`, `docs/data/current_run_card.json`, `docs/data/run_card.json`, `evidence/current_run_card.json`, and generated pages describe different submissions and historic states. The legacy `scripts/build_docs_pages.py` reads a schema requiring `submission_zip_name` and nested `registry_correlation_overlap`; the checked-in current card has neither. It is inconsistent with the current schema and should not be used. The active conservative renderer is `scripts/build_review_site.py`, but it writes pages at import time rather than behind a `main()` guard, making it unsafe to import in tests or other tools.
-5. **High — gate suite has assumptions that are not candidate-generic.** `verify_all_gates.py` hardcodes 37,654 positives and loads legacy checks from evidence JSON. A different valid candidate cannot be evaluated by this verifier without edits. It should derive expected properties from a manifest and independently compute all candidate-specific checks against the official sample and complete registry; missing inputs should fail closed.
-6. **Medium — test/CI reproducibility.** Local test execution is blocked by missing `pytest` and `numpy`; CI installs several geospatial libraries but not a pinned dependency set. The workflow command `--expect-blocked` currently tests for a specific historical blocked condition, not a general “safe to submit” contract. CI status was not available from the local checkout.
-7. **Medium — scientific claims in artifact provenance exceed their evidence.** A deterministic sparse line pattern can be unique by construction but cannot be presumed predictive. The current audit sidecar gives no holdout evidence and no independent validation; do not call its pattern a geologically-informed predictor or infer a leaderboard estimate from dot count or morphology.
-8. **Medium — discovery hypotheses are hypotheses, not results.** The 2026-10-28 review already lists candidate H-SASS3-F (multivariate geophysical mixture-component boundaries), H-SASS3-G (anisotropic earthquake point-pattern clustering), and H-SASS3-H (geodetic dilatation ridges), with H-SASS3-E recorded as negative. These ideas have not been tested in this checkout. Keep them preregistered candidates; do not describe expected improvement as a score.
+1. **High — the newer candidate was described as “unique by construction.”** Byte distinction or disjoint construction does not prove the specified 3-px overlap/rank-correlation gate. The 386-raster registry is not present; the candidate-specific pre-placement surface and full final-dot checks were not run. The current card now says **NOT CLEARED**.
+2. **High — the raster is not generated from real data.** Although the method hypothesis mentions gravity, radiometric K/eTh, and dilatation, the checked-in generator uses synthetic substitutes and an approximate footprint. This is not empirical validation of that mechanism. The README and site now say synthetic / archive-only.
+3. **High — no score is supportable.** Withheld labels and official features are absent; no HOLDOUT-DTI, confidence interval, or candidate-specific leakage test exists. Historical 0.2778 and leaderboard values cannot be attributed to this raster. Estimate is **NOT ESTIMABLE**.
+4. **Medium — conflicting leaderboards.** The request gives 0.3195/0.4413; earlier repo evidence records 0.4544 as of 2026-10-27. The live leaderboard was not refreshed in this review; none is claimed as the current score.
+5. **High — stale scripts and status.** Previous gate verifier fixed the 37,654-pixel count and used an LWST run card; page builders could advertise a different file. Replaced both old page-builder entrypoints with wrappers to the fail-closed builder and made the verifier use the canonical current run card.
+6. **Medium — research archive conflicts.** `docs/hypotheses.md` still contains inconsistent lane names (GSD-HUA, LWST-GeoConduit, BGK-PBE), claims unavailable data caches, quantitative uplift/cost claims, and band mappings that conflict with its own schema list and the band-audit JSON. A top-level warning now identifies this material as historical/unverified. Do not use it as a source of current scientific fact.
+7. **Medium — test suite exposed stale expectations.** Before changes, tests expected the older file/card and broken nested `docs/docs/...` links. Those assumptions were updated for current fail-closed behavior.
 
-## Candidate research plan (not executed)
+## Pass 3 — changes and final verification
 
-The existing review ranks these ideas. They are viable only if their listed layers are actually available in the restored official/verified feature stack and can be hidden/recovered without leakage:
+- Synced the current run card to BGK-PBE and marked holdout, leakage, full-registry uniqueness, and active-footprint validation **NOT RUN / NOT CLEARED**. Retained the earlier structural-candidate audit separately.
+- Saved the measured one-witness overlap in `evidence/uniqueness_audit_current_candidate_20261029.json` and a Pages copy under `docs/data/`. The record explicitly says it is not a complete registry certificate.
+- Rewrote README and Pages so the first screen says **SUBMISSION BLOCKED / DO NOT SUBMIT**. The download link is labeled archive-only. The nine-site table labels historical scores OWNER-REPORT and gives no estimate for the candidate.
+- Updated the gate verifier and tests to check the exact active raster, hashes, local format, and fail-closed score/uniqueness gates. Updated stale builders to delegate to the canonical builder.
+- The prior BGK generator is synthetic; the current `scripts/generate_unique_submission.py` is relabeled as archive-only diagnostic generation. No script may treat a generated pattern as a data-derived submission.
+- Rebuilt `index.html` and `executive-summary.html` in root and `docs/`, checked relative links, and made archived independent review clearly historical.
+- Local verification: `scripts/validate_submission_tif.py` hard checks passed for both archive TIFs; `scripts/check_lattice_lane.py` passed both selected files against the pinned lattice only; the official worked-example DTI tests passed. `.venv/bin/python -m pytest -q` — **28 passed, 2 skipped**. `python scripts/verify_all_gates.py --expect-blocked` — format/record/ZIP integrity PASS; holdout, leakage canary, and complete uniqueness intentionally FAIL closed. `git diff --check` — clean.
 
-| Rank | Hypothesis | Layers and targeted signal | Why potentially off-catalogue | Main mimic / risk | Cost |
-|---|---|---|---|---|---|
-| 1 | H-SASS3-F | TMI high-gradient, isostatic-gravity high-gradient, geodetic shear-rate, conductivity surface; boundaries of multivariate Gaussian-mixture components | Targets coincident geophysical-domain boundaries not explicitly in the fault catalogue | Lithologic contacts, playa-margin conductivity; mixture labels can be unstable | Medium |
-| 2 | H-SASS3-G | `ieq_n100a15`, `deq_n100a15`; anisotropic Ripley-K / linear clustering of seismic events | Seismic lineaments may reveal unmapped active structures | Aftershock sequences and induced seismicity; event catalog selection bias | Medium-high |
-| 3 | H-SASS3-H | `geod_dilaterate`; Otsu-thresholded coherent dilatation ridges | A broad deformation signal may expose uncharted structures | Subsidence, thermal expansion, groundwater extraction; weakly fault-specific | Low-medium |
+## Research options (proposals, not results)
 
-H-SASS3-E, basement-surface minimum-curvature ridges, is reported as **negative** in the historical review; do not rerun or promote it without a reasoned change to the preregistered method. No hypothesis here has a valid projected score. First restore the official data, verify provenance, test each feature alone for leakage, and run the exact blocked holdout with visible-only catalogue features. Stop at the user's three-experiment/two-hour budget.
+The five ranked alternatives are in [`hypotheses_ranked_20261028.md`](hypotheses_ranked_20261028.md); no numeric uplift is substantiated. The strongest next step is to restore official data before any scoring. Candidate families include:
 
-## Next actions
+| Relative rank | Idea | Layers / physical signal | Why it may find uncatalogued faults | Mimic / novelty | Cost and validation gate |
+|---:|---|---|---|---|---|
+| 1 | BGK-PBE (hypothesis only) | Gravity-gradient boundaries × K/eTh alteration × geodetic dilation at piedmont-basin transitions | Blind structures may perturb basement and host alteration despite no mapped scarp | Plutonic contacts and playa edges; distinct sensor family from dotted-ridge work | Medium; official bands/data and leakage-safe holdout required |
+| 2 | SST-2MT | Official GDR #1391 paleogeothermal deposits + 2 m temperature observations + conductivity | Small discharge centers may indicate unmapped conduits | Cold CO2 springs and nontectonic carbonate deposition; sparse observations | Medium; verify source metadata/access and holdout |
+| 3 | MT-Edge | RTP magnetics, true tilt/analytic-signal edges | Concealed contacts under subdued topography | Reversed magnetic units and dikes; overlaps some earlier repo features, so lane novelty is limited | Low-medium; real grid and independent feature canary needed |
+| 4 | LLW-SPI | Lahontan shoreline flexure, basement surface, SPI/Theta persistence | Pleistocene deformation may be absent from younger fault catalogues | Shoreline/dune geometry and sediment thickness | Medium; official elevation and geophysical sources required |
+| 5 | InSAR-LST | Sentinel-1 deformation and ECOSTRESS thermal anomaly | Could directly reveal active deformation/upflow | Irrigation, groundwater withdrawal, landslides; high processing burden | High; official data access and >2h processing budget issue; not viable until verified |
 
-1. Obtain official competition files (`sample_submission.tif`, labels/training rasters and feature stack) through authorized competition access; verify hashes and provenance. Keep raw inputs out of Git.
-2. Make one canonical candidate manifest/run card. Have the writer and validator consume it; fail closed if any expected reference/registry input is missing.
-3. Replace the two page builders with one tested renderer. Add a test asserting pages never display “OK TO SUBMIT” unless the exact linked TIFF hash is checked and every required gate passes.
-4. Re-run unit tests and format/holdout/leakage/registry gates against the exact downloadable artifact; include evidence files and evaluator version, withheld-positive count, and 95% CI.
-5. Only then decide whether an eligible file exists. Promotion and submission-slot selection remain separate; disclose generative-AI use as required by competition rules.
+These ranks are qualitative, not expected score numbers. The detailed source and novelty statements in the older hypothesis archive still need official-source verification. No external source was tested for obtainability in this review. The public USGS GeoDAWN release and GDR #1391 are references to check after restoring data; do not claim availability or geologic interpretation from a URL alone.
 
-## Trusted references already recorded in the repository
+## Current status and required next actions
 
-- Competition overview/rules: https://www.drivendata.org/competitions/306/competition-doe-gems/
-- Problem description: https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/
-- Competition data (login may be required): https://www.drivendata.org/competitions/306/competition-doe-gems/data/
-- Official reference solution: https://github.com/drivendataorg/gems-prize-reference-solution
-- USGS GeoDAWN data: https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and
-- Existing detailed audit and caveats: [independent review](independent-review-20261028.md), [irregularity ledger](../../evidence/irregularities_ledger.json), [new artifact sidecar](../downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-audit.json).
+- **Download:** current BGK file is archive-only. **DO NOT SUBMIT.**
+- **Estimated leaderboard score:** not estimable; no HOLDOUT-DTI or organizer receipt.
+- **Uniqueness:** one lattice witness is below 70%, but complete registry and pre-placement checks are missing. **NOT CLEARED.**
+- **Highest requested historical score:** 0.2778 at GEMSDOE32, OWNER-REPORT only, not evidence that the current raster beats it.
+- Restore official data through authorized competition access, verify hashes/schema/footprint, then run feature canaries and the shared buffered evaluator. Obtain all accessible registry rasters and rerun surface and final-dot gates. Only a passing candidate should proceed to a separate selector.
 
-## Run card (this review)
+## Sources for provenance review
+
+- [Competition overview/rules](https://www.drivendata.org/competitions/306/competition-doe-gems/)
+- [Problem description](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
+- [Competition data page](https://www.drivendata.org/competitions/306/competition-doe-gems/data/) (login may be required)
+- [Official reference solution](https://github.com/drivendataorg/gems-prize-reference-solution)
+- [USGS GeoDAWN](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and)
+- [INGENIOUS / GDR #1391](https://gdr.openei.org/submissions/1391)
+- [BGK synthetic generator in merged upstream snapshot](https://github.com/sassnarep3-star/GEMSDOESASS3/blob/bdc695ecf356b22549f610b2c69b1134802bf9f5/scripts/generate_unique_submission.py)
+- [Pinned calibration-lattice witness](https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif)
+- [Official rules PDF](https://docs.nlr.gov/docs/fy26osti/96647.pdf)
+
+## Run card (active archive candidate)
 
 ```json
 {
-  "hypothesis": "Repository audit only; no candidate experiment",
-  "mechanism": "Static inspection of repository files, metadata and scripts",
-  "named_non_fault_mimic": "Not applicable; no geological predictor evaluated",
-  "holdout_dti": "Not run; no labels/cached stack present in checkout",
-  "correlation_overlap_vs_registry": "Not run for newest raster; complete registry unavailable",
-  "raster_sha256": "Not independently recomputed in this environment",
-  "validator_output": "Not run; numpy/rasterio and official sample raster unavailable",
-  "submission_name": "gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
-  "submission_note": "Analysis-only; not approved for competition submission",
+  "hypothesis": "BGK-PBE geological hypothesis; checked-in raster is synthetic and does not test it",
+  "mechanism": "Hand-coded NNE pulses and synthetic pseudo-gravity/K/dilatation on an approximate footprint",
+  "named_non_fault_mimic": "Plutonic margin, lithologic contact, playa or drainage lineament",
+  "holdout_dti": "NOT RUN; official labels/features absent; no estimate",
+  "correlation_overlap_vs_registry": "One lattice final-dot result: 44.4053% of positive cells within 3 px; complete registry and pre-placement tests not run",
+  "raster_sha256": "7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f",
+  "validator_output": "Single-band float32 EPSG:32611 3730x3292; recorded transform; finite [0,1]; official sample/footprint match unavailable",
+  "submission_name": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros",
+  "submission_note": "Archive-only synthetic BGK-PBE stand-in; no real features, holdout, or complete uniqueness check. DO NOT SUBMIT.",
   "verdict": "negative"
 }
 ```

@@ -51,21 +51,15 @@
  },
  "ok_to_download": false,
  "ok_to_submit": false,
- "verdict": "NOT_OK_LITERAL_RULE_FAIL",
+ "verdict": "negative",
  "verdict_reason": "Format and lattice-lane gates pass, but there is no measured or estimated score, and the file uses no data signal. Spending one of 3 weekly slots on it cannot be justified as a path to beat 0.2778 or 0.4544. Use only as a format test if the user chooses.",
  "promotion": "Not promoted. Promotion is a separate selector step within the weekly cap (3 per week, official rules section 3.2).",
+ "ok_to_download_previous": true,
+ "correction_note": "Corrected 2026-10-29: ok_to_download set to false (was true). The file has 74,418 non-zero cells outside the footprint, so it fails the competition outside-bounds rule (IR-SASS3-49). The validator's 'all hard checks pass' did not include that rule.",
  "literal_audit_2026_10_29": {
-  "receipt": "evidence/literal_audit_gemsdoesass3-unique-structural-e3ecb47c.json",
+  "source": "literal audit receipt (scripts/literal_registry_audit.py)",
   "literal_rule_passed": false,
-  "format_all_passed": false,
-  "format_failed_checks": [
-   "outside_footprint_zero",
-   "all_passed"
-  ],
   "worst_within_3px_fraction_final_dots": 0.9985061847594411,
-  "worst_within_3px_raster": "HISTORICAL_SCORED:scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
-  "worst_abs_spearman_final_dots": 0.0012855531636129145,
   "registry_rasters_compared": 386
- },
- "status_reason": "Literal Rule 1 audit run 2026-10-29 on the registry (386 rasters). FAIL: dot-level within-3 px overlap with the calibration lattice 99.85% (limit 70%). Format validator also FAIL (outside_footprint_zero: non-zero values outside footprint). The earlier 'lattice lane PASS' figure used a pixel-level measure, which is not the rule's wording. Not OK to download or submit."
+ }
 }

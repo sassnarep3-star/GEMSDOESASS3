@@ -1,106 +1,223 @@
 # GEMSDOESASS3 — read first
 
-**Focus values:** Maximize P(Win). Own the Outcome.
+## Decision (2026-10-29)
 
-## Verdicts (2026-10-29)
+**Status: the compliant file is OK to download; it is NOT OK to submit.** The current candidate is the 21k dispersed LWST file with NaN outside the footprint (`docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif`, SHA-256 `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`). It meets the official format and the literal Rule 1 lattice check. Submission is blocked by three gates: the spatially-blocked holdout (HOLDOUT-DTI below the champion, hide-and-recover not run), the leakage canary (not run on this raster), and complete uniqueness (binary surface only). The validator (`python scripts/verify_all_gates.py`) reports `OK TO DOWNLOAD: YES` and `OK TO SUBMIT: NO`. The gate sets `ok_to_download` from the format and competition checks, not from a hard-coded `false` (IR-SASS3-65, owner to confirm). `ok_to_submit` stays gated (IR-SASS3-41, 42, 49, 65).
 
-**Current candidate: `gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif`** (21,012 dots, literal-rule compliant).
-The current file is format-valid and literal-rule compliant. **OK to download: YES.** **OK to submit: NO (not recommended for a leaderboard slot).**
+| File | Download? | Submit? | Why |
+|------|-----------|---------|-----|
+| `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (current candidate, NaN outside) | **YES** | **NO** | Format and literal rule pass: 21,012 dots, NaN outside (official rule), inside-footprint lattice overlap 68.99% (limit 70%). Holdout SGMC 0.042851 is below the champion control 0.064121 with disjoint CIs; hide-and-recover not run; canary not run for this raster; uniqueness is binary-surface only (IR-SASS3-64, 66). |
+| `docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` (PR #19, unique-structural placeholder) | **NO** | **NO** | 74,418 non-zero cells outside the competition bounds (rule: null or NaN). Its validator receipt said "all hard checks PASS" only because the footprint check was not run (IR-SASS3-49, 51). Reads no data; no score is estimable. |
+| `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` (PR #16, BGK-PBE, current run card) | **NO** | **NO** | 4,911 non-zero cells outside the bounds. Literal lattice overlap is 99.59% inside the footprint (limit 70%); the 44.41% all-cell figure comes from dots outside the scored region (IR-SASS3-42, 43, 44). |
+| `docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif` | Archive only | **NO** | Zeros outside the bounds. Literal lattice overlap 99.78% inside the footprint (fails). Review SGMC-CAL HOLDOUT-DTI 0.065702 [0.058992, 0.071240] against the champion's 0.064121: intervals overlap, no improvement shown (IR-SASS3-34, 53). |
+| `docs/downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif` | Archive only | **NO** | Zeros outside the bounds. Literal lattice overlap 99.97% inside the footprint (fails). |
 
-| File | Estimated score (label) | Unique under the literal rule? | OK to download? | OK to submit / upload? |
-|---|---|---|---|---|
-| **`gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif`** (current) | HOLDOUT-DTI 0.042851 [0.038871, 0.046157] (proxy, not an organizer score) | **YES.** Lattice overlap 68.9987% (limit 70%). Max non-lattice 55.2%. \|Spearman\| 0.150 (limit 0.90). | **YES** | **NOT RECOMMENDED for a slot.** Proxy is below the champion, and the CIs do not overlap. |
-| `gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` (main, BGK-PBE) | Not scored: holdout not run, fail-closed | **NO.** Lattice overlap 99.59%. 4,911 non-zero values outside the footprint. | **NO** | **NOT OK to submit.** |
-| `gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` (main, unique-structural) | Not scored: holdout not run, fail-closed | **NO.** Lattice overlap 99.85%. 74,418 non-zero values outside the footprint. | **NO** | **NOT OK to submit.** |
-| `gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif` (archived, 37,654 dots) | HOLDOUT-DTI 0.065702 [0.058992, 0.071240] | **NO.** Lattice overlap 99.78%. | **NO** | **NOT OK to submit.** |
-| `gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif` (champion, already scored) | OWNER-REPORT 0.2778. HOLDOUT-DTI 0.064121 [0.056730, 0.071649] | Already in the registry | n/a | Do not resubmit. |
+**Measured by:** `scripts/candidate_format_audit.py` (REGISTRY-MEASUREMENT, `evidence/candidate_format_audit_20261029.json`); the gate `scripts/verify_all_gates.py`; `scripts/validate_submission_tif.py` (now fails closed without the footprint).
 
-**Download the current file:** [TIF](docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif) · [ZIP](docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif.zip) · [run card](evidence/run_card.json) · [literal receipt](evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2.json)
+**Nothing in this repo is evidenced to beat 0.2778 or the leaderboard top (0.4544).** The blocker is the labels (`labels.tif`, `training_features.tif`), which come only through your DrivenData account (official rules §3.1). They are not in this workspace, and this session did not download them. The 28 restored files are owner-mirror copies (IR-SASS3-46) and are not organizer-authenticated.
 
-- **Submission name:** `gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif`
-- **Note to paste (≤140 characters):** `LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted`
-- **SHA-256:** `d84217d5c59ffc7ec06c3f2bbbf390ae764b26bf96810dca6bfe7ab7fd752fdb`
+**Owner decision needed (not an agent action):** the literal lattice rule blocks every focus-site file. Options in [docs/research/lattice-decision-20261028.md](docs/research/lattice-decision-20261028.md): **A (recommended)** the like-for-like reading that the shared template already implements, which excludes halo-saturated lattices (`vendor/gems57/uniqueness.py` line 353) from the dot-overlap test; **B** keep the literal rule (nothing eligible); **C** an edge-only rule (not produced, not endorsed). Option A does not clear any file for the outside-bounds rule, which needs its own fix.
 
-All scores are HOLDOUT-DTI proxies from `GEMSDOE32-SGMC-CAL-v3.0`, with 62,703 withheld positives, not organizer scores. No organizer receipt exists for any new file. Only a portal upload shows acceptance, and it uses one of the three weekly submissions.
+Executive summary and submission guide: [docs/executive-summary.html](docs/executive-summary.html) · Site: [docs/index.html](docs/index.html) · Per-site table: [docs/research/focus-site-candidates-20261028.md](docs/research/focus-site-candidates-20261028.md) · Independent review: [docs/research/independent-review-20261028.md](docs/research/independent-review-20261028.md) · Decision memo: [docs/research/lattice-decision-20261028.md](docs/research/lattice-decision-20261028.md) · Protocol amendment (PROPOSED, not applied): [docs/research/protocol-amendments.md](docs/research/protocol-amendments.md)
 
-**Decision needed from the owner.** Does the synthetic 13GEMSDOE calibration lattice count as a registry raster under Rule 1? The lattice is listed in the registry manifest, so this repo counts it, with no exemption (IR-SASS3-35). If it counted as none, the 37,654-dot LWST file would become OK to download, with its proxy effectively tied with the champion. The owner should also rule on the measure. Rule 1 says "dots", which is the measure used here. `main`'s IR-SASS3-30 argues the dot-level measure does not suit line-like rasters, and its pixel-level figures (44.4%, 42.35%) are not the rule's wording (IR-SASS3-42).
+## Standing prompt (verbatim, as recorded 2026-10-27)
 
-**Current decision: NOT OK to submit** for any file. The compliant file is the only one that is OK to download. Earlier claims that the LWST file beats the 0.2778 champion are withdrawn: its SGMC-CAL value 0.065702 [0.058992, 0.071240] overlaps the champion's 0.064121. The archived note's `HR=0.1111` is a per-fold OOF value; the file's static HIDE-RECOVER value is 0.006130.
+The full standing prompt is at [docs/research/standing-prompt-as-recorded-20261027.md](docs/research/standing-prompt-as-recorded-20261027.md). Read it each session.
 
-**Archive pointer:** `gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif` · SHA-256 `bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a` · prior note `GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657`.
+<details>
+<summary>Show the standing prompt</summary>
 
-Pages: [submission guide and executive summary](docs/executive-summary.html) · [overview](docs/index.html) · [independent review](docs/research/independent-review-20261028.md).
+```text
+Review the repo. 
 
-## Standing prompt (read every session)
+I want to focus on the highest scoring submissions from the following sites, GEMSDOE24, GEMSDOE25, GEMSDOE27, GEMSDOE28, GEMSDOE30, GEMSDOE31, GEMSDOE32, GEMSDOE33, GEMSDOE36.
 
-> I want to focus on the highest scoring submissions from the following sites and I want an executive summary on every site:
-> GEMSDOE24, GEMSDOE25, GEMSDOE27, GEMSDOE28, GEMSDOE30, GEMSDOE31, GEMSDOE32, GEMSDOE33, GEMSDOE36.
->
-> I want an executive summary on every site that is clear and obvious which is the best submission to submit to obtain a high score on the leaderboard.
->
-> MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION.
-> It must score higher than 0.2778 (ideally higher than the leaderboard top, 0.4544 as of 2026-10-29).
-> There should be an easy to download submission tif file.
->
-> It must pass validation without any human intervention.
-> Values in [0,1]. No NaN inside footprint. CRS/EPSG:32611/shape/transform match the training grid.
->
-> Follow PARALLEL-RUN PROTOCOL (lane rule: rank-correlation ≤0.90 vs registry rasters; ≤70% of dots within 3 px;
-> holdout hide-and-recover with visible-only masking; leakage canary AUC ≤0.90; run card JSON; budget 3 experiments / 2 hours).
-> Must not copy previous submissions.
-> Must create executive summary subpage explaining how to submit.
->
-> Short submission note ≤ 140 chars. Easy download link must be prominent (top of site / executive summary).
-> No human inspection; validation must be programmatic.
->
-> Do not interpret a failed uniqueness gate as permission to submit.
-> No hallucinations; verify line by line; official verified sources with links.
-> Put prompt into repo README and read it each session.
-> Core values: Maximize P(Win), Own the Outcome.
+THE FOLLOWING IS THE HIGHEST URGENCY AND MUST BE FOLLOWED!
 
-## Protocol rules in force
+MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION. DO NOT COPY A PREVIOUS SUBMISSION UNLESS IT'S FOR LEARNING AND EDUCATION. BUT WE MUST GENERATE A UNIQUE TIF SUBMISSION. IT MUST BE OBVIOUS WHETHER IT IS OK TO DOWNLOAD AND SUBMIT THE GENERATED TIF SUBMISSION.
 
-- Lane check: rank correlation above 0.90 or more than 70% of dots within 3 px of any registry raster is a duplicate. Checked on the surface and on the final dots, against all 386 focus-registry rasters, with no exemption.
-- Leakage canary AUC above 0.90 fails (51 channels).
-- Hypothesis numbers are labelled HOLDOUT-DTI or ORGANIZER-CONFIRMED.
-- Budget: 3 candidate experiments or 2 hours. Controls are not counted. The lane count across E1 and the literal candidates may exceed the cap (IR-SASS3-41, open).
-- Promotion is a separate selector step. No file is promoted here.
+There should be an easy to download submission tif file as described by the prompt. Read the entire prompt. A lot of sites mention inspection only and a human inspector, but the inspection needs to be done through the project and needs to be validated for submission without human intervention.
 
-## Hypotheses
+PARALLEL-RUN PROTOCOL — read first. This session is one of several running from this same prompt.
 
-Ranked and untried, except E1 (H-SASS3-E, negative): H-SASS3-F (Gaussian-mixture boundaries on `tmi_hg`, `iso_grav_anom_hg`, `geod_shearrate`, `cond_surf`), H-SASS3-G (anisotropic Ripley's K on `ieq/deq_n100a15` seismicity), H-SASS3-H (Otsu ridges on `geod_dilaterate`; lowest priority). Details in the review. No hypothesis will be spent without HOLDOUT-DTI validation first. `main`'s BGK-PBE and unique-structural candidates were generated outside this review's protocol and have not been scored (see the table).
+1. LANE. Your lane is the single method paragraph below. Stay inside it. If your raster's rank-correlation with any registry raster exceeds [0.90], or more than [70%] of your dots fall within 3 px of one registry raster's dots, you have drifted into another lane: log it as a duplicate and stop. Check this on the surface before placement AND on the final dots.
 
-## Limitations and access needs
+2. REUSE, DON'T REBUILD. Use the template's cached feature stack, evaluate_holdout.py and submission_writer.py. Holdout = hide-and-recover: withhold whole fault segments with a buffer, derive every catalogue-based feature only from the visible faults, mask visible faults pixel-exactly, score pooled DTI (alpha 0.2, beta 0.8, 300 m triangular kernel). If a shared tool is wrong, fix it once in the template and report it; never keep a private fork.
 
-- **Needed from the owner:** a DrivenData account for any portal upload (the agent has none); the lattice and measure ruling (IR-SASS3-35, IR-SASS3-42); a decision on the experiment count across lanes (IR-SASS3-41); one of three weekly submissions; and confirmation of the sibling mapping to `buffedlizard55-lab` (IR-SASS3-09).
-- **Data provenance:** the training data was restored from an owner mirror, with SHA-256 pins checked. The pins prove mirror consistency, not organizer provenance (IR-SASS3-14, IR-SASS3-43).
-- **Hide-and-recover not run** for the current file. Only SGMC-CAL was run, so the file is not evaluated on the full protocol yet (blocker in the gates).
-- **Margin:** the current file sits 1.0 point below the 70% limit, and the registry can change. Rerun the literal audit before any upload.
-- **Leaderboard figures conflict:** the request cites 0.3195 and 0.4413. The live page fetched in this session shows #1 xiaofanhu 0.4544 and #2 cfld__ 0.3916 ([leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/)). Public and private scores can differ (IR-SASS3-39).
-- **Irregularities:** 43 entries in [`evidence/irregularities_ledger.json`](evidence/irregularities_ledger.json). New open items from this merge: IR-SASS3-35, 37, 38, 39, 40, 41, 42.
+3. LABEL EVERY NUMBER as HOLDOUT-DTI (evaluator version, number of withheld positives, 95% CI) or ORGANIZER-CONFIRMED (copied from a submission-page receipt). A projection is never written as a score.
+
+4. LEAKAGE CANARY. Test each feature alone on the holdout before trusting any result. AUC above [0.90] means leakage until proven otherwise.
+
+5. RUN CARD. End with one JSON card: hypothesis; mechanism; the named non-fault process that could mimic it; holdout DTI + CI; correlation/overlap vs registry; raster sha256; validator output (no NaN inside the footprint, values in [0,1], CRS/shape/transform match); submission name + note of at most 140 characters; verdict promote / negative. Negative results are deliverables.
+
+6. BUDGET. Stop after [3] experiments or [2] hours. Do not pick submissions: promotion to a real slot is a separate selector step, within the weekly cap shown on the submission page.
+
+WE NEED TO STUDY, ANALYZE, AND UNDERSTAND THE HIGHEST SCORE FROM THE GEMDOE SITE WHERE THE SUBMISSION TIF IS DOWNLOADED FROM WHICH IS THE FOLLOWING:
+https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html
+h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros: 0.2778
+
+Why and how did this get the highest score and are we able to generate a submission that scores higher than 0.2778?
+Answer the question using Phd level experience, knowledge, and judgement. Then use the answer to generate a unique TIF submission into the competition. Must be unique submission unlike any within the GEMSDOE sites above. Verify working line by line no hallucinations.
+
+Current competition leaderboard GEMSDOE high score: 0.4413
+
+Before implementing, generate 3–5 candidate geological hypotheses we haven't tried yet, each naming: the specific layer(s) involved, the physical signature being targeted (e.g., an edge-detection or curvature transform), why it should catch a fault missing from the USGS/INGENIOUS catalogue rather than one already in it, and how it differs from anything already implemented in this repo. Rank them by expected DTI improvement and implementation cost. Validate the top candidate on our spatially-blocked holdout set before touching a weekly submission slot — do not spend a submission slot on an idea that hasn't beaten the current holdout best. If a candidate can't be validated without new external data, name the specific free, official source needed and check it's obtainable before proposing the idea as viable.
+
+Work line by line verifying from official verified trusted sources, provide links for manual review. There should be no manual input, work on your own to complete tasks. Flag any irregularities for review. No hallucinations.
+
+I tried to submit the document that i downloaded from the site but it returned this error on the submission form: "Predicted values must be in range [0, 1]"
+Also we need to give it a unique name and A short comment to help you or your team tell submissions apart later e.g. clustering with k=25
+Create a executive summary subpage that explains exactly how to make a submission into the contest.
+Create a github page for this repo that has clean ui, user friendly, simple and easy to use. It should be organized and clean.
+```
+
+</details>
+
+## Core Values
+
+- Maximize P(Win)
+- Own the Outcome
+
+## Leaderboard (ORGANIZER-CONFIRMED)
+
+Source: [leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/), fetched 2026-10-28 and 2026-10-29. #1 xiaofanhu **0.4544**; #27 kpomazi **0.3195**; #48 roison **0.2897**. The champion GEMSDOE32 (0.2778) is below #48. The standing prompt's 0.4413 does not match the page and is superseded. Public-split scores only (competition page 967).
+
+## Verified official facts (with links)
+
+| Fact | Source |
+|------|--------|
+| Metric: distance-weighted Tversky, α = 0.2, β = 0.8, triangular kernel with 300 m (3 px) support | [Problem description](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) |
+| Worked example: TP_w = 3.00, FP_w = 1.89, FN_w = 2.00 → TI = 0.60. Repo check: 3/(3 + 0.2·1.89 + 0.8·2.00) = 0.6027 | Same page; `tests/test_metric_official_example.py` |
+| Format: single layer, float32, values in [0, 1], EPSG:32611, 100 m, same bounds as training data; "data outside the bounds is null or nan" | Same page, "Submission format" |
+| Three submissions per week; one final submission per entity; generative-AI use must be disclosed in the narrative | [Official rules (NLR PDF)](https://docs.nlr.gov/docs/fy26osti/96647.pdf) §3.2, §3.4 |
+| Training features and labels come via the DrivenData account after registration; labels are from the INGENIOUS Great Basin compilation (doi:10.15121/1881483) | Official rules §3.1, §3.3 |
+| Leaderboard top: #1 xiaofanhu 0.4544 | [Leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) |
+| Rules page | [herox rules](https://www.herox.com/GEMSPrize/resource/2274) |
+
+**Outside-bounds rule (official).** The competition text requires null or NaN outside the bounds (page 967). Zeros outside are not compliant. The earlier 21k file with zeros outside was superseded and removed (IR-SASS3-64). Whether the portal accepts the owner-scored zeros champion (0.2778, zeros outside) is unverified.
+
+## Current candidate (OK to download; NOT OK to submit)
+
+- Submission name: `gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan`
+- Submission note (≤140 characters, 104): `LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted`
+- SHA-256 (TIF): `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`; zip: `1625a1a7167aed9995a9bb75eb1a410b0136c1f3ccab16ff0e0a39628f07c97a`
+- File: `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (zip beside it). Run card: `evidence/current_run_card.json` (identical copies in `evidence/run_card.json` and `docs/`).
+- Literal audit receipt: `evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json`. Registry receipt: `evidence/uniqueness_audit_current_candidate_20261029.json`.
+- Verdict: negative; `ok_to_submit` false. Holdout: HOLDOUT-DTI (SGMC) 0.042851 [0.038871, 0.046157] vs champion control 0.064121 [0.056730, 0.071649]; not recommended for a slot.
+
+Previous candidate on main (blocked, not OK to download or submit): the BGK-PBE file, `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif`. Its non-zero outside cells and lattice overlap of 99.59% fail the rules. Hypothesis: `docs/research/hypotheses_ranked_20261028.md` (PR #16). No holdout result exists.
+
+The per-site executive summary, uniqueness table and the explanation of 0.2778 are in [docs/executive-summary.html](docs/executive-summary.html) and [docs/research/independent-review-20261028.md](docs/research/independent-review-20261028.md) (§2, §6).
+
+## Why 0.2778 scored highest, and why the local holdout cannot say so
+
+Owner-reported leaderboard scores for the nine focus sites, against the HR-static evaluator recorded in the audit (`docs/data/focus9_executive_audit.json`):
+
+| Site | Owner-reported score | HOLDOUT-DTI HR-static [95% CI] | File |
+|------|----------------------|--------------------------------|------|
+| GEMSDOE24 | 0.2477 | 0.0932 [0.0813, 0.1060] | `h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan` |
+| GEMSDOE25 | 0.2600 | 0.0967 [0.0842, 0.1095] | `dotted-h19-5-d2-8-20261002-e56ea318af89-zeros` |
+| GEMSDOE27 | 0.2449 | 0.0927 [0.0809, 0.1054] | `topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite` |
+| GEMSDOE28 | 0.2710 (best of 4 files) | 0.0294 [0.0250, 0.0344] | `h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite` |
+| GEMSDOE30 | 0.2600 | 0.0967 [0.0842, 0.1095]* | `d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca` |
+| GEMSDOE31 | 0.2708 | 0.0305 [0.0257, 0.0361] | `h27-4-solo-d28-20261004-8acb75e1-allfinite` |
+| GEMSDOE32 | **0.2778 (champion)** | 0.0045 [0.0038, 0.0053] | `h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros` |
+| GEMSDOE33 | 0.2632 | 0.0520 [0.0458, 0.0583] | `h33d-analog-tip-stepover-r30-20261004-cb490425926e` |
+| GEMSDOE36 | 0.2750 | 0.0046 [0.0039, 0.0053] | `anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros` |
+
+\* GEMSDOE30's audit row is attached to a file named with `gems24-`; file identity unconfirmed (IR-SASS3-22).
+
+Labels: owner scores are **OWNER-REPORT**, not organizer-confirmed. The HR-static values are **HOLDOUT-DTI** for that evaluator, but the withheld-positive count is not recorded in the audit, so the label is incomplete.
+
+**Finding (reported, not re-run here).** The HR-static holdout ranks these files in reverse order of the leaderboard (Spearman −0.89, n = 10, p = 0.001; `evidence/holdout_vs_leaderboard_concordance_20261029.json`). The independent review's other evaluators disagree: SGMC-CAL puts the champion second of nine (0.064121 vs top GEMSDOE36 0.064444); pooled-hide-v2 gives the champion 0.003885 [0.003316, 0.004478] (IR-SASS3-36).
+
+**Structural observation (measured here).** GEMSDOE32's historical file (37,654 dots) overlaps the other focus-site historical files at 99.9–100% within 3 px (`evidence/focus_site_candidate_audit_20261028.json`). The 0.2778 result therefore sits inside a family of near-identical dot placements. Why it scored high is still a hypothesis: the holdout tests recovery of catalogue faults, while the scored set is new faults outside the USGS catalogue. Explaining 0.2778 needs the labels, and then a holdout designed for off-catalogue recovery.
+
+## Hypotheses (ranked; validation status)
+
+From the independent review §8 (`docs/research/independent-review-20261028.md`):
+
+| Rank | ID | Status |
+|---|---|---|
+| 1 | H-SASS3-E basement minimum-curvature ridges | TESTED — NEGATIVE (experiment E1, 1 of 3 budget; no slot spent) |
+| 2 | H-SASS3-F Gaussian-mixture boundaries on the multi-layer geophysical vector | UNTESTED (candidate for E2) |
+| 3 | H-SASS3-G anisotropic earthquake-epicentre clustering (Ripley's K) | UNTESTED |
+| 4 | H-SASS3-H Otsu-thresholded geodetic dilatation ridges | UNTESTED (lowest priority) |
+
+No hypothesis has passed the spatially-blocked holdout. The budget is 3 experiments or 2 hours, and this session used none of it.
+
+## What is needed to go further (in order)
+
+1. **Owner decision** on the lattice rule: Option A, B or C (see Decision above). Not an agent action.
+2. **Labels and features from your DrivenData account**: download `training_features.tif` and `labels.tif` (official rules §3.1) into `.cache/gems_data/` or `data/`. Do not use third-party mirror copies (IR-SASS3-26).
+3. **Done for the current file:** NaN outside the footprint, official rule. BGK-PBE and unique-structural still have non-zero outside cells and must be rebuilt or replaced. Re-run `scripts/candidate_format_audit.py`.
+4. **Done in this branch:** the gate reads a registry receipt bound to the current file's SHA (IR-SASS3-45). Clearing uniqueness still needs the continuous pre-placement surface (IR-SASS3-66).
+4a. **Run hide-and-recover and the leakage canary** on the current file. These are the holdout and canary gates.
+5. **Redesign the holdout** for off-catalogue structure, and check that it reproduces the leaderboard order on the nine owner-reported files. Reconcile the evaluators (IR-SASS3-36).
+6. **Compute the SGMC-CAL proxy** for the nine latest candidates (not done).
+7. **Run H-SASS3-F, G or H** only after the owner decision, within the budget, on the spatially-blocked holdout.
+8. **Obtain the missing lane paragraph** of the parallel-run protocol (IR-SASS3-37).
+9. Owner: confirm the gate change (IR-SASS3-65) and whether E1 counts toward the experiment budget (IR-SASS3-62).
+10. Choose at most one candidate, check it against the 3-per-week cap, and record the generative-AI disclosure (rules §3.2).
+
+## Irregularities
+
+Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data/irregularities_ledger.json`), 66 entries. Open items for review: IR-SASS3-20 (holdout vs leaderboard), 22 (GEMSDOE30 file identity), 25 (prompt leaderboard figures), 26 (third-party data mirrors), 29 (legacy build scripts), 34 (literal lattice rule), 36 (evaluators disagree), 37 (missing lane paragraph), 42–45 and 49–51 (BGK-PBE and unique-structural outside-bounds, format and validator findings), 52–53 (LWST figures and "OK to upload"). This branch adds 54–66: the holdout gates on withdrawn baselines (54), the card contradiction (55), the lattice decision (56), the uncovered-cell count (57), the uniqueness scope (58), the broken review script (59), the leaderboard conflict (60), the sibling verdicts (61), the experiment count (62), the cross-reference to 42/43/49/50 (63), the zeros-outside correction (64), the gate change (65) and the uniqueness scope limit (66). IR-SASS3-27 (zeros convention) is superseded by 64.
+
+## PARALLEL-RUN PROTOCOL (binding)
+
+Rules applied: lane checks (rank correlation ≤ 0.90; ≤ 70% of dots within 3 px of any registry raster, checked on surface and dots), the leakage canary (single-feature AUC ≤ 0.90), buffered hide-and-recover with visible-only masking, labels reported only as HOLDOUT-DTI or ORGANIZER-CONFIRMED, run card JSON, budget of 3 experiments or 2 hours. A failed uniqueness gate is never permission to submit. No copying of previous submissions. The protocol's lane paragraph is missing from the request (IR-SASS3-37), so the lane is defined here by the rules above only.
+
+**Current run cards:**
+- Current candidate (compliant NaN file): `evidence/current_run_card.json` and `evidence/run_card.json`. Verdict: `negative`; `ok_to_download` true; `ok_to_submit` false.
+- BGK-PBE (previous, blocked): `evidence/run_card_bgk_pbe.json`. Verdict: negative; `ok_to_download` false.
+- Unique-structural placeholder (PR #19): `evidence/run_card_unique_structural_20261029.json`. Verdict: negative; `ok_to_download` false; `ok_to_submit` false.
+- LWST 37,654-dot file (archive): `evidence/archive/run_card_lwst_archived_20261027.json`; experiment ledger `evidence/lwst_experiment_ledger.json`; review `evidence/independent_review_20261028.json`. NOT OK to submit.
+
+
+## How to submit (only when every gate passes)
+
+1. Run `python scripts/verify_all_gates.py` with the competition data restored. It must exit 0 with `ok_to_submit` true. Anything else means do not submit.
+2. Run the fold-honest evaluator and the feature canaries. Report the version, withheld-positive count and spatial-block CI (HOLDOUT-DTI).
+3. Check rank correlation and final-dot overlap against every accessible registry raster, with no exclusions. Fail closed when coverage is incomplete.
+4. Run the leakage canary (AUC ≤ 0.90) and buffered hide-and-recover with visible-only masking.
+5. Validate with `python scripts/validate_submission_tif.py <file.tif>`. It must pass every hard check, including the outside-bounds check.
+6. Use a distinct filename and a note of at most 140 characters. Write a run card JSON with all metrics, the CI, the gates and the promotion decision.
+7. A separate selector promotes a passing candidate, within the weekly cap of 3 (official rules §3.2), via "New submission" on the [competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/).
 
 ## Reproduce checks
 
-Create the environment: `python3 -m venv .venv && .venv/bin/pip install numpy scipy scikit-learn rasterio pytest`.
+```bash
+python3 -m venv .venv && . .venv/bin/activate
+pip install numpy scipy scikit-learn rasterio pytest
+pytest -q                                              # metric, site, gate and link tests
+python scripts/verify_all_gates.py --expect-blocked    # exit 0 = documented blocked state
+python scripts/candidate_format_audit.py               # outside-bounds and literal lattice, all candidate files (needs restored data)
+python scripts/validate_submission_tif.py docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif   # exits 1: outside-bounds fails
+python scripts/build_review_site.py                    # regenerates the four pages and the per-site table
+```
 
-1. `bash scripts/download_competition_data.sh` restores the 28 training files into `.cache/gems_data/` and checks their SHA-256 pins. Restore receipts are historical.
-2. `.venv/bin/python scripts/fetch_registry_rasters.py --workers 4` fetches and SHA-verifies the 378 registry rasters.
-3. `.venv/bin/python scripts/lattice_gap_check.py` writes `evidence/lattice_gap_check.json` (ceiling of about 21,713 dots under the literal rule).
-4. `.venv/bin/python scripts/build_literal_candidate.py --variant dispersed --out <path.tif>` rebuilds the current file. It reproduces SHA-256 `d84217d5…fd752fdb`.
-5. `.venv/bin/python scripts/literal_registry_audit.py <candidate.tif> <receipt.json>` runs the literal audit (about 150 s).
-6. `.venv/bin/python scripts/verify_literal_candidate.py --write-card` checks the current file's bytes, receipts and canary, and writes the run cards.
-7. `.venv/bin/python scripts/verify_all_gates.py --expect-blocked` must report exactly the two documented holdout blockers and exit 0.
-8. `.venv/bin/python -m pytest -q`.
-9. `.venv/bin/python scripts/build_review_site.py` refreshes the static pages (root and `docs/`).
+> **Warning (IR-SASS3-29):** `scripts/build_site.py` and `scripts/build_docs_pages.py` are legacy builders. They overwrite the README and site pages from older templates and would revert the corrections. Do not run them. `scripts/build_review_site.py` writes only the four pages and the per-site research table, not the README.
 
-`scripts/independent_review.py` is still broken in this checkout (IR-SASS3-38). Legacy page builders are disabled to prevent their outdated approval claims from returning.
+## Limitations
 
-## Official links
+- The competition data (labels and features) is not in this workspace. The restored copies come from owner mirrors (`data/restore_receipt.json`, 28 files, SHA-256 verified), not organizer-authenticated downloads.
+- Owner scores come from the task prompt and the leaderboard page, not organizer receipts. The leaderboard shows only the public split.
+- The overlap check covers ten references for the focus files and the lattice, not the full registry. The 451-download scan from the independent review was not re-run here.
+- Holdout values are proxies. Evaluators disagree about the champion and the owner order.
+- The outside-bounds rule is taken from the official text (null or nan). The compliant file meets it; zeros-outside files do not. Owner-scored zeros champions are not verified against the portal.
+- The lane paragraph of the protocol is missing (IR-SASS3-37).
+- GitHub Pages output was checked by a local build only.
 
-- [DrivenData competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/)
-- [Live leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/)
-- [Problem description (metric)](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
+## Sources
+
+- [Competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/)
+- [Problem description and metric (page 967)](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
+- [Competition data (login required)](https://www.drivendata.org/competitions/306/competition-doe-gems/data/)
+- [Leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/)
+- [Official rules (NLR PDF)](https://docs.nlr.gov/docs/fy26osti/96647.pdf) · [HeroX rules page](https://www.herox.com/GEMSPrize/resource/2274)
 - [Official reference solution](https://github.com/drivendataorg/gems-prize-reference-solution)
-- [GEMS Prize Official Rules (NLR PDF)](https://docs.nlr.gov/docs/fy26osti/96647.pdf)
-
-Not yet fetched, listed for manual review: USGS GeoDAWN (doi 10.5066/P93LGLVQ), epsg.io/32611, the Tversky index definition, gbcge.org INGENIOUS, and USGS ANSS.
+- [USGS GeoDAWN](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and)
+- [GDR #1391 INGENIOUS](https://gdr.openei.org/submissions/1391)
+- [13GEMSDOE (calibration lattice source)](https://github.com/buffedlizard55-lab/13GEMSDOE)
+- [EPSG:32611](https://epsg.io/32611) · [Tversky index](https://en.wikipedia.org/wiki/Tversky_index)

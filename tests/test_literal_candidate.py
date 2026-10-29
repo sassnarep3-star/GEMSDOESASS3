@@ -1,4 +1,4 @@
-"""Invariants for the literal-rule-compliant candidate (H-LIT-DISP).
+"""Invariants for the literal-rule-compliant candidate (H-LIT-DISP), NaN outside the footprint.
 
 These tests read only shipped files, so they run in CI. The lattice recomputation needs the
 restored competition data and skips with a visible reason when it is absent.
@@ -15,10 +15,10 @@ import pytest
 import rasterio
 
 ROOT = Path(__file__).resolve().parents[1]
-CAND_NAME = "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-zeros.tif"
+CAND_NAME = "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif"
 CAND = ROOT / "docs/downloads" / CAND_NAME
 ZIP = CAND.with_suffix(".tif.zip")
-AUDIT = ROOT / "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2.json"
+AUDIT = ROOT / "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json"
 CARD = ROOT / "evidence/run_card_literal.json"
 HOLD = ROOT / "evidence/literal_candidates_sgmc.json"
 LATTICE = ROOT / ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
@@ -43,11 +43,16 @@ def test_candidate_format_matches_organizer_grid():
         assert str(s.crs) == "EPSG:32611"
         assert s.shape == (3730, 3292)
         assert tuple(s.transform)[:6] == (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
-        assert s.nodata is None
+        assert s.nodata is not None and np.isnan(s.nodata)
         arr = s.read(1)
-    assert np.isfinite(arr).all(), "no NaN or Inf anywhere (zeros mode)"
-    assert float(arr.min()) >= 0.0 and float(arr.max()) <= 1.0
-    assert set(np.unique(arr).tolist()) <= {0.0, 1.0}
+    # Official rule (page 967): data outside the bounds is null or nan. Finite cells are the footprint.
+    finite = np.isfinite(arr)
+    assert int(finite.sum()) == 5_167_373, "finite cells must equal the footprint"
+    assert np.isnan(arr[~finite]).all(), "outside the footprint must be NaN, not zero"
+    assert not np.isinf(arr).any()
+    vals = np.unique(arr[finite])
+    assert float(vals.min()) >= 0.0 and float(vals.max()) <= 1.0
+    assert set(vals.tolist()) <= {0.0, 1.0}
     assert int((arr > 0).sum()) == 21012
 
 

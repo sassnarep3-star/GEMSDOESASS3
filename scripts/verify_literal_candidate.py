@@ -58,8 +58,10 @@ def sha256_file(p: Path) -> str:
 
 
 def canonical_card(card, sha, zip_sha, n_dots, lattice_overlap, hold, champ, lwst, lit) -> dict:
-    """Current-candidate card in the schema read by scripts/verify_all_gates.py."""
+    """Current-candidate card in the schema read by scripts/verify_all_gates.py (fail-closed gate)."""
     ci = lambda x: list(x) if x is not None else None  # noqa: E731
+    val = card["validator_output"]
+    lit_tpl = json.loads((ROOT / "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json").read_text())["format_validator"]["template"]
     return {
         "lane_id": "GEMSDOESASS3-H-LIT-DISP",
         "branch": "arena/16a108e5-gemsdoesass3",
@@ -67,12 +69,13 @@ def canonical_card(card, sha, zip_sha, n_dots, lattice_overlap, hold, champ, lws
         "mechanism": card["mechanism"],
         "mimic": card["mimic"],
         "holdout_dti": {
+            "status": "NOT PASS",
             "score_label": "HOLDOUT-DTI",
             "evaluator_version": hold["evaluator_version"],
             "n_withheld_positives": hold["n_withheld_positives"],
             "primary_hide_and_recover": {
                 "score_label": "NOT RUN",
-                "note": "Hide-and-recover was not computed for this file in this session. Required before any slot.",
+                "note": "Hide-and-recover was not computed for this file. Required before any slot.",
             },
             "secondary_off_catalogue_sgmc": {
                 "score_label": "HOLDOUT-DTI",
@@ -82,12 +85,19 @@ def canonical_card(card, sha, zip_sha, n_dots, lattice_overlap, hold, champ, lws
                 "champion_02778_calibrated_dti": champ["calibrated"],
                 "champion_02778_calibrated_ci95": ci(champ["calibrated_ci95"]),
                 "lwst_37654_control_calibrated_dti": lwst["calibrated"],
+                "result": "below champion with disjoint CIs (not recommended for a slot)",
             },
         },
-        "leakage_canary": {"passed": True, "n_channels_tested": 51, "worst_symmetric_auc": 0.90,
-                           "source": "evidence/leakage_canary_report.json"},
+        "leakage_canary": {
+            "status": "NOT RUN for this raster",
+            "registry_level_report": "evidence/leakage_canary_report.json (51 channels, worst symmetric AUC 0.90)",
+        },
         "registry_correlation_and_overlap": {
-            "passed": True,
+            "literal_uniqueness_gate": "NOT CLEARED",
+            "literal_uniqueness_note": ("Literal rule passes against all 386 registry rasters, but the surface stage uses the "
+                                        "emitted binary surface (pre-placement continuous surface not retained), so it is "
+                                        "weaker than the protocol test."),
+            "pre_placement_rank_correlation": None,
             "registry_rasters_checked": card["correlation_overlap_vs_registry"]["registry_rasters_compared"],
             "worst_within_3px_fraction_final_dots": card["correlation_overlap_vs_registry"]["worst_within_3px_fraction"],
             "worst_abs_spearman": card["correlation_overlap_vs_registry"]["worst_abs_spearman"],
@@ -96,20 +106,57 @@ def canonical_card(card, sha, zip_sha, n_dots, lattice_overlap, hold, champ, lws
         },
         "raster_sha256": sha,
         "zip_sha256": zip_sha,
-        "validator_output": {"emitted_positive_pixels": n_dots, "n_soft_pixels": n_dots, "checks": card["validator_output"]["checks"],
-                             "problems": card["validator_output"]["problems"]},
-        "submission_name": card["submission_name"],
+        "validator_output": {
+            "crs": lit_tpl["crs"],
+            "shape": lit_tpl["shape"],
+            "transform": lit_tpl["transform"],
+            "nodata": "nan",
+            "positive_cells": n_dots,
+            "emitted_positive_pixels": n_dots,
+            "n_soft_pixels": n_dots,
+            "checks": val["checks"],
+            "problems": val["problems"],
+        },
+        "submission_name": card["submission_name"].removesuffix(".tif"),
         "submission_note": card["submission_note"],
-        "ok_to_download": True,
+        "submission_note_length": len(card["submission_note"]),
+        "ok_to_download_for_analysis": True,
         "ok_to_submit": False,
-        "verdict": "not_recommended",
+        "verdict": "negative",
         "download_path": card["download_path"],
         "status_reason": card["verdict_detail"],
         "generated_utc": card["generated_utc"],
-        "method": "Parallel-Run Protocol literal build: dispersed LWST subset, see run_card_literal.json",
+        "method": "Parallel-Run Protocol literal build: dispersed LWST subset (NaN outside footprint), see run_card_literal.json",
         "unique_vs_focus9": True,
         "unique_note": ("Literal audit compares against all 386 focus-registry rasters, which include the nine "
                         "focus sites' downloads (see registry/focus_registry_manifest.json)."),
+    }
+
+
+def uniqueness_receipt(card, sha, lit_audit_path) -> dict:
+    """Registry receipt bound to this raster's SHA, derived from the literal audit receipt."""
+    lit = json.loads(Path(lit_audit_path).read_text())
+    assert lit["candidate_sha256"] == sha, "literal audit receipt does not match this raster"
+    return {
+        "schema_version": 1,
+        "recorded_utc": card["generated_utc"],
+        "candidate": card["download_path"],
+        "candidate_sha256": sha,
+        "candidate_positive_cells": lit["candidate_dots"],
+        "source_receipt": str(lit_audit_path),
+        "method": "Literal Protocol Rule 1 vs all registry rasters (|Spearman|<=0.90 and within-3px<=0.70)",
+        "result": {
+            "registry_rasters_compared": lit["registry_rasters_compared"],
+            "threshold": lit["thresholds"]["max_within_3px"],
+            "one_witness_result_below_threshold": True,
+            "one_witness_note": "Lattice witness within-3px fraction on inside-footprint dots (see literal audit).",
+            "complete_registry_uniqueness_pass": False,
+            "reason": ("Literal rule passes against all registry rasters, but the surface stage used the emitted binary "
+                       "surface because the pre-placement continuous surface was not retained. Not CLEARED for a slot."),
+            "literal_rule_passed": lit["literal_rule_passed"],
+            "worst_within_3px_fraction": lit["final_dots_stage"]["worst_within_3px_fraction"],
+            "worst_abs_spearman": lit["final_dots_stage"]["worst_abs_spearman"],
+        },
     }
 
 
@@ -258,6 +305,10 @@ def main() -> int:
         print("wrote", CARD.relative_to(ROOT))
         canon = canonical_card(card, sha, hashlib.sha256(ZIP.read_bytes()).hexdigest(), n_dots, lattice_overlap, hold, champ, lwst, lit)
         text = json.dumps(canon, indent=1) + "\n"
+        lit_receipt = ROOT / "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json"
+        (ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").write_text(
+            json.dumps(uniqueness_receipt(card, sha, lit_receipt), indent=1) + "\n")
+        print("wrote evidence/uniqueness_audit_current_candidate_20261029.json")
         for rel in ["evidence/run_card.json", "evidence/current_run_card.json", "docs/data/current_run_card.json",
                     "docs/evidence/run_card.json", "docs/evidence/current_run_card.json"]:
             (ROOT / rel).write_text(text)

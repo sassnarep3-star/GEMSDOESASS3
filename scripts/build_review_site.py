@@ -31,7 +31,7 @@ LIT_SHA = lit["raster_sha256"]
 LIT_DOTS = lit["summary"]["dots"]
 LIT_WORST = lit["correlation_overlap_vs_registry"]["worst_within_3px_fraction"]
 LIT_WORST_NONLAT = None
-audit = json.loads((ROOT / "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2.json").read_text())
+audit = json.loads((ROOT / "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json").read_text())
 for row in audit["final_dots_stage"]["worst_rows"]:
     if row["repo"] != "HISTORICAL_SCORED" or "lattice" not in row["path"]:
         LIT_WORST_NONLAT = row["within_3px_fraction"]
@@ -72,14 +72,14 @@ rev_items = (
     f"{LWST_LAT*100:.2f}% of its dots within 3 px. Reproduced on fresh bytes.</li>"
 )
 
-hero_ok = f'''<section class="hero ok"><p class="label">START HERE · DOWNLOAD-READY FILE (format-valid, literal-rule compliant)</p>
+hero_ok = f'''<section class="hero ok"><p class="label">START HERE · OK TO DOWNLOAD · NOT CLEARED FOR SUBMISSION (ok_to_submit: false)</p>
 <h1>Download the unique, format-valid TIF</h1>
 <p><strong>File:</strong> <code>{e(LIT_NAME)}</code><br>
 <strong>Note to paste (≤140 characters):</strong> <code>{e(LIT_NOTE)}</code><br>
 <strong>SHA-256:</strong> <code>{e(LIT_SHA)}</code></p>
 <p><a class="btn" href="downloads/{e(LIT_NAME)}">Download TIF</a> <a class="btn alt" href="downloads/{e(LIT_NAME)}.zip">Download ZIP</a> <a href="data/run_card_literal.json">Run card (JSON)</a></p>
-<p><strong>Download: YES.</strong> It passes the format gate and the literal uniqueness rule against all 386 registry rasters.
-<strong>Upload to a leaderboard slot: NOT RECOMMENDED.</strong> On the holdout proxy it scores below the 0.2778 champion, and
+<p><strong>Download: YES.</strong> It passes the format gate (NaN outside the footprint, the official rule) and the literal uniqueness rule against all 386 registry rasters.
+<strong>Upload to a leaderboard slot: NOT OK to submit.</strong> NOT CLEARED FOR SUBMISSION: holdout not PASS, canary not run, uniqueness on the binary surface only. On the holdout proxy it scores below the 0.2778 champion, and
 the confidence intervals do not overlap. Promotion is a separate selector decision, and any upload uses one of the three weekly submissions.</p>
 </section>'''
 
@@ -127,7 +127,7 @@ owner_section = f'''<section><h2>Per-site summary: nine focus sites (best owner-
 </tbody></table></div></section>'''
 
 review_sec = f'''<section><h2>Verification (2026-10-29)</h2><ul>{rev_items}</ul>
-<p>Open irregularities: <strong>{rows_ledger}</strong>. The full ledger is in <a href="data/irregularities_ledger.json">data/irregularities_ledger.json</a>. The lattice-gap numbers are in <a href="data/lattice_gap_check.json">data/lattice_gap_check.json</a>. Literal audit receipts: <a href="data/literal_audit_compliant.json">compliant file</a>. Holdout receipts: <a href="data/literal_holdout_sgmc.json">HOLDOUT-DTI</a>. Full review and corrections: <a href="research/independent-review-20261028.md">Independent review (2026-10-28)</a>.</p></section>'''
+<p>Open irregularities: <strong>{rows_ledger}</strong>. The full ledger is in <a href="data/irregularities_ledger.json">data/irregularities_ledger.json</a>. The lattice-gap numbers are in <a href="data/lattice_gap_check.json">data/lattice_gap_check.json</a>. Literal audit receipts: <a href="data/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json">compliant file</a>. Holdout receipts: <a href="data/literal_holdout_sgmc.json">HOLDOUT-DTI</a>. Full review and corrections: <a href="research/independent-review-20261028.md">Independent review (2026-10-28)</a>.</p></section>'''
 
 leaderboard_sec = '''<section><h2>Leaderboard reference</h2><p>The live DrivenData leaderboard page, fetched in this session, shows #1 <strong>xiaofanhu 0.4544</strong> and #2 <strong>cfld__ 0.3916</strong>. The request mentions 0.3195 and 0.4413 as the top score. These figures conflict, and the owner should confirm which applies (IR-SASS3-26). Source: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a>. Public and private scores can differ.</p></section>'''
 
@@ -187,6 +187,7 @@ shutil.copyfile(ROOT / "evidence/run_card_literal.json", ROOT / "docs/data/run_c
 shutil.copyfile(ROOT / "evidence/lattice_gap_check.json", ROOT / "docs/data/lattice_gap_check.json")
 shutil.copyfile(ROOT / "evidence/literal_candidates_sgmc.json", ROOT / "docs/data/literal_holdout_sgmc.json")
 shutil.copyfile(ROOT / "evidence/irregularities_ledger.json", ROOT / "docs/data/irregularities_ledger.json")
+shutil.copyfile(ROOT / "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json", ROOT / "docs/data/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json")
 shutil.copyfile(ROOT / "evidence/archive/run_card_lwst_archived_20261027.json", ROOT / "docs/data/run_card_lwst_archived.json")
 shutil.copyfile(ROOT / "evidence/run_card_bgk_pbe.json", ROOT / "docs/data/run_card_bgk_pbe.json")
 shutil.copyfile(ROOT / "evidence/run_card_unique_structural_20261029.json", ROOT / "docs/data/run_card_unique_structural.json")
