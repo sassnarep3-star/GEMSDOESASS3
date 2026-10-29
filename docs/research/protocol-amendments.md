@@ -2,6 +2,8 @@
 
 Only amendments recorded here are in force. Every amendment needs an explicit owner decision and a date.
 
+> **Current-task warning:** the user-supplied protocol requires checks against any registry raster and authorizes no lattice exemption. The proposal below conflicts with that instruction, remains unapplied, and must not be used to clear, download, submit, or promote any file in this task.
+
 ## PROPOSED-20261028-A — like-for-like reading of Rule 1 (NOT APPLIED)
 
 Status: **PROPOSED. Not applied.** The owner must record the decision (Option A in

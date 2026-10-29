@@ -77,15 +77,15 @@ for site in SITES:
         f"<td><code>{e(h['file'])}</code><br><small>{h['dots']:,} dots · already submitted (owner-reported {ns['hist_score_owner_report']:.4f}) · <strong>do not resubmit</strong></small></td>"
         f"<td><code>{e(l['file'])}</code><br><small>{l['dots']:,} dots · sibling claim: {e(l['sibling_verdict_claimed'])}</small></td>"
         f"<td>{pct(lv['lattice_overlap'])}</td>"
-        f"<td>{'PASS' if lv['like_for_like_rule_ok'] else 'FAIL'}</td>"
+        f"<td>{'ALT-ONLY; NOT CLEARED' if lv['like_for_like_rule_ok'] else 'FAIL'}</td>"
         f"<td>{pct(lv['max_overlap_vs_other_focus_hist'])}</td>"
         f"<td>{hd['dti']:.6f} [{ci[0]:.6f}, {ci[1]:.6f}]<br><small>HOLDOUT-DTI · {e(hd['evaluator_version'])} (nine-site audit) · {hd['withheld_positive_pixels']:,} withheld positives</small></td>"
-        f"<td><strong>NO</strong> until the owner decides on the lattice rule and a selector promotes one file</td>"
+        f"<td><strong>NO.</strong> Fails the binding rule and other gates are incomplete.</td>"
         "</tr>"
     )
     md_rows.append(
         f"| {site} | `{h['file']}` | {h['dots']:,} | {ns['hist_score_owner_report']:.4f} (OWNER-REPORT) | "
-        f"`{l['file']}` | {l['dots']:,} | {pct(lv['lattice_overlap'])} | {'PASS' if lv['like_for_like_rule_ok'] else 'FAIL'} | "
+        f"`{l['file']}` | {l['dots']:,} | {pct(lv['lattice_overlap'])} | {'ALT-ONLY; NOT CLEARED' if lv['like_for_like_rule_ok'] else 'FAIL'} | "
         f"{pct(lv['max_overlap_vs_other_focus_hist'])} | {'PASS' if lv['format_ok'] else 'FAIL'} | "
         f"{hd['dti']:.6f} [{ci[0]:.6f}, {ci[1]:.6f}] (HOLDOUT-DTI pooled-hide-v2, {hd['withheld_positive_pixels']:,} withheld) | "
         f"{e(l['sibling_verdict_claimed'])} |"
@@ -93,7 +93,7 @@ for site in SITES:
 
 md_table = (
     "| Site | Historical best file (owner-reported; already submitted) | Dots | Owner score | Latest candidate (sibling) | Dots | "
-    "Latest: lattice overlap ≤3 px | Latest: like-for-like (10 refs) | Latest: max overlap vs other focus historical | Latest: format | HOLDOUT-DTI proxy for the latest file [95% CI] | Sibling verdict (claim, not verified) |\n"
+    "Latest: lattice overlap ≤3 px | Alternate diagnostic (lattice excluded; 10 refs; NOT binding) | Latest: max overlap vs other focus historical | Latest: format | HOLDOUT-DTI proxy for the latest file [95% CI] | Sibling verdict (claim, not verified) |\n"
     "|---|---|---|---|---|---|---|---|---|---|---|---|\n" + "\n".join(md_rows)
 )
 
@@ -107,11 +107,12 @@ Labels: **REGISTRY-MEASUREMENT** (overlap, rank correlation, format; recomputed 
 catalogue-derived pseudo-labels; not an estimate of an organizer score). The sibling verdicts are claims from
 other sessions and were not accepted.
 
-Literal rule: fails if more than 70% of a candidate's dots lie within 3 px of any registry raster's dots, including the
-13GEMSDOE calibration lattice. Like-for-like rule: the same test with the halo-saturated lattice excluded from the
-dot-overlap test (vendor/gems57/uniqueness.py classification). Rank correlation is limited to 0.90 under both readings.
-"Like-for-like (10 refs)" means checked against the ten references measured here (nine historical focus files and the
-LWST archive). It is not a full registry scan.
+**Binding task rule:** more than 70% within 3 px of **any** registry raster is a duplicate, including the 13GEMSDOE
+calibration lattice; rank-correlation limit is 0.90. All measured focus-site files fail the literal lattice test.
+
+The lattice-excluded "like-for-like" columns are a **proposed alternate diagnostic only**. That reading conflicts with
+the current task's any-registry instruction; it is not applied, is not a pass, and cannot clear a candidate. The
+"10 refs" scope (nine historical focus files and the LWST archive) is partial, not a full registry scan.
 
 {md_table}
 
@@ -126,10 +127,10 @@ def section(title: str, body: str) -> str:
 hero = f"""<section class="hero">
 <p class="label">SUBMISSION STATUS · NOT CLEARED FOR SUBMISSION · SUBMIT-GATED · NOT DOWNLOAD-READY · NOT OK to submit · OK TO DOWNLOAD: NO (BLOCKED) · OK TO SUBMIT: NO</p>
 <h1>No focus-site file is cleared for submission yet</h1>
-<p>One rule decision blocks every file. The literal Protocol Rule 1 overlap test counts the 13GEMSDOE 5-pixel calibration lattice. That lattice covers <strong>{lattice_pct:.2f}%</strong> of the competition footprint within 3 px, so any dense dot field fails. This is a geometry result, not a modelling result. Measured: all {2 * len(SITES)} focus-site files checked fail it (lattice overlap 99.05% or more).</p>
-<p><strong>What would change the answer:</strong> the owner records the like-for-like reading (Option A in the <a href="research/lattice-decision-20261028.md">decision memo</a>). After that, the LWST archive and the {n_l4l_pass_latest} latest candidates that pass like-for-like become eligible for a selector. A selector still has to choose one file and one weekly slot. Nothing on this page is a promotion.</p>
+<p>The binding task protocol says to compare against <strong>any registry raster</strong>; no calibration-lattice exception is authorized. The literal Protocol Rule 1 test counts the 13GEMSDOE 5-pixel lattice, which covers <strong>{lattice_pct:.2f}%</strong> of the competition footprint within 3 px. All {2 * len(SITES)} measured focus-site files fail the 70% limit. This is a geometry result, not a modelling result.</p>
+<p>The lattice-excluded like-for-like figures elsewhere on this page are partial research diagnostics only. Option A in the <a href="research/lattice-decision-20261028.md">decision memo</a> is an unapplied proposal that conflicts with the current instruction; it is not a path to clearance. Full current-registry and pre-placement checks are also unavailable. No file is eligible for a selector.</p>
 <p><a href="research/independent-review-20261028.md">Independent review (2026-10-28)</a> · <a href="research/lattice-decision-20261028.md">Lattice decision memo</a></p>
-<p><strong>Download: none.</strong> The validator (scripts/verify_all_gates.py) reports <code>OK TO DOWNLOAD: NO (BLOCKED)</code> and <code>OK TO SUBMIT: NO</code> for the archived LWST file, and the BGK-PBE file currently on main are kept in the repository for audit only. The BGK-PBE file fails the outside-bounds rule (section below). Do not upload any file until the owner decision is recorded.</p>
+<p><strong>Download: none. Submit: no.</strong> The validator (<code>scripts/verify_all_gates.py</code>) reports <code>OK TO DOWNLOAD: NO (BLOCKED)</code> and <code>OK TO SUBMIT: NO</code>. The checked-in rasters are retained for audit only; the BGK-PBE and unique-structural files fail the outside-bounds rule, while the literal lattice rule blocks the measured focus-site family. Do not download or upload any of them for competition use.</p>
 <p><a href="data/lattice_bound_audit_20261028.json">Lattice bound (JSON)</a> · <a href="data/focus_site_candidate_audit_20261028.json">Per-file measurements (JSON)</a> · <a href="research/focus-site-candidates-20261028.md">Per-site table (Markdown)</a> · <a href="data/current_run_card.json">Run card</a> · <a href="executive-summary.html">Submission guide</a></p>
 </section>"""
 
@@ -137,26 +138,26 @@ glance = f"""<section><h2>At a glance</h2><div class="scroll"><table><thead><tr>
 <tr><td>Can I download a file and submit it today?</td><td><strong>No.</strong></td><td>Protocol gate (this repo, recomputed 2026-10-28)</td></tr>
 <tr><td>Is the file format valid?</td><td>Yes for all 18 measured focus-site files: EPSG:32611, 3730 × 3292, float32, no NaN in the footprint, values within [0, 1], and zeros (no non-zero values) outside the bounds.</td><td>REGISTRY-MEASUREMENT (scripts/focus_site_candidate_audit.py)</td></tr>
 <tr><td>Is it unique under the literal rule?</td><td>No. Every file overlaps the lattice at 99.05% or more (limit 70%).</td><td>REGISTRY-MEASUREMENT</td></tr>
-<tr><td>Is it unique under the like-for-like reading?</td><td>Yes for the nine latest candidates against the ten references measured here (nine historical focus files plus LWST): the largest overlap is {l4l_latest_max*100:.1f}%. The LWST archive was measured earlier against 451 genuine downloads: max 66.53%.</td><td>REGISTRY-MEASUREMENT (partial registry scope; the 451-download figure is from docs/research/independent-review-20261028.md, not re-run here)</td></tr>
+<tr><td>What do the lattice-excluded diagnostics show?</td><td>The maximum like-for-like overlap among latest candidates is {l4l_latest_max*100:.1f}% against ten partial references, but this excludes the calibration lattice. It is NOT the binding task rule and does not clear any file.</td><td>REGISTRY-MEASUREMENT (alternate partial diagnostic only; full-registry checks unavailable)</td></tr>
 <tr><td>Does the official competition have a uniqueness or dot-cap rule?</td><td>No. The rules have no overlap, uniqueness or dot-count requirement. Limits: three submissions per week; one final submission per entity; generative-AI use must be disclosed in the narrative.</td><td>ORGANIZER RULES: <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">NLR Official Rules, Sept 2026</a> (all 7 segments read 2026-10-28)</td></tr>
 <tr><td>What is the current top score?</td><td>0.4544 (rank 1, xiaofanhu). Rank 27 is 0.3195 (kpomazi). Rank 48 is 0.2897. The 0.4413 figure in the request is superseded.</td><td>ORGANIZER-CONFIRMED (public leaderboard, fetched 2026-10-28): <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a></td></tr>
-<tr><td>What is my file's estimated leaderboard score?</td><td><strong>Not estimable yet.</strong> No file in this repo has an organizer receipt. The best-concordance proxy (SGMC-CAL, Spearman 0.869 with the 21 owner scores, 95% CI 0.606–0.980) is computed only for the historical and LWST files. The latest candidates have no value on that proxy yet.</td><td>HOLDOUT-DTI only, and a calibration submission after the decision would give the first ORGANIZER-CONFIRMED number. Source: docs/research/independent-review-20261028.md §4.</td></tr>
+<tr><td>What is my file's estimated leaderboard score?</td><td><strong>Not estimable.</strong> No file in this repo has a supported candidate HOLDOUT-DTI plus organizer receipt. The best-concordance proxy (SGMC-CAL, Spearman 0.869 with the 21 owner scores, 95% CI 0.606–0.980) is computed only for historical files; the latest candidates have no value on that proxy.</td><td>HOLDOUT-DTI values are not scores. No calibration or submission slot is authorized under the current blocked protocol. Source: docs/research/independent-review-20261028.md §4.</td></tr>
 </tbody></table></div></section>"""
 
-decision = f"""<section><h2>Decision the owner must make</h2>
-<div class="scroll"><table><thead><tr><th>Option</th><th>What it means</th><th>Result for the files</th><th>My recommendation</th></tr></thead><tbody>
-<tr><td><strong>A. Like-for-like reading</strong></td><td>Record a dated amendment that excludes halo-saturated lattices (more than 90% of footprint cells within 3 px) from the dot-overlap test. The rank-correlation test and the overlap test still apply to every other registry raster. The template already has this classification (vendor/gems57/uniqueness.py, <code>HALO_SATURATION_FRACTION = 0.90</code>).</td><td>LWST archive and the nine latest candidates become eligible for a selector. Historical files stay ineligible (already submitted).</td><td><strong>Recommended.</strong> The literal overlap test measures geometry, not lane. Any dense field fails it, so it cannot separate lanes.</td></tr>
-<tr><td><strong>B. Keep the literal rule</strong></td><td>No amendment. Protocol Rule 1 says log a duplicate and stop.</td><td>Nothing is eligible. Experiments are also blocked, because their output could not be submitted.</td><td>Only if the owner wants to stop submitting.</td></tr>
-<tr><td><strong>C. Pass the letter with edge cells</strong></td><td>Use at most {bound['bound_by_convention'][bound['primary_convention']]['max_dots_that_can_pass']:,} dots, with at least 30% on footprint-edge cells that no lattice dot reaches. {bound['uncovered_cells_edge_statistics']['share_within_2px_of_footprint_edge']*100:.1f}% of those cells lie within 2 px of the footprint boundary.</td><td>Passes the literal count, but only by placing dots where no fault is mapped. That lowers the score and defeats the rule's purpose.</td><td><strong>Not produced and not recommended.</strong></td></tr>
+decision = f"""<section><h2>Current binding rule and historical alternatives</h2>
+<div class="scroll"><table><thead><tr><th>Option</th><th>What it means</th><th>Result for the files</th><th>Status under current task</th></tr></thead><tbody>
+<tr><td><strong>A. Like-for-like proposal (not authorized)</strong></td><td>Would exclude a halo-saturated lattice from the overlap test. This conflicts with the current task's requirement to compare against any registry raster; it remains unapplied.</td><td><strong>No clearance.</strong> Partial like-for-like figures are research diagnostics only; full registry, format, holdout and canary checks still block the files.</td><td><strong>Not adopted.</strong> A template implementation does not amend the user's protocol.</td></tr>
+<tr><td><strong>B. Literal rule (binding here)</strong></td><td>No amendment. Protocol Rule 1 says compare against any registry raster and log a duplicate over 70%.</td><td>Nothing measured is eligible. Current-registry and pre-placement checks remain unavailable.</td><td><strong>Required by the current task.</strong></td></tr>
+<tr><td><strong>C. Edge-cell workaround (not authorized)</strong></td><td>Would concentrate dots on uncovered footprint-edge cells; {bound['uncovered_cells_edge_statistics']['share_within_2px_of_footprint_edge']*100:.1f}% lie within 2 px of the boundary.</td><td>Not a geological method and not an acceptable way to meet the literal rule.</td><td><strong>Must not be implemented.</strong></td></tr>
 </tbody></table></div>
-<p>I changed the gate to add the outside-bounds check and the blocked-state acceptance; I did not change any run card. The gate reports OK TO DOWNLOAD: NO (BLOCKED) and OK TO SUBMIT: NO. The owner's written decision is needed before any file is promoted.</p></section>"""
+<p>The binding task protocol remains unchanged. The gate reports OK TO DOWNLOAD: NO (BLOCKED) and OK TO SUBMIT: NO. No owner or agent has applied the proposed lattice exemption; no file is promoted or eligible for download/submission.</p></section>"""
 
 site_section = (
     "<section><h2>Executive summary: nine sites</h2>"
-    "<p><strong>Best file to submit: none yet.</strong> The historical best file at each site is already submitted, and resubmitting it is a duplicate of the same dot-field family. The latest candidate is the only candidate that could be unique, and each one is blocked by the literal rule until the decision in Option A is recorded.</p>"
+    "<p><strong>Best file to submit: none.</strong> The historical best file at each site is already submitted and must not be reused. All measured files fail the binding literal lattice rule; the lattice-excluded table column is an alternate partial diagnostic only, not a uniqueness clearance. Full current-registry and pre-placement checks are unavailable.</p>"
     "<p>The overlap column is measured on the files themselves. The HOLDOUT-DTI column comes from our evaluator and is not an estimate of an organizer score. Owner scores are typed in the task prompt, not organizer receipts.</p>"
     "<div class=\"scroll\"><table><thead><tr><th>Site</th><th>Historical best (do not resubmit)</th><th>Latest candidate (sibling claim)</th>"
-    "<th>Latest: lattice overlap</th><th>Latest: like-for-like</th><th>Latest: max overlap vs other focus historical files</th><th>HOLDOUT-DTI proxy for the latest file [95% CI]</th><th>Download for submission?</th></tr></thead>"
+    "<th>Latest: lattice overlap</th><th>Alternate partial diagnostic (not binding)</th><th>Latest: max overlap vs other focus historical files</th><th>HOLDOUT-DTI proxy for the latest file [95% CI]</th><th>Download for submission?</th></tr></thead>"
     f"<tbody>{''.join(site_table_rows)}</tbody></table></div>"
     "<p><small>The per-file table, including format checks and rank correlation, is in <a href=\"research/focus-site-candidates-20261028.md\">focus-site-candidates-20261028.md</a>.</small></p></section>"
 )
@@ -186,7 +187,7 @@ why = (
 beat = (
     "<section><h2>Can we beat 0.2778?</h2>"
     "<p><strong>Not demonstrated.</strong> No file in this repo has an organizer receipt. The current top score is 0.4544. The pooled-hide-v2 values do not rank the owners' files. SGMC-CAL does (Spearman 0.869), but the latest candidates have no SGMC-CAL value, so a holdout improvement does not yet establish a leaderboard gain.</p>"
-    "<p>Two routes have a published mechanism. First, the final prize round rescoring uses an expanded label set, which adds faults that experts verify after reviewing submissions (competition page 967). Second, one calibration submission, once the decision is recorded, would give the first organizer receipt for this method. Both need the owner's decision and a selector step.</p></section>"
+    "<p>The final prize round uses an expanded label set, but that does not justify using a file that fails the binding protocol. No calibration submission is recommended or authorized here. A future candidate would need real official inputs, a valid holdout and canary, complete literal-rule uniqueness, format validation, and a separate selector decision before any slot could be used.</p></section>"
 )
 
 lattice_block = (
@@ -200,7 +201,7 @@ lattice_block = (
 
 irr = (
     "<section><h2>Irregularities flagged for review</h2><ul>"
-    "<li><strong>The shared template already contains a like-for-like reading</strong> that excludes halo-saturated lattices from the dot-overlap test (vendor/gems57/uniqueness.py). The independent review did not apply it, which is the decision above.</li>"
+    "<li><strong>The shared template contains a like-for-like reading</strong> that excludes halo-saturated lattices, but the current task requires every registry raster. The code path is not applied and cannot grant clearance; a template implementation does not amend the user protocol.</li>"
     "<li><strong>The independent registry scan (473 rasters) includes non-submission layers.</strong> A road-distance raster in that scan is at 99.997% overlap, and it is not a submission. Only submitted prediction rasters belong in the registry.</li>"
     "<li><strong>No lane paragraph was supplied.</strong> The parallel-run protocol refers to a single method paragraph that is not in the request, so the lane is undefined.</li>"
     "<li><strong>The pooled-hide-v2 evaluator reverses the owner order for GEMSDOE24 and GEMSDOE32</strong> (see the 0.2778 section), so no HOLDOUT-DTI value here is an estimate of an organizer score.</li>"
@@ -221,7 +222,7 @@ sources = (
 
 how = (
     "<section><h2>How to submit once a file is cleared</h2><ol>"
-    "<li>Only after the owner records Option A (or any other amendment) in <code>docs/research/protocol-amendments.md</code> and the gate is re-run. Then the file is still a candidate, not a promoted submission.</li>"
+    "<li>At present, no checked-in file is download-ready or cleared. A future file may be considered only if it passes the unchanged literal any-registry protocol and every format, holdout, leakage, and provenance gate; it still would not be promoted automatically.</li>"
     "<li>A separate selector chooses one file within the weekly cap of three (NLR Official Rules §3.2, §3.4).</li>"
     "<li>Download the single-band GeoTIFF (or its single-file zip) and upload it through the competition's submission form. Use the submission name and note from the file's run card, which are at most 140 characters.</li>"
     "<li>Disclose the use of generative AI in the narrative, as the rules require.</li>"
@@ -231,8 +232,8 @@ how = (
 
 remaining = (
     "<section><h2>Remaining work</h2><ol>"
-    "<li>The owner records Option A, B or C. Draft amendment: docs/research/protocol-amendments.md (PROPOSED, not applied).</li>"
-    "<li>If Option A is recorded, re-run the gates with the recorded reading. A separate selector then picks one file within the weekly cap of three.</li>"
+    "<li>Keep the supplied any-registry rule in force. The Option A amendment is a proposal only and conflicts with this task; do not apply it to clear a file.</li>"
+    "<li>Restore organizer-authenticated training features, labels, sample submission, and a complete current registry; then re-run official-format, literal uniqueness, leakage, and buffered hide-and-recover gates. No experiment or selector action is authorized before these blockers are resolved.</li>"
     "<li>Reconcile the two holdout evaluators (pooled-hide-v2 vs SGMC-CAL) on the owner-scored set (ledger IR-SASS3-36).</li>"
     "<li>Compute the SGMC-CAL proxy for the nine latest candidates (not done).</li>"
     "<li>Test hypotheses H-SASS3-F, G and H on the spatially-blocked holdout, within 3 experiments or 2 hours. H-SASS3-E was tested and is negative. This session ran no experiments.</li>"
@@ -339,4 +340,4 @@ def page(title: str, rootrel: bool) -> str:
 (ROOT / "docs/research/focus-site-candidates-20261028.md").write_text(md_doc)
 for name in ("lattice_bound_audit_20261028.json", "focus_site_candidate_audit_20261028.json", "irregularities_ledger.json"):
     shutil.copyfile(ROOT / "evidence" / name, ROOT / "docs" / "data" / name)
-print("built pages:", len(SITES), "sites;", n_literal_fail, "literal failures;", n_l4l_pass_latest, "latest like-for-like passes")
+print("built pages:", len(SITES), "sites;", n_literal_fail, "literal failures;", n_l4l_pass_latest, "partial alternate diagnostics below threshold (not clearances)")

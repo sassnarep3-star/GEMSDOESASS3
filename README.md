@@ -2,7 +2,7 @@
 
 ## Decision (2026-10-29)
 
-**Status: NOT OK to download and NOT OK to submit for any file. Neither the BGK-PBE file nor the unique-structural file is format-valid under the competition's outside-bounds rule.** The validator (`python scripts/verify_all_gates.py`) reports `OK TO DOWNLOAD: NO (BLOCKED)` and `OK TO SUBMIT: NO` for the current candidate. The gate keeps `ok_to_download` false by design (archive only). `ok_to_submit` requires the format record, the outside-bounds rule, the literal lattice rule on the file itself, the uniqueness gate, the holdout gate and the leakage canary, and fails closed when any cannot be measured (IR-SASS3-41, 42, 49).
+**Status: NOT OK to download and NOT OK to submit for any file. Neither the BGK-PBE file nor the unique-structural file is format-valid under the competition's outside-bounds rule.** The validator (`python scripts/verify_all_gates.py`) reports `OK TO DOWNLOAD: NO (BLOCKED)` and `OK TO SUBMIT: NO` for the current candidate. An audit copy in the repository is not a competition-download authorization; the competition download gate remains false. `ok_to_submit` requires the format record, the outside-bounds rule, the literal lattice rule on the file itself, the uniqueness gate, the holdout gate and the leakage canary, and fails closed when any cannot be measured (IR-SASS3-41, 42, 49).
 
 | File | Download? | Submit? | Why |
 |------|-----------|---------|-----|
@@ -15,7 +15,7 @@
 
 **Nothing in this repo is evidenced to beat 0.2778 or the leaderboard top (0.4544).** The blocker is the labels (`labels.tif`, `training_features.tif`), which come only through your DrivenData account (official rules §3.1). They are not in this workspace, and this session did not download them. The 28 restored files are owner-mirror copies (IR-SASS3-46) and are not organizer-authenticated.
 
-**Owner decision needed (not an agent action):** the literal lattice rule blocks every focus-site file. Options in [docs/research/lattice-decision-20261028.md](docs/research/lattice-decision-20261028.md): **A (recommended)** the like-for-like reading that the shared template already implements, which excludes halo-saturated lattices (`vendor/gems57/uniqueness.py` line 353) from the dot-overlap test; **B** keep the literal rule (nothing eligible); **C** an edge-only rule (not produced, not endorsed). Option A does not clear any file for the outside-bounds rule, which needs its own fix.
+**Binding decision for this task:** the supplied protocol says to compare against **any registry raster** and sets a 70% overlap cap with no lattice exemption. The literal rule therefore governs; all measured focus-site files fail. The halo-saturated-lattice exclusion in Option A of [the decision memo](docs/research/lattice-decision-20261028.md) is a proposed protocol amendment only, is not applied, and is **not authorized by this task**. It cannot clear a candidate unless the user explicitly revises the protocol; even then, all other gates remain. No checked-in file is download-ready or submittable under the current decision.
 
 Scoped uniqueness recheck (2026-10-28, [audit note](docs/research/uniqueness-scope-audit-20261028.md), IR-SASS3-54..59): against 453 pinned submitted GEMSDOE rasters and 6 calibration lattices, LWST passes the submissions-only rule (max 66.53%) and fails the lattice rule (99.78%); sar-deconf fails both (76.26% and 99.97%); BGK-PBE and unique-structural pass the literal rule but have no holdout and are not approved. No estimated leaderboard score is given for any file.
 
@@ -29,7 +29,7 @@ The full standing prompt is at [docs/research/standing-prompt-as-recorded-202610
 <summary>Show the standing prompt</summary>
 
 ```text
-Review the repo. 
+Review the repo.
 
 I want to focus on the highest scoring submissions from the following sites, GEMSDOE24, GEMSDOE25, GEMSDOE27, GEMSDOE28, GEMSDOE30, GEMSDOE31, GEMSDOE32, GEMSDOE33, GEMSDOE36.
 
@@ -146,19 +146,19 @@ No hypothesis has passed the spatially-blocked holdout. The budget is 3 experime
 
 ## What is needed to go further (in order)
 
-1. **Owner decision** on the lattice rule: Option A, B or C (see Decision above). Not an agent action.
+1. Keep the user's binding any-registry / 70% rule in force. Do not apply the proposed lattice exemption or edge-only workaround; neither is authorized by this task.
 2. **Labels and features from your DrivenData account**: download `training_features.tif` and `labels.tif` (official rules §3.1) into `.cache/gems_data/` or `data/`. Do not use third-party mirror copies (IR-SASS3-26).
 3. **Fix the outside-bounds rule** for the BGK-PBE and unique-structural files (both have non-zero outside cells), or replace them. Re-run `scripts/candidate_format_audit.py`.
 4. **Measure the current file's registry overlap** inside the gate. The gate's registry check currently reads a stored LWST audit (IR-SASS3-45).
 5. **Redesign the holdout** for off-catalogue structure, and check that it reproduces the leaderboard order on the nine owner-reported files. Reconcile the evaluators (IR-SASS3-36).
 6. **Compute the SGMC-CAL proxy** for the nine latest candidates (not done).
-7. **Run H-SASS3-F, G or H** only after the owner decision, within the budget, on the spatially-blocked holdout.
+7. **Do not run H-SASS3-F, G or H now.** Any future experiment requires an explicitly assigned lane, authenticated inputs, remaining budget, and a candidate that can satisfy the unchanged literal registry rule; use the spatially-blocked holdout only then.
 8. **Obtain the missing lane paragraph** of the parallel-run protocol (IR-SASS3-37).
 9. Choose at most one candidate, check it against the 3-per-week cap, and record the generative-AI disclosure (rules §3.2).
 
 ## Irregularities
 
-Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data/irregularities_ledger.json`), 53 entries. Open items for review: IR-SASS3-20 (holdout vs leaderboard), 22 (GEMSDOE30 file identity), 25 (prompt leaderboard figures), 26 (third-party data mirrors), 27 (outside-bounds convention), 29 (legacy build scripts), 34 (literal lattice rule blocks all focus files), 36 (evaluators disagree), 37 (missing lane paragraph), 42–44 (BGK-PBE outside bounds and format gate), 45 (registry check reads a stored audit), 49–51 (unique-structural outside bounds; format-only PASS claims; validator fix), 52–53 (LWST figures and "OK to upload").
+Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data/irregularities_ledger.json`), 53 entries. Open items for review: IR-SASS3-20 (holdout vs leaderboard), 22 (GEMSDOE30 file identity), 25 (prompt leaderboard figures), 26 (third-party data mirrors), 27 (outside-bounds convention), 29 (legacy build scripts), 34 (literal lattice rule blocks all focus files), 36 (evaluators disagree), 37 (missing lane paragraph), 42–44 (BGK-PBE outside bounds and format gate), 45 (registry check reads a stored audit), 49–51 (unique-structural outside bounds; format-only PASS claims; validator fix), 52–53 (LWST figures and "OK to upload"). The separate narrative `docs/irregularities.md` is a historical archive; it contains a lattice-exemption proposal that conflicts with this task's literal rule and must not be used to clear files.
 
 ## PARALLEL-RUN PROTOCOL (binding)
 

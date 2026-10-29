@@ -1,5 +1,7 @@
 # Forensic Irregularities & Data/Template Fixes Ledger (`GEMSDOESASS3`)
 
+> **Historical notes — not current approval or authority to submit.** This legacy narrative contains unreconciled claims and methods, including a proposed halo-saturation exception for the calibration lattice that conflicts with the binding parallel-run rule (“any registry raster”). Do not use its old “promote” or uniqueness claims. The current decision is **NO FILE APPROVED / DO NOT SUBMIT**; use `README.md`, `evidence/current_run_card.json`, `docs/research/repo-review-20261029.md`, and the synchronized JSON irregularities ledger for current status. Measurements in old entries are archival unless explicitly revalidated.
+
 Every irregularity uncovered during the line-by-line audit of DrivenData Competition #306, the 19-band `training_features.tif` GeoTIFF metadata, the shared `template57` toolkit, and the 9 sibling `GEMSDOE` repositories is documented below with exact cryptographic/numerical proof and remediation status.
 
 ---
