@@ -35,10 +35,10 @@ No leaderboard estimate is written. The holdout proxy is on a different scale fr
 
 ## Corrections to earlier figures
 
-- **Scope bug (IR-SASS3-33).** The earlier audit counted feature layers. `tiger_road_distance_m.tif` produced a false 100% overlap. Fixed in the shared tool; both candidates rerun.
-- **sar-deconf 67.4% (IR-SASS3-34).** That figure came from a 42-raster inventory. The full submitted set reaches 76.26%.
-- **Registry index incomplete (IR-SASS3-35).** `evidence/registry_index.json` lists 43 rasters; the pinned repositories contain 454 submission-scope TIFs.
-- **Lattice footprint count (IR-SASS3-36).** Measured 6,649, not 5,379. The conclusion is unchanged at 37,654 dots.
+- **Scope bug (IR-SASS3-54).** The earlier audit counted feature layers. `tiger_road_distance_m.tif` produced a false 100% overlap. Fixed in the shared tool; both candidates rerun.
+- **sar-deconf 67.4% (IR-SASS3-55).** That figure came from a 42-raster inventory. The full submitted set reaches 76.26%.
+- **Registry index incomplete (IR-SASS3-56).** `evidence/registry_index.json` lists 43 rasters; the pinned repositories contain 454 submission-scope TIFs.
+- **Lattice footprint count (IR-SASS3-57).** Measured 6,649, not 5,379. The conclusion is unchanged at 37,654 dots.
 
 ## Coverage notes
 
@@ -54,10 +54,10 @@ No leaderboard estimate is written. The holdout proxy is on a different scale fr
 
 ## Irregularities for review
 
-IR-SASS3-33 to IR-SASS3-38 in `evidence/irregularities_ledger.json`. Key items:
+IR-SASS3-54 to IR-SASS3-59 in `evidence/irregularities_ledger.json`. Key items:
 
-- **IR-SASS3-37.** The lane method paragraph referred to by the protocol does not appear in the request or the recorded prompt. The feature stack is absent, so the holdout cannot be reproduced here. No new experiment or raster was generated in this session.
-- **IR-SASS3-38.** The leaderboard figures in the request (0.3195, 0.4413, 0.4544) conflict and cannot be checked from this sandbox. Treat them as unverified.
+- **IR-SASS3-58.** The lane method paragraph referred to by the protocol does not appear in the request or the recorded prompt. The feature stack is absent, so the holdout cannot be reproduced here. No new experiment or raster was generated in this session.
+- **IR-SASS3-59.** The leaderboard figures in the request (0.3195, 0.4413, 0.4544) conflict and cannot be checked from this sandbox. Treat them as unverified.
 
 ## Next steps for the next session
 

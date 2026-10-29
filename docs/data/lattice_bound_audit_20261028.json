@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "generated_by": "scripts/lattice_bound_audit.py",
+  "evidence_class": "REGISTRY-MEASUREMENT + exact arithmetic (no holdout, no organizer score)",
+  "lattice": {
+    "path": "data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
+    "positive_cells": 206895,
+    "source_submission": "13GEMSDOE 20261001_r13-lattice-s5_v2_nan-outside (owner-reported 0.0904)",
+    "source_repo": "https://github.com/buffedlizard55-lab/13GEMSDOE"
+  },
+  "footprint": {
+    "cells": 5167373,
+    "grid": {
+      "crs": "EPSG:32611",
+      "shape": [
+        3730,
+        3292
+      ],
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ]
+    }
+  },
+  "rule": {
+    "text": "more than 70% of your dots within 3 px of one registry raster's dots = duplicate",
+    "overlap_limit": 0.7
+  },
+  "bound_by_convention": {
+    "euclidean_le_3px": {
+      "footprint_cells_within_3px_of_lattice": 5160724,
+      "footprint_cells_outside_buffer": 6649,
+      "max_dots_that_can_pass": 22163,
+      "candidate_37654_dots_can_pass": false
+    },
+    "euclidean_lt_3px": {
+      "footprint_cells_within_3px_of_lattice": 5159381,
+      "footprint_cells_outside_buffer": 7992,
+      "max_dots_that_can_pass": 26640,
+      "candidate_37654_dots_can_pass": false
+    },
+    "square_7x7_neighbourhood": {
+      "footprint_cells_within_3px_of_lattice": 5165527,
+      "footprint_cells_outside_buffer": 1846,
+      "max_dots_that_can_pass": 6153,
+      "candidate_37654_dots_can_pass": false
+    }
+  },
+  "primary_convention": "euclidean_le_3px",
+  "uncovered_cells_edge_statistics": {
+    "median_distance_to_footprint_edge_px": 1.0,
+    "max_distance_to_footprint_edge_px": 48.010415536631214,
+    "share_within_2px_of_footprint_edge": 0.9032937283802075
+  },
+  "candidate_dots_assumed": 37654,
+  "conclusion": "No raster with 37,654 dots can pass the literal lattice rule on this footprint under any of the three conventions.",
+  "lwst_archive": {
+    "sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
+    "dots": 37654,
+    "forward_overlap_within_3px": 0.997848834121209,
+    "dots_on_lattice_uncovered_cells": 81
+  },
+  "previous_figure_discrepancy": "evidence/irregularities_ledger.json IR-SASS3-19 and the review state 5,379 uncovered cells and 11,297 dots needed. Recomputed here: 6,649 uncovered cells (<=3 px Euclidean) and 11,297 dots needed at 37,654. The 5,379 figure did not reproduce under any convention tested. The conclusion is unchanged."
+}
