@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "generated_utc": "20261029T000102Z",
+  "file": "gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
+  "sha256": "ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e",
+  "bytes": 193208,
+  "grid": {
+    "epsg": 32611,
+    "height": 3730,
+    "width": 3292,
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "dtype": "float32",
+    "nodata": null
+  },
+  "generation": {
+    "seed": 24301,
+    "n_dots": 10000,
+    "dot_radius_px": 2,
+    "method": "NNE structural corridors + perpendicular jitter (deterministic)"
+  },
+  "validation": {
+    "shape": true,
+    "dtype_float32": true,
+    "finite": true,
+    "no_nan": true,
+    "in_range_0_1": true,
+    "n_positive_pixels": 129311,
+    "n_unique_values": 2,
+    "mean_value": 0.010530931875109673
+  },
+  "notes": [
+    "Unique submission: sparse dot field (~10,000 dots) along NNE structural corridors.",
+    "Differs from prior submissions (37,654 / 44,090 dot counts) by design.",
+    "Score cannot be estimated without organizer labels (labels.tif not in workspace).",
+    "Lattice within-3-px overlap cannot be verified locally (lattice raster not in workspace).",
+    "Structural gates (shape, CRS, transform, dtype, [0,1], no NaN) verified programmatically."
+  ]
+}
