@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import json
 import sys
+import zipfile
 from pathlib import Path
 
 import numpy as np
@@ -39,7 +40,13 @@ def verify() -> dict:
         if note and not value:
             notes.append(f"{key}: {note}")
 
-    check("run_card_copies_match", card == json.loads((ROOT / "evidence/run_card.json").read_text()) == json.loads((ROOT / "docs/data/current_run_card.json").read_text()), "run card copies differ")
+    copies = [
+        json.loads((ROOT / "evidence/run_card.json").read_text()),
+        json.loads((ROOT / "docs/data/current_run_card.json").read_text()),
+        json.loads((ROOT / "docs/evidence/current_run_card.json").read_text()),
+        json.loads((ROOT / "docs/evidence/run_card.json").read_text()),
+    ]
+    check("run_card_copies_match", all(copy == card for copy in copies), "run card copies differ")
     check("candidate_exists", tif.is_file(), f"missing {tif}")
     if tif.is_file():
         digest = sha256(tif)
@@ -55,10 +62,20 @@ def verify() -> dict:
             check("nodata_matches_card", src.nodata is None)
             check("all_values_finite", bool(np.isfinite(arr).all()))
             check("all_values_in_0_1", bool(arr.min() >= 0 and arr.max() <= 1))
-            check("positive_cell_count_matches_audit", int((arr > 0).sum()) == 129311)
+            check("positive_cell_count_matches_audit", int((arr > 0).sum()) == card["validator_output"]["positive_cells"])
+    zip_path = tif.with_suffix(".tif.zip")
+    check("zip_exists", zip_path.is_file(), f"missing {zip_path}")
+    if zip_path.is_file():
+        check("zip_sha256_matches", sha256(zip_path) == card["zip_sha256"])
+        try:
+            with zipfile.ZipFile(zip_path) as archive:
+                names = archive.namelist()
+                check("zip_contains_one_matching_tif", names == [tif.name] and hashlib.sha256(archive.read(tif.name)).hexdigest() == card["raster_sha256"])
+        except (OSError, zipfile.BadZipFile, KeyError):
+            check("zip_contains_one_matching_tif", False, "zip invalid or inner TIFF missing")
     uq = json.loads((ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").read_text())
     check("uniqueness_receipt_matches_candidate", uq["candidate_sha256"] == card["raster_sha256"])
-    check("one_witness_metric_is_under_threshold", uq["result"]["this_witness_threshold_pass"] is True)
+    check("one_witness_metric_is_under_threshold", uq["result"]["one_witness_result_below_threshold"] is True)
     complete_unique = (
         uq["result"]["complete_registry_uniqueness_pass"] is True
         and card["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "CLEARED"
@@ -76,6 +93,7 @@ def verify() -> dict:
         "run_card_copies_match", "candidate_exists", "sha256_matches", "single_band", "float32",
         "crs_matches_card", "shape_matches_card", "transform_matches_card", "nodata_matches_card",
         "all_values_finite", "all_values_in_0_1", "positive_cell_count_matches_audit",
+        "zip_exists", "zip_sha256_matches", "zip_contains_one_matching_tif",
         "uniqueness_receipt_matches_candidate", "one_witness_metric_is_under_threshold",
         "submission_note_length", "archive_only_ui", "candidate_not_promoted"))
     approved = format_ok and checks["complete_uniqueness_gate"] and checks["holdout_gate"] and checks["canary_gate"]
@@ -89,7 +107,7 @@ def verify() -> dict:
         "verdict": card["verdict"],
         "submission_name": card["submission_name"],
         "submission_note": card["submission_note"],
-        "positive_pixels": 129311,
+        "positive_pixels": card["validator_output"]["positive_cells"],
         "checks_passed": sum(checks.values()),
         "checks_total": len(checks),
         "checks": checks,

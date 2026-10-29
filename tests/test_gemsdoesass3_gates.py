@@ -120,7 +120,7 @@ def test_emitted_geotiff_and_all_automated_gates() -> None:
         assert np.isfinite(arr).all()
         assert float(arr.min()) >= 0.0
         assert float(arr.max()) <= 1.0
-        assert int((arr > 0).sum()) == 129_311
+        assert int((arr > 0).sum()) == 8_794
 
 
 def test_space_filling_witness_does_not_get_a_protocol_exemption():

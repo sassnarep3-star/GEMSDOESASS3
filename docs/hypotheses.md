@@ -1,6 +1,6 @@
 # Historical hypothesis archive — NOT CURRENT APPROVAL
 
-> **Audit warning (2026-10-29):** this file records prior-session plans and claims that have not been independently reproduced in the current checkout. It contains inconsistent lane identifiers (`H-GASS3-1`/GSD-HUA versus `H-SASS3-A`/LWST-GeoConduit), claims cached rasters that are absent now, quantitative uplift/cost claims without current source data, and an H-GASS3-1 band mapping that conflicts with the audited 19-band schema in `data/feature_bands_audit.json`. Treat the entries below as unverified archival hypotheses, not facts, current results, or implementation instructions. The active run card is negative; no submission is approved.
+> **Audit warning (2026-10-29):** this file records prior-session plans and claims that have not been independently reproduced in the current checkout. It contains inconsistent lane identifiers (`H-GASS3-1`/GSD-HUA, `H-SASS3-A`/LWST-GeoConduit, and `H-BGK-PBE-EXP1`), claims cached rasters that are absent now, quantitative uplift/cost claims without current source data, and an H-GASS3-1 band mapping that conflicts with the audited 19-band schema in `data/feature_bands_audit.json`. Treat the entries below as unverified archival hypotheses, not facts, current results, or implementation instructions. The active run card is negative; no submission is approved.
 
 # Preregistered Geological & Geothermal Hypotheses (`GEMSDOESASS3`)
 

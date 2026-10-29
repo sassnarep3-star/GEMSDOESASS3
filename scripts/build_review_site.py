@@ -53,9 +53,9 @@ common = f"""
 </section>
 <section><h2>Why it is not approved</h2><ul>
 <li>Local raster inspection: one-band float32, EPSG:32611, 3730×3292, recorded transform, all cells finite and values in [0,1]. The official <code>sample_submission.tif</code> is absent, so the transform is compared to the checked-in manifest, not the organizer sample.</li>
-<li>The generator is a hand-coded 10,000-center pattern, not predictions derived from the competition feature stack. Radius-2 disks produce 129,311 positive pixels.</li>
+<li>The current BGK-PBE raster is synthetic: its footprint is an approximate ellipse and its gravity/K/dilatation fields are placeholders, not official competition or USGS measurements. It has 6,178 hard cells (>0.5) and 8,794 positive cells (>0).</li>
 <li>HOLDOUT-DTI and candidate-specific leakage canary: NOT RUN; feature stack and labels are not present.</li>
-<li>Final-dot overlap against one pinned calibration lattice is 54,872/129,311 = 42.4341% within 3 px. This does not cover the other registry rasters and does not clear the full uniqueness gate. There is no pre-placement continuous surface to check.</li>
+<li>Against one pinned calibration lattice, 3,905/8,794 = 44.4053% of positive cells (2,687/6,178 = 43.4930% of hard cells) are within 3 px. This does not cover the other registry rasters or clear uniqueness. No official footprint or complete pre-placement check is available.</li>
 </ul><p>Archive only. The complete machine-readable card is <a href="{e(run_card_path)}">current_run_card.json</a>; one-witness measurement: <a href="data/uniqueness_audit_current_candidate_20261029.json">audit JSON</a>.</p></section>
 <section><h2>Nine-site executive summary</h2><p>The scores below are OWNER-REPORT / supplied historical results, not independently verified organizer receipts and not score estimates for this candidate. Each historical file has already been submitted; none is recommended for reuse. There is no current file eligible to submit.</p>
 <div class="table-wrap"><table><thead><tr><th>Site</th><th>Highest historical file reported</th><th>Reported result</th><th>Unique / eligible to submit now?</th></tr></thead><tbody>{''.join(site_rows)}</tbody></table></div>

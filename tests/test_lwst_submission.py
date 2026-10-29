@@ -11,7 +11,7 @@ import numpy as np
 import rasterio
 
 ROOT = Path(__file__).resolve().parents[1]
-CANDIDATE = ROOT / "docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif"
+CANDIDATE = ROOT / "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif"
 
 
 def test_current_run_card_labels_missing_evidence_and_negative_verdict():
@@ -20,7 +20,7 @@ def test_current_run_card_labels_missing_evidence_and_negative_verdict():
     assert rc["ok_to_submit"] is False
     assert rc["holdout_dti"]["status"] == "NOT RUN"
     assert rc["holdout_dti"]["pooled_dti"] is None
-    assert rc["leakage_canary"]["status"] == "NOT RUN for this candidate"
+    assert rc["leakage_canary"]["status"] == "NOT RUN for this raster"
     assert rc["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
     assert rc["submission_name"] + ".tif" == CANDIDATE.name
     assert len(rc["submission_note"]) <= 140
@@ -31,7 +31,7 @@ def test_historical_canary_and_uniqueness_artifacts_are_not_marked_current_appro
     canary = json.loads((ROOT / "evidence/leakage_canary_report.json").read_text())
     assert canary["all_passed"] is True
     assert canary["n_channels_tested"] == 51
-    assert "NOT RUN for this candidate" in json.loads((ROOT / "evidence/current_run_card.json").read_text())["leakage_canary"]["status"]
+    assert "NOT RUN for this raster" in json.loads((ROOT / "evidence/current_run_card.json").read_text())["leakage_canary"]["status"]
 
     audit = json.loads((ROOT / "evidence/uniqueness_audit_386.json").read_text())
     assert audit["total_valid_registry_rasters_checked"] == 386
@@ -55,15 +55,15 @@ def test_current_archive_geotiff_format_and_sha():
         arr = src.read(1)
     assert np.isfinite(arr).all()
     assert float(arr.min()) >= 0.0 and float(arr.max()) <= 1.0
-    assert int((arr > 0).sum()) == 129311
+    assert int((arr > 0).sum()) == 8794
 
 
 def test_one_lattice_witness_is_not_a_complete_uniqueness_certificate():
     audit = json.loads((ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").read_text())
-    assert audit["result"]["within_3px_fraction"] == 0.4243413167
-    assert audit["result"]["this_witness_threshold_pass"] is True
+    assert audit["result"]["all_positive_cells"]["fraction"] == 0.4440527632
+    assert audit["result"]["one_witness_result_below_threshold"] is True
     assert audit["result"]["complete_registry_uniqueness_pass"] is False
-    assert audit["verdict"] == "negative; archive only, do not submit"
+    assert audit["verdict"] == "negative; archive only; do not submit"
 
 
 def test_fail_closed_cli():

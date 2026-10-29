@@ -15,7 +15,7 @@ def test_current_archive_candidate_format_recomputed_from_raster():
     import numpy as np
     import rasterio
 
-    path = ROOT / "docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif"
+    path = ROOT / "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif"
     with rasterio.open(path) as src:
         data = src.read(1)
         assert src.count == 1
@@ -26,8 +26,8 @@ def test_current_archive_candidate_format_recomputed_from_raster():
         assert src.nodata is None
     assert np.isfinite(data).all()
     assert data.min() >= 0.0 and data.max() <= 1.0
-    # 10,000 painted centers become 129,311 positive pixels because radius-2 disks overlap/expand.
-    assert int((data > 0).sum()) == 129311
+    # Synthetic BGK diagnostic has 8,794 positive cells, including soft halo pixels.
+    assert int((data > 0).sum()) == 8794
 
 
 def test_historical_lwst_format_gate_is_not_current_candidate():
@@ -56,7 +56,7 @@ def test_current_candidate_is_fail_closed_and_not_a_score_claim():
     assert card["holdout_dti"]["pooled_dti"] is None
     assert card["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
     assert audit["candidate_sha256"] == card["raster_sha256"]
-    assert audit["result"]["within_3px_fraction"] == 0.4243413167
+    assert audit["result"]["all_positive_cells"]["fraction"] == 0.4440527632
     assert audit["result"]["complete_registry_uniqueness_pass"] is False
     assert 0 < len(card["submission_note"]) <= 140
 

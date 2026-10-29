@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "recorded_utc": "2026-10-29T00:01:30Z",
-  "candidate": "docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
-  "candidate_sha256": "ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e",
-  "candidate_positive_pixels": 129311,
-  "method": "Final positive pixels within Euclidean distance 3 raster pixels from a positive lattice cell; distance transform recomputed from the pinned public GitHub artifact.",
+  "recorded_utc": "2026-10-29T00:13:00Z",
+  "candidate": "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+  "candidate_sha256": "7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f",
+  "candidate_positive_cells": 8794,
+  "candidate_hard_cells_gt_0_5": 6178,
   "witness": {
     "repo": "buffedlizard55-lab/GEMSDOE24",
     "commit": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
@@ -13,17 +13,15 @@
     "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52c4d697f0647dc9b2",
     "same_crs_shape_transform": true
   },
+  "method": "For each candidate positive pixel, compute Euclidean distance in pixels to nearest positive lattice pixel; report fraction <= 3 px. Hard cells are candidate values >0.5; all positive cells are >0.",
   "result": {
-    "within_3px_positive_pixels": 54872,
-    "within_3px_fraction": 0.4243413167,
+    "all_positive_cells": {"within_3px": 3905, "total": 8794, "fraction": 0.4440527632},
+    "hard_cells": {"within_3px": 2687, "total": 6178, "fraction": 0.4349303982},
     "threshold": 0.70,
-    "this_witness_threshold_pass": true,
+    "one_witness_result_below_threshold": true,
     "complete_registry_uniqueness_pass": false,
-    "reason": "The complete 386-raster registry and pre-placement continuous surface were not available. A pass against one witness is not a uniqueness certificate."
+    "reason": "This one witness check is not a complete registry audit. The registry and official footprint are absent; pre-placement surface rank correlation was not computed. The raster itself uses synthetic fields and footprint."
   },
-  "holdout": {
-    "status": "NOT RUN",
-    "reason": "Competition feature/label rasters are absent from this checkout."
-  },
-  "verdict": "negative; archive only, do not submit"
+  "holdout": {"status": "NOT RUN", "score_estimate": null, "reason": "Competition training features and labels are absent."},
+  "verdict": "negative; archive only; do not submit"
 }

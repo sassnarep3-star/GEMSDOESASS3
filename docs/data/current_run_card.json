@@ -1,54 +1,78 @@
 {
   "schema_version": 1,
-  "recorded_utc": "2026-10-29T00:01:30Z",
-  "lane_id": "GEMSDOESASS3-H-SASS3-A-LWST-GeoConduit",
-  "hypothesis": "Diagnostic-only synthetic NNE corridor pattern. This is not a geology-tested hypothesis: no feature or label raster was available in this checkout, and the generated pixels were not derived from measured geophysical evidence.",
-  "mechanism": "Deterministic placement of 10,000 seeded centers on six hand-coded NNE-oriented corridors with 400 m random perpendicular jitter; each center burns a radius-2-pixel disk. The resulting raster has 129,311 positive pixels, not 10,000 positive pixels.",
-  "mimic": "Unrelated linear geomorphic or lithologic boundaries, drainage/ridge lineaments, and synthetic cartographic regularity can mimic the hand-coded corridors; no data-driven test of these mimics was possible.",
+  "recorded_utc": "2026-10-29T00:13:00Z",
+  "lane_id": "GEMSDOESASS3-H-BGK-PBE-EXP1 (synthetic diagnostic only)",
+  "hypothesis": "BGK-PBE is a geological hypothesis: basement gravity-gradient edges, radiometric potassium/K-eTh alteration, and geodetic dilatation could jointly indicate concealed geothermal faults near piedmont-basin transitions. The checked-in raster does not test this hypothesis; its fields and footprint are synthetic placeholders.",
+  "mechanism": "The archived generator synthesizes NNE linear pulses, a hand-coded transition band, sinusoidal pseudo-gravity, filtered random pseudo-potassium, and coordinate-derived pseudo-dilatation inside an approximate ellipse. These are not values read from the competition stack or USGS data. The raster has 6,178 hard cells (>0.5) and 8,794 total positive cells (>0).",
+  "mimic": "Plutonic intrusive margins, lithologic contacts, playa/shoreline boundaries, drainage, and arbitrary linear cartographic patterns could mimic faults. The synthetic raster does not model or suppress these mimics using real geology.",
   "holdout_dti": {
     "status": "NOT RUN",
     "evaluator_version": null,
     "withheld_positive_count": null,
     "pooled_dti": null,
     "ci95": null,
-    "reason": "The official training feature and label rasters, and the cached evaluator inputs, are absent from this checkout. No score estimate or holdout result is supportable."
+    "reason": "Official training features and labels are absent. The synthetic pseudo-features cannot be evaluated as model predictions."
   },
   "leakage_canary": {
-    "status": "NOT RUN for this candidate",
-    "reason": "No candidate feature stack or holdout labels are present. The historical 51-feature canary is not transferable to this synthetic raster."
+    "status": "NOT RUN for this raster",
+    "reason": "No real feature stack or holdout labels are present. The historical 51-channel canary is not applicable to this synthetic raster."
   },
   "registry_correlation_and_overlap": {
-    "pre_placement_surface": "NOT AVAILABLE: the generator directly produces a binary raster and has no scored continuous surface.",
+    "pre_placement_surface": "NOT CLEARED: no real prediction surface or official active-footprint mask is present; full registry unavailable.",
     "pre_placement_rank_correlation": null,
-    "final_dot_overlap_vs_pinned_calibration_lattice": 0.4243413167,
-    "final_dot_overlap_label": "Measured fraction of candidate positive pixels within 3 px of the lattice witness; 54,872 / 129,311. This one-witness result is below 70%, but is not a complete registry audit.",
-    "pinned_lattice_sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
-    "full_registry_audit": "NOT RUN: the 386-raster registry used in historical receipts is not in this checkout.",
+    "final_dot_overlap_vs_pinned_calibration_lattice": {
+      "all_positive_cells_fraction": 0.4440527632,
+      "all_positive_cells_within_3px": 3905,
+      "all_positive_cells_count": 8794,
+      "hard_cells_fraction": 0.4349303982,
+      "hard_cells_within_3px": 2687,
+      "hard_cells_count": 6178,
+      "threshold": 0.7
+    },
+    "pinned_lattice_sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52c4d697f0647dc9b2",
+    "full_registry_audit": "NOT RUN: full registry unavailable in this checkout.",
     "literal_uniqueness_gate": "NOT CLEARED"
   },
-  "raster_sha256": "ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e",
+  "raster_sha256": "7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f",
   "validator_output": {
     "single_band": true,
     "dtype": "float32",
     "crs": "EPSG:32611",
-    "shape": [3730, 3292],
-    "transform": [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0],
-    "transform_source": "data/prepared_manifest.json; organizer sample_submission.tif is not present for direct comparison",
+    "shape": [
+      3730,
+      3292
+    ],
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "transform_source": "recorded grid specification; official sample_submission.tif absent for direct comparison",
+    "nodata": null,
     "full_array_finite": true,
     "full_array_nan_count": 0,
     "full_array_inf_count": 0,
-    "full_array_range": [0.0, 1.0],
-    "no_nan_inside_footprint": "Not independently checked against the organizer footprint mask; all cells in this raster are finite.",
-    "format_gate": "PASS against recorded grid specification only; not organizer acceptance",
-    "uniqueness_gate": "NOT CLEARED",
-    "holdout_gate": "NOT RUN"
+    "full_array_range": [
+      0.0,
+      1.0
+    ],
+    "positive_cells": 8794,
+    "hard_cells_gt_0_5": 6178,
+    "footprint_match": "NOT VERIFIED; the generator uses a synthetic ellipse and range masks, not the official footprint",
+    "format_gate": "Local format pass against recorded metadata only; not organizer acceptance",
+    "holdout_gate": "NOT RUN",
+    "uniqueness_gate": "NOT CLEARED"
   },
-  "submission_name": "gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros",
-  "submission_note": "Archive-only synthetic corridor raster; no holdout or full-registry uniqueness clearance.",
-  "submission_note_length": 91,
+  "submission_name": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros",
+  "submission_note": "Archive-only synthetic BGK-PBE stand-in; no real features, holdout, or complete uniqueness check. DO NOT SUBMIT.",
+  "submission_note_length": 112,
   "verdict": "negative",
   "ok_to_download_for_analysis": true,
   "ok_to_submit": false,
-  "download_path": "docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif",
-  "status_reason": "Do not submit. Format-only checks pass against the recorded grid; score validation was not run, pre-placement lane check is unavailable, and the complete registry comparison is missing. The measured 42.4341% lattice overlap alone does not establish uniqueness."
+  "download_path": "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+  "status_reason": "Do not submit. File-format properties pass locally against the recorded grid only; footprint/sample agreement, holdout score, candidate-specific canary, pre-placement test, and complete registry comparison are absent. One-lattice final-dot overlaps below 70% do not establish uniqueness.",
+  "zip_sha256": "965be47e20a7d84dd9874bacc45d7e1a8dbf36b6ecfad99aa4fb5735bedd5c5c"
 }
