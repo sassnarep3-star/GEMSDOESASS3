@@ -2,7 +2,7 @@
 
 ## Decision (2026-10-29)
 
-**Status: NOT OK to download and NOT OK to submit for any file. Neither the BGK-PBE file nor the unique-structural file is format-valid under the competition's outside-bounds rule.** The validator (`python scripts/verify_all_gates.py`) reports `OK TO DOWNLOAD: NO (BLOCKED)` and `OK TO SUBMIT: NO` for the current candidate. Download approval now requires the outside-bounds, literal-lattice and registry checks to pass on the file itself, and fails closed when any cannot be measured (IR-SASS3-41, 42, 49).
+**Status: NOT OK to download and NOT OK to submit for any file. Neither the BGK-PBE file nor the unique-structural file is format-valid under the competition's outside-bounds rule.** The validator (`python scripts/verify_all_gates.py`) reports `OK TO DOWNLOAD: NO (BLOCKED)` and `OK TO SUBMIT: NO` for the current candidate. The gate keeps `ok_to_download` false by design (archive only). `ok_to_submit` requires the format record, the outside-bounds rule, the literal lattice rule on the file itself, the uniqueness gate, the holdout gate and the leakage canary, and fails closed when any cannot be measured (IR-SASS3-41, 42, 49).
 
 | File | Download? | Submit? | Why |
 |------|-----------|---------|-----|
@@ -99,9 +99,8 @@ Source: [leaderboard](https://www.drivendata.org/competitions/306/competition-do
 
 - Submission name: `gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif`
 - SHA-256: `7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f`
-- SHA-256 (first 12): `7ab47cf53879`
-- Submission note: `GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh x dilatation blind-fault locator, NNE faults, unscored`
-- Run card: `evidence/current_run_card.json` (corrected 2026-10-29: `ok_to_download` set to false; the earlier value was true)
+- Submission note: `Archive-only synthetic BGK-PBE stand-in; no real features, holdout, or complete uniqueness check. DO NOT SUBMIT.`
+- Run card: `evidence/current_run_card.json` (main's fail-closed card: `ok_to_download` is null and `ok_to_submit` is false). The card describes this raster as an archive-only synthetic stand-in (IR-SASS3-47); its provenance is unresolved.
 - File: `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` (audit copy, not an approved download)
 
 The hypothesis for this file is in `docs/research/hypotheses_ranked_20261028.md` (BGK-PBE, PR #16). No holdout result exists for it.
@@ -164,13 +163,14 @@ Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data
 Rules applied: lane checks (rank correlation ≤ 0.90; ≤ 70% of dots within 3 px of any registry raster, checked on surface and dots), the leakage canary (single-feature AUC ≤ 0.90), buffered hide-and-recover with visible-only masking, labels reported only as HOLDOUT-DTI or ORGANIZER-CONFIRMED, run card JSON, budget of 3 experiments or 2 hours. A failed uniqueness gate is never permission to submit. No copying of previous submissions. The protocol's lane paragraph is missing from the request (IR-SASS3-37), so the lane is defined here by the rules above only.
 
 **Current run cards:**
-- BGK-PBE (current): `evidence/current_run_card.json` and `evidence/run_card.json`. Verdict: `blocked_outside_bounds`; `ok_to_download` false; `ok_to_submit` false.
-- Unique-structural placeholder (PR #19): `evidence/run_card_unique_structural_20261029.json`. Verdict: negative; `ok_to_download` corrected to false; `ok_to_submit` false.
+- BGK-PBE (current): `evidence/current_run_card.json` and `evidence/run_card.json`. Verdict: `negative`; `ok_to_submit` false; `ok_to_download` null (main's fail-closed design).
+- Unique-structural placeholder (PR #19): `evidence/run_card_unique_structural_20261029.json`. Verdict: negative; `ok_to_download` set to false (was true; corrected, IR-SASS3-49); `ok_to_submit` false.
 - LWST (archive): experiment ledger `evidence/lwst_experiment_ledger.json`; review `evidence/independent_review_20261028.json`. NOT OK to submit.
+
 
 ## How to submit (only when every gate passes)
 
-1. Run `python scripts/verify_all_gates.py` with the competition data restored. It must print `OK TO DOWNLOAD: YES (APPROVED)` and `OK TO SUBMIT: YES`. Anything else means do not submit.
+1. Run `python scripts/verify_all_gates.py` with the competition data restored. It must exit 0 with `ok_to_submit` true. Anything else means do not submit.
 2. Run the fold-honest evaluator and the feature canaries. Report the version, withheld-positive count and spatial-block CI (HOLDOUT-DTI).
 3. Check rank correlation and final-dot overlap against every accessible registry raster, with no exclusions. Fail closed when coverage is incomplete.
 4. Run the leakage canary (AUC ≤ 0.90) and buffered hide-and-recover with visible-only masking.

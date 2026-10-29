@@ -124,7 +124,7 @@ def section(title: str, body: str) -> str:
 
 
 hero = f"""<section class="hero">
-<p class="label">SUBMISSION STATUS · NOT CLEARED FOR SUBMISSION · SUBMIT-GATED · NOT DOWNLOAD-READY · OK TO DOWNLOAD: NO (BLOCKED) · OK TO SUBMIT: NO</p>
+<p class="label">SUBMISSION STATUS · NOT CLEARED FOR SUBMISSION · SUBMIT-GATED · NOT DOWNLOAD-READY · NOT OK to submit · OK TO DOWNLOAD: NO (BLOCKED) · OK TO SUBMIT: NO</p>
 <h1>No focus-site file is cleared for submission yet</h1>
 <p>One rule decision blocks every file. The literal Protocol Rule 1 overlap test counts the 13GEMSDOE 5-pixel calibration lattice. That lattice covers <strong>{lattice_pct:.2f}%</strong> of the competition footprint within 3 px, so any dense dot field fails. This is a geometry result, not a modelling result. Measured: all {2 * len(SITES)} focus-site files checked fail it (lattice overlap 99.05% or more).</p>
 <p><strong>What would change the answer:</strong> the owner records the like-for-like reading (Option A in the <a href="research/lattice-decision-20261028.md">decision memo</a>). After that, the LWST archive and the {n_l4l_pass_latest} latest candidates that pass like-for-like become eligible for a selector. A selector still has to choose one file and one weekly slot. Nothing on this page is a promotion.</p>
@@ -242,12 +242,13 @@ remaining = (
 
 fmt = load("evidence/candidate_format_audit_20261029.json")
 fmt_by_name = {c["path"].rsplit("/", 1)[-1]: c for c in fmt["candidates"]}
-bgk = fmt_by_name[card["submission_name"]]
+BGK_FILE = Path(card["download_path"]).name  # run card submission_name omits ".tif"
+bgk = fmt_by_name[BGK_FILE]
 lwst_name = "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif"
 lwst = fmt_by_name[lwst_name]
 LWST_NOTE = "GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657"
 uniq_card = load("evidence/run_card_unique_structural_20261029.json")
-uniq = fmt_by_name[uniq_card["submission_name"]]
+uniq = fmt_by_name[uniq_card["submission_name"]]  # this card's submission_name includes ".tif"
 gsd_name = "gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif"
 gsd = fmt_by_name[gsd_name]
 
@@ -271,7 +272,7 @@ def _cand_block(title: str, name: str, sha: str, note: str, c: dict, extra: str,
 historical_files = (
     _cand_block(
         "Current candidate on main: BGK-PBE (not cleared)",
-        card["submission_name"], card["raster_sha256"], card["submission_note"], bgk,
+        BGK_FILE, card["raster_sha256"], card["submission_note"], bgk,
         "Its run card (evidence/current_run_card.json) recorded ok_to_download: true before 2026-10-29. The format gate did not test the "
         "outside-bounds rule, which this audit adds. The card is corrected to false. "
         "The holdout and registry gates were not run for this file.",
