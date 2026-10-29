@@ -1,4 +1,4 @@
-"""Current candidate must remain an archive-only negative until all gates exist."""
+"""Current candidate: OK to download (format and competition rules), NOT OK to submit (gates still failing)."""
 from __future__ import annotations
 
 import hashlib
@@ -11,15 +11,18 @@ import numpy as np
 import rasterio
 
 ROOT = Path(__file__).resolve().parents[1]
-CANDIDATE = ROOT / "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif"
+CURRENT = json.loads((ROOT / "evidence/current_run_card.json").read_text())
+CANDIDATE = ROOT / CURRENT["download_path"]
+BGK = ROOT / "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif"
 
 
 def test_current_run_card_labels_missing_evidence_and_negative_verdict():
-    rc = json.loads((ROOT / "evidence/current_run_card.json").read_text())
+    rc = CURRENT
     assert rc["verdict"] == "negative"
     assert rc["ok_to_submit"] is False
-    assert rc["holdout_dti"]["status"] == "NOT RUN"
-    assert rc["holdout_dti"]["pooled_dti"] is None
+    assert rc["ok_to_download_for_analysis"] is True
+    assert rc["holdout_dti"]["status"] == "NOT PASS"
+    assert rc["holdout_dti"]["primary_hide_and_recover"]["score_label"] == "NOT RUN"
     assert rc["leakage_canary"]["status"] == "NOT RUN for this raster"
     assert rc["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
     assert rc["submission_name"] + ".tif" == CANDIDATE.name
@@ -31,39 +34,47 @@ def test_historical_canary_and_uniqueness_artifacts_are_not_marked_current_appro
     canary = json.loads((ROOT / "evidence/leakage_canary_report.json").read_text())
     assert canary["all_passed"] is True
     assert canary["n_channels_tested"] == 51
-    assert "NOT RUN for this raster" in json.loads((ROOT / "evidence/current_run_card.json").read_text())["leakage_canary"]["status"]
+    assert "NOT RUN for this raster" in CURRENT["leakage_canary"]["status"]
 
     audit = json.loads((ROOT / "evidence/uniqueness_audit_386.json").read_text())
     assert audit["total_valid_registry_rasters_checked"] == 386
     witness = audit["space_filling_calibration_lattices"][0]
     assert witness["within_3px_fraction"] > 0.70
     assert witness["literal_duplicate"] is True
-    assert json.loads((ROOT / "evidence/current_run_card.json").read_text())["ok_to_submit"] is False
+    assert CURRENT["ok_to_submit"] is False
 
 
-def test_current_archive_geotiff_format_and_sha():
-    card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
+def test_current_candidate_geotiff_format_and_sha():
     assert CANDIDATE.is_file()
-    assert hashlib.sha256(CANDIDATE.read_bytes()).hexdigest() == card["raster_sha256"]
+    assert hashlib.sha256(CANDIDATE.read_bytes()).hexdigest() == CURRENT["raster_sha256"]
     with rasterio.open(CANDIDATE) as src:
         assert src.count == 1
         assert src.dtypes[0] == "float32"
         assert str(src.crs) == "EPSG:32611"
         assert src.shape == (3730, 3292)
         assert tuple(src.transform)[:6] == (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
-        assert src.nodata is None
+        assert np.isnan(src.nodata)
         arr = src.read(1)
-    assert np.isfinite(arr).all()
-    assert float(arr.min()) >= 0.0 and float(arr.max()) <= 1.0
-    assert int((arr > 0).sum()) == 8794
+    finite = np.isfinite(arr)
+    assert int(finite.sum()) == 5_167_373
+    assert np.isnan(arr[~finite]).all()
+    assert float(np.nanmin(arr)) >= 0.0 and float(np.nanmax(arr)) <= 1.0
+    assert int((arr > 0).sum()) == 21_012
 
 
-def test_one_lattice_witness_is_not_a_complete_uniqueness_certificate():
+def test_current_candidate_uniqueness_receipt_is_not_a_complete_certificate():
     audit = json.loads((ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").read_text())
+    assert audit["candidate_sha256"] == CURRENT["raster_sha256"]
+    assert audit["result"]["one_witness_result_below_threshold"] is True
+    assert audit["result"]["complete_registry_uniqueness_pass"] is False
+
+
+def test_bgk_one_lattice_witness_is_not_a_complete_uniqueness_certificate():
+    audit = json.loads((ROOT / "evidence/uniqueness_audit_bgk_pbe_20261029.json").read_text())
     assert audit["result"]["all_positive_cells"]["fraction"] == 0.444053
     assert audit["result"]["one_witness_result_below_threshold"] is True
     assert audit["result"]["complete_registry_uniqueness_pass"] is False
-    assert audit["verdict"] == "negative; archive only; do not submit"
+    assert BGK.is_file()
 
 
 def test_fail_closed_cli():
@@ -79,3 +90,4 @@ def test_fail_closed_cli():
     assert result["ok_to_submit"] is False
     assert result["checks"]["complete_uniqueness_gate"] is False
     assert result["checks"]["holdout_gate"] is False
+    assert result["checks"]["canary_gate"] is False

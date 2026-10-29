@@ -1,48 +1,20 @@
 {
-  "schema_version": 1,
-  "recorded_utc": "2026-10-29T00:13:00Z",
-  "candidate": "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
-  "candidate_sha256": "7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f",
-  "candidate_positive_cells": 8794,
-  "candidate_hard_cells_gt_0_5": 6178,
-  "witness": {
-    "repo": "buffedlizard55-lab/GEMSDOE24",
-    "commit": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
-    "path": "inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
-    "url": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
-    "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52c4d697f0647dc9b2",
-    "same_crs_shape_transform": true
-  },
-  "method": "For each candidate positive pixel, compute Euclidean distance in pixels to nearest positive lattice pixel; report fraction <= 3 px. Hard cells are candidate values >0.5; all positive cells are >0.",
-  "result": {
-    "all_positive_cells": {
-      "within_3px": 3905,
-      "total": 8794,
-      "fraction": 0.444053
-    },
-    "hard_cells": {
-      "within_3px": 2687,
-      "total": 6178,
-      "fraction": 0.43493
-    },
-    "threshold": 0.7,
-    "one_witness_result_below_threshold": true,
-    "complete_registry_uniqueness_pass": false,
-    "reason": "This one witness check is not a complete registry audit. The registry and official footprint are absent; pre-placement surface rank correlation was not computed. The raster itself uses synthetic fields and footprint.",
-    "output_raster_vs_lattice_sampled_spearman": -0.00163,
-    "spearman_sample_size": 300000,
-    "spearman_scope": "All finite raster cells sampled; not a pre-placement surface comparison over the official active footprint.",
-    "blob_dot_overlap": {
-      "blobs": 10,
-      "within_3px_fraction": 0.5,
-      "definition": "8-connected value==1 components represented by rounded centroid; unsuitable for line-like merged blobs, shown alongside all-pixel measure."
-    }
-  },
-  "holdout": {
-    "status": "NOT RUN",
-    "score_estimate": null,
-    "reason": "Competition training features and labels are absent."
-  },
-  "verdict": "negative; archive only; do not submit",
-  "method_receipt": "evidence/lattice_lane_check_selected_20261029.json"
+ "schema_version": 1,
+ "recorded_utc": "2026-10-29T00:38:29.160636+00:00",
+ "candidate": "docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+ "candidate_sha256": "7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a",
+ "candidate_positive_cells": 21012,
+ "source_receipt": "/home/user/GEMSDOESASS3/evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json",
+ "method": "Literal Protocol Rule 1 vs all registry rasters (|Spearman|<=0.90 and within-3px<=0.70)",
+ "result": {
+  "registry_rasters_compared": 386,
+  "threshold": 0.7,
+  "one_witness_result_below_threshold": true,
+  "one_witness_note": "Lattice witness within-3px fraction on inside-footprint dots (see literal audit).",
+  "complete_registry_uniqueness_pass": false,
+  "reason": "Literal rule passes against all registry rasters, but the surface stage used the emitted binary surface because the pre-placement continuous surface was not retained. Not CLEARED for a slot.",
+  "literal_rule_passed": true,
+  "worst_within_3px_fraction": 0.6899866742813631,
+  "worst_abs_spearman": 0.1504139046570531
+ }
 }

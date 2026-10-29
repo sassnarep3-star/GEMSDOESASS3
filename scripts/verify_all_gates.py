@@ -30,11 +30,36 @@ def sha256(path: Path) -> str:
 
 
 def _footprint_mask():
-    """Finite cells of the organizer sample_submission.tif (the scored region), or None if the data is absent."""
+    """Finite cells of the organizer sample_submission.tif (the scored region).
+
+    Falls back to the packed mask in evidence/organizer_footprint_mask.npz (exported from the sample by
+    scripts/export_footprint_mask.py) so that a fresh checkout without .cache/ can still check the rule.
+    Returns None only if neither is available.
+    """
     for cand in (ROOT / ".cache/gems_data/sample_submission.tif", Path("/tmp/gems_data/sample_submission.tif")):
         if cand.is_file():
             with rasterio.open(cand) as src:
                 return np.isfinite(src.read(1))
+    packed = ROOT / "evidence/organizer_footprint_mask.npz"
+    if packed.is_file():
+        z = np.load(packed)
+        shape = tuple(int(x) for x in z["shape"])
+        bits = np.unpackbits(z["packed"])[: shape[0] * shape[1]]
+        return bits.reshape(shape).astype(bool)
+    return None
+
+
+def _lattice_mask():
+    """Positive cells of the 13GEMSDOE calibration lattice, or None. Falls back to evidence/calibration_lattice_mask.npz."""
+    cand = ROOT / ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
+    if cand.is_file():
+        with rasterio.open(cand) as lat_ds:
+            return np.nan_to_num(lat_ds.read(1), nan=0.0) > 0.0
+    packed = ROOT / "evidence/calibration_lattice_mask.npz"
+    if packed.is_file():
+        z = np.load(packed)
+        shape = tuple(int(x) for x in z["shape"])
+        return np.unpackbits(z["packed"])[: shape[0] * shape[1]].reshape(shape).astype(bool)
     return None
 
 
@@ -58,6 +83,7 @@ def verify() -> dict:
     ]
     check("run_card_copies_match", all(copy == card for copy in copies), "run card copies differ")
     check("candidate_exists", tif.is_file(), f"missing {tif}")
+    footprint = _footprint_mask() if tif.is_file() else None
     if tif.is_file():
         digest = sha256(tif)
         check("sha256_matches", digest == card["raster_sha256"], f"actual digest {digest}")
@@ -69,31 +95,32 @@ def verify() -> dict:
             check("shape_matches_card", list(src.shape) == card["validator_output"]["shape"])
             transform = [float(x) for x in tuple(src.transform)[:6]]
             check("transform_matches_card", transform == card["validator_output"]["transform"])
-            check("nodata_matches_card", src.nodata is None)
-            check("all_values_finite", bool(np.isfinite(arr).all()))
-            check("all_values_in_0_1", bool(arr.min() >= 0 and arr.max() <= 1))
-            check("positive_cell_count_matches_audit", int((arr > 0).sum()) == card["validator_output"]["positive_cells"])
+            # Organizer sample convention: nodata NaN, NaN outside the footprint (official rule: null or nan).
+            check("nodata_matches_card", src.nodata is None or bool(np.isnan(src.nodata)))
+            # Official rule: data outside the bounds is null or nan -> every outside cell must be NaN; inside all finite.
+            check("finite_inside_footprint_only", footprint is not None and bool(np.isfinite(arr[footprint]).all()) and bool(np.isnan(arr[~footprint]).all()), "inside footprint not all finite, or outside not all NaN")
+            check("all_values_in_0_1", bool(np.nanmin(arr) >= 0 and np.nanmax(arr) <= 1))
+            check("positive_cell_count_matches_audit", int(np.nansum(arr > 0)) == card["validator_output"]["positive_cells"])
     # Competition rules (page 967): "data outside the bounds is null or nan". Zeros outside are the convention of the
     # owner-scored files (IR-SASS3-27), so only NON-ZERO finite cells outside the footprint fail. Pending without data.
     # Added 2026-10-29 (IR-SASS3-42, 44): the format checks above do not test this rule, so it gates approval below.
-    footprint = _footprint_mask() if tif.is_file() else None
     if tif.is_file() and footprint is not None:
         with rasterio.open(tif) as src:
             raw = src.read(1)
         outside = raw[~footprint]
         n_nonzero_out = int(np.count_nonzero(np.isfinite(outside) & (outside != 0)))
-        check("outside_bounds_null_or_zero", n_nonzero_out == 0, f"{n_nonzero_out} non-zero cells outside the competition bounds")
+        # Official rule (page 967): data outside the bounds is null or nan. Zeros outside are NOT compliant (IR-SASS3-64).
+        n_finite_out = int(np.count_nonzero(np.isfinite(outside)))
+        check("outside_bounds_null_or_zero", n_finite_out == 0, f"{n_finite_out} finite cells outside the competition bounds (official rule: null or nan)")
     else:
         check("outside_bounds_null_or_zero", False, "PENDING_DATA: competition footprint absent; outside-bounds rule not checked")
 
     # Literal lattice rule measured on THIS file (<= 70% of its positive cells inside the footprint within 3 px of the
     # pinned 13GEMSDOE calibration lattice). Pending without the data.
-    lattice_path = ROOT / ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
-    if tif.is_file() and footprint is not None and lattice_path.is_file():
+    lat = _lattice_mask() if (tif.is_file() and footprint is not None) else None
+    if tif.is_file() and footprint is not None and lat is not None:
         with rasterio.open(tif) as src:
             cand_pos = src.read(1) > 0.0
-        with rasterio.open(lattice_path) as lat_ds:
-            lat = np.nan_to_num(lat_ds.read(1), nan=0.0) > 0.0
         inside = cand_pos & footprint
         n_inside = int(inside.sum())
         frac = float((ndi.distance_transform_edt(~lat)[inside] <= 3.0).mean()) if n_inside else 1.0
@@ -132,7 +159,7 @@ def verify() -> dict:
             f"submissions {scoped['by_scope']['submission']['max_within3']['frac']*100:.2f}%, "
             f"calibration {scoped['by_scope']['calibration']['max_within3']['frac']*100:.2f}% (limit 70%)",
         )
-    check("holdout_gate", card["holdout_dti"]["status"] == "PASS", "candidate HOLDOUT-DTI not run")
+    check("holdout_gate", card["holdout_dti"]["status"] == "PASS", f"candidate HOLDOUT-DTI status = {card['holdout_dti']['status']}")
     check("canary_gate", card["leakage_canary"]["status"] == "PASS", "candidate leakage canary not run")
     check("candidate_not_promoted", card["verdict"] == "negative" and card["ok_to_submit"] is False)
     note_len = len(card["submission_note"])
@@ -142,7 +169,7 @@ def verify() -> dict:
     format_ok = all(checks[k] for k in (
         "run_card_copies_match", "candidate_exists", "sha256_matches", "single_band", "float32",
         "crs_matches_card", "shape_matches_card", "transform_matches_card", "nodata_matches_card",
-        "all_values_finite", "all_values_in_0_1", "positive_cell_count_matches_audit",
+        "finite_inside_footprint_only", "all_values_in_0_1", "positive_cell_count_matches_audit",
         "zip_exists", "zip_sha256_matches", "zip_contains_one_matching_tif",
         "uniqueness_receipt_matches_candidate", "one_witness_metric_is_under_threshold",
         "submission_note_length", "archive_only_ui", "candidate_not_promoted"))
@@ -154,6 +181,8 @@ def verify() -> dict:
         "ok": bool(approved and card.get("ok_to_submit") is True),
         "format_and_record_integrity": format_ok,
         "competition_rules_outside_bounds_and_literal_lattice": competition_rules_ok,
+        # Competition-download authorization stays FALSE (fail-closed, as on main; IR-SASS3-65, owner decision).
+        # The repository copy is an audit copy for analysis: see ok_to_download_for_analysis below.
         "ok_to_download": False,
         "ok_to_download_for_analysis": bool(card.get("ok_to_download_for_analysis")),
         "ok_to_submit": approved and card.get("ok_to_submit") is True,

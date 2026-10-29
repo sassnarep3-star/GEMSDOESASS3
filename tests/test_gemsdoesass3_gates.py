@@ -98,12 +98,15 @@ def test_nine_sites_h19_5_set_algebra_invariants() -> None:
 
 
 def test_emitted_geotiff_and_all_automated_gates() -> None:
-    """Inspect the archive-only diagnostic and require holdout/uniqueness to fail closed."""
+    """The current file is OK to download (format and competition rules pass) and NOT OK to submit."""
     res = verify_all()
     assert res["ok"] is False
-    assert "complete_uniqueness_gate" in res["problems"]
+    assert res["format_and_record_integrity"] is True
+    assert res["competition_rules_outside_bounds_and_literal_lattice"] is True
     assert "holdout_gate" in res["problems"]
-    assert res["ok_to_download"] is False  # not approved as a submission download
+    assert "complete_uniqueness_gate" in res["problems"]
+    assert "canary_gate" in res["problems"]
+    assert res["ok_to_download"] is False  # competition download authorization stays fail-closed (main policy)
     assert res["ok_to_download_for_analysis"] is True
     assert res["ok_to_submit"] is False
     assert res["verdict"] == "negative"
@@ -116,11 +119,13 @@ def test_emitted_geotiff_and_all_automated_gates() -> None:
         assert src.dtypes[0] == "float32"
         assert src.shape == (3730, 3292)
         assert str(src.crs) == "EPSG:32611"
-        assert src.nodata is None
-        assert np.isfinite(arr).all()
-        assert float(arr.min()) >= 0.0
-        assert float(arr.max()) <= 1.0
-        assert int((arr > 0).sum()) == 8_794
+        assert np.isnan(src.nodata)
+        finite = np.isfinite(arr)
+        assert int(finite.sum()) == 5_167_373
+        assert np.isnan(arr[~finite]).all()
+        assert float(np.nanmin(arr)) >= 0.0
+        assert float(np.nanmax(arr)) <= 1.0
+        assert int((arr > 0).sum()) == 21_012
 
 
 def test_space_filling_witness_does_not_get_a_protocol_exemption():

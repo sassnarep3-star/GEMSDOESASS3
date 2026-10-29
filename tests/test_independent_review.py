@@ -72,12 +72,10 @@ def test_current_candidate_is_fail_closed_and_not_a_score_claim():
     audit = json.loads((ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").read_text())
     assert card["verdict"] == "negative"
     assert card["ok_to_submit"] is False
-    assert card["holdout_dti"]["status"] == "NOT RUN"
-    assert card["holdout_dti"]["pooled_dti"] is None
+    assert card["holdout_dti"]["status"] in ("NOT RUN", "NOT PASS")  # fail-closed: never PASS here
     assert card["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
     assert audit["candidate_sha256"] == card["raster_sha256"]
-    assert audit["result"]["all_positive_cells"]["fraction"] == 0.444053
-    assert audit["result"]["output_raster_vs_lattice_sampled_spearman"] == -0.00163
+    assert audit["result"]["one_witness_result_below_threshold"] is True
     assert audit["result"]["complete_registry_uniqueness_pass"] is False
     assert 0 < len(card["submission_note"]) <= 140
 

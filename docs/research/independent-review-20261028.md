@@ -278,3 +278,18 @@ Ranks are qualitative expected-value/cost priorities, not measured gains. None i
   }
 }
 ```
+
+## Erratum and status update (2026-10-29)
+
+The sections above are kept as written. The corrections below supersede them where they conflict.
+
+- **C10 — lattice gap count.** The 5,379 footprint pixels outside the 3 px lattice buffer (section "lattice_gate_literal") do not reproduce. Recomputed from the lattice raster: 6,649 pixels (≤3 px), 7,992 (<3 px), 6,514 (≤3 px, after excluding catalogue labels). The conclusion stands: a 37,654-dot file cannot pass the literal rule, and the maximum compliant dot count is about 21,713. Source: `evidence/lattice_gap_check.json`, from `scripts/lattice_gap_check.py`.
+- **C11 — two measures of lattice coverage.** `footprint_fraction_within_3px_of_lattice` (0.99896) is footprint coverage. The dot-level figure for the 37,654-dot file is 99.7849% (`evidence/literal_audit_lwst_baseline.json`). The gate uses the dot-level figure.
+- **C12 — holdout gates (IR-SASS3-60).** The two holdout gates previously passed on withdrawn baselines. They now require the reproduced HIDE-RECOVER value (0.006130) and paired CIs that exclude zero. Expected blockers are unchanged: HIDE-RECOVER, SGMC, and the literal lattice rule.
+- **C13 — card contradiction (IR-SASS3-61).** `ok_to_download` in the archived 37,654-dot card is now `false`, matching the gate. The verdict is unchanged: NOT OK to submit.
+- **New candidate (supersedes the zeros file).** `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (21,012 dots, SHA-256 `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`) has NaN outside the footprint, as the competition page requires (null or nan). It passes the literal rule (inside-footprint lattice overlap 68.9987%; worst |Spearman| 0.1504 over the 386 registry rasters, binary surface only). Its HOLDOUT-DTI (SGMC) is 0.042851 [0.038871, 0.046157], below the champion control 0.064121 [0.056730, 0.071649], with disjoint CIs. Verdict: **OK to download; NOT OK to submit** (the holdout, the canary, and complete uniqueness are not cleared). Run card: `evidence/current_run_card.json`. Zeros-outside file removed (IR-SASS3-70).
+- **Non-compliant files (IR-SASS3-69).** `main`'s BGK-PBE and unique-structural files fail the literal lattice check (99.59% and 99.85%) and the outside-bounds rule (4,911 and 74,418 non-zero outside values). Both cards say `ok_to_download: false`.
+- **Download authorization (IR-SASS3-71).** `main` keeps the competition-download flag false, and this branch keeps it false. The compliant file is an analysis copy (`ok_to_download_for_analysis` true). The gate also reports main's scoped literal-registry checks for the two archives. The current file's submission verdict is NOT OK (`ok_to_submit` false).
+- **Uniqueness scope (IR-SASS3-72).** The compliant file passes the literal rule over 386 rasters, but the surface stage used the binary surface. Recorded as NOT CLEARED.
+- **Open:** the owner's decision on whether the synthetic calibration lattice counts as a registry raster (IR-SASS3-62); `scripts/independent_review.py` still cannot run in this checkout (IR-SASS3-65); the leaderboard figures in the request conflict with the live page (IR-SASS3-66).
+- **Experiment budget (IR-SASS3-68).** The run card records 3 literal candidate experiments (dense, random, dispersed), with controls not counted. E1 (H-SASS3-E) is a separate lane and was recorded as "1 of 3". If the 3-experiment cap applies to all lanes together, the total is 4 and the cap was exceeded by one. The owner must decide whether E1 counts. No further experiments run without that decision.
