@@ -124,18 +124,18 @@ def section(title: str, body: str) -> str:
 
 
 hero = f"""<section class="hero">
-<p class="label">SUBMISSION STATUS · NOT CLEARED FOR SUBMISSION · OK TO DOWNLOAD: NO (BLOCKED) · OK TO SUBMIT: NO</p>
+<p class="label">SUBMISSION STATUS · NOT CLEARED FOR SUBMISSION · SUBMIT-GATED · NOT DOWNLOAD-READY · OK TO DOWNLOAD: NO (BLOCKED) · OK TO SUBMIT: NO</p>
 <h1>No focus-site file is cleared for submission yet</h1>
 <p>One rule decision blocks every file. The literal Protocol Rule 1 overlap test counts the 13GEMSDOE 5-pixel calibration lattice. That lattice covers <strong>{lattice_pct:.2f}%</strong> of the competition footprint within 3 px, so any dense dot field fails. This is a geometry result, not a modelling result. Measured: all {2 * len(SITES)} focus-site files checked fail it (lattice overlap 99.05% or more).</p>
 <p><strong>What would change the answer:</strong> the owner records the like-for-like reading (Option A in the <a href="research/lattice-decision-20261028.md">decision memo</a>). After that, the LWST archive and the {n_l4l_pass_latest} latest candidates that pass like-for-like become eligible for a selector. A selector still has to choose one file and one weekly slot. Nothing on this page is a promotion.</p>
 <p><a href="research/independent-review-20261028.md">Independent review (2026-10-28)</a> · <a href="research/lattice-decision-20261028.md">Lattice decision memo</a></p>
-<p><strong>Download: none.</strong> The validator (scripts/verify_all_gates.py) reports <code>OK TO DOWNLOAD: NO (BLOCKED)</code> and <code>OK TO SUBMIT: NO</code> for the archived LWST file, which is kept in the repository for audit only. Do not upload any focus-site file until the owner decision is recorded.</p>
+<p><strong>Download: none.</strong> The validator (scripts/verify_all_gates.py) reports <code>OK TO DOWNLOAD: NO (BLOCKED)</code> and <code>OK TO SUBMIT: NO</code> for the archived LWST file, and the BGK-PBE file currently on main are kept in the repository for audit only. The BGK-PBE file fails the outside-bounds rule (section below). Do not upload any file until the owner decision is recorded.</p>
 <p><a href="data/lattice_bound_audit_20261028.json">Lattice bound (JSON)</a> · <a href="data/focus_site_candidate_audit_20261028.json">Per-file measurements (JSON)</a> · <a href="research/focus-site-candidates-20261028.md">Per-site table (Markdown)</a> · <a href="data/current_run_card.json">Run card</a> · <a href="executive-summary.html">Submission guide</a></p>
 </section>"""
 
 glance = f"""<section><h2>At a glance</h2><div class="scroll"><table><thead><tr><th>Question</th><th>Answer</th><th>Label and source</th></tr></thead><tbody>
 <tr><td>Can I download a file and submit it today?</td><td><strong>No.</strong></td><td>Protocol gate (this repo, recomputed 2026-10-28)</td></tr>
-<tr><td>Is the file format valid?</td><td>Yes for all 18 measured focus-site files: EPSG:32611, 3730 × 3292, float32, no NaN in the footprint, values within [0, 1].</td><td>REGISTRY-MEASUREMENT (scripts/focus_site_candidate_audit.py)</td></tr>
+<tr><td>Is the file format valid?</td><td>Yes for all 18 measured focus-site files: EPSG:32611, 3730 × 3292, float32, no NaN in the footprint, values within [0, 1], and zeros (no non-zero values) outside the bounds.</td><td>REGISTRY-MEASUREMENT (scripts/focus_site_candidate_audit.py)</td></tr>
 <tr><td>Is it unique under the literal rule?</td><td>No. Every file overlaps the lattice at 99.05% or more (limit 70%).</td><td>REGISTRY-MEASUREMENT</td></tr>
 <tr><td>Is it unique under the like-for-like reading?</td><td>Yes for the nine latest candidates against the ten references measured here (nine historical focus files plus LWST): the largest overlap is {l4l_latest_max*100:.1f}%. The LWST archive was measured earlier against 451 genuine downloads: max 66.53%.</td><td>REGISTRY-MEASUREMENT (partial registry scope; the 451-download figure is from docs/research/independent-review-20261028.md, not re-run here)</td></tr>
 <tr><td>Does the official competition have a uniqueness or dot-cap rule?</td><td>No. The rules have no overlap, uniqueness or dot-count requirement. Limits: three submissions per week; one final submission per entity; generative-AI use must be disclosed in the narrative.</td><td>ORGANIZER RULES: <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">NLR Official Rules, Sept 2026</a> (all 7 segments read 2026-10-28)</td></tr>
@@ -149,7 +149,7 @@ decision = f"""<section><h2>Decision the owner must make</h2>
 <tr><td><strong>B. Keep the literal rule</strong></td><td>No amendment. Protocol Rule 1 says log a duplicate and stop.</td><td>Nothing is eligible. Experiments are also blocked, because their output could not be submitted.</td><td>Only if the owner wants to stop submitting.</td></tr>
 <tr><td><strong>C. Pass the letter with edge cells</strong></td><td>Use at most {bound['bound_by_convention'][bound['primary_convention']]['max_dots_that_can_pass']:,} dots, with at least 30% on footprint-edge cells that no lattice dot reaches. {bound['uncovered_cells_edge_statistics']['share_within_2px_of_footprint_edge']*100:.1f}% of those cells lie within 2 px of the footprint boundary.</td><td>Passes the literal count, but only by placing dots where no fault is mapped. That lowers the score and defeats the rule's purpose.</td><td><strong>Not produced and not recommended.</strong></td></tr>
 </tbody></table></div>
-<p>I did not change any gate or run card. The gates still report BLOCKED. The owner's written decision is needed before any file is promoted.</p></section>"""
+<p>I changed the gate to add the outside-bounds check and the blocked-state acceptance; I did not change any run card. The gate reports OK TO DOWNLOAD: NO (BLOCKED) and OK TO SUBMIT: NO. The owner's written decision is needed before any file is promoted.</p></section>"""
 
 site_section = (
     "<section><h2>Executive summary: nine sites</h2>"
@@ -240,11 +240,43 @@ remaining = (
     "</ol></section>"
 )
 
+fmt = load("evidence/candidate_format_audit_20261029.json")
+fmt_by_name = {c["path"].rsplit("/", 1)[-1]: c for c in fmt["candidates"]}
+bgk = fmt_by_name[card["submission_name"]]
+lwst_name = "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif"
+lwst = fmt_by_name[lwst_name]
+LWST_NOTE = "GEMSDOESASS3 LWST-GeoConduit EXP3: 3D SPI+WijnsTheta+DualHGB300m 37654d B=2 HR=0.1111 SGMC=0.0657"
+
+
+def _cand_block(title: str, name: str, sha: str, note: str, c: dict, extra: str) -> str:
+    fp, pos, lat, v = c["footprint"], c["positive_cells"], c["lattice"], c["verdict"]
+    return (
+        f"<section><h2>{e(title)}</h2>"
+        f"<p><strong>Status: NOT download-ready. OK TO DOWNLOAD: NO (BLOCKED) · OK TO SUBMIT: NO.</strong> Run card field ok_to_submit: false. Format-valid: "
+        f"{'yes' if v['format_ok'] else 'no'}. Measured in scripts/candidate_format_audit.py (REGISTRY-MEASUREMENT).</p>"
+        "<ul>"
+        f"<li>Outside the competition bounds: {fp['outside_nonzero']:,} non-zero cells and {pos['outside_footprint']:,} positive cells. The rule is \"data outside the bounds is null or nan\". Zeros outside are tolerated (the convention of the owner-scored files); non-zero values are not.</li>"
+        f"<li>Literal lattice overlap, all positive cells: {100*lat['overlap_all_positive_cells']:.2f}%. Inside the footprint only: <strong>{100*lat['overlap_inside_footprint']:.2f}%</strong> (limit 70%). The all-cells figure passes only because the outside-bounds cells count as non-overlapping.</li>"
+        f"<li>Rank correlation with the lattice (sampled): {lat['spearman_vs_lattice_sampled']:.4f}.</li>"
+        f"</ul><p>{extra}</p>"
+        f"<p>Name: <code>{e(name)}</code><br>SHA-256: <code>{e(sha)}</code><br>Note: <code>{e(note)}</code><br>"
+        f"Path (audit copy, not linked): <code>{e(c['path'])}</code></p></section>"
+    )
+
+
 historical_files = (
-    "<section><h2>Historical archive (not cleared)</h2>"
-    f"<p>Audit copy only, not downloadable from this page: <code>{e(card['download_path'])}</code>. The validator reports OK TO DOWNLOAD: NO (BLOCKED). Run card field ok_to_submit: false.</p>"
-    f"<p>Archive: <code>{e(card['submission_name'])}</code><br>SHA-256: <code>{e(card['raster_sha256'])}</code><br>Historical note: <code>{e(card['submission_note'])}</code></p>"
-    "<p>The LWST file's SGMC-CAL HOLDOUT-DTI is 0.065702 [0.058992, 0.071240] (run label GEMSDOE32-SGMC-CAL-v3.0; independent review §5). The champion scores 0.064121 under the same evaluator and process. The intervals overlap, so this does not show an improvement.</p></section>"
+    _cand_block(
+        "Current candidate on main: BGK-PBE (not cleared)",
+        card["submission_name"], card["raster_sha256"], card["submission_note"], bgk,
+        "Its run card (evidence/current_run_card.json) records ok_to_download: true and status 'Format gate PASSED', and it "
+        "predates this measurement. The gate's format check did not test the outside-bounds rule, which this audit adds. "
+        "The holdout and registry gates were not run for this file.",
+    )
+    + _cand_block(
+        "Archived LWST file (not cleared)",
+        lwst_name, lwst["sha256"], LWST_NOTE, lwst,
+        "The LWST SGMC-CAL HOLDOUT-DTI is 0.065702 [0.058992, 0.071240] (run label GEMSDOE32-SGMC-CAL-v3.0; independent review §5). The champion scores 0.064121 under the same evaluator and process. The intervals overlap, so this does not show an improvement.",
+    )
 )
 
 body_common = "".join(

@@ -88,7 +88,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 0,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 60069
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.999218,
@@ -106,8 +110,21 @@
         "LATTICE_13GEMSDOE": -0.0008,
         "LWST_ARCHIVE": 0.034653
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.999218,
+        "LWST_ARCHIVE": 0.377849,
+        "HIST_GEMSDOE25": 1.0,
+        "HIST_GEMSDOE27": 1.0,
+        "HIST_GEMSDOE28": 0.934792,
+        "HIST_GEMSDOE30": 1.0,
+        "HIST_GEMSDOE31": 0.940785,
+        "HIST_GEMSDOE32": 0.884766,
+        "HIST_GEMSDOE33": 0.962393,
+        "HIST_GEMSDOE36": 0.885615
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": true,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": false,
         "max_overlap_vs_other_focus_hist": 1.0,
@@ -133,7 +150,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 37654
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.996893,
@@ -152,8 +173,22 @@
         "LATTICE_13GEMSDOE": -0.002001,
         "LWST_ARCHIVE": 0.0177
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.996893,
+        "LWST_ARCHIVE": 0.32865,
+        "HIST_GEMSDOE24": 0.52021,
+        "HIST_GEMSDOE25": 0.504488,
+        "HIST_GEMSDOE27": 0.522415,
+        "HIST_GEMSDOE28": 0.482738,
+        "HIST_GEMSDOE30": 0.504488,
+        "HIST_GEMSDOE31": 0.486668,
+        "HIST_GEMSDOE32": 0.469538,
+        "HIST_GEMSDOE33": 0.497105,
+        "HIST_GEMSDOE36": 0.47331
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": true,
         "max_overlap_vs_other_focus_hist": 0.522415,
@@ -179,7 +214,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 44090
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.999161,
@@ -197,8 +236,21 @@
         "LATTICE_13GEMSDOE": 0.000819,
         "LWST_ARCHIVE": 0.028081
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.999161,
+        "LWST_ARCHIVE": 0.366183,
+        "HIST_GEMSDOE24": 1.0,
+        "HIST_GEMSDOE27": 1.0,
+        "HIST_GEMSDOE28": 0.931821,
+        "HIST_GEMSDOE30": 1.0,
+        "HIST_GEMSDOE31": 0.937151,
+        "HIST_GEMSDOE32": 0.881719,
+        "HIST_GEMSDOE33": 0.960581,
+        "HIST_GEMSDOE36": 0.882649
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": false,
         "max_overlap_vs_other_focus_hist": 1.0,
@@ -224,7 +276,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 37654
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 1.0,
@@ -243,8 +299,22 @@
         "LATTICE_13GEMSDOE": -0.002086,
         "LWST_ARCHIVE": 0.008597
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 1.0,
+        "LWST_ARCHIVE": 0.255112,
+        "HIST_GEMSDOE24": 0.254422,
+        "HIST_GEMSDOE25": 0.242312,
+        "HIST_GEMSDOE27": 0.258512,
+        "HIST_GEMSDOE28": 0.238036,
+        "HIST_GEMSDOE30": 0.242312,
+        "HIST_GEMSDOE31": 0.240107,
+        "HIST_GEMSDOE32": 0.236283,
+        "HIST_GEMSDOE33": 0.243427,
+        "HIST_GEMSDOE36": 0.239098
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": true,
         "max_overlap_vs_other_focus_hist": 0.258512,
@@ -270,7 +340,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 61328
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.999234,
@@ -288,8 +362,21 @@
         "LATTICE_13GEMSDOE": -0.000655,
         "LWST_ARCHIVE": 0.034049
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.999234,
+        "LWST_ARCHIVE": 0.37257,
+        "HIST_GEMSDOE24": 0.980188,
+        "HIST_GEMSDOE25": 0.980156,
+        "HIST_GEMSDOE28": 0.916156,
+        "HIST_GEMSDOE30": 0.980156,
+        "HIST_GEMSDOE31": 0.922091,
+        "HIST_GEMSDOE32": 0.86719,
+        "HIST_GEMSDOE33": 0.943289,
+        "HIST_GEMSDOE36": 0.868037
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": false,
         "max_overlap_vs_other_focus_hist": 0.980188,
@@ -315,7 +402,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 37654
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.996149,
@@ -334,8 +425,22 @@
         "LATTICE_13GEMSDOE": 4.1e-05,
         "LWST_ARCHIVE": 0.036038
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.996149,
+        "LWST_ARCHIVE": 0.404632,
+        "HIST_GEMSDOE24": 0.573671,
+        "HIST_GEMSDOE25": 0.558799,
+        "HIST_GEMSDOE27": 0.577044,
+        "HIST_GEMSDOE28": 0.524752,
+        "HIST_GEMSDOE30": 0.558799,
+        "HIST_GEMSDOE31": 0.53009,
+        "HIST_GEMSDOE32": 0.502337,
+        "HIST_GEMSDOE33": 0.543183,
+        "HIST_GEMSDOE36": 0.50486
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": true,
         "max_overlap_vs_other_focus_hist": 0.573671,
@@ -361,7 +466,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 37660
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.999097,
@@ -379,8 +488,21 @@
         "LATTICE_13GEMSDOE": -0.002724,
         "LWST_ARCHIVE": 0.027089
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.999097,
+        "LWST_ARCHIVE": 0.36649,
+        "HIST_GEMSDOE24": 1.0,
+        "HIST_GEMSDOE25": 1.0,
+        "HIST_GEMSDOE27": 1.0,
+        "HIST_GEMSDOE30": 1.0,
+        "HIST_GEMSDOE31": 0.997557,
+        "HIST_GEMSDOE32": 0.954727,
+        "HIST_GEMSDOE33": 0.998407,
+        "HIST_GEMSDOE36": 0.955204
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": false,
         "max_overlap_vs_other_focus_hist": 1.0,
@@ -406,7 +528,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 37654
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.996176,
@@ -425,8 +551,22 @@
         "LATTICE_13GEMSDOE": 0.0005,
         "LWST_ARCHIVE": 0.019288
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.996176,
+        "LWST_ARCHIVE": 0.305173,
+        "HIST_GEMSDOE24": 0.465024,
+        "HIST_GEMSDOE25": 0.449328,
+        "HIST_GEMSDOE27": 0.477665,
+        "HIST_GEMSDOE28": 0.432278,
+        "HIST_GEMSDOE30": 0.449328,
+        "HIST_GEMSDOE31": 0.43674,
+        "HIST_GEMSDOE32": 0.42054,
+        "HIST_GEMSDOE33": 0.445159,
+        "HIST_GEMSDOE36": 0.424364
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": true,
         "max_overlap_vs_other_focus_hist": 0.477665,
@@ -452,7 +592,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 44090
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.999161,
@@ -470,8 +614,21 @@
         "LATTICE_13GEMSDOE": 0.000819,
         "LWST_ARCHIVE": 0.028081
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.999161,
+        "LWST_ARCHIVE": 0.366183,
+        "HIST_GEMSDOE24": 1.0,
+        "HIST_GEMSDOE25": 1.0,
+        "HIST_GEMSDOE27": 1.0,
+        "HIST_GEMSDOE28": 0.931821,
+        "HIST_GEMSDOE31": 0.937151,
+        "HIST_GEMSDOE32": 0.881719,
+        "HIST_GEMSDOE33": 0.960581,
+        "HIST_GEMSDOE36": 0.882649
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": false,
         "max_overlap_vs_other_focus_hist": 1.0,
@@ -497,7 +654,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 44090
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.999864,
@@ -516,8 +677,22 @@
         "LATTICE_13GEMSDOE": -0.003471,
         "LWST_ARCHIVE": 0.031448
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.999864,
+        "LWST_ARCHIVE": 0.329258,
+        "HIST_GEMSDOE24": 0.398004,
+        "HIST_GEMSDOE25": 0.383488,
+        "HIST_GEMSDOE27": 0.405874,
+        "HIST_GEMSDOE28": 0.370492,
+        "HIST_GEMSDOE30": 0.383488,
+        "HIST_GEMSDOE31": 0.374824,
+        "HIST_GEMSDOE32": 0.360558,
+        "HIST_GEMSDOE33": 0.380699,
+        "HIST_GEMSDOE36": 0.370674
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": true,
         "max_overlap_vs_other_focus_hist": 0.405874,
@@ -543,7 +718,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 40199
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.999179,
@@ -561,8 +740,21 @@
         "LATTICE_13GEMSDOE": -0.000627,
         "LWST_ARCHIVE": 0.029987
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.999179,
+        "LWST_ARCHIVE": 0.366228,
+        "HIST_GEMSDOE24": 1.0,
+        "HIST_GEMSDOE25": 1.0,
+        "HIST_GEMSDOE27": 1.0,
+        "HIST_GEMSDOE28": 0.995622,
+        "HIST_GEMSDOE30": 1.0,
+        "HIST_GEMSDOE32": 0.953904,
+        "HIST_GEMSDOE33": 0.999055,
+        "HIST_GEMSDOE36": 0.954402
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": false,
         "max_overlap_vs_other_focus_hist": 1.0,
@@ -588,7 +780,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 37654
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.990466,
@@ -607,8 +803,22 @@
         "LATTICE_13GEMSDOE": -0.001704,
         "LWST_ARCHIVE": 0.022053
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.990466,
+        "LWST_ARCHIVE": 0.304031,
+        "HIST_GEMSDOE24": 0.502417,
+        "HIST_GEMSDOE25": 0.488049,
+        "HIST_GEMSDOE27": 0.506321,
+        "HIST_GEMSDOE28": 0.473416,
+        "HIST_GEMSDOE30": 0.488049,
+        "HIST_GEMSDOE31": 0.475992,
+        "HIST_GEMSDOE32": 0.459314,
+        "HIST_GEMSDOE33": 0.48303,
+        "HIST_GEMSDOE36": 0.461598
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": true,
         "max_overlap_vs_other_focus_hist": 0.506321,
@@ -634,7 +844,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 37654
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.99915,
@@ -652,8 +866,21 @@
         "LATTICE_13GEMSDOE": -0.000125,
         "LWST_ARCHIVE": 0.031399
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.99915,
+        "LWST_ARCHIVE": 0.353163,
+        "HIST_GEMSDOE24": 1.0,
+        "HIST_GEMSDOE25": 1.0,
+        "HIST_GEMSDOE27": 1.0,
+        "HIST_GEMSDOE28": 0.998752,
+        "HIST_GEMSDOE30": 1.0,
+        "HIST_GEMSDOE31": 1.0,
+        "HIST_GEMSDOE33": 0.999841,
+        "HIST_GEMSDOE36": 1.0
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": false,
         "max_overlap_vs_other_focus_hist": 1.0,
@@ -679,7 +906,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 37654
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.996149,
@@ -698,8 +929,22 @@
         "LATTICE_13GEMSDOE": -0.00355,
         "LWST_ARCHIVE": 0.114099
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.996149,
+        "LWST_ARCHIVE": 0.617066,
+        "HIST_GEMSDOE24": 0.432809,
+        "HIST_GEMSDOE25": 0.420008,
+        "HIST_GEMSDOE27": 0.436713,
+        "HIST_GEMSDOE28": 0.386015,
+        "HIST_GEMSDOE30": 0.420008,
+        "HIST_GEMSDOE31": 0.391778,
+        "HIST_GEMSDOE32": 0.357784,
+        "HIST_GEMSDOE33": 0.402693,
+        "HIST_GEMSDOE36": 0.368832
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": true,
         "max_overlap_vs_other_focus_hist": 0.436713,
@@ -725,7 +970,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 41865
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.99914,
@@ -743,8 +992,21 @@
         "LATTICE_13GEMSDOE": -0.000748,
         "LWST_ARCHIVE": 0.025642
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.99914,
+        "LWST_ARCHIVE": 0.363454,
+        "HIST_GEMSDOE24": 0.997062,
+        "HIST_GEMSDOE25": 0.997038,
+        "HIST_GEMSDOE27": 0.997086,
+        "HIST_GEMSDOE28": 0.9705,
+        "HIST_GEMSDOE30": 0.997038,
+        "HIST_GEMSDOE31": 0.9748,
+        "HIST_GEMSDOE32": 0.92643,
+        "HIST_GEMSDOE36": 0.927123
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": false,
         "max_overlap_vs_other_focus_hist": 0.997086,
@@ -770,7 +1032,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 37654
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 1.0,
@@ -789,8 +1055,22 @@
         "LATTICE_13GEMSDOE": 0.00143,
         "LWST_ARCHIVE": 0.008213
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 1.0,
+        "LWST_ARCHIVE": 0.246906,
+        "HIST_GEMSDOE24": 0.344107,
+        "HIST_GEMSDOE25": 0.328942,
+        "HIST_GEMSDOE27": 0.351065,
+        "HIST_GEMSDOE28": 0.325862,
+        "HIST_GEMSDOE30": 0.328942,
+        "HIST_GEMSDOE31": 0.328942,
+        "HIST_GEMSDOE32": 0.328225,
+        "HIST_GEMSDOE33": 0.332554,
+        "HIST_GEMSDOE36": 0.336193
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": true,
         "max_overlap_vs_other_focus_hist": 0.351065,
@@ -816,7 +1096,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 38854
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.999176,
@@ -834,8 +1118,21 @@
         "LATTICE_13GEMSDOE": -0.000687,
         "LWST_ARCHIVE": 0.032011
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.999176,
+        "LWST_ARCHIVE": 0.352654,
+        "HIST_GEMSDOE24": 0.975678,
+        "HIST_GEMSDOE25": 0.974983,
+        "HIST_GEMSDOE27": 0.975781,
+        "HIST_GEMSDOE28": 0.97313,
+        "HIST_GEMSDOE30": 0.974983,
+        "HIST_GEMSDOE31": 0.974571,
+        "HIST_GEMSDOE32": 0.974031,
+        "HIST_GEMSDOE33": 0.975035
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": false,
         "max_overlap_vs_other_focus_hist": 0.975781,
@@ -861,7 +1158,11 @@
         "min_in_footprint": 0.0,
         "max_in_footprint": 1.0,
         "values_in_0_1_footprint": true,
-        "values_in_0_1_whole_grid": true
+        "values_in_0_1_whole_grid": true,
+        "outside_footprint_nonnull": 7111787,
+        "outside_footprint_nonzero": 0,
+        "positive_cells_outside_footprint": 0,
+        "positive_cells_inside_footprint": 37654
       },
       "overlap_within3px": {
         "LATTICE_13GEMSDOE": 0.991687,
@@ -880,8 +1181,22 @@
         "LATTICE_13GEMSDOE": -0.002023,
         "LWST_ARCHIVE": 0.035507
       },
+      "overlap_within3px_inside_footprint": {
+        "LATTICE_13GEMSDOE": 0.991687,
+        "LWST_ARCHIVE": 0.481118,
+        "HIST_GEMSDOE24": 0.612976,
+        "HIST_GEMSDOE25": 0.590057,
+        "HIST_GEMSDOE27": 0.616004,
+        "HIST_GEMSDOE28": 0.570962,
+        "HIST_GEMSDOE30": 0.590057,
+        "HIST_GEMSDOE31": 0.577601,
+        "HIST_GEMSDOE32": 0.561268,
+        "HIST_GEMSDOE33": 0.585542,
+        "HIST_GEMSDOE36": 0.563207
+      },
       "verdict": {
         "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
         "literal_rule_ok": false,
         "like_for_like_rule_ok": true,
         "max_overlap_vs_other_focus_hist": 0.616004,

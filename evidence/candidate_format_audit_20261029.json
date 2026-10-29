@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "generated_by": "scripts/candidate_format_audit.py",
+  "evidence_class": "REGISTRY-MEASUREMENT (format, footprint, lattice overlap, rank correlation). No holdout, no organizer score.",
+  "footprint_cells": 5167373,
+  "lattice": {
+    "path": "data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2"
+  },
+  "competition_rule_text": "data outside the bounds is null or nan (competition page 967, submission format)",
+  "candidates": [
+    {
+      "path": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
+      "sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
+      "bytes": 211511,
+      "grid": {
+        "crs": "EPSG:32611",
+        "shape": [
+          3730,
+          3292
+        ],
+        "transform": [
+          100.0,
+          0.0,
+          243350.0,
+          0.0,
+          -100.0,
+          4508550.0
+        ],
+        "count": 1,
+        "dtype": "float32",
+        "nodata": null,
+        "grid_ok": true
+      },
+      "footprint": {
+        "nan_inside": 0,
+        "values_0_1_inside": true,
+        "outside_nonnull": 7111787,
+        "outside_nonzero": 0
+      },
+      "positive_cells": {
+        "total": 37654,
+        "inside_footprint": 37654,
+        "outside_footprint": 0,
+        "hard_value_1_inside": 37654,
+        "hard_value_1_outside": 0
+      },
+      "lattice": {
+        "overlap_all_positive_cells": 0.997849,
+        "overlap_inside_footprint": 0.997849,
+        "spearman_vs_lattice_sampled": 0.000418
+      },
+      "verdict": {
+        "format_ok": true,
+        "outside_bounds_null_or_nan_strict": false,
+        "outside_bounds_no_positive_cells": true,
+        "literal_lattice_rule_on_all_dots": false,
+        "literal_lattice_rule_inside_footprint": false
+      }
+    },
+    {
+      "path": "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+      "sha256": "7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f",
+      "bytes": 64961,
+      "grid": {
+        "crs": "EPSG:32611",
+        "shape": [
+          3730,
+          3292
+        ],
+        "transform": [
+          100.0,
+          0.0,
+          243350.0,
+          0.0,
+          -100.0,
+          4508550.0
+        ],
+        "count": 1,
+        "dtype": "float32",
+        "nodata": null,
+        "grid_ok": true
+      },
+      "footprint": {
+        "nan_inside": 0,
+        "values_0_1_inside": true,
+        "outside_nonnull": 7111787,
+        "outside_nonzero": 4911
+      },
+      "positive_cells": {
+        "total": 8794,
+        "inside_footprint": 3883,
+        "outside_footprint": 4911,
+        "hard_value_1_inside": 2675,
+        "hard_value_1_outside": 3503
+      },
+      "lattice": {
+        "overlap_all_positive_cells": 0.444053,
+        "overlap_inside_footprint": 0.995879,
+        "spearman_vs_lattice_sampled": -0.001295
+      },
+      "verdict": {
+        "format_ok": false,
+        "outside_bounds_null_or_nan_strict": false,
+        "outside_bounds_no_positive_cells": false,
+        "literal_lattice_rule_on_all_dots": true,
+        "literal_lattice_rule_inside_footprint": false
+      }
+    }
+  ]
+}

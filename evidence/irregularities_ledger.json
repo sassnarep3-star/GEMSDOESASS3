@@ -198,6 +198,55 @@
       "title": "Run card ok_to_download conflicts with the gate verdict",
       "finding": "evidence/current_run_card.json records ok_to_download: true (status_reason 'Archival download only'), while scripts/verify_all_gates.py reports OK TO DOWNLOAD: NO (BLOCKED) for the same file. The two cannot both be right for a download decision.",
       "resolution": "The gate verdict governs. The site and README now say OK TO DOWNLOAD: NO, and the archive is not linked for download. The run card field should be corrected by the owner or by the next run-card writer."
+    },
+    {
+      "id": "IR-SASS3-29",
+      "severity": "HIGH (OPEN)",
+      "title": "BGK-PBE file on main is not OK to download: non-zero values outside the competition bounds",
+      "finding": "docs/downloads/...bgk-pbe...-zeros.tif (main, SHA-256 7ab47cf5...) has 4,911 non-zero cells outside the sample footprint (the competition rule is 'data outside the bounds is null or nan', competition page 967). 3,503 of its 6,178 hard dots and 4,911 of its positive cells lie outside the footprint, where they cannot score. Measured by scripts/candidate_format_audit.py -> evidence/candidate_format_audit_20261029.json.",
+      "resolution": "Gate now fails the file (tif_outside_bounds_null_or_zero) and prints OK TO DOWNLOAD: NO (BLOCKED). The run card on main still says ok_to_download true; the owner or the run-card writer must correct it. The file is kept for audit and is not linked as a download."
+    },
+    {
+      "id": "IR-SASS3-30",
+      "severity": "HIGH (OPEN)",
+      "title": "The BGK-PBE 'literal lattice pass' comes entirely from dots outside the footprint",
+      "finding": "Over all positive cells the BGK file's lattice overlap is 44.41%, which passes the 70% limit. Inside the footprint it is 99.59% (hard dots 99.40%), which fails. The outside-bounds cells count as non-overlapping, so the all-cells figure is a placement artefact of the same kind as Option C in docs/research/lattice-decision-20261028.md.",
+      "resolution": "Recorded both figures. The literal rule is applied inside the footprint in the audit. Owner decision still required (Options A, B, C)."
+    },
+    {
+      "id": "IR-SASS3-31",
+      "severity": "MEDIUM (OPEN)",
+      "title": "Gate format checks did not test the outside-bounds rule",
+      "finding": "scripts/verify_all_gates.py checked CRS, shape, transform, range, NaN and dot counts, but not the competition's 'data outside the bounds is null or nan' rule. The format gate therefore reported PASS for the BGK file, which fails that rule. Download approval depended only on format checks.",
+      "resolution": "Added tif_outside_bounds_null_or_zero (non-zero cells outside the footprint fail; pending without the data). Blocked-state acceptance now requires every failing check to be a documented one. Test run: data present -> exit 1 (BGK run card's doc_sync also failed until the README named it); data absent -> documented pending states only."
+    },
+    {
+      "id": "IR-SASS3-32",
+      "severity": "MEDIUM (OPEN)",
+      "title": "Gate registry checks read a stored LWST audit, not the current candidate",
+      "finding": "verify_all_gates.py's literal_registry_overlap_all_rasters and historical_non_lattice_subset_passed read evidence/uniqueness_audit_386.json (a stored audit with the LWST-era lattice figure of 99.7849%). They do not measure the file named in the run card. For the BGK file registry_rasters_checked is 0, so they stay pending.",
+      "resolution": "Unresolved. The current candidate's registry overlap must be measured by the gate itself before any download or submit decision relies on it."
+    },
+    {
+      "id": "IR-SASS3-33",
+      "severity": "MEDIUM (OPEN)",
+      "title": "Main's README said competition data was absent; it is restored here",
+      "finding": "The README on main says the holdout, leakage canary and registry gates cannot run because competition rasters are absent. In this session the restore script fetched 28 files from owner mirrors (data/restore_receipt.json), so the lattice, footprint and LWST checks ran here. The mirrors are not organizer-authenticated.",
+      "resolution": "README updated. Holdout-DTI for the BGK file was not run."
+    },
+    {
+      "id": "IR-SASS3-34",
+      "severity": "HIGH (OPEN; provenance)",
+      "title": "Main's README calls the BGK raster content a synthetic stand-in",
+      "finding": "The README on main (Limitations) states 'Raster content is a synthetic stand-in; real multi-sensor features must be computed on training_features.tif'. The run card on main says the file was generated from the BGK-PBE hypothesis. The two statements conflict unless the file is a placeholder.",
+      "resolution": "Unresolved. The owner must confirm how the BGK raster was produced (features actually computed from the restored training_features.tif, or a placeholder) before any use."
+    },
+    {
+      "id": "IR-SASS3-35",
+      "severity": "LOW (OPEN)",
+      "title": "BGK submission note is truncated",
+      "finding": "The BGK run card's submission_note ends with 'NNE-trendi...' (a truncated sentence, 140 characters). A submission form may show a cut-off comment.",
+      "resolution": "Unresolved. Write a complete note of at most 140 characters before any submission."
     }
   ]
 }

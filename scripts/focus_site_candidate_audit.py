@@ -157,7 +157,14 @@ def main() -> None:
                 max_in_footprint=float(np.nanmax(in_f)) if np.isfinite(in_f).any() else None,
                 values_in_0_1_footprint=bool(np.isfinite(in_f).all() and (in_f >= 0).all() and (in_f <= 1).all()),
                 values_in_0_1_whole_grid=bool(np.nanmin(arr) >= 0 and np.nanmax(arr) <= 1),
+                # Competition text: "data outside the bounds is null or nan". Non-null outside cells are reported;
+                # zeros outside are tolerated only because an owner-scored zeros file exists (see the review).
+                outside_footprint_nonnull=int(np.isfinite(arr[~foot]).sum()),
+                outside_footprint_nonzero=int(np.count_nonzero(np.isfinite(arr[~foot]) & (arr[~foot] != 0))),
+                positive_cells_outside_footprint=int((dots & ~foot).sum()),
+                positive_cells_inside_footprint=int((dots & foot).sum()),
             )
+            dots_in = dots & foot
             row = dict(
                 site=s["site"],
                 role=role,
@@ -175,6 +182,9 @@ def main() -> None:
                 if rk.startswith("HIST_") and rk == f"HIST_{s['site']}" and role == "historical_best":
                     continue  # the file against itself
                 row["overlap_within3px"][rk] = round(float(near[rk][dots].mean()) if dots.any() else 0.0, 6)
+                # Same measure with dots outside the scored footprint removed (they cannot score).
+                row.setdefault("overlap_within3px_inside_footprint", {})[rk] = (
+                    round(float(near[rk][dots_in].mean()) if dots_in.any() else 0.0, 6))
             # Sampled Spearman against the lattice and the LWST archive (binary references).
             for rk in ("LATTICE_13GEMSDOE", "LWST_ARCHIVE"):
                 ref_b = refs[rk]["dots"].ravel()[samp].astype(np.float64)
@@ -196,7 +206,8 @@ def main() -> None:
         rho_ok = all(v is None or abs(v) <= RHO_LIMIT for v in row["spearman_sampled"].values())
         return dict(
             format_ok=bool(row["format"]["grid_match"] and row["format"]["single_band"] and row["format"]["nan_in_footprint"] == 0
-                           and row["format"]["values_in_0_1_footprint"]),
+                           and row["format"]["values_in_0_1_footprint"] and row["format"]["outside_footprint_nonzero"] == 0),
+            outside_bounds_null_or_nan_strict=bool(row["format"]["outside_footprint_nonnull"] == 0),
             literal_rule_ok=bool(literal_ok and rho_ok),
             like_for_like_rule_ok=bool(dot_field_ok and rho_ok),
             max_overlap_vs_other_focus_hist=max(hist_peer.values()) if hist_peer else None,
