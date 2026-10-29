@@ -114,13 +114,18 @@ def test_review_json_verdict_is_conservative():
     assert v["uniqueness_recomputed_this_run"] is False
     assert v["unique_literal_incl_calibration_lattice"] is False
     assert v["ok_to_download_and_upload_as_valid_unique_file"] is False
-    assert v["ok_to_download_as_format_valid_archive_only"] is True
+    assert v["ok_to_download_for_competition"] is False
+    assert v["archive_file_present_for_research"] is True
+    assert r["run_card"]["ok_to_download"] is False
+    assert r["run_card"]["repository_archive_available_for_research"] is True
     assert v["beats_0_2778_champion_demonstrated"] is False
     assert v["beats_current_leaderboard_demonstrated"] is False
     assert v["promote_to_real_slot"] is False
     assert r["lattice_gate_literal"]["within3_frac"] > 0.70
     assert r["lattice_gate_literal"]["available"] is False
     assert r["lattice_gate_literal"]["recomputed_this_run"] is False
+    assert r["lattice_gate_literal"]["coverage_analysis"]["footprint_px_outside_3px_of_lattice"] == 6649
+    assert r["lattice_gate_literal"]["coverage_analysis"]["dots_needed_outside_3px_to_pass"] == 11297
     assert r["link_gate"]["verification_complete"] is True
     assert r["link_gate"]["all_resolved"] is True
     assert len(r["per_site_table"]) == 9
@@ -172,15 +177,16 @@ def test_missing_lattice_witness_reuses_only_archived_measurement(tmp_path, monk
 
 def test_pages_state_block_and_link_review():
     readme = (ROOT / "README.md").read_text()
-    assert "NO FILE IS APPROVED FOR COMPETITION SUBMISSION" in readme
+    assert "NOT OK to download and NOT OK to submit for any file" in readme
     assert "independent-review-20261028.md" in readme
     assert "Maximize P(Win)" in readme and "Own the Outcome" in readme
-    assert "Verbatim standing task prompt" in readme
+    assert "Standing prompt (verbatim" in readme
     assert "MUST GENERATE A UNIQUE TIF SUBMISSION" in readme
     for rel in ["index.html", "docs/index.html"]:
         txt = (ROOT / rel).read_text()
-        assert "NO APPROVED FILE" in txt, rel
+        assert "NOT CLEARED FOR SUBMISSION" in txt, rel
         assert "Independent review (2026-10-28)" in txt, rel
+        assert "any registry raster" in txt.lower(), rel
         assert "synthetic" in txt.lower(), rel
     for rel in ["executive-summary.html", "docs/executive-summary.html"]:
         assert "BLOCKED" in (ROOT / rel).read_text(), rel
@@ -217,4 +223,6 @@ def test_independent_review_markdown_has_run_card_and_sources():
     assert "**NO**" in md
     assert "99.78%" in md
     assert "docs.nlr.gov/docs/fy26osti/96647.pdf" in md
+    assert "**Competition download:** **NO**" in md
+    assert '"ok_to_download": false' in md
     assert md.count("| GEMSDOE") == 9

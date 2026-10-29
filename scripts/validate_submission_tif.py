@@ -12,7 +12,8 @@ Checks the requirements stated in the official problem description
   * nodata handling is reported explicitly (official text: data outside bounds is null or nan)
 
 Exit code 0 only when every hard check passes. Writes a JSON receipt when --out is given.
-Also reports whether the sample_submission.tif footprint is available for a footprint check.
+Runs the outside-bounds check against sample_submission.tif when it is present; without it the check is PENDING and the
+validator fails closed.
 """
 from __future__ import annotations
 
@@ -28,6 +29,18 @@ import rasterio
 EXPECTED_CRS = "EPSG:32611"
 EXPECTED_SHAPE = (3730, 3292)
 EXPECTED_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
+
+
+def _footprint(shape):
+    """Boolean mask of finite cells of sample_submission.tif, or None if absent or of the wrong shape."""
+    for cand in (Path(".cache/gems_data/sample_submission.tif"), Path("/tmp/gems_data/sample_submission.tif")):
+        if cand.exists():
+            with rasterio.open(cand) as src:
+                a = src.read(1)
+            if a.shape != tuple(shape):
+                return None
+            return np.isfinite(a)
+    return None
 
 
 def validate(path: Path) -> dict:
@@ -51,7 +64,18 @@ def validate(path: Path) -> dict:
         notes.append(f"{int((~finite).sum())} non-finite cells")
     if nodata is not None:
         notes.append(f"nodata declared = {nodata}; official text asks outside-bounds cells to be null or NaN")
-    notes.append("footprint check NOT run: sample_submission.tif is not in this workspace (login-walled)")
+    # Competition text (page 967): "data outside the bounds is null or nan". Non-zero finite cells outside the
+    # organizer footprint fail the rule. Zeros outside are the convention of the owner-scored files (see IR-SASS3-27).
+    # Fail closed: without the footprint this check is PENDING and the validator does not pass.
+    footprint = _footprint(arr.shape)
+    if footprint is None:
+        checks["outside_bounds_null_or_zero"] = False
+        notes.append("PENDING_DATA: outside-bounds check NOT run; sample_submission.tif footprint is not in this workspace (login-walled). Fails closed.")
+    else:
+        outside = arr[~footprint]
+        n_nonzero_out = int(np.count_nonzero(np.isfinite(outside) & (outside != 0)))
+        checks["outside_bounds_null_or_zero"] = n_nonzero_out == 0
+        notes.append(f"outside-bounds check: {n_nonzero_out} non-zero finite cells outside the footprint")
     ok = all(checks.values())
     return {
         "file": path.name,

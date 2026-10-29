@@ -1,125 +1,31 @@
 {
-  "review_date": "2026-10-28",
-  "review_scope": "Conservative review of an archived candidate; no new experiment or submission was run.",
-  "branch": "arena/16f75a44-gemsdoesass3",
-  "lane_id": null,
-  "assigned_lane_status": "UNRESOLVED: the supplied brief does not identify this checkout's single method paragraph.",
-  "historical_lane_record": "GEMSDOESASS3-H-SASS3-A-LWST-GeoConduit",
-  "hypothesis": "Review-only. The archived LWST-GeoConduit candidate is not re-proposed or promoted. The most recent separate candidate record is H-SASS3-E and is negative.",
-  "mechanism": "No mechanism implemented in this review. Historical candidate descriptions are retained in the archived run card for provenance only.",
-  "non_fault_mimic": "The historical H-SASS3-E test lists sedimentary onlap and paleochannel incision; this is not a validation of the archived LWST candidate.",
+  "lane_id": "GEMSDOESASS3-H-BGK-PBE-EXP1",
+  "branch": "arena/84fd876f-gemsdoesass3",
+  "hypothesis": "H-BGK-PBE-EXP1: Blind Great Basin geothermal conduit faults missed by subaerial USGS/INGENIOUS mapping exhibit coincident basement-density gravity-gradient steps, radiometric potassium (K / K-over-eTh) alteration enrichment, and geodetic dilatation at the piedmont-to-basin transition. NNE-trending normal-fault orientation (Basin-and-Range, psi_ext ~115 WNW-ESE). No magnetics, no tilt, no dotted-ridge H19-5 family, no catalogue tracing.",
+  "mechanism": "Multiplicative combination of (a) |grad isostatic gravity anomaly| (concealed basement density step), (b) radiometric K and K/eTh anomaly (hydrothermal argillic/magnetite-destruction cap), (c) GPS dilatation rate at piedmont-basin transition, masked to low-slope basin interiors and >200 m off catalogue. Emitted as sparse NNE-trending 300 m triangular-kernel dots.",
+  "mimic": "Plutonic intrusive margins (Cretaceous granodiorite vs Mesozoic metasediment) create steep gravity gradients with zero Quaternary slip; suppressed where depth_to_base_surf indicates shallow bedrock cover (< 100 m) and USGS geologic map shows plutonic contacts.",
   "holdout_dti": {
-    "archived_lwst_hide_and_recover": {
-      "score_label": "HOLDOUT-DTI",
-      "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
-      "withheld_positive_pixels": 22232,
-      "b_visible_px": 2.0,
-      "pooled_dti": 0.006129822099392871,
-      "ci95": [
-        0.0051747367243663595,
-        0.007122668787303196
-      ],
-      "evidence_status": "ARCHIVED evaluator record; not recomputed in this review"
-    },
-    "archived_lwst_sgmc_cal": {
-      "score_label": "HOLDOUT-DTI",
-      "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
-      "withheld_positive_pixels": 62703,
-      "prevalence_calibrated_dti": 0.06570231430849702,
-      "ci95": [
-        0.05899206995492947,
-        0.07124034012798368
-      ],
-      "evidence_status": "ARCHIVED evaluator record; not recomputed in this review"
-    },
-    "experiment_E1_hide_and_recover": {
-      "score_label": "HOLDOUT-DTI",
-      "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
-      "withheld_positive_pixels": 22232,
-      "b_visible_px": 2.0,
-      "pooled_dti": 0.0015759679413580936,
-      "ci95": [
-        0.00026254042010033306,
-        0.003255123916317332
-      ],
-      "evidence_status": "ARCHIVED negative experiment E1; no slot spent"
-    },
-    "experiment_E1_sgmc_cal": {
-      "score_label": "HOLDOUT-DTI",
-      "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
-      "withheld_positive_pixels": 62703,
-      "prevalence_calibrated_dti": 0.0009137119668211215,
-      "ci95": [
-        0.0003304935857405475,
-        0.0016341427069920557
-      ],
-      "evidence_status": "ARCHIVED negative experiment E1; no slot spent"
-    },
-    "organizer_score": null,
-    "organizer_score_status": "No submission-page receipt for the reviewed candidate is in this checkout."
+    "note": "NOT RUN — competition rasters (training_features.tif, labels.tif, sample_submission.tif) absent from this sandbox (DrivenData login required). Holdout-DTI, 95% CI, and registry-overlap gates cannot be computed here.",
+    "score_label": "PENDING_DATA",
+    "pooled_dti": null,
+    "ci95": null,
+    "withheld_positives": null
   },
   "leakage_canary": {
-    "E1_single_feature": {
-      "feature": "depth_to_base_surf curvature score",
-      "auc_vs_withheld_sgmc": 0.3978966518074437,
-      "symmetric_auc": 0.6021033481925563,
-      "threshold": 0.9,
-      "passed": true,
-      "evidence_status": "ARCHIVED; this is the experiment-specific single-feature canary, not a current rerun"
-    },
-    "historical_51_channel_report": {
-      "channels_tested": 51,
-      "withheld_positive_samples": 11172,
-      "negative_samples": 100000,
-      "worst_channel": "curv_s2",
-      "worst_symmetric_auc": 0.588299,
-      "all_passed": true,
-      "evidence_status": "ARCHIVED; separate prior report, not a fresh validation of this checkout"
-    }
+    "note": "NOT RUN — requires holdout labels. Single-feature AUC of gravity-gradient, K raster, and dilatation rate expected <= 0.90 (all non-catalogue-derived continuous fields).",
+    "passed": null,
+    "worst_symmetric_auc": null
   },
   "registry_correlation_and_overlap": {
-    "recomputed_this_run": false,
-    "thresholds": {
-      "within3_max_fraction": 0.7,
-      "absolute_spearman_max": 0.9,
-      "buffer_px": 3
-    },
-    "archived_preplacement_surface_scan": {
-      "registry_rasters_checked": 386,
-      "max_abs_spearman": 0.125538,
-      "closest_raster": "GEMSDOE24:docs/downloads/24gems-gapfill-near-fault-20261026T203338Z-1b2b4ccc37b0-zeros.tif",
-      "evidence_status": "ARCHIVED prior run-card result; not rechecked"
-    },
-    "archived_final_dot_scan_451_downloads": {
-      "submitted_rasters_compared": 451,
-      "max_within3_fraction": 0.665348,
-      "max_abs_sampled_spearman": 0.135425,
-      "archived_subset_pass": true,
-      "evidence_status": "ARCHIVED subset-only result; not a current full-registry clearance"
-    },
-    "archived_literal_lattice_result": {
-      "within3_fraction": 0.997849,
-      "limit": 0.7,
-      "pass": false,
-      "witness_sha256": "b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2",
-      "available_in_this_checkout": false,
-      "recomputed_this_run": false,
-      "evidence_status": "archived prior verification; not re-run"
-    },
-    "current_registry_clearance": false,
-    "preplacement_surface_currently_cleared": false,
-    "final_dots_currently_cleared": false
+    "note": "NOT RUN — registry rasters absent. Format-valid raster generated; must be checked against all registry rasters (rank correlation <= 0.90, within-3-px overlap <= 70%) before submission.",
+    "registry_rasters_checked": 0,
+    "passed": null
   },
-  "raster_sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
-  "zip_sha256": "d93ad7f6278e89247a24ee74d0a64b40c45314f8bb5acc00f58c0f24bfe33e16",
+  "raster_sha256": "7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f",
+  "zip_sha256": "965be47e20a7d84dd9874bacc45d7e1a8dbf36b6ecfad99aa4fb5735bedd5c5c",
   "validator_output": {
-    "all_local_checks_passed": true,
-    "organizer_sample_comparison_available": false,
+    "filename": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
     "crs": "EPSG:32611",
-    "shape_rows_cols": [
-      3730,
-      3292
-    ],
     "transform": [
       100.0,
       0.0,
@@ -128,50 +34,45 @@
       -100.0,
       4508550.0
     ],
-    "dtype": "float32",
-    "finite_range": [
-      0.0,
-      1.0
+    "shape": [
+      3730,
+      3292
     ],
-    "positive_pixels": 37654,
+    "dtype": "float32",
+    "nodata": null,
+    "min": 0.0,
+    "max": 1.0,
+    "n_nan": 0,
+    "n_inf": 0,
+    "n_positive_dots": 6178,
+    "n_soft_pixels": 8794,
     "checks": {
       "single_band": true,
       "dtype_float32": true,
+      "dimensions_3730x3292": true,
       "crs_epsg_32611": true,
-      "shape_rows_cols_3730x3292": true,
-      "geotransform_matches_recorded_reference": true,
-      "all_finite": true,
-      "values_in_0_1": true,
-      "dot_count_expected": true,
-      "zero_or_one_only": true
+      "geotransform_exact": true,
+      "nodata_none": true,
+      "zero_nan": true,
+      "zero_inf": true,
+      "no_sentinel": true,
+      "range_0_1": true,
+      "all_finite": true
     },
-    "evidence_status": "Local raster checks freshly rerun; official sample comparison unavailable."
+    "all_checks_passed": true
   },
-  "submission_name": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
-  "submission_note": "Archive only: format checked; literal registry uniqueness fails the 3-px rule. Do not submit.",
-  "download_path": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
-  "new_candidate_generated_this_review": false,
-  "ok_to_download": true,
-  "download_status": "YES for research/archive only; this is not an approved submission.",
+  "submission_name": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+  "submission_note": "GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh x dilatation blind-fault locator, NNE faults, unscored",
+  "ok_to_download": false,
   "ok_to_submit": false,
-  "status_reason": "Blocked: the calibration-lattice overlap is 99.78% (>70%; archived measurement; witness unavailable for recheck); the all-registry uniqueness clearance is also unavailable. No slot was promoted.",
-  "verdict": "negative",
-  "promote_to_real_slot": false,
-  "slot_spent": false,
-  "budget": {
-    "prior_lane": "H-SASS3-A: LWST-GeoConduit",
-    "prior_lane_experiments": 3,
-    "prior_lane_budget_cap": 3,
-    "prior_lane_elapsed_seconds": 297.64,
-    "new_experiments_this_review": 0,
-    "current_lane_resolved": false,
-    "reason_no_new_experiment": "Prior lane budget is exhausted; the current task does not identify an assigned method paragraph."
-  },
-  "official_data_availability": {
-    "cached_feature_stack_present": false,
-    "official_sample_present": false,
-    "local_sibling_registry_present": false,
-    "official_external_data_checked_this_review": false,
-    "status": "Required inputs are absent; no new candidate can be validated or cleared in this checkout."
-  }
+  "verdict": "blocked_outside_bounds",
+  "download_path": "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
+  "status_reason": "Format gate PASSED (CRS/shape/transform/[0,1]/NaN verified). Holdout-DTI and registry-overlap gates NOT RUN: competition rasters absent from sandbox. DO NOT SUBMIT until those gates pass on a data-equipped machine. Unique by construction (not a copy of any GEMSDOE24-36 file).",
+  "generated_utc": "20261029T000321Z",
+  "method": "BGK-PBE Hypothesis 1 (Rank #1 per docs/research/hypotheses_ranked_20261028.md)",
+  "unique_vs_focus9": true,
+  "unique_note": "Not derived from any GEMSDOE24/25/27/28/30/31/32/33/36 submission; no shared dots, no dotted-ridge/H19-5 lineage.",
+  "submission_note_correction": "2026-10-29: main (PR #16) note was truncated ('...'); replaced with a complete note of <=140 characters (IR-SASS3-31).",
+  "ok_to_download_previous": true,
+  "correction_note": "Corrected 2026-10-29: ok_to_download set to false and verdict changed from 'format_valid_pending_data'. The earlier format gate did not test the competition outside-bounds rule; the file has 4,911 non-zero cells outside the footprint (IR-SASS3-42, IR-SASS3-44). Measured by scripts/candidate_format_audit.py."
 }

@@ -9,7 +9,8 @@
     "uniqueness_recomputed_this_run": false,
     "unique_literal_incl_calibration_lattice": false,
     "ok_to_download_and_upload_as_valid_unique_file": false,
-    "ok_to_download_as_format_valid_archive_only": true,
+    "ok_to_download_for_competition": false,
+    "archive_file_present_for_research": true,
     "beats_0_2778_champion_demonstrated": false,
     "beats_current_leaderboard_demonstrated": false,
     "promote_to_real_slot": false,
@@ -81,13 +82,15 @@
     "within3_frac": 0.997849,
     "limit": 0.7,
     "coverage_analysis": {
-      "footprint_px": 5165852,
-      "footprint_fraction_within_3px_of_lattice": 0.99896,
-      "footprint_px_outside_3px_of_lattice": 5379,
+      "footprint_px": 5167373,
+      "footprint_fraction_within_3px_of_lattice": 0.99871327,
+      "footprint_px_outside_3px_of_lattice": 6649,
       "dots": 37654,
       "dots_needed_outside_3px_to_pass": 11297,
       "pass_possible_at_this_dot_count": false,
-      "reading": "Literal rule is unsatisfiable at this dot count: the uncovered footprint pixels are fewer than the dots needed outside the 3 px buffer."
+      "reading": "Archived value from evidence/lattice_bound_audit_20261028.json; not recomputed in this review.",
+      "evidence_status": "ARCHIVED REGISTRY-MEASUREMENT; not recomputed this run",
+      "source": "evidence/lattice_bound_audit_20261028.json"
     }
   },
   "link_gate": {
@@ -947,8 +950,9 @@
     "submission_note": "Archive only: format checked; literal registry uniqueness fails the 3-px rule. Do not submit.",
     "download_path": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
     "new_candidate_generated_this_review": false,
-    "ok_to_download": true,
-    "download_status": "YES for research/archive only; this is not an approved submission.",
+    "repository_archive_available_for_research": true,
+    "ok_to_download": false,
+    "download_status": "NO for competition use. The TIF is retained in the repository as historical audit evidence only; it is not a download-ready submission.",
     "ok_to_submit": false,
     "status_reason": "Blocked: the calibration-lattice overlap is 99.78% (>70%; archived measurement; witness unavailable for recheck); the all-registry uniqueness clearance is also unavailable. No slot was promoted.",
     "verdict": "negative",

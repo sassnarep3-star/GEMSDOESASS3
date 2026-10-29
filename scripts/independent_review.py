@@ -227,14 +227,32 @@ def lattice_gate() -> dict:
 
     path = SIB / LATTICE_REL
     if not path.exists():
-        # Preserve the previously verified measurement as an archive record, but
-        # explicitly mark it unavailable for fresh recomputation in this checkout.
+        # Keep candidate-overlap evidence archived and fail the live gate closed.
+        # Prefer the later checked-in bound audit over the older, retracted
+        # footprint count; neither is a fresh calculation in this checkout.
         archived = {}
         if OUT_JSON.exists():
             try:
                 archived = json.loads(OUT_JSON.read_text()).get("lattice_gate_literal", {})
             except (OSError, json.JSONDecodeError):
                 archived = {}
+        coverage = archived.get("coverage_analysis")
+        bound_path = ROOT / "evidence/lattice_bound_audit_20261028.json"
+        if bound_path.exists():
+            bound = json.loads(bound_path.read_text())
+            primary = bound["bound_by_convention"][bound["primary_convention"]]
+            footprint_cells = bound["footprint"]["cells"]
+            coverage = {
+                "footprint_px": footprint_cells,
+                "footprint_fraction_within_3px_of_lattice": round(primary["footprint_cells_within_3px_of_lattice"] / footprint_cells, 8),
+                "footprint_px_outside_3px_of_lattice": primary["footprint_cells_outside_buffer"],
+                "dots": bound["candidate_dots_assumed"],
+                "dots_needed_outside_3px_to_pass": int(np.ceil(bound["candidate_dots_assumed"] * 0.30)),
+                "pass_possible_at_this_dot_count": primary["candidate_37654_dots_can_pass"],
+                "reading": "Archived value from evidence/lattice_bound_audit_20261028.json; not recomputed in this review.",
+                "evidence_status": "ARCHIVED REGISTRY-MEASUREMENT; not recomputed this run",
+                "source": "evidence/lattice_bound_audit_20261028.json",
+            }
         return {
             "pass": False,
             "available": False,
@@ -248,7 +266,7 @@ def lattice_gate() -> dict:
             "witness_positive_px": archived.get("witness_positive_px"),
             "within3_frac": archived.get("within3_frac"),
             "limit": 0.70,
-            "coverage_analysis": archived.get("coverage_analysis"),
+            "coverage_analysis": coverage,
         }
     sha = hashlib.sha256(path.read_bytes()).hexdigest()
     with rasterio.open(path) as w, rasterio.open(LWST) as c:
@@ -527,8 +545,9 @@ def _run_card(fmt: dict, uq: dict, lat: dict, e1: dict, old_card: dict, ledger: 
         "submission_note": "Archive only: format checked; literal registry uniqueness fails the 3-px rule. Do not submit.",
         "download_path": str(LWST.relative_to(ROOT)),
         "new_candidate_generated_this_review": False,
-        "ok_to_download": bool(fmt.get("all_pass") and LWST.exists()),
-        "download_status": "YES for research/archive only; this is not an approved submission.",
+        "repository_archive_available_for_research": LWST.exists(),
+        "ok_to_download": False,
+        "download_status": "NO for competition use. The TIF is retained in the repository as historical audit evidence only; it is not a download-ready submission.",
         "ok_to_submit": False,
         "status_reason": _safe_block_reason(lat),
         "verdict": "negative",
@@ -569,11 +588,11 @@ def render_md(r: dict) -> str:
     A = lines.append
     A("# Independent review of the archived LWST GeoTIFF — 2026-10-28")
     A("")
-    A("> **Decision: DO NOT SUBMIT.** The archived file is available to download for research only. Its literal registry uniqueness gate fails on the archived lattice measurement, current source rasters are missing, and no new candidate was generated or cleared in this review.")
+    A("> **Decision: NO COMPETITION DOWNLOAD / NO SUBMISSION.** The TIF remains in this repository as historical audit evidence, not as a download-ready competition file. Its literal registry uniqueness gate fails on the archived lattice measurement, current source rasters are missing, and no new candidate was generated or cleared in this review.")
     A("")
     A("## Executive summary")
     A("")
-    A("- **Download:** Yes, for archive/research only. The file is `docs/downloads/" + LWST.name + "`.")
+    A("- **Competition download:** **NO**. The TIF exists in the repository as a historical audit artifact at `docs/downloads/" + LWST.name + "`, not as a download-ready submission.")
     A("- **Upload/submission:** **NO**. Archived lattice overlap exceeds the 70% limit; current full-registry uniqueness and pre-placement surface comparisons are not available to rerun. No calibration-lattice exemption is applied.")
     A("- **New unique GeoTIFF:** None created in this review. Repackaging or renaming the old file would not make it unique. Generating another raster is blocked by the missing feature stack/registry/sample, the unresolved method lane, and the exhausted prior lane budget.")
     A("- **Slot:** None spent; no promotion decision was made by a selector.")
@@ -593,17 +612,17 @@ def render_md(r: dict) -> str:
     lat_source = "archived prior verification; witness absent from this checkout" if not lat.get("available") else "recomputed from the local witness raster"
     A(f"| Literal rule including calibration lattice | **FAIL CLOSED** | {lat_text} within 3 px vs 70% limit; {lat_source}. Witness hash: `{lat.get('witness_sha256') or 'not available'}`. |")
     A(f"| Current all-registry surface and final-dot gates | **NOT VERIFIED** | No complete current registry is present. Surface scan freshness={card['registry_correlation_and_overlap']['archived_preplacement_surface_scan']['evidence_status']}; final-dot scan freshness={card['registry_correlation_and_overlap']['archived_final_dot_scan_451_downloads']['evidence_status']}. |")
-    A(f"| Download for analysis / upload to competition | **{('YES' if verdict['ok_to_download_as_format_valid_archive_only'] else 'NO')} / NO** | Archive download only; no organizer receipt or submission approval exists. |")
+    A("| Competition download / upload | **NO / NO** | The local TIF is retained for audit only; it is not download-ready for competition use and has no submission approval. |")
     A("")
     A("### Archived lattice coverage check")
     A("")
     cov = lat.get("coverage_analysis")
     if isinstance(cov, dict) and isinstance(cov.get("footprint_px_outside_3px_of_lattice"), int):
         A(
-            f"The prior witness analysis reports {cov.get('footprint_fraction_within_3px_of_lattice', 0) * 100:.2f}% of the footprint within 3 px, "
+            f"The checked-in archived bound audit reports {cov.get('footprint_fraction_within_3px_of_lattice', 0) * 100:.4f}% of the footprint within 3 px, "
             f"leaving {cov['footprint_px_outside_3px_of_lattice']:,} pixels outside the buffer. At {cov.get('dots', 37_654):,} dots, "
-            f"at least {cov.get('dots_needed_outside_3px_to_pass', 0):,} would need to be outside to meet the 70% cap, so the archived coverage calculation says the gate is unsatisfiable at that dot count. "
-            "This is a prior verified calculation, not a fresh measurement in this checkout."
+            f"at least {cov.get('dots_needed_outside_3px_to_pass', 0):,} would need to be outside to meet the 70% cap, so that archived calculation says the gate is unsatisfiable at this dot count. "
+            "The earlier 5,379-cell figure was retracted after the 2026-10-28 bound audit recomputed 6,649 uncovered cells; neither figure was freshly recomputed here."
         )
     else:
         A("No lattice coverage raster is available for a fresh calculation. The literal uniqueness gate therefore remains blocked; no exemption is inferred.")
@@ -726,7 +745,8 @@ def main() -> int:
         "uniqueness_recomputed_this_run": bool(uq.get("recomputed_this_run")),
         "unique_literal_incl_calibration_lattice": literal_unique,
         "ok_to_download_and_upload_as_valid_unique_file": False,
-        "ok_to_download_as_format_valid_archive_only": bool(fmt["all_pass"] and LWST.exists()),
+        "ok_to_download_for_competition": False,
+        "archive_file_present_for_research": LWST.exists(),
         "beats_0_2778_champion_demonstrated": False,
         "beats_current_leaderboard_demonstrated": False,
         "promote_to_real_slot": False,

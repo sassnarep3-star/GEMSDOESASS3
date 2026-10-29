@@ -1,10 +1,10 @@
 # Independent review of the archived LWST GeoTIFF — 2026-10-28
 
-> **Decision: DO NOT SUBMIT.** The archived file is available to download for research only. Its literal registry uniqueness gate fails on the archived lattice measurement, current source rasters are missing, and no new candidate was generated or cleared in this review.
+> **Decision: NO COMPETITION DOWNLOAD / NO SUBMISSION.** The TIF remains in this repository as historical audit evidence, not as a download-ready competition file. Its literal registry uniqueness gate fails on the archived lattice measurement, current source rasters are missing, and no new candidate was generated or cleared in this review.
 
 ## Executive summary
 
-- **Download:** Yes, for archive/research only. The file is `docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif`.
+- **Competition download:** **NO**. The TIF exists in the repository as a historical audit artifact at `docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif`, not as a download-ready submission.
 - **Upload/submission:** **NO**. Archived lattice overlap exceeds the 70% limit; current full-registry uniqueness and pre-placement surface comparisons are not available to rerun. No calibration-lattice exemption is applied.
 - **New unique GeoTIFF:** None created in this review. Repackaging or renaming the old file would not make it unique. Generating another raster is blocked by the missing feature stack/registry/sample, the unresolved method lane, and the exhausted prior lane budget.
 - **Slot:** None spent; no promotion decision was made by a selector.
@@ -17,11 +17,11 @@
 | Historical submitted-download comparison | **ARCHIVED ONLY — not a current clearance** | archived subset scan over 451 downloads: 66.53% max within 3 px; max sampled |Spearman| 0.135; archived subset-only pass=True. Sibling raster files are absent, and this final-dot scan does not verify the required pre-placement surface for the current registry. |
 | Literal rule including calibration lattice | **FAIL CLOSED** | 99.78% within 3 px vs 70% limit; archived prior verification; witness absent from this checkout. Witness hash: `b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2`. |
 | Current all-registry surface and final-dot gates | **NOT VERIFIED** | No complete current registry is present. Surface scan freshness=ARCHIVED prior run-card result; not rechecked; final-dot scan freshness=ARCHIVED subset-only result; not a current full-registry clearance. |
-| Download for analysis / upload to competition | **YES / NO** | Archive download only; no organizer receipt or submission approval exists. |
+| Competition download / upload | **NO / NO** | The local TIF is retained for audit only; it is not download-ready for competition use and has no submission approval. |
 
 ### Archived lattice coverage check
 
-The prior witness analysis reports 99.90% of the footprint within 3 px, leaving 5,379 pixels outside the buffer. At 37,654 dots, at least 11,297 would need to be outside to meet the 70% cap, so the archived coverage calculation says the gate is unsatisfiable at that dot count. This is a prior verified calculation, not a fresh measurement in this checkout.
+The checked-in archived bound audit reports 99.8713% of the footprint within 3 px, leaving 6,649 pixels outside the buffer. At 37,654 dots, at least 11,297 would need to be outside to meet the 70% cap, so that archived calculation says the gate is unsatisfiable at this dot count. The earlier 5,379-cell figure was retracted after the 2026-10-28 bound audit recomputed 6,649 uncovered cells; neither figure was freshly recomputed here.
 
 ## 2. Score provenance and what can be concluded
 
@@ -252,8 +252,9 @@ Ranks are qualitative expected-value/cost priorities, not measured gains. None i
   "submission_note": "Archive only: format checked; literal registry uniqueness fails the 3-px rule. Do not submit.",
   "download_path": "docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
   "new_candidate_generated_this_review": false,
-  "ok_to_download": true,
-  "download_status": "YES for research/archive only; this is not an approved submission.",
+  "repository_archive_available_for_research": true,
+  "ok_to_download": false,
+  "download_status": "NO for competition use. The TIF is retained in the repository as historical audit evidence only; it is not a download-ready submission.",
   "ok_to_submit": false,
   "status_reason": "Blocked: the calibration-lattice overlap is 99.78% (>70%; archived measurement; witness unavailable for recheck); the all-registry uniqueness clearance is also unavailable. No slot was promoted.",
   "verdict": "negative",
