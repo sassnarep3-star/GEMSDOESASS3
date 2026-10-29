@@ -2,11 +2,11 @@
 
 ## Decision (2026-10-29)
 
-**Status: the compliant file is OK to download; it is NOT OK to submit.** The current candidate is the 21k dispersed LWST file with NaN outside the footprint (`docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif`, SHA-256 `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`). It meets the official format and the literal Rule 1 lattice check. Submission is blocked by three gates: the spatially-blocked holdout (HOLDOUT-DTI below the champion, hide-and-recover not run), the leakage canary (not run on this raster), and complete uniqueness (binary surface only). The validator (`python scripts/verify_all_gates.py`) reports `OK TO DOWNLOAD: YES` and `OK TO SUBMIT: NO`. The gate sets `ok_to_download` from the format and competition checks, not from a hard-coded `false` (IR-SASS3-65, owner to confirm). `ok_to_submit` stays gated (IR-SASS3-41, 42, 49, 65).
+**Status: NOT OK to download and NOT OK to submit for any file** (competition download and submission). The repository holds one analysis copy of the compliant file, described here; it is not a competition-download authorization. The current candidate is the 21k dispersed LWST file with NaN outside the footprint (`docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif`, SHA-256 `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`). It meets the official format (NaN outside, the official rule), and it passes the literal any-registry rule (386 rasters, inside-footprint lattice overlap 68.99%, limit 70%). It is a download for analysis. Competition-download authorization stays NO (`ok_to_download` false, fail-closed as on main; owner decision, IR-SASS3-71). Submission is blocked by three gates: the spatially-blocked holdout (HOLDOUT-DTI below the champion; hide-and-recover not run), the leakage canary (not run on this raster), and complete uniqueness (binary surface only). The validator (`python scripts/verify_all_gates.py`) reports `ok_to_download_for_analysis: true`, `ok_to_download: false`, `ok_to_submit: false`. Earlier notes said the zeros-outside file was format-valid; that was wrong under the official rule (IR-SASS3-70).
 
 | File | Download? | Submit? | Why |
 |------|-----------|---------|-----|
-| `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (current candidate, NaN outside) | **YES** | **NO** | Format and literal rule pass: 21,012 dots, NaN outside (official rule), inside-footprint lattice overlap 68.99% (limit 70%). Holdout SGMC 0.042851 is below the champion control 0.064121 with disjoint CIs; hide-and-recover not run; canary not run for this raster; uniqueness is binary-surface only (IR-SASS3-64, 66). |
+| `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (current candidate, NaN outside) | Analysis copy only (competition download NO) | **NO** | Official format and literal any-registry rule pass: 21,012 dots, NaN outside, inside-footprint lattice overlap 68.99% (limit 70%). Holdout SGMC 0.042851 is below the champion control 0.064121 with disjoint CIs; hide-and-recover not run; canary not run for this raster; uniqueness is binary-surface only (IR-SASS3-70, 72). |
 | `docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` (PR #19, unique-structural placeholder) | **NO** | **NO** | 74,418 non-zero cells outside the competition bounds (rule: null or NaN). Its validator receipt said "all hard checks PASS" only because the footprint check was not run (IR-SASS3-49, 51). Reads no data; no score is estimable. |
 | `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` (PR #16, BGK-PBE, current run card) | **NO** | **NO** | 4,911 non-zero cells outside the bounds. Literal lattice overlap is 99.59% inside the footprint (limit 70%); the 44.41% all-cell figure comes from dots outside the scored region (IR-SASS3-42, 43, 44). |
 | `docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif` | Archive only | **NO** | Zeros outside the bounds. Literal lattice overlap 99.78% inside the footprint (fails). Review SGMC-CAL HOLDOUT-DTI 0.065702 [0.058992, 0.071240] against the champion's 0.064121: intervals overlap, no improvement shown (IR-SASS3-34, 53). |
@@ -16,7 +16,9 @@
 
 **Nothing in this repo is evidenced to beat 0.2778 or the leaderboard top (0.4544).** The blocker is the labels (`labels.tif`, `training_features.tif`), which come only through your DrivenData account (official rules §3.1). They are not in this workspace, and this session did not download them. The 28 restored files are owner-mirror copies (IR-SASS3-46) and are not organizer-authenticated.
 
-**Owner decision needed (not an agent action):** the literal lattice rule blocks every focus-site file. Options in [docs/research/lattice-decision-20261028.md](docs/research/lattice-decision-20261028.md): **A (recommended)** the like-for-like reading that the shared template already implements, which excludes halo-saturated lattices (`vendor/gems57/uniqueness.py` line 353) from the dot-overlap test; **B** keep the literal rule (nothing eligible); **C** an edge-only rule (not produced, not endorsed). Option A does not clear any file for the outside-bounds rule, which needs its own fix.
+**Binding decision for this task:** the supplied protocol says to compare against **any registry raster** and sets a 70% overlap cap with no lattice exemption. The literal rule therefore governs; all measured focus-site files fail. The compliant 21k candidate below is not a focus-site file and passes the same rule (inside-footprint lattice overlap 68.99%). The halo-saturated-lattice exclusion in Option A of [the decision memo](docs/research/lattice-decision-20261028.md) is a proposed protocol amendment only, is not applied, and is **not authorized by this task**. It cannot clear a candidate unless the user explicitly revises the protocol; even then, all other gates remain. No checked-in file is download-ready or submittable under the current decision.
+
+Scoped uniqueness recheck (2026-10-28, [audit note](docs/research/uniqueness-scope-audit-20261028.md), IR-SASS3-54..59): against 453 pinned submitted GEMSDOE rasters and 6 calibration lattices, LWST passes the submissions-only rule (max 66.53%) and fails the lattice rule (99.78%); sar-deconf fails both (76.26% and 99.97%); BGK-PBE and unique-structural pass the literal rule but have no holdout and are not approved. No estimated leaderboard score is given for any file.
 
 Executive summary and submission guide: [docs/executive-summary.html](docs/executive-summary.html) · Site: [docs/index.html](docs/index.html) · Per-site table: [docs/research/focus-site-candidates-20261028.md](docs/research/focus-site-candidates-20261028.md) · Independent review: [docs/research/independent-review-20261028.md](docs/research/independent-review-20261028.md) · Decision memo: [docs/research/lattice-decision-20261028.md](docs/research/lattice-decision-20261028.md) · Protocol amendment (PROPOSED, not applied): [docs/research/protocol-amendments.md](docs/research/protocol-amendments.md)
 
@@ -28,7 +30,7 @@ The full standing prompt is at [docs/research/standing-prompt-as-recorded-202610
 <summary>Show the standing prompt</summary>
 
 ```text
-Review the repo. 
+Review the repo.
 
 I want to focus on the highest scoring submissions from the following sites, GEMSDOE24, GEMSDOE25, GEMSDOE27, GEMSDOE28, GEMSDOE30, GEMSDOE31, GEMSDOE32, GEMSDOE33, GEMSDOE36.
 
@@ -94,16 +96,16 @@ Source: [leaderboard](https://www.drivendata.org/competitions/306/competition-do
 | Leaderboard top: #1 xiaofanhu 0.4544 | [Leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) |
 | Rules page | [herox rules](https://www.herox.com/GEMSPrize/resource/2274) |
 
-**Outside-bounds rule (official).** The competition text requires null or NaN outside the bounds (page 967). Zeros outside are not compliant. The earlier 21k file with zeros outside was superseded and removed (IR-SASS3-64). Whether the portal accepts the owner-scored zeros champion (0.2778, zeros outside) is unverified.
+**Outside-bounds rule (official).** The competition text requires null or NaN outside the bounds (page 967). Zeros outside are not compliant. The earlier 21k file with zeros outside was superseded and removed (IR-SASS3-70). Whether the portal accepts the owner-scored zeros champion (0.2778, zeros outside) is unverified.
 
-## Current candidate (OK to download; NOT OK to submit)
+## Current candidate (analysis copy; NOT OK to submit)
 
 - Submission name: `gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan`
 - Submission note (≤140 characters, 104): `LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted`
 - SHA-256 (TIF): `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`; zip: `1625a1a7167aed9995a9bb75eb1a410b0136c1f3ccab16ff0e0a39628f07c97a`
 - File: `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (zip beside it). Run card: `evidence/current_run_card.json` (identical copies in `evidence/run_card.json` and `docs/`).
 - Literal audit receipt: `evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json`. Registry receipt: `evidence/uniqueness_audit_current_candidate_20261029.json`.
-- Verdict: negative; `ok_to_submit` false. Holdout: HOLDOUT-DTI (SGMC) 0.042851 [0.038871, 0.046157] vs champion control 0.064121 [0.056730, 0.071649]; not recommended for a slot.
+- Verdict: negative; `ok_to_submit` false; `ok_to_download` false (competition-download authorization). Holdout: HOLDOUT-DTI (SGMC) 0.042851 [0.038871, 0.046157] vs champion control 0.064121 [0.056730, 0.071649]; not recommended for a slot.
 
 Previous candidate on main (blocked, not OK to download or submit): the BGK-PBE file, `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif`. Its non-zero outside cells and lattice overlap of 99.59% fail the rules. Hypothesis: `docs/research/hypotheses_ranked_20261028.md` (PR #16). No holdout result exists.
 
@@ -148,28 +150,28 @@ No hypothesis has passed the spatially-blocked holdout. The budget is 3 experime
 
 ## What is needed to go further (in order)
 
-1. **Owner decision** on the lattice rule: Option A, B or C (see Decision above). Not an agent action.
+1. Keep the user's binding any-registry / 70% rule in force. Do not apply the proposed lattice exemption or edge-only workaround; neither is authorized by this task.
 2. **Labels and features from your DrivenData account**: download `training_features.tif` and `labels.tif` (official rules §3.1) into `.cache/gems_data/` or `data/`. Do not use third-party mirror copies (IR-SASS3-26).
 3. **Done for the current file:** NaN outside the footprint, official rule. BGK-PBE and unique-structural still have non-zero outside cells and must be rebuilt or replaced. Re-run `scripts/candidate_format_audit.py`.
-4. **Done in this branch:** the gate reads a registry receipt bound to the current file's SHA (IR-SASS3-45). Clearing uniqueness still needs the continuous pre-placement surface (IR-SASS3-66).
+4. **Done in this branch:** the gate reads a registry receipt bound to the current file's SHA (IR-SASS3-45). Clearing uniqueness still needs the continuous pre-placement surface (IR-SASS3-72).
 4a. **Run hide-and-recover and the leakage canary** on the current file. These are the holdout and canary gates.
 5. **Redesign the holdout** for off-catalogue structure, and check that it reproduces the leaderboard order on the nine owner-reported files. Reconcile the evaluators (IR-SASS3-36).
 6. **Compute the SGMC-CAL proxy** for the nine latest candidates (not done).
-7. **Run H-SASS3-F, G or H** only after the owner decision, within the budget, on the spatially-blocked holdout.
+7. **Do not run H-SASS3-F, G or H now.** Any future experiment requires an explicitly assigned lane, authenticated inputs, remaining budget, and a candidate that can satisfy the unchanged literal registry rule; use the spatially-blocked holdout only then.
 8. **Obtain the missing lane paragraph** of the parallel-run protocol (IR-SASS3-37).
-9. Owner: confirm the gate change (IR-SASS3-65) and whether E1 counts toward the experiment budget (IR-SASS3-62).
+9. Owner: confirm the download-authorization decision (IR-SASS3-71) and whether E1 counts toward the experiment budget (IR-SASS3-68).
 10. Choose at most one candidate, check it against the 3-per-week cap, and record the generative-AI disclosure (rules §3.2).
 
 ## Irregularities
 
-Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data/irregularities_ledger.json`), 66 entries. Open items for review: IR-SASS3-20 (holdout vs leaderboard), 22 (GEMSDOE30 file identity), 25 (prompt leaderboard figures), 26 (third-party data mirrors), 29 (legacy build scripts), 34 (literal lattice rule), 36 (evaluators disagree), 37 (missing lane paragraph), 42–45 and 49–51 (BGK-PBE and unique-structural outside-bounds, format and validator findings), 52–53 (LWST figures and "OK to upload"). This branch adds 54–66: the holdout gates on withdrawn baselines (54), the card contradiction (55), the lattice decision (56), the uncovered-cell count (57), the uniqueness scope (58), the broken review script (59), the leaderboard conflict (60), the sibling verdicts (61), the experiment count (62), the cross-reference to 42/43/49/50 (63), the zeros-outside correction (64), the gate change (65) and the uniqueness scope limit (66). IR-SASS3-27 (zeros convention) is superseded by 64.
+Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data/irregularities_ledger.json`), 72 entries. IR-SASS3-54 to 59 are from main (shared uniqueness auditor, sar-deconf 70% check, registry omissions, calibration-lattice count, missing lane paragraph, leaderboard conflict). Open items from earlier: IR-SASS3-20 (holdout vs leaderboard), 22 (GEMSDOE30 file identity), 25 (prompt leaderboard figures), 26 (third-party data mirrors), 29 (legacy build scripts), 34 (literal lattice rule), 36 (evaluators disagree), 37 (missing lane paragraph), 42–45 and 49–51 (BGK-PBE and unique-structural outside-bounds, format and validator findings), 52–53 (LWST figures and "OK to upload"). This branch adds 60–72: the holdout gates on withdrawn baselines (60), the card contradiction (61), the lattice decision (62), the uncovered-cell count (63), the uniqueness scope (64), the broken review script (65), the leaderboard conflict (66), the sibling verdicts (67), the experiment count (68), the cross-reference to 42/43/49/50 (69), the zeros-outside correction (70), the gate and download-authorization decision (71) and the uniqueness scope limit (72). IR-SASS3-27 (zeros convention) is superseded by 70.
 
 ## PARALLEL-RUN PROTOCOL (binding)
 
 Rules applied: lane checks (rank correlation ≤ 0.90; ≤ 70% of dots within 3 px of any registry raster, checked on surface and dots), the leakage canary (single-feature AUC ≤ 0.90), buffered hide-and-recover with visible-only masking, labels reported only as HOLDOUT-DTI or ORGANIZER-CONFIRMED, run card JSON, budget of 3 experiments or 2 hours. A failed uniqueness gate is never permission to submit. No copying of previous submissions. The protocol's lane paragraph is missing from the request (IR-SASS3-37), so the lane is defined here by the rules above only.
 
 **Current run cards:**
-- Current candidate (compliant NaN file): `evidence/current_run_card.json` and `evidence/run_card.json`. Verdict: `negative`; `ok_to_download` true; `ok_to_submit` false.
+- Current candidate (compliant NaN file): `evidence/current_run_card.json` and `evidence/run_card.json`. Verdict: `negative`; `ok_to_download_for_analysis` true; `ok_to_download` false; `ok_to_submit` false.
 - BGK-PBE (previous, blocked): `evidence/run_card_bgk_pbe.json`. Verdict: negative; `ok_to_download` false.
 - Unique-structural placeholder (PR #19): `evidence/run_card_unique_structural_20261029.json`. Verdict: negative; `ok_to_download` false; `ok_to_submit` false.
 - LWST 37,654-dot file (archive): `evidence/archive/run_card_lwst_archived_20261027.json`; experiment ledger `evidence/lwst_experiment_ledger.json`; review `evidence/independent_review_20261028.json`. NOT OK to submit.

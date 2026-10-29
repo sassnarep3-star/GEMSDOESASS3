@@ -1,12 +1,10 @@
 # Decision memo: the calibration-lattice block (2026-10-28)
 
-Status: **OPEN — owner decision required.** Nothing in this memo has been applied to any gate, run card, or
-protocol. No experiment ran in this session (experiment budget 0 of 3). No submission slot was used.
+Status: **Historical alternatives memo; no amendment applied.** The binding task protocol says to compare with **any registry raster** and sets a 70% overlap limit without a lattice exemption. Therefore the literal rule governs this session, and every measured focus-site file remains blocked. Option A below is only a proposal and is not authorized by the current task. No experiment ran in this session (experiment budget 0 of 3). No submission slot was used.
 
 ## 1. Bottom line
 
-- **No focus-site file is cleared for submission.** The LWST archive is available for download for review only
-  (`ok_to_download: true`, `ok_to_submit: false`).
+- **No focus-site file is cleared for download or submission.** The LWST TIF remains in the repository as a historical audit artifact, but its competition-download flag is false and it is not approved for upload.
 - The block is geometric. The 13GEMSDOE 5-px calibration lattice (206,895 dots, owner-reported 0.0904) covers
   99.87% of the 5,167,373-cell footprint within 3 px. Only 6,649 cells lie outside that buffer, and 90.3% of them are
   within 2 px of the footprint boundary. Under the literal rule, a file with 37,654 dots can have at most 22,163 dots
@@ -44,34 +42,33 @@ Correction: the review and ledger entry IR-SASS3-19 gave 5,379 uncovered cells a
 values did not reproduce under any convention tested. The recomputed values above replace them. The conclusion is
 unchanged. See IR-SASS3-33 in `evidence/irregularities_ledger.json`.
 
-## 3. Options for the owner
+## 3. Historical alternatives (not changes to the current protocol)
 
-### Option A — like-for-like reading (recommended)
+### Option A — like-for-like reading (PROPOSAL ONLY; not authorized for this task)
 
-Adopt, by a dated amendment, the reading the shared template already implements: a halo-saturated lattice (more than
-90% of footprint cells within 3 px, `HALO_SATURATION_FRACTION = 0.90` in `vendor/gems57/uniqueness.py`) is excluded
-from the dot-overlap test. Rank correlation still applies to every raster, and the dot-overlap test still applies to
-every other registry raster.
+This proposed amendment would exclude a halo-saturated lattice (more than 90% of footprint cells within 3 px,
+`HALO_SATURATION_FRACTION = 0.90` in `vendor/gems57/uniqueness.py`) from the dot-overlap test. This conflicts with
+the supplied task's requirement to compare against **any registry raster**, so it is not applied and cannot clear a
+file here. It is retained only as a record of a prior proposal. A future explicit user revision would still require
+fresh full-registry, surface, official-format, holdout, leakage, and selector checks before a candidate could be used.
 
-- **Why recommended:** the literal test measures geometry, not lane. Any dense dot field fails it, so the test cannot
-  separate lanes, which is the purpose of Rule 1.
-- **What it unlocks:** the LWST archive (max 66.53% against 451 genuine downloads, per the independent review, not
-  re-run here) and the nine latest candidates (max 61.6% against the ten references measured here).
-- **What it does not unlock:** any historical focus file (already submitted; duplicates its family), and any file
-  that fails rank correlation.
+- **Prior rationale (not adopted here):** the lattice may make the literal test non-discriminating for dense dot fields.
+  That concern does not authorize an exception under the current instruction.
+- **What it unlocks under this task:** nothing. The alternate-reading metrics below are partial diagnostics, not passes
+  under the binding rule and not download or submission clearance.
 - Draft amendment text: `docs/research/protocol-amendments.md` (status PROPOSED, not applied).
 
-### Option B — keep the literal rule
+### Option B — binding for this task: keep the literal rule
 
-No amendment. Protocol Rule 1 says log the duplicate and stop. Nothing is eligible. Experiments are also blocked,
-because their output could not be submitted.
+No amendment. Protocol Rule 1 says to log a duplicate and stop. Nothing is eligible under the measured literal lattice
+rule. Experiments are blocked because no candidate can clear the current protocol with the required evidence.
 
-### Option C — meet the letter with edge cells (not produced, not recommended)
+### Option C — edge-cell workaround (not authorized; not produced)
 
-A file could satisfy the literal count by placing at least 30% of its dots on the 6,649 uncovered cells, at most
-22,163 dots in total. Those cells lie mostly on the footprint boundary, where no mapped fault exists. This meets the
-letter of the rule by placing dots where no geology is mapped, which lowers the expected score and defeats the rule's
-purpose. I did not generate such a file.
+A file could appear to satisfy the literal count by placing at least 30% of its dots on the 6,649 uncovered cells, at
+most 22,163 dots in total. Most lie near the footprint boundary, where no mapped fault exists. This is not a scientific
+hypothesis, does not satisfy the user's geological-method requirement, and must not be implemented. I did not generate
+such a file.
 
 ## 4. Why no file was generated or promoted
 
@@ -121,11 +118,12 @@ hypothesis has passed the spatially-blocked holdout.
 
 ## 9. Next steps
 
-1. Owner records Option A, B or C. Only Option A unlocks any file, and only by recording the amendment.
-2. If Option A is recorded: re-run `scripts/verify_all_gates.py` (the literal gate will then be replaced by the recorded
-   reading, and the gate output must say so). A selector then picks one file within the weekly cap.
+1. Apply the current task as written: keep the literal any-registry rule and do not use Option A or C as an exemption.
+2. No file is eligible for download or submission under the current decision. If the user later changes the protocol,
+   document that revision first and rerun every gate; a protocol change alone does not clear any file.
 3. Reconcile the two holdout evaluators (pooled-hide-v2 vs SGMC-CAL) on the owner-scored set before using any holdout
    value to select a file.
 4. Compute the SGMC-CAL proxy for the nine latest candidates (not done in this session).
-5. Run experiments F, G and H only after the owner decision, within the budget of 3 experiments or 2 hours. The
-   holdout must be spatially blocked, and the lane rule applies.
+5. Do not run experiments in the current blocked state. Any later experiment requires an explicit assigned lane,
+   organizer-authenticated inputs, available budget, and a candidate that can satisfy the unchanged literal rule; it
+   must use the buffered shared holdout and leakage canaries.

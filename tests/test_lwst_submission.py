@@ -85,7 +85,7 @@ def test_fail_closed_cli():
     assert proc.returncode == 0, proc.stdout + proc.stderr
     result = json.loads(proc.stdout)
     assert result["format_and_record_integrity"] is True
-    assert result["ok_to_download"] is True
+    assert result["ok_to_download"] is False
     assert result["ok_to_download_for_analysis"] is True
     assert result["ok_to_submit"] is False
     assert result["checks"]["complete_uniqueness_gate"] is False

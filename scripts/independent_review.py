@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
-"""Independent review of the shipped LWST submission (2026-10-28).
+"""Conservative review of the archived LWST GeoTIFF (2026-10-28).
 
-Recomputes, from the rasters themselves (not from the pipeline's JSON):
-  * format gate: single band, float32, EPSG:32611, 3730 x 3292, geotransform equal to the
-    organizer's sample_submission.tif, all values finite and in [0, 1], 37,654 dots;
-  * uniqueness gate: within-3 px overlap and sampled |Spearman| vs every submitted raster under
-    docs/downloads in the sibling checkouts (reads evidence/independent_uniqueness_lwst_20261028.json,
-    which scripts/independent_uniqueness_audit.py wrote);
-  * link gate: every sassnarep3-star GitHub link in the public pages is rewritten, and every
-    buffedlizard55-lab target resolves in the sibling checkouts.
-
-Writes evidence/independent_review_20261028.json and docs/research/independent-review-20261028.md.
-Labels: every score is HOLDOUT-DTI (evaluator named), ORGANIZER-CONFIRMED (none used except the
-leaderboard top), or OWNER-REPORT (typed in the task prompt; not organizer receipts).
+This script freshly checks the local GeoTIFF's structural/range properties. The
+sibling registry rasters and official sample are not in this checkout, so it
+reports the previous uniqueness scan and lattice measurement as archived
+records, fails the current uniqueness gates closed, and does not claim a fresh
+registry clearance. It also renders the score provenance, per-site audit, and
+limitations to evidence/independent_review_20261028.json and
+ docs/research/independent-review-20261028.md.
 """
 from __future__ import annotations
 
@@ -36,6 +31,7 @@ UNIQ = ROOT / "evidence/independent_uniqueness_lwst_20261028.json"
 EXP_E1 = ROOT / "evidence/hypothesis_h_sass3_e_experiment.json"
 OUT_JSON = ROOT / "evidence/independent_review_20261028.json"
 OUT_MD = ROOT / "docs/research/independent-review-20261028.md"
+ARCHIVE_CARD = ROOT / "evidence/archived_run_card_lwst_20261027.json"
 SIB = Path(os.environ.get("GEMS_SIB_ROOT", "/tmp/sib"))
 PAGES = ["README.md", "index.html", "executive-summary.html", "docs/index.html", "docs/executive-summary.html"]
 EXPECTED_DOTS = 37654
@@ -47,6 +43,7 @@ EXPECTED_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
 
 
 def format_gate() -> dict:
+    """Freshly check the archived file's local format; disclose if the sample is absent."""
     checks: dict[str, bool] = {}
     ref_available = SAMPLE.exists()
     with rasterio.open(LWST) as s:
@@ -54,16 +51,19 @@ def format_gate() -> dict:
         checks["single_band"] = s.count == 1
         checks["dtype_float32"] = s.dtypes[0] == "float32"
         checks["crs_epsg_32611"] = s.crs is not None and s.crs.to_epsg() == 32611
-        checks["shape_rows_cols_3730x3292"] = s.shape == (3730, 3292)  # rows x cols, as in the organizer sample
+        checks["shape_rows_cols_3730x3292"] = s.shape == (3730, 3292)
         if ref_available:
             with rasterio.open(SAMPLE) as ref:
                 checks["shape_matches_organizer_sample"] = s.shape == ref.shape
                 ref_tf = tuple(ref.transform)[:6]
+            checks["geotransform_matches_organizer_sample"] = tuple(round(v, 9) for v in s.transform)[:6] == tuple(
+                round(v, 9) for v in ref_tf
+            )[:6]
         else:
             ref_tf = EXPECTED_TRANSFORM
-        checks["geotransform_matches_sample"] = tuple(round(v, 9) for v in s.transform)[:6] == tuple(
-            round(v, 9) for v in ref_tf
-        )[:6]
+            checks["geotransform_matches_recorded_reference"] = tuple(round(v, 9) for v in s.transform)[:6] == tuple(
+                round(v, 9) for v in ref_tf
+            )[:6]
         checks["all_finite"] = bool(np.isfinite(a).all())
         checks["values_in_0_1"] = bool(np.isfinite(a).all() and a.min() >= 0.0 and a.max() <= 1.0)
         dots = int((a == 1).sum())
@@ -71,27 +71,63 @@ def format_gate() -> dict:
         checks["zero_or_one_only"] = bool(np.isin(a, [0.0, 1.0]).all())
         meta = {
             "crs": str(s.crs),
-            "sample_reference": "organizer sample" if ref_available else "recorded EXPECTED_TRANSFORM",
+            "organizer_sample_available": ref_available,
+            "sample_reference": "organizer sample" if ref_available else "recorded EXPECTED_TRANSFORM (not rechecked against sample)",
             "width": s.width,
             "height": s.height,
             "transform": list(s.transform)[:6],
             "nodata": s.nodata,
-            "outside_footprint_fill": "0.0 (valid in [0,1]); organizer sample uses NaN nodata. Unconfirmed whether the portal treats 0 and NaN identically outside the footprint.",
+            "outside_footprint_fill": "0.0 (valid in [0,1]); organizer sample uses NaN nodata. Portal treatment outside the footprint is unconfirmed.",
             "dots": dots,
             "min": float(a.min()),
             "max": float(a.max()),
             "sha256": __import__("hashlib").sha256(LWST.read_bytes()).hexdigest(),
         }
-    return {"checks": checks, "all_pass": all(checks.values()), "meta": meta}
+    return {
+        "checks": checks,
+        "all_pass": all(checks.values()),
+        "organizer_sample_comparison_available": ref_available,
+        "meta": meta,
+    }
 
 
 def uniqueness_gate() -> dict:
+    """Summarize the prior raster scan without misrepresenting it as a fresh recheck.
+
+    The 451-raster comparison JSON is retained as historical evidence, but the
+    referenced sibling rasters are not present in this checkout. A stored result
+    can explain why an artifact was rejected; it cannot certify the current
+    registry or an artifact's pre-placement surface.
+    """
     d = json.loads(UNIQ.read_text())
     res = d["results"]
     subs = [r for r in res if "/docs/downloads/" in r["path"]]
+    if not subs:
+        return {
+            "n_submitted_rasters_compared": 0,
+            "n_non_submission_rasters_excluded": len(res),
+            "threshold_within3_max": 0.70,
+            "threshold_abs_spearman_max": 0.90,
+            "max_within3_frac": None,
+            "max_within3_vs": None,
+            "max_abs_spearman_sampled": None,
+            "max_abs_spearman_vs": None,
+            "vs_champion_e5eb6e7e_within3": None,
+            "archived_pass": False,
+            "recomputed_this_run": False,
+            "pass": False,
+            "source": "evidence/independent_uniqueness_lwst_20261028.json",
+            "note": "No comparable submission rows are available; uniqueness is unverified and fails closed.",
+        }
     max_w3 = max(subs, key=lambda r: r["within3_frac"])
-    max_rho = max(subs, key=lambda r: abs(r["spearman_sampled"]))
+    rho_rows = [r for r in subs if r.get("spearman_sampled") is not None]
+    max_rho = max(rho_rows, key=lambda r: abs(r["spearman_sampled"])) if rho_rows else None
     champ = [r for r in subs if "e5eb6e7e" in r["path"] and r["path"].endswith("-zeros.tif")]
+    archived_pass = bool(
+        max_w3["within3_frac"] <= 0.70
+        and max_rho is not None
+        and abs(max_rho["spearman_sampled"]) <= 0.90
+    )
     return {
         "n_submitted_rasters_compared": len(subs),
         "n_non_submission_rasters_excluded": len(res) - len(subs),
@@ -99,36 +135,81 @@ def uniqueness_gate() -> dict:
         "threshold_abs_spearman_max": 0.90,
         "max_within3_frac": round(max_w3["within3_frac"], 6),
         "max_within3_vs": max_w3["path"],
-        "max_abs_spearman_sampled": round(abs(max_rho["spearman_sampled"]), 6),
-        "max_abs_spearman_vs": max_rho["path"],
+        "max_abs_spearman_sampled": round(abs(max_rho["spearman_sampled"]), 6) if max_rho else None,
+        "max_abs_spearman_vs": max_rho["path"] if max_rho else None,
         "vs_champion_e5eb6e7e_within3": round(champ[0]["within3_frac"], 6) if champ else None,
-        "pass": max_w3["within3_frac"] <= 0.70 and abs(max_rho["spearman_sampled"]) <= 0.90,
+        "archived_pass": archived_pass,
+        "recomputed_this_run": False,
+        "pass": False,
         "source": "evidence/independent_uniqueness_lwst_20261028.json (scripts/independent_uniqueness_audit.py)",
-        "note": "Final-dot check only. Protocol Rule 1 also asks for a surface check before placement; not re-run here.",
+        "note": "Archived final-dot scan only; sibling rasters are absent from this checkout. It is not a current uniqueness clearance, and the required pre-placement surface scan is not re-run.",
     }
 
 
 def per_site_table() -> list[dict]:
+    """Build a provenance-explicit summary from archived per-site audit records."""
+    audit = json.loads((ROOT / "evidence/nine_sites_executive_audit.json").read_text())
     conc = json.loads(CONC.read_text())
-    uniq = json.loads(UNIQ.read_text())["results"]
-    by_site: dict[str, list[dict]] = {}
-    for r in conc["rows"]:
-        by_site.setdefault(r["site"], []).append(r)
+    uniq = json.loads(UNIQ.read_text()).get("results", [])
     rows = []
-    for site in sorted(by_site):
-        best = max(by_site[site], key=lambda r: r["owner_reported_score"])
-        base = Path(best["file"]).name
-        hit = [u for u in uniq if f"{site}-main" in u["path"] and u["path"].endswith(base)]
-        ov = round(hit[0]["within3_frac"], 4) if hit else None
+    for site_record in audit.get("sites", []):
+        site = site_record["site"]
+        historical = site_record["historical_best"]
+        filename = site_record["hist_name"]
+        conc_match = next(
+            (
+                row for row in conc.get("rows", [])
+                if row.get("site") == site and Path(row.get("file", "")).name.removesuffix(".tif") == filename
+            ),
+            None,
+        )
+        # Prefer the exact filename-matched row, then fall back to the audited best
+        # owner report without implying that its proxy values are organizer scores.
+        if conc_match is None:
+            conc_match = max(
+                (row for row in conc.get("rows", []) if row.get("site") == site),
+                key=lambda row: row.get("owner_reported_score", float("-inf")),
+                default=None,
+            )
+        hold = historical.get("holdout_dti", {})
+        projection = historical.get("lli_projection", {})
+        base = Path(conc_match["file"]).name if conc_match else filename
+        overlap_row = next(
+            (
+                row for row in uniq
+                if f"{site}-main" in row.get("path", "") and row.get("path", "").endswith(base)
+            ),
+            None,
+        )
         rows.append(
             {
                 "site": site,
                 "best_owner_reported_file": base,
-                "estimated_score": f"OWNER-REPORT {best['owner_reported_score']:.4f} (already scored; not an estimate)",
-                "uniqueness_of_new_LWST_vs_this_file": f"overlap {ov:.4f} (within 3 px, LWST dots near this file)" if ov is not None else "not in audit",
-                "holdout_sgmc_cal": f"HOLDOUT-DTI {best['sgmc_calibrated_dti']:.6f}",
-                "dots": best["dots_in_footprint"],
-                "use": "DO NOT RESUBMIT (already scored; duplicates the family)",
+                "owner_reported_score": site_record.get("hist_score_owner_report"),
+                "owner_report_status": "OWNER-REPORT; transcribed in the archived sibling audit, no organizer receipt",
+                "organizer_confirmed_score": None,
+                "organizer_confirmed_status": "No per-file organizer receipt in this checkout",
+                "holdout_dti": {
+                    "label": "HOLDOUT-DTI (historical proxy; not a leaderboard score)",
+                    "evaluator_version": hold.get("evaluator_version"),
+                    "withheld_positive_pixels": hold.get("withheld_positive_pixels"),
+                    "dti": hold.get("dti"),
+                    "ci95": hold.get("ci95"),
+                },
+                "model_projection_not_score": {
+                    "label": projection.get("evidence_class", "LLI-PROJECTION (NOT A SCORE)"),
+                    "model": projection.get("model"),
+                    "projected_dti": projection.get("projected_dti"),
+                    "loo_mae_band": projection.get("uncertainty_band_loo_mae"),
+                    "loo_mae": projection.get("loo_mae"),
+                },
+                "historical_pairwise_overlap_vs_other_8": historical.get("max_3px_overlap_vs_other_8_hist"),
+                "nearest_historical_peer": historical.get("nearest_peer_site"),
+                "historically_unique_vs_other_8": historical.get("unique_vs_other_8_sites"),
+                "archived_lwst_overlap_vs_this_file": overlap_row.get("within3_frac") if overlap_row else None,
+                "archived_lwst_overlap_recomputed_this_run": False,
+                "dots": historical.get("dots"),
+                "use": "Historical comparison only; do not resubmit this recorded file.",
             }
         )
     return rows
@@ -146,7 +227,47 @@ def lattice_gate() -> dict:
 
     path = SIB / LATTICE_REL
     if not path.exists():
-        return {"pass": False, "available": False, "reason": f"witness not found at {path}"}
+        # Keep candidate-overlap evidence archived and fail the live gate closed.
+        # Prefer the later checked-in bound audit over the older, retracted
+        # footprint count; neither is a fresh calculation in this checkout.
+        archived = {}
+        if OUT_JSON.exists():
+            try:
+                archived = json.loads(OUT_JSON.read_text()).get("lattice_gate_literal", {})
+            except (OSError, json.JSONDecodeError):
+                archived = {}
+        coverage = archived.get("coverage_analysis")
+        bound_path = ROOT / "evidence/lattice_bound_audit_20261028.json"
+        if bound_path.exists():
+            bound = json.loads(bound_path.read_text())
+            primary = bound["bound_by_convention"][bound["primary_convention"]]
+            footprint_cells = bound["footprint"]["cells"]
+            coverage = {
+                "footprint_px": footprint_cells,
+                "footprint_fraction_within_3px_of_lattice": round(primary["footprint_cells_within_3px_of_lattice"] / footprint_cells, 8),
+                "footprint_px_outside_3px_of_lattice": primary["footprint_cells_outside_buffer"],
+                "dots": bound["candidate_dots_assumed"],
+                "dots_needed_outside_3px_to_pass": int(np.ceil(bound["candidate_dots_assumed"] * 0.30)),
+                "pass_possible_at_this_dot_count": primary["candidate_37654_dots_can_pass"],
+                "reading": "Archived value from evidence/lattice_bound_audit_20261028.json; not recomputed in this review.",
+                "evidence_status": "ARCHIVED REGISTRY-MEASUREMENT; not recomputed this run",
+                "source": "evidence/lattice_bound_audit_20261028.json",
+            }
+        return {
+            "pass": False,
+            "available": False,
+            "recomputed_this_run": False,
+            "reason": f"witness not present in this checkout: {path}",
+            "evidence_status": "archived prior verification; not re-run",
+            "witness_path": LATTICE_REL,
+            "witness_sha256": archived.get("witness_sha256"),
+            "witness_sha256_matches_main_pin": archived.get("witness_sha256_matches_main_pin"),
+            "same_grid_crs_shape_transform": archived.get("same_grid_crs_shape_transform"),
+            "witness_positive_px": archived.get("witness_positive_px"),
+            "within3_frac": archived.get("within3_frac"),
+            "limit": 0.70,
+            "coverage_analysis": coverage,
+        }
     sha = hashlib.sha256(path.read_bytes()).hexdigest()
     with rasterio.open(path) as w, rasterio.open(LWST) as c:
         same_grid = (w.crs == c.crs) and (w.shape == c.shape) and (w.transform == c.transform)
@@ -180,6 +301,8 @@ def lattice_gate() -> dict:
         "coverage_analysis": coverage,
         "pass": bool(frac <= 0.70 and sha == LATTICE_SHA256 and same_grid),
         "available": True,
+        "recomputed_this_run": True,
+        "evidence_status": "recomputed from the witness raster in this checkout",
         "witness_path": LATTICE_REL,
         "witness_sha256": sha,
         "witness_sha256_matches_main_pin": sha == LATTICE_SHA256,
@@ -187,7 +310,7 @@ def lattice_gate() -> dict:
         "witness_positive_px": int(wpos.sum()),
         "within3_frac": round(frac, 6),
         "limit": 0.70,
-        "note": "Literal rule, no exemption. Reproduces the 99.7849% figure recorded on main (docs/research/review-20261028.md).",
+        "note": "Literal rule, no exemption.",
     }
 
 
@@ -198,10 +321,15 @@ def link_gate() -> dict:
         p = ROOT / rel
         txt = p.read_text(encoding="utf-8")
         broken = re.findall(r"https://github\.com/sassnarep3-star/GEMSDOE\d+/", txt)
-        fixed = re.findall(r"https://github\.com/buffedlizard55-lab/(GEMSDOE\d+)/(?:raw|blob)/main/([^\s\"'<>)\]]+)", txt)
+        fixed = re.findall(
+            r"https://github\.com/buffedlizard55-lab/(GEMSDOE\d+)/(?:raw|blob)/[^/\s\"'<>)\]]+/([^\s\"'<>)\]]+)",
+            txt,
+        )
         targets.update(fixed)
         out["pages"][rel] = {"remaining_sassnarep3_star_links": len(broken), "buffedlizard55_lab_links": len(fixed)}
     out["unique_targets"] = len(targets)
+    out["remaining_broken_links"] = sum(page["remaining_sassnarep3_star_links"] for page in out["pages"].values())
+    out["local_sibling_root_available"] = SIB.exists()
     for repo, rel in sorted(targets):
         num = repo[len("GEMSDOE"):]
         cand = SIB / f"x_g{num}" / f"{repo}-main" / rel
@@ -209,7 +337,17 @@ def link_gate() -> dict:
             out["targets_resolved"] += 1
         else:
             out["unresolved"].append(f"{repo}/{rel}")
-    out["all_resolved"] = out["targets_resolved"] == out["unique_targets"] and not out["unresolved"]
+    out["verification_complete"] = not targets or SIB.exists()
+    out["all_resolved"] = (
+        out["verification_complete"]
+        and out["remaining_broken_links"] == 0
+        and out["targets_resolved"] == out["unique_targets"]
+        and not out["unresolved"]
+    )
+    if not out["verification_complete"]:
+        out["reason"] = "Sibling targets exist, but no local sibling checkout is available; path resolution was not verified."
+    elif not targets:
+        out["reason"] = "No sibling file targets were present on the reviewed pages; there was nothing to resolve locally."
     out["resolution_root"] = str(SIB)
     return out
 
@@ -217,209 +355,369 @@ def link_gate() -> dict:
 HYPOTHESES = [
     {
         "rank": 1,
-        "id": "H-SASS3-E",
-        "status": "TESTED - NEGATIVE (experiment E1, 1 of 3 budget; no slot spent)",
-        "layers": "depth_to_base_surf (cached feature stack)",
-        "signature": "narrow ridges of the most-negative Hessian eigenvalue, weighted by local relief |grad z| of the basement surface",
-        "mimic": "sedimentary onlap and paleochannel incision along the basement",
-        "why_new": "The phrase 'minimum curvature' and 'watershed' have no hits in the repo or the sibling docs (keyword screen). 'Hessian' is common (119 sibling files), so the novelty is the layer and statistic pairing, not the Hessian itself.",
+        "id": "H-SASS3-PLAN-1",
+        "status": "PLANNING ONLY — not implemented or validated",
+        "layers": "Official GeoDAWN magnetic field plus radiometric K and Th; requires source rasters",
+        "signature": "Robust paired-flank local residual contrast across a lineament, retained after upward continuation",
+        "mimic": "Lithologic contacts, remanent magnetic bodies, and radiometric facies boundaries",
+        "why_new": "Targets asymmetric alteration around buried fluid pathways rather than scalar SPI/Theta ridge strength or simple ratio fusion. Novelty is a code-inventory hypothesis, not established across sibling repositories.",
+        "cost": "Moderate; raster alignment, paired-profile statistic, then buffered whole-segment validation",
+        "source_status": "USGS GeoDAWN is the named official source; coverage/download availability was not verified, so not currently viable.",
+        "expected_dti": "Unquantified; qualitative priority only, not a score or projection.",
     },
     {
         "rank": 2,
-        "id": "H-SASS3-F",
-        "status": "UNTESTED (candidate for experiment E2)",
-        "layers": "tmi_hg, iso_grav_anom_hg, geod_shearrate, cond_surf (cached stack)",
-        "signature": "sharp, lineated boundaries between Gaussian-mixture components of the standardised multi-layer geophysical vector",
-        "mimic": "lithologic contacts and playa-margin conductivity changes",
-        "why_new": "The term 'Gaussian mixture' has no hit in the sibling docs (keyword screen). The repo's EXP1 is an unsupervised tree model, not a mixture boundary.",
+        "id": "H-SASS3-PLAN-2",
+        "status": "PLANNING ONLY — not implemented or validated",
+        "layers": "Competition-provided DEM and gravity anomaly; requires the official data package",
+        "signature": "Scale-dependent cross-slope asymmetry around gravity-gradient lineaments, evaluated on both basin flanks",
+        "mimic": "Alluvial-fan margins, basin stratigraphy, and asymmetric erosional slopes",
+        "why_new": "Tests a paired basin-flank response rather than existing piedmont/gravity score fusion; any distinction from related repository code still needs a code-level audit.",
+        "cost": "Moderate; multiscale derivatives and controls, then the shared blocked evaluator",
+        "source_status": "The competition data page is the named official source; local package/cache is absent and external availability was not verified, so not currently viable.",
+        "expected_dti": "Unquantified; qualitative priority only, not a score or projection.",
     },
     {
         "rank": 3,
-        "id": "H-SASS3-G",
-        "status": "UNTESTED",
-        "layers": "ieq_n100a15, deq_n100a15 (cached stack)",
-        "signature": "anisotropic point-pattern clustering (Ripley's K) of earthquake epicentres that aligns into linear clusters",
-        "mimic": "aftershock sequences and induced seismicity",
-        "why_new": "Ripley's K has no hit in the sibling docs. Partial overlap with H-SASS3-D (plane fitting of relocated seismicity), so treat it as a variant.",
-    },
-    {
-        "rank": 4,
-        "id": "H-SASS3-H",
-        "status": "UNTESTED (lowest priority)",
-        "layers": "geod_dilaterate (cached stack)",
-        "signature": "Otsu-thresholded ridges of geodetic dilatation",
-        "mimic": "subsidence and thermal-expansion strain",
-        "why_new": "Otsu has no hit in the sibling docs. Weak physical link to faults; rank last.",
+        "id": "H-SASS3-PLAN-3",
+        "status": "PLANNING ONLY — not implemented or validated",
+        "layers": "Multi-height upward continuations of the official GeoDAWN magnetic field",
+        "signature": "Direction and magnitude of magnetic gradient-ridge migration across continuation heights",
+        "mimic": "Dipping intrusive contacts and depth-varying lithologic boundaries",
+        "why_new": "Focuses on displacement direction of a ridge through scale, not only its persistence or an Euler-style depth cluster; novelty remains unverified outside this checkout.",
+        "cost": "High; requires trusted grids at multiple heights, synthetic depth controls, and a leakage-safe holdout",
+        "source_status": "USGS GeoDAWN is the named official source; coverage/download availability was not verified, so not currently viable.",
+        "expected_dti": "Unquantified; lowest priority due data and implementation cost; not a score or projection.",
     },
 ]
 
 
-def _pct(x: float) -> str:
-    return f"{x * 100:.2f}%"
+def _pct(x: float | None) -> str:
+    return f"{x * 100:.2f}%" if isinstance(x, (int, float)) else "not available"
+
+
+def _float_text(x: float | None, digits: int = 6) -> str:
+    return f"{x:.{digits}f}" if isinstance(x, (int, float)) else "not available"
+
+
+def _ci_text(ci: list[float] | None, digits: int = 6) -> str:
+    if not isinstance(ci, list) or len(ci) != 2:
+        return "CI unavailable"
+    return f"[{ci[0]:.{digits}f}, {ci[1]:.{digits}f}]"
+
+
+def _safe_block_reason(lat: dict) -> str:
+    frac = lat.get("within3_frac")
+    if isinstance(frac, (int, float)):
+        freshness = "freshly recomputed" if lat.get("recomputed_this_run") else "archived measurement; witness unavailable for recheck"
+        return (
+            f"Blocked: the calibration-lattice overlap is {_pct(frac)} (>70%; {freshness}); "
+            "the all-registry uniqueness clearance is also unavailable. No slot was promoted."
+        )
+    return (
+        "Blocked: the calibration-lattice witness and comparable measurements are unavailable in this checkout; "
+        "the literal registry uniqueness gate fails closed. No slot was promoted."
+    )
+
+
+def _run_card(fmt: dict, uq: dict, lat: dict, e1: dict, old_card: dict, ledger: dict) -> dict:
+    lwst_ref = e1.get("like_for_like_reference", {})
+    lwst_hr = lwst_ref.get("lwst_hide_and_recover", {})
+    lwst_sg = lwst_ref.get("lwst_sgmc_off_catalogue", {})
+    e1_hr = e1.get("holdout_dti", {}).get("hide_and_recover", {})
+    e1_sg = e1.get("holdout_dti", {}).get("sgmc_off_catalogue", {})
+    old_registry = old_card.get("registry_correlation_and_overlap", {})
+    canary = json.loads((ROOT / "evidence/leakage_canary_report.json").read_text())
+    zip_path = LWST.with_suffix(".tif.zip")
+    zip_sha = __import__("hashlib").sha256(zip_path.read_bytes()).hexdigest() if zip_path.exists() else None
+    fmt_meta = fmt.get("meta", {})
+    return {
+        "review_date": "2026-10-28",
+        "review_scope": "Conservative review of an archived candidate; no new experiment or submission was run.",
+        "branch": "arena/16f75a44-gemsdoesass3",
+        "lane_id": None,
+        "assigned_lane_status": "UNRESOLVED: the supplied brief does not identify this checkout's single method paragraph.",
+        "historical_lane_record": old_card.get("lane_id"),
+        "hypothesis": "Review-only. The archived LWST-GeoConduit candidate is not re-proposed or promoted. The most recent separate candidate record is H-SASS3-E and is negative.",
+        "mechanism": "No mechanism implemented in this review. Historical candidate descriptions are retained in the archived run card for provenance only.",
+        "non_fault_mimic": "The historical H-SASS3-E test lists sedimentary onlap and paleochannel incision; this is not a validation of the archived LWST candidate.",
+        "holdout_dti": {
+            "archived_lwst_hide_and_recover": {
+                "score_label": lwst_hr.get("score_label", "HOLDOUT-DTI"),
+                "evaluator_version": lwst_hr.get("evaluator_version"),
+                "withheld_positive_pixels": lwst_hr.get("n_withheld_positives"),
+                "b_visible_px": lwst_hr.get("b_visible_px"),
+                "pooled_dti": lwst_hr.get("pooled_dti"),
+                "ci95": lwst_hr.get("ci95_cluster_bootstrap"),
+                "evidence_status": "ARCHIVED evaluator record; not recomputed in this review",
+            },
+            "archived_lwst_sgmc_cal": {
+                "score_label": lwst_sg.get("score_label", "HOLDOUT-DTI"),
+                "evaluator_version": lwst_sg.get("evaluator_version"),
+                "withheld_positive_pixels": lwst_sg.get("n_withheld_positives"),
+                "prevalence_calibrated_dti": lwst_sg.get("sgmc_prevalence_calibrated_dti"),
+                "ci95": lwst_sg.get("sgmc_calibrated_ci95"),
+                "evidence_status": "ARCHIVED evaluator record; not recomputed in this review",
+            },
+            "experiment_E1_hide_and_recover": {
+                "score_label": e1_hr.get("score_label", "HOLDOUT-DTI"),
+                "evaluator_version": e1_hr.get("evaluator_version"),
+                "withheld_positive_pixels": e1_hr.get("n_withheld_positives"),
+                "b_visible_px": e1_hr.get("b_visible_px"),
+                "pooled_dti": e1_hr.get("pooled_dti"),
+                "ci95": e1_hr.get("ci95_cluster_bootstrap"),
+                "evidence_status": "ARCHIVED negative experiment E1; no slot spent",
+            },
+            "experiment_E1_sgmc_cal": {
+                "score_label": e1_sg.get("score_label", "HOLDOUT-DTI"),
+                "evaluator_version": e1_sg.get("evaluator_version"),
+                "withheld_positive_pixels": e1_sg.get("n_withheld_positives"),
+                "prevalence_calibrated_dti": e1_sg.get("sgmc_prevalence_calibrated_dti"),
+                "ci95": e1_sg.get("sgmc_calibrated_ci95"),
+                "evidence_status": "ARCHIVED negative experiment E1; no slot spent",
+            },
+            "organizer_score": None,
+            "organizer_score_status": "No submission-page receipt for the reviewed candidate is in this checkout.",
+        },
+        "leakage_canary": {
+            "E1_single_feature": {
+                "feature": "depth_to_base_surf curvature score",
+                "auc_vs_withheld_sgmc": e1.get("leakage_canary_single_feature", {}).get("auc_vs_withheld_sgmc"),
+                "symmetric_auc": e1.get("leakage_canary_single_feature", {}).get("symmetric_auc"),
+                "threshold": 0.90,
+                "passed": e1.get("leakage_canary_single_feature", {}).get("pass_le_090"),
+                "evidence_status": "ARCHIVED; this is the experiment-specific single-feature canary, not a current rerun",
+            },
+            "historical_51_channel_report": {
+                "channels_tested": canary.get("n_channels_tested"),
+                "withheld_positive_samples": canary.get("n_withheld_positive_samples"),
+                "negative_samples": canary.get("n_negative_samples"),
+                "worst_channel": canary.get("worst_channel"),
+                "worst_symmetric_auc": canary.get("worst_symmetric_auc"),
+                "all_passed": canary.get("all_passed"),
+                "evidence_status": "ARCHIVED; separate prior report, not a fresh validation of this checkout",
+            },
+        },
+        "registry_correlation_and_overlap": {
+            "recomputed_this_run": False,
+            "thresholds": {"within3_max_fraction": 0.70, "absolute_spearman_max": 0.90, "buffer_px": 3},
+            "archived_preplacement_surface_scan": {
+                "registry_rasters_checked": old_registry.get("registry_rasters_checked"),
+                "max_abs_spearman": old_registry.get("pre_placement_surface_max_abs_spearman"),
+                "closest_raster": old_registry.get("pre_placement_surface_closest_raster"),
+                "evidence_status": "ARCHIVED prior run-card result; not rechecked",
+            },
+            "archived_final_dot_scan_451_downloads": {
+                "submitted_rasters_compared": uq.get("n_submitted_rasters_compared"),
+                "max_within3_fraction": uq.get("max_within3_frac"),
+                "max_abs_sampled_spearman": uq.get("max_abs_spearman_sampled"),
+                "archived_subset_pass": uq.get("archived_pass"),
+                "evidence_status": "ARCHIVED subset-only result; not a current full-registry clearance",
+            },
+            "archived_literal_lattice_result": {
+                "within3_fraction": lat.get("within3_frac"),
+                "limit": lat.get("limit", 0.70),
+                "pass": False,
+                "witness_sha256": lat.get("witness_sha256"),
+                "available_in_this_checkout": lat.get("available", False),
+                "recomputed_this_run": lat.get("recomputed_this_run", False),
+                "evidence_status": lat.get("evidence_status", "unavailable; fail closed"),
+            },
+            "current_registry_clearance": False,
+            "preplacement_surface_currently_cleared": False,
+            "final_dots_currently_cleared": False,
+        },
+        "raster_sha256": fmt_meta.get("sha256"),
+        "zip_sha256": zip_sha,
+        "validator_output": {
+            "all_local_checks_passed": fmt.get("all_pass", False),
+            "organizer_sample_comparison_available": fmt.get("organizer_sample_comparison_available", False),
+            "crs": fmt_meta.get("crs"),
+            "shape_rows_cols": [fmt_meta.get("height"), fmt_meta.get("width")],
+            "transform": fmt_meta.get("transform"),
+            "dtype": "float32",
+            "finite_range": [fmt_meta.get("min"), fmt_meta.get("max")],
+            "positive_pixels": fmt_meta.get("dots"),
+            "checks": fmt.get("checks", {}),
+            "evidence_status": "Local raster checks freshly rerun; official sample comparison unavailable.",
+        },
+        "submission_name": LWST.name,
+        "submission_note": "Archive only: format checked; literal registry uniqueness fails the 3-px rule. Do not submit.",
+        "download_path": str(LWST.relative_to(ROOT)),
+        "new_candidate_generated_this_review": False,
+        "repository_archive_available_for_research": LWST.exists(),
+        "ok_to_download": False,
+        "download_status": "NO for competition use. The TIF is retained in the repository as historical audit evidence only; it is not a download-ready submission.",
+        "ok_to_submit": False,
+        "status_reason": _safe_block_reason(lat),
+        "verdict": "negative",
+        "promote_to_real_slot": False,
+        "slot_spent": False,
+        "budget": {
+            "prior_lane": ledger.get("lane"),
+            "prior_lane_experiments": ledger.get("experiment_count"),
+            "prior_lane_budget_cap": ledger.get("experiment_budget_cap"),
+            "prior_lane_elapsed_seconds": ledger.get("elapsed_seconds"),
+            "new_experiments_this_review": 0,
+            "current_lane_resolved": False,
+            "reason_no_new_experiment": "Prior lane budget is exhausted; the current task does not identify an assigned method paragraph.",
+        },
+        "official_data_availability": {
+            "cached_feature_stack_present": (ROOT / ".cache/gems_data/training_features.tif").exists(),
+            "official_sample_present": SAMPLE.exists(),
+            "local_sibling_registry_present": SIB.exists(),
+            "official_external_data_checked_this_review": False,
+            "status": "Required inputs are absent; no new candidate can be validated or cleared in this checkout.",
+        },
+    }
 
 
 def render_md(r: dict) -> str:
-    v = r["verdict"]
-    fg = r["format_gate"]
+    card = r["run_card"]
+    verdict = r["verdict"]
     uq = r["uniqueness_gate"]
     lat = r["lattice_gate_literal"]
-    lg = r["link_gate"]
-    hs = r["holdout_summary"]
-    pc = r["proxy_concordance"]
+    budget = card["budget"]
+    links = r["link_gate"]
     e1 = r["experiment_E1_H_SASS3_E"]
-    rho_sg = pc["rho_sgmc_calibrated_vs_owner"]
-    rho_hr = pc["rho_hide_recover_vs_owner"]
-    lines = []
+    lwst_hr = card["holdout_dti"]["archived_lwst_hide_and_recover"]
+    lwst_sg = card["holdout_dti"]["archived_lwst_sgmc_cal"]
+    e1_hr = card["holdout_dti"]["experiment_E1_hide_and_recover"]
+    e1_sg = card["holdout_dti"]["experiment_E1_sgmc_cal"]
+    lines: list[str] = []
     A = lines.append
-    A("# Independent review of the shipped LWST submission (2026-10-28)")
+    A("# Independent review of the archived LWST GeoTIFF — 2026-10-28")
     A("")
-    A("Every number is labelled **HOLDOUT-DTI** (evaluator named), **ORGANIZER-CONFIRMED** (none used except the leaderboard top), "
-      "or **OWNER-REPORT** (typed in the task prompt, not an organizer receipt). Gate results are recomputed from the rasters by "
-      "`scripts/independent_review.py`, not copied from pipeline JSON.")
+    A("> **Decision: NO COMPETITION DOWNLOAD / NO SUBMISSION.** The TIF remains in this repository as historical audit evidence, not as a download-ready competition file. Its literal registry uniqueness gate fails on the archived lattice measurement, current source rasters are missing, and no new candidate was generated or cleared in this review.")
     A("")
-    A("## 1. Answers")
+    A("## Executive summary")
     A("")
-    A("| Question | Answer | Basis (label) |")
+    A("- **Competition download:** **NO**. The TIF exists in the repository as a historical audit artifact at `docs/downloads/" + LWST.name + "`, not as a download-ready submission.")
+    A("- **Upload/submission:** **NO**. Archived lattice overlap exceeds the 70% limit; current full-registry uniqueness and pre-placement surface comparisons are not available to rerun. No calibration-lattice exemption is applied.")
+    A("- **New unique GeoTIFF:** None created in this review. Repackaging or renaming the old file would not make it unique. Generating another raster is blocked by the missing feature stack/registry/sample, the unresolved method lane, and the exhausted prior lane budget.")
+    A("- **Slot:** None spent; no promotion decision was made by a selector.")
+    A("")
+    A("## 1. Evidence status and submission gates")
+    A("")
+    A("| Check | Result | Evidence and freshness |")
     A("|---|---|---|")
-    ok_txt = "YES" if v["ok_to_download_and_upload_as_valid_unique_file"] else "NO"
-    A(f"| Is the file OK to download and upload? | **{ok_txt}** "
-      f"(literal registry-overlap rule fails; format-valid archive only) | Recomputed from the raster (programmatic) |")
-    A(f"| Format valid? | {'PASS' if v['format_valid_programmatic'] else 'FAIL'} | single band float32, EPSG:32611, 3730 rows x 3292 cols, sample geotransform, values in {{0,1}}, no NaN, 37,654 dots |")
-    A(f"| Unique on the 451 submitted downloads? | {'PASS' if v['unique_on_downloads_programmatic'] else 'FAIL'} | max within-3 px overlap {_pct(uq['max_within3_frac'])} vs 70% limit; max sampled abs Spearman {uq['max_abs_spearman_sampled']:.3f} vs 0.90 |")
-    A(f"| Unique under the literal rule (any registry raster, incl. calibration lattice)? | **{'PASS' if v['unique_literal_incl_calibration_lattice'] else 'FAIL'}** | lattice witness `inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif` (SHA-256 verified): {_pct(lat['within3_frac'])} of dots within 3 px vs 70% limit |")
-    A("| Beats the 0.2778 champion? | **NOT DEMONSTRATED** | LWST SGMC-CAL HOLDOUT-DTI 0.065702 [0.058992, 0.071240] vs champion 0.064121 (same evaluator). The CI contains the champion point. |")
-    A("| Beats the 0.4544 leader? | **NOT DEMONSTRATED** | No organizer score exists for this file. ORGANIZER-CONFIRMED leader 0.4544 (xiaofanhu). |")
-    A("| Promote to a real slot? | **NO** | Protocol Rule 6: promotion is a separate selector step. |")
+    A(f"| Local raster format/range | {'PASS' if r['format_gate']['all_pass'] else 'FAIL'} | Fresh local checks: one float32 band, EPSG:32611, 3730 x 3292, recorded transform, finite values in [0,1], 37,654 positives. Official sample comparison available: **{r['format_gate'].get('organizer_sample_comparison_available', False)}**. |")
+    if uq.get("max_within3_frac") is not None:
+        archived_uq = f"archived subset scan over {uq['n_submitted_rasters_compared']} downloads: {_pct(uq['max_within3_frac'])} max within 3 px; max sampled |Spearman| {_float_text(uq['max_abs_spearman_sampled'], 3)}; archived subset-only pass={uq.get('archived_pass')}"
+    else:
+        archived_uq = "no archived comparable rasters available"
+    A(f"| Historical submitted-download comparison | **ARCHIVED ONLY — not a current clearance** | {archived_uq}. Sibling raster files are absent, and this final-dot scan does not verify the required pre-placement surface for the current registry. |")
+    lat_value = lat.get("within3_frac")
+    lat_text = _pct(lat_value) if isinstance(lat_value, (int, float)) else "not available"
+    lat_source = "archived prior verification; witness absent from this checkout" if not lat.get("available") else "recomputed from the local witness raster"
+    A(f"| Literal rule including calibration lattice | **FAIL CLOSED** | {lat_text} within 3 px vs 70% limit; {lat_source}. Witness hash: `{lat.get('witness_sha256') or 'not available'}`. |")
+    A(f"| Current all-registry surface and final-dot gates | **NOT VERIFIED** | No complete current registry is present. Surface scan freshness={card['registry_correlation_and_overlap']['archived_preplacement_surface_scan']['evidence_status']}; final-dot scan freshness={card['registry_correlation_and_overlap']['archived_final_dot_scan_451_downloads']['evidence_status']}. |")
+    A("| Competition download / upload | **NO / NO** | The local TIF is retained for audit only; it is not download-ready for competition use and has no submission approval. |")
     A("")
-    A("The earlier statement that the file \"beats 0.2778 on both metrics\" is withdrawn. Its HIDE-RECOVER figure (0.111062) was a per-fold OOF value compared with a mislabelled D2.8 parent. Section 3 has the details.")
-    A("")
-    A("## 2. Per-site executive summary (focus sites)")
-    A("")
-    A("Each file is already scored or belongs to a scored family, so none should be resubmitted. The score column is OWNER-REPORT and is not an estimate for the new file.")
-    A("")
-    A("| Site | Best owner-reported file | Estimated score (label) | Uniqueness of new LWST vs this file | Holdout SGMC-CAL (label) | Use |")
-    A("|---|---|---|---|---|---|")
-    for row in r["per_site_table"]:
-        A(f"| {row['site']} | `{row['best_owner_reported_file']}` ({row['dots']:,} dots) | {row['estimated_score']} | {row['uniqueness_of_new_LWST_vs_this_file']} | {row['holdout_sgmc_cal']} | {row['use']} |")
-    A("")
-    A("**New file (LWST, `gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif`):** estimated score **not available**. "
-      "Its SGMC-CAL value lies above the maximum of the 21 owner-scored rasters (0.0644), so any number would be an extrapolation and is not reported.")
-    A("")
-    A("## 3. Corrections to earlier claims")
-    A("")
-    A("| # | Earlier claim | Status | Evidence |")
-    A("|---|---|---|---|")
-    A("| C1 | LWST beats 0.2778 on both HOLDOUT-DTI metrics | WRONG (overstated) | SGMC-CAL CI contains the champion point; HR for the catalogue-built champion is not leak-free (Rule 2). |")
-    A("| C2 | 0.111062 [0.098423, 0.123755] is the shipped file's HIDE-RECOVER value | WRONG | It is a per-fold OOF value. `evaluate_holdout.py` on the shipped file gives 0.006130 [0.005175, 0.007123]. |")
-    A("| C3 | 0.099202 is the 0.2778 champion baseline | WRONG | It is the D2.8 parent e56ea318af89 (owner-reported 0.2600). The true champion e5eb6e7e gives static HR 0.004515. Code fixed in `scripts/run_lwst_experiments.py` (IR-SASS3-08). Artifacts still carry the old value until the pipeline is rerun. |")
-    A("| C4 | Sibling repos at sassnarep3-star/GEMSDOE* | WRONG (404) | Rewritten to buffedlizard55-lab. 18 unique targets, all resolved in the sibling checkouts (IR-SASS3-09). The owner should confirm the mapping. |")
-    A("| C5 | Uniqueness max 63.27% across 385 rasters | STALE | Current audit: 66.53% across 451 submitted rasters (vs gemsdoe32-h49, newer). Still under 70% on downloads; see C9 for the literal rule. |")
-    A("| C9 | This review: file OK to upload, uniqueness PASS | WRONG (corrected) | The audit excluded `inputs/calibration`. That raster is a registry raster under the literal rule. It has 99.78% overlap, which fails the 70% limit. Main's review (`docs/research/review-20261028.md`) reaches the same block. |")
-    A("| C6 | Root cause of the portal error is NaN outside the footprint | UNVERIFIED | No portal log exists. The file passes the format gate, so it is safe under the stated rule. |")
-    A("| C7 | verify_all_gates 30/30 PASS = independent verification | OVERSTATED | It reads JSON the pipeline wrote. The recomputed gates are in `scripts/independent_review.py` (IR-SASS3-15). |")
-    A("| C8 | Leaderboard progression 0.4413 to 0.4544 | CORRECT | Live public top: xiaofanhu 0.4544 (ORGANIZER-CONFIRMED). Public scores may differ from the private final (Rules 3.2). |")
-    A("")
-    A("Irregularities, including the open items, are in `evidence/irregularities_ledger.json` (IR-SASS3-01..18).")
-    A("")
-    A("## 4. Proxy validation (concordance with owner scores, n = 21)")
-    A("")
-    A("| Proxy (HOLDOUT-DTI) | Spearman vs OWNER-REPORT | 95% bootstrap CI |")
-    A("|---|---|---|")
-    A(f"| SGMC-CAL (calibrated off-catalogue) | {rho_sg['spearman_rho_vs_owner_score']:.3f} | [{rho_sg['bootstrap_ci95'][0]:.3f}, {rho_sg['bootstrap_ci95'][1]:.3f}] |")
-    A(f"| SGMC raw | {pc['rho_sgmc_raw_vs_owner']['spearman_rho_vs_owner_score']:.3f} | [{pc['rho_sgmc_raw_vs_owner']['bootstrap_ci95'][0]:.3f}, {pc['rho_sgmc_raw_vs_owner']['bootstrap_ci95'][1]:.3f}] |")
-    A(f"| HIDE-RECOVER | {rho_hr['spearman_rho_vs_owner_score']:.3f} | [{rho_hr['bootstrap_ci95'][0]:.3f}, {rho_hr['bootstrap_ci95'][1]:.3f}] |")
-    A("")
-    A("Reading: SGMC-CAL ranks the owner scores well, so it is the more useful proxy. HIDE-RECOVER does not rank them, and it should not be used for selection.")
-    A("")
-    A("## 5. Holdout comparison (same evaluator, B_visible = 2 px)")
-    A("")
-    A(f"- LWST: HIDE-RECOVER {hs['lwst']['hide_recover']}; SGMC-CAL {hs['lwst']['sgmc_cal']}.")
-    A(f"- Champion e5eb6e7e: HIDE-RECOVER {hs['champion_e5eb6e7e']['hide_recover']}; SGMC-CAL {hs['champion_e5eb6e7e']['sgmc_cal']}; {hs['champion_e5eb6e7e']['owner_reported']}.")
-    A(f"- {hs['reading']}")
-    A("")
-    A("## 6. Why the 0.2778 file scored highest, and what this means (PhD-level reading)")
-    A("")
-    A("The evidence supports a narrower answer than the prompt implies:")
-    A("")
-    A("1. The 0.2778 file is the best member of a near-duplicate family. Its neighbours overlap 86.7-100% within 3 px (IR-SASS3-02, from the repo's earlier audit). Its owner-reported score is the highest of the 21 known files.")
-    A("2. Across all 21 owner-scored files, SGMC-CAL ranks the owner scores well (rho 0.87). This is consistent with an off-catalogue advantage, but that is an inference, not a test. HIDE-RECOVER does not rank them (rho 0.14), so the static HR value cannot explain the score.")
-    A("3. The gap to the leader (0.2778 to 0.4544) is 0.1766. Nothing in this repo shows a route to that gap. The most promising route is probably a different family of method. That is an open question for the user, not a result.")
-    A("")
-    A("## 7. Experiment E1 (H-SASS3-E, basement minimum-curvature ridges)")
-    A("")
-    A(f"- Hypothesis: {e1['hypothesis']}.")
-    A(f"- HIDE-RECOVER {e1['hide_recover']}; SGMC-CAL {e1['sgmc_cal']}.")
-    A(f"- Single-feature canary: symmetric AUC {e1['canary_symmetric_auc']:.3f} (pass, <= 0.90).")
-    A(f"- Pre-registered criteria failed. Verdict: **{e1['verdict'].upper()}**. Slot spent: {e1['slot_spent']}.")
-    A("- The E1 candidate was not run against the calibration lattice. The verdict is negative on the holdout, so the lattice check is moot for E1. It would be required before any promotion.")
-    A("- Evidence: `evidence/hypothesis_h_sass3_e_experiment.json`, produced by `scripts/hypothesis_h_sass3_e_basement_curvature.py`.")
-    A("")
-    A("## 8. Ranked untried hypotheses (3 to 5)")
-    A("")
-    A("Ranking is by expected DTI improvement and implementation cost. \"Untried\" means not found by a keyword screen of this repo and of the 882 Markdown files in the nine sibling checkouts. It is not exhaustive.")
-    A("")
-    A("| Rank | ID | Status | Layer(s) | Physical signature | Non-fault mimic | Why new |")
-    A("|---|---|---|---|---|---|---|")
-    for h in HYPOTHESES:
-        A(f"| {h['rank']} | {h['id']} | {h['status']} | {h['layers']} | {h['signature']} | {h['mimic']} | {h['why_new']} |")
-    A("")
-    A("## 9. Official sources (status in this session)")
-    A("")
-    A("| Source | Status | Use |")
-    A("|---|---|---|")
-    A("| https://docs.nlr.gov/docs/fy26osti/96647.pdf (GEMS Prize Official Rules, Sept 2026) | Fetched 2026-10-28 | Single GeoTIFF, 100 m; three submissions per week; public vs private scoring; generative-AI disclosure |")
-    A("| https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/ | Fetched 2026-10-28 (earlier session) | Metric (distance-weighted Tversky, alpha 0.2, beta 0.8, 300 m kernel); format |")
-    A("| https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ | Fetched 2026-10-28 (earlier session) | Leader 0.4544 (ORGANIZER-CONFIRMED) |")
-    A("| https://github.com/drivendataorg/gems-prize-reference-solution (commit aebe92f) | Cloned | Metric is not in the notebook |")
-    A("| https://github.com/buffedlizard55-lab/GEMSDOE{24,25,27,28,30,31,32,33,36} | Tarballs downloaded and checked | Sibling submissions; champion SHA-256 matches the sibling audit |")
-    A("| https://github.com/sassnarep3-star/GEMSDOE* | 404 | Not usable (C4) |")
-    A("| https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif (lattice witness) | Checked in the sibling checkout; SHA-256 b4570b40... matches main's pin | Literal registry rule (C9) |\n")
-    A("| USGS GeoDAWN (doi 10.5066/P93LGLVQ, cited in the Rules), epsg.io/32611, Tversky index wiki, gbcge.org INGENIOUS, USGS ANSS | NOT fetched in this session | Listed for manual review |")
-    A("")
-    A("## 10. Limitations")
+    A("### Archived lattice coverage check")
     A("")
     cov = lat.get("coverage_analysis")
-    if cov:
-        A(f"1. The literal registry rule blocks this file (C9). {cov['footprint_fraction_within_3px_of_lattice']*100:.2f}% of the footprint lies within 3 px of a lattice positive, leaving {cov['footprint_px_outside_3px_of_lattice']:,} footprint pixels outside the buffer. Passing needs at least {cov['dots_needed_outside_3px_to_pass']:,} of the {cov['dots']:,} dots there. {cov['reading']} The owner must decide whether the synthetic calibration lattice counts under Rule 1. This review applies no exemption.")
+    if isinstance(cov, dict) and isinstance(cov.get("footprint_px_outside_3px_of_lattice"), int):
+        A(
+            f"The checked-in archived bound audit reports {cov.get('footprint_fraction_within_3px_of_lattice', 0) * 100:.4f}% of the footprint within 3 px, "
+            f"leaving {cov['footprint_px_outside_3px_of_lattice']:,} pixels outside the buffer. At {cov.get('dots', 37_654):,} dots, "
+            f"at least {cov.get('dots_needed_outside_3px_to_pass', 0):,} would need to be outside to meet the 70% cap, so that archived calculation says the gate is unsatisfiable at this dot count. "
+            "The earlier 5,379-cell figure was retracted after the 2026-10-28 bound audit recomputed 6,649 uncovered cells; neither figure was freshly recomputed here."
+        )
     else:
-        A("1. The literal registry rule blocks this file (C9). Under that rule it is not OK to submit. Whether the calibration lattice should count is a protocol decision for the owner, not for this review.")
-    A("1a. No organizer score for the new file. Only the upload itself can show whether it is accepted or what it scores.")
-    A("2. Holdout values are proxies. The HIDE-RECOVER proxy is not leak-free for catalogue-built masks, and it does not rank the owner scores.")
-    A("3. Owner scores come from the task prompt, not from organizer receipts.")
-    A("4. Uniqueness was checked on final dots only. The surface check that Rule 1 also requires was not re-run. The downloads audit excludes non-download rasters; the literal gate adds the lattice only.")
-    A("5. Zeros fill the area outside the footprint. The organizer sample uses NaN nodata. Both are in [0,1], but whether the portal treats them identically is unconfirmed.")
-    A("6. Public and private leaderboard scores can differ (Rules 3.2).")
-    A("7. Generative-AI use must be disclosed in the submission narrative (Rules 3.2, IR-SASS3-11). This is an owner action.")
-    A("8. Training data comes from an owner mirror, not from organizer-authenticated downloads (IR-SASS3-14).")
-    A("9. The sibling checkouts are a snapshot taken 2026-10-28. Newer rasters are not covered.")
-    A("10. The GitHub Pages site cannot be checked from this sandbox. The local build reproduces the committed pages, but the live site updates only after the merge is published.")
-    A("11. `scripts/build_docs_pages.py` is broken and not used (IR-SASS3-10).")
-    A("12. Artifacts from `run_lwst_experiments.py` still show the old baseline until the pipeline is rerun (IR-SASS3-08).")
+        A("No lattice coverage raster is available for a fresh calculation. The literal uniqueness gate therefore remains blocked; no exemption is inferred.")
     A("")
-    A("## 11. Run card (Protocol Rule 5, review and experiment E1)")
+    A("## 2. Score provenance and what can be concluded")
     A("")
-    card = {
-        "review": "independent_review_20261028",
-        "hypothesis": "H-SASS3-E basement minimum-curvature ridges (E1). Review of the shipped LWST file.",
-        "mechanism": "Hessian minimum eigenvalue of depth_to_base_surf weighted by relief (E1)",
-        "non_fault_mimic": "sedimentary onlap / paleochannel incision",
-        "holdout_dti": {
-            "E1_hide_recover": e1["hide_recover"],
-            "E1_sgmc_cal": e1["sgmc_cal"],
-            "label": "HOLDOUT-DTI",
-        },
-        "correlation_overlap_vs_registry": {
-            "lwst_max_within3": uq["max_within3_frac"],
-            "lwst_max_abs_spearman": uq["max_abs_spearman_sampled"],
-            "limit_within3": 0.70,
-            "limit_spearman": 0.90,
-        },
-        "raster_sha256": fg["meta"]["sha256"],
-        "validator": {k: bool(v) for k, v in fg["checks"].items()},
-        "submission_name": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros",
-        "submission_note": "LWST GeoConduit dual-37654 zeros; format and uniqueness gates only",
-        "verdict": "negative for H-SASS3-E; review: OK to upload (format+uniqueness), not promoted to a slot",
-    }
+    A("No organizer submission-page receipt for the candidate or the nine site files is present in this checkout. All site scores below are **OWNER-REPORT** values copied from the archived audit. **HOLDOUT-DTI** is a local proxy evaluation, not a leaderboard estimate or organizer score. **LLI-PROJECTION** is a model-only estimate with a leave-one-out-error band, not a confidence interval and not a score.")
+    A("")
+    A("The archived LWST record reports:")
+    A("")
+    A(f"- {lwst_hr['score_label']} {lwst_hr['pooled_dti']:.6f} {_ci_text(lwst_hr['ci95'])}; evaluator `{lwst_hr['evaluator_version']}`, {lwst_hr['withheld_positive_pixels']:,} withheld positives, B_visible={lwst_hr['b_visible_px']} px. Archived; not rerun here.")
+    A(f"- {lwst_sg['score_label']} {lwst_sg['prevalence_calibrated_dti']:.6f} {_ci_text(lwst_sg['ci95'])}; evaluator `{lwst_sg['evaluator_version']}`, {lwst_sg['withheld_positive_pixels']:,} withheld positives. Archived; not rerun here.")
+    paired_delta = json.loads((ROOT / "evidence/archived_run_card_lwst_20261027.json").read_text()).get("holdout_dti", {}).get("secondary_off_catalogue_sgmc", {})
+    A(f"- Archived SGMC-CAL comparator: champion point 0.064121; paired delta {paired_delta.get('paired_delta_calibrated_vs_champion', 0.001581):+.6f} {_ci_text(paired_delta.get('paired_delta_calibrated_ci95'))}. The paired interval includes zero.")
+    A("- **Outperformance status: NOT DEMONSTRATED.** These are archived HOLDOUT-DTI proxies, not organizer scores or leaderboard predictions.")
+    A("")
+    A("The earlier 0.111062 HIDE-RECOVER claim is withdrawn as the shipped raster's score: it was an OOF/per-fold result using a mislabeled parent baseline. The archived static-file evaluation above is the relevant proxy record, and still does not predict a competition score. The task prompt gives conflicting 0.3195 and 0.4413 leaderboard snapshots; later repository notes record a 0.4544 public-board read. This review did not fetch the live leaderboard, so none is asserted as today's value, and no public-board snapshot is an organizer receipt for a particular site file.")
+    A("")
+    A("### Nine-site executive summary")
+    A("")
+    A("The maximum pairwise overlap column compares each historical leader against the other eight historical leaders only. It is not a full-registry uniqueness test. The LWST comparison is a separate archived pairwise scan, not a fresh clearance.")
+    A("")
+    A("| Site | Best file in archived audit | OWNER-REPORT (no receipt) | ORGANIZER-CONFIRMED file score | LLI-v1-S0 projection (NOT a score) | HOLDOUT-DTI proxy | Max 3-px overlap vs other 8 historic leaders | Archived LWST overlap vs this file |")
+    A("|---|---|---:|---|---|---|---|---|")
+    for row in r["per_site_table"]:
+        owner = _float_text(row.get("owner_reported_score"), 4)
+        proj = row.get("model_projection_not_score", {})
+        proj_score = proj.get("projected_dti")
+        proj_band = proj.get("loo_mae_band")
+        projection_text = (
+            f"{proj_score:.6f}; LOO-MAE band {_ci_text(proj_band, 4)}"
+            if isinstance(proj_score, (int, float)) and isinstance(proj_band, list)
+            else "not available"
+        )
+        hold = row.get("holdout_dti", {})
+        hold_text = (
+            f"HOLDOUT-DTI {hold['dti']:.6f} {_ci_text(hold.get('ci95'))}; {hold.get('evaluator_version')}; "
+            f"n={hold.get('withheld_positive_pixels'):,}"
+            if isinstance(hold.get("dti"), (int, float)) and isinstance(hold.get("withheld_positive_pixels"), int)
+            else "not available"
+        )
+        ov = row.get("historical_pairwise_overlap_vs_other_8")
+        peer = row.get("nearest_historical_peer") or "peer not recorded"
+        pairwise = f"{_pct(ov)} vs {peer} (ARCHIVE)" if isinstance(ov, (int, float)) else "not available"
+        lwst_ov = row.get("archived_lwst_overlap_vs_this_file")
+        lwst_text = f"{_pct(lwst_ov)} (ARCHIVE)" if isinstance(lwst_ov, (int, float)) else "not available"
+        filename = row.get("best_owner_reported_file", "unknown")
+        A(f"| {row['site']} | `{filename}` | {owner} (OWNER-REPORT) | No per-file receipt | {projection_text} (not a CI) | {hold_text} | {pairwise} | {lwst_text} |")
+    A("")
+    A("**Cross-site reading:** the archived leader-to-leader overlaps are all above the 70% threshold, so those historical leaders are not unique relative to one another under the specified 3-pixel comparison. The separate old LWST/download scan cannot clear the new/current full registry.")
+    A("")
+    A("## 3. Prior experiment E1 — negative result")
+    A("")
+    A(f"Archived H-SASS3-E ({e1.get('hypothesis', 'basement-curvature candidate')}) was marked **{e1.get('verdict', 'negative').upper()}**, with no slot spent. Its metrics were:")
+    A("")
+    A(f"- {e1_hr['score_label']} {e1_hr['pooled_dti']:.6f} {_ci_text(e1_hr['ci95'])}; `{e1_hr['evaluator_version']}`, {e1_hr['withheld_positive_pixels']:,} withheld positives, B_visible={e1_hr['b_visible_px']} px.")
+    A(f"- {e1_sg['score_label']} {e1_sg['prevalence_calibrated_dti']:.6f} {_ci_text(e1_sg['ci95'])}; `{e1_sg['evaluator_version']}`, {e1_sg['withheld_positive_pixels']:,} withheld positives.")
+    can = card["leakage_canary"]["E1_single_feature"]
+    A(f"- Single-feature canary: symmetric AUC {_float_text(can['symmetric_auc'])} vs 0.90 limit; pass={can['passed']}. This is the experiment-specific scalar canary, not the separate 51-channel report.")
+    A("- This negative historical result is not a reason to start another experiment: the H-SASS3-A ledger records 3/3 experiments and the current checkout's task brief does not identify the active method lane.")
+    A("")
+    A("## 4. Ranked geological hypotheses — planning only")
+    A("")
+    A("Ranks are qualitative expected-value/cost priorities, not measured gains. None is approved or validated; expected DTI improvement is unquantified. The cached feature stack is missing. The official sources below were not checked for current coverage or downloadable files, so these ideas are not currently viable experimental plans.")
+    A("")
+    A("| Rank | Candidate | Status | Layers | Physical signature / why it may reveal uncatalogued faults | Non-fault mimic | Difference from existing repo work | Cost and data availability |")
+    A("|---:|---|---|---|---|---|---|---|")
+    for h in HYPOTHESES:
+        A(f"| {h['rank']} | {h['id']} | {h['status']} | {h['layers']} | {h['signature']} | {h['mimic']} | {h['why_new']} | {h['cost']}. {h['source_status']} {h['expected_dti']} |")
+    A("")
+    A("## 5. Current blockers, provenance, and official sources")
+    A("")
+    A(f"- Lane/budget: active method lane is unresolved. Prior ledger `{budget.get('prior_lane')}` records {budget.get('prior_lane_experiments')} of {budget.get('prior_lane_budget_cap')} experiments (elapsed {budget.get('prior_lane_elapsed_seconds')} seconds); no new experiment was run.")
+    A(f"- Data: cached feature stack present={card['official_data_availability']['cached_feature_stack_present']}; official sample present={card['official_data_availability']['official_sample_present']}; local sibling registry present={card['official_data_availability']['local_sibling_registry_present']}. No current full-registry uniqueness or surface scan is possible from these files.")
+    A(f"- Sibling links on the reviewed public pages: {links.get('unique_targets', 0)} targets; local resolution complete={links.get('verification_complete')}; all resolved={links.get('all_resolved')}. {links.get('reason', '')}")
+    A("")
+    A("| Official/reference source | Status in this review | Intended use |")
+    A("|---|---|---|")
+    A("| [GEMS Official Rules (PDF)](https://docs.nlr.gov/docs/fy26osti/96647.pdf) | Cited in the archived review; not fetched again for this edit | File format, scoring disclosure, submission rules; confirm against current organizer page before upload. |")
+    A("| [Competition problem/data page](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) · [data download](https://www.drivendata.org/competitions/306/competition-doe-gems/data/) | Not checked in this review; cache absent | Official training data and metric. |")
+    A("| [Competition leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) | Not checked in this review; prompt values conflict | No current leaderboard value asserted. An organizer receipt is needed for a per-submission score. |")
+    A("| [USGS GeoDAWN](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and) | Named in planning only; coverage and download access not verified | Potential official geophysical layers for hypotheses 1 and 3. |")
+    A("| [Reference solution](https://github.com/drivendataorg/gems-prize-reference-solution) | Repository is cited in the archived work; not reaudited in this review | Evaluator and submission conventions; use shared `vendor/gems57` tools where appropriate. |")
+    A("| [Archived lattice witness source](https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif) | Previously pinned/hash-checked; local witness missing now | Explains the archived literal uniqueness failure; not a fresh local recheck. |")
+    A("")
+    A("## 6. Limitations and required next steps")
+    A("")
+    A("1. Do not submit or spend a slot. First resolve the lane and whether the synthetic calibration raster is in scope without silently changing the protocol.")
+    A("2. Restore authenticated official data, the sample GeoTIFF, cached feature stack, and a complete current registry. Re-run surface correlation and final-dot overlap against every in-scope registry raster; keep archived results separate.")
+    A("3. Only after that, and only if the lane budget permits, use the shared `vendor/gems57` evaluator/writer, whole-segment buffered hide-and-recover, single-feature leakage canaries, and report evaluator, withheld positives and 95% CI. No new experiment is authorized by this review.")
+    A("4. Generate and validate a distinct GeoTIFF only after its method clears the protocol. Check exact CRS, shape, transform, finite [0,1] range and unique name; write a <=140-character truthful note. A selector—not this report—makes any slot promotion decision.")
+    A("5. Preserve negative results. Do not turn OWNER-REPORT, HOLDOUT-DTI, or model projections into organizer-confirmed scores.")
+    A("")
+    A("## 7. Run card (Protocol Rule 5)")
+    A("")
     A("```json")
     A(json.dumps(card, indent=2, ensure_ascii=False))
     A("```")
@@ -434,24 +732,30 @@ def main() -> int:
     conc = json.loads(CONC.read_text())
     e1 = json.loads(EXP_E1.read_text())
     links = link_gate()
-    owner_n = len(json.loads(OWNER.read_text())["entries"])
+    owner_n = len(json.loads(OWNER.read_text()).get("entries", []))
+    old_card = json.loads(ARCHIVE_CARD.read_text()) if ARCHIVE_CARD.exists() else {}
+    ledger_path = ROOT / "evidence/lwst_experiment_ledger.json"
+    ledger = json.loads(ledger_path.read_text()) if ledger_path.exists() else {}
 
-    literal_unique = bool(uq["pass"] and lat["pass"])
+    literal_unique = bool(uq.get("pass") and lat.get("pass"))
     verdict = {
         "format_valid_programmatic": fmt["all_pass"],
-        "unique_on_downloads_programmatic": uq["pass"],
+        "unique_on_downloads_programmatic": False,
+        "unique_on_downloads_archived_pass": bool(uq.get("archived_pass")),
+        "uniqueness_recomputed_this_run": bool(uq.get("recomputed_this_run")),
         "unique_literal_incl_calibration_lattice": literal_unique,
-        "ok_to_download_and_upload_as_valid_unique_file": fmt["all_pass"] and literal_unique,
-        "ok_to_download_as_format_valid_archive_only": fmt["all_pass"],
+        "ok_to_download_and_upload_as_valid_unique_file": False,
+        "ok_to_download_for_competition": False,
+        "archive_file_present_for_research": LWST.exists(),
         "beats_0_2778_champion_demonstrated": False,
-        "beats_0_4544_leader_demonstrated": False,
+        "beats_current_leaderboard_demonstrated": False,
         "promote_to_real_slot": False,
-        "reason_not_promoted": "Blocked by the literal registry-overlap rule (lattice witness "
-                               f"{lat['within3_frac']*100:.2f}% > 70%). Also Protocol Rule 6: promotion is a separate selector step.",
+        "reason_not_promoted": _safe_block_reason(lat),
     }
-    sgmc_lwst = 0.065702
+    per_site = per_site_table()
+    card = _run_card(fmt, uq, lat, e1, old_card, ledger)
     result = {
-        "schema_version": 1,
+        "schema_version": 2,
         "date": "2026-10-28",
         "file_under_review": str(LWST.relative_to(ROOT)),
         "verdict": verdict,
@@ -459,49 +763,41 @@ def main() -> int:
         "uniqueness_gate": uq,
         "lattice_gate_literal": lat,
         "link_gate": links,
-        "holdout_summary": {
-            "lwst": {
-                "hide_recover": "HOLDOUT-DTI 0.006130 [0.005175, 0.007123] (GEMSDOE32-HIDE-RECOVER-v3.0, B_visible=2 px, n_withheld 22,232)",
-                "sgmc_cal": f"HOLDOUT-DTI {sgmc_lwst:.6f} [0.058992, 0.071240] (GEMSDOE32-SGMC-CAL-v3.0)",
-            },
-            "champion_e5eb6e7e": {
-                "hide_recover": "HOLDOUT-DTI 0.004515 (static; NOT leak-free under Rule 2 because the champion was built from the full catalogue)",
-                "sgmc_cal": "HOLDOUT-DTI 0.064121 (same evaluator, same process as the LWST receipt)",
-                "owner_reported": "OWNER-REPORT 0.2778",
-            },
-            "reading": "LWST SGMC-CAL 95% CI [0.059, 0.071] contains the champion point 0.064121: the difference is not significant.",
-        },
+        "holdout_summary": card["holdout_dti"],
         "proxy_concordance": {
-            "label": "HOLDOUT-DTI proxies vs OWNER-REPORT scores (n=21 focus-site rasters)",
+            "label": "HOLDOUT-DTI proxy rank correlations versus OWNER-REPORT scores; archived, n=21",
+            "evaluator_versions": ["GEMSDOE32-HIDE-RECOVER-v3.0", "GEMSDOE32-SGMC-CAL-v3.0"],
             "rho_sgmc_calibrated_vs_owner": conc["concordance"]["sgmc_calibrated_dti"],
             "rho_hide_recover_vs_owner": conc["concordance"]["hide_recover_dti"],
             "rho_sgmc_raw_vs_owner": conc["concordance"]["sgmc_raw_dti"],
-            "reading": "SGMC-CAL ranks the owner scores well; HIDE-RECOVER does not. Use SGMC-CAL for ranking only.",
-            "projection": "None. The LWST SGMC-CAL value lies above the 21 known values' maximum (0.0644), so any numeric score "
-                          "estimate would be an extrapolation and is not reported.",
+            "evidence_status": "Archived concordance; proxy ranking only, not score prediction.",
         },
-        "experiment_E1_H_SASS3_E": {
-            "hypothesis": e1["hypothesis"],
-            "hide_recover": f"HOLDOUT-DTI {e1['holdout_dti']['hide_and_recover']['pooled_dti']:.6f} "
-                            f"{[round(x, 6) for x in e1['holdout_dti']['hide_and_recover']['ci95_cluster_bootstrap']]}",
-            "sgmc_cal": f"HOLDOUT-DTI {e1['holdout_dti']['sgmc_off_catalogue']['sgmc_prevalence_calibrated_dti']:.6f} "
-                        f"{[round(x, 6) for x in e1['holdout_dti']['sgmc_off_catalogue']['sgmc_calibrated_ci95']]}",
-            "canary_symmetric_auc": round(e1["leakage_canary_single_feature"]["symmetric_auc"], 6),
-            "verdict": e1["verdict"],
-            "slot_spent": e1["slot_spent"],
-        },
+        "experiment_E1_H_SASS3_E": e1,
         "owner_reported_entries": owner_n,
-        "per_site_table": per_site_table(),
-        "budget": {"experiments_used": 1, "budget": 3, "hours_note": "wall-clock not tracked to the minute; within 2 h by estimate"},
+        "per_site_table": per_site,
+        "budget": card["budget"],
+        "run_card": card,
     }
-    OUT_JSON.write_text(json.dumps(result, indent=2) + "\n")
+    OUT_JSON.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text(render_md(result), encoding="utf-8")
-    print(json.dumps({"verdict": verdict, "format_pass": fmt["all_pass"], "uniqueness_pass": uq["pass"],
-                      "links_all_resolved": links["all_resolved"], "unique_targets": links["unique_targets"],
-                      "remaining_broken": sum(p["remaining_sassnarep3_star_links"] for p in links["pages"].values())},
-                     indent=2))
-    return 0 if fmt["all_pass"] and links["all_resolved"] else 1
+    # This report concerns an archived LWST raster. Keep its run card nested in
+    # the dated review receipt; never overwrite the repository's canonical
+    # current-candidate cards (which may describe a different, later artifact).
+    print(json.dumps({
+        "verdict": verdict,
+        "format_pass": fmt["all_pass"],
+        "archived_download_subset_pass": uq.get("archived_pass"),
+        "current_uniqueness_verified": uq.get("recomputed_this_run"),
+        "literal_lattice_overlap": lat.get("within3_frac"),
+        "lattice_witness_recomputed": lat.get("recomputed_this_run"),
+        "links_all_resolved": links.get("all_resolved"),
+        "link_verification_complete": links.get("verification_complete"),
+        "experiments_run_this_review": 0,
+    }, indent=2))
+    # This is a report generator. Submission eligibility is represented separately
+    # and remains false unless all current uniqueness evidence is revalidated.
+    return 0 if fmt["all_pass"] else 1
 
 
 if __name__ == "__main__":

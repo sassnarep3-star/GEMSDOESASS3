@@ -88,6 +88,20 @@ def test_amendment_is_proposed_not_applied():
     assert "ACCEPT / AMEND / REJECT" in text
 
 
+def test_lattice_exemption_is_not_applied_under_the_binding_task_protocol():
+    readme = (ROOT / "README.md").read_text()
+    memo = MEMO.read_text()
+    builder = (ROOT / "scripts/build_review_site.py").read_text()
+    assert "any registry raster" in readme.lower()
+    assert "not authorized by the current task" in memo.lower()
+    assert "not a path to clearance" in builder.lower()
+    assert "become eligible for a selector" not in builder.lower()
+    for page in PAGES:
+        html = page.read_text()
+        assert "NOT CLEARED" in html
+        assert "not a path to clearance" in html.lower()
+
+
 def test_pages_do_not_clear_any_file_for_submission():
     for p in PAGES:
         html = p.read_text()

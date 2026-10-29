@@ -72,25 +72,25 @@ rev_items = (
     f"{LWST_LAT*100:.2f}% of its dots within 3 px. Reproduced on fresh bytes.</li>"
 )
 
-hero_ok = f'''<section class="hero ok"><p class="label">START HERE · OK TO DOWNLOAD · NOT CLEARED FOR SUBMISSION (ok_to_submit: false)</p>
-<h1>Download the unique, format-valid TIF</h1>
+hero_ok = f'''<section class="hero ok"><p class="label">START HERE · ANALYSIS COPY · COMPETITION DOWNLOAD NOT AUTHORIZED · NOT OK TO SUBMIT (ok_to_submit: false)</p>
+<h1>Download the validated TIF (analysis copy)</h1>
 <p><strong>File:</strong> <code>{e(LIT_NAME)}</code><br>
 <strong>Note to paste (≤140 characters):</strong> <code>{e(LIT_NOTE)}</code><br>
 <strong>SHA-256:</strong> <code>{e(LIT_SHA)}</code></p>
 <p><a class="btn" href="downloads/{e(LIT_NAME)}">Download TIF</a> <a class="btn alt" href="downloads/{e(LIT_NAME)}.zip">Download ZIP</a> <a href="data/run_card_literal.json">Run card (JSON)</a></p>
-<p><strong>Download: YES.</strong> It passes the format gate (NaN outside the footprint, the official rule) and the literal uniqueness rule against all 386 registry rasters.
-<strong>Upload to a leaderboard slot: NOT OK to submit.</strong> NOT CLEARED FOR SUBMISSION: holdout not PASS, canary not run, uniqueness on the binary surface only. On the holdout proxy it scores below the 0.2778 champion, and
+<p><strong>Analysis download: YES.</strong> It passes the format gate (NaN outside the footprint, the official rule) and the literal any-registry rule against all 386 rasters. <strong>Competition-download authorization: NO</strong> (fail-closed, as on main; owner decision, IR-SASS3-71).
+<strong>Upload to a leaderboard slot: NOT OK to submit.</strong> Option A is not a path to clearance. NOT CLEARED FOR SUBMISSION: holdout not PASS, canary not run, uniqueness on the binary surface only. On the holdout proxy it scores below the 0.2778 champion, and
 the confidence intervals do not overlap. Promotion is a separate selector decision, and any upload uses one of the three weekly submissions.</p>
 </section>'''
 
 table_ok = f'''<section><h2>Which file to use: summary table</h2>
 <p>Scores are <strong>HOLDOUT-DTI</strong> estimates from the repo's SGMC-CAL evaluator (<code>{e(EVAL)}</code>, {n_wh:,} withheld off-catalogue positives, 95% spatial-cluster bootstrap CI). They are <strong>not organizer scores</strong> and are not calibrated to the leaderboard scale. The only organizer-scale number is the champion's OWNER-REPORT 0.2778, which is a typed value, not an organizer receipt.</p>
-<div class="scroll"><table><thead><tr><th>File to download</th><th>Estimated score</th><th>Unique vs GEMSDOE 24-36 and registry?</th><th>OK to download?</th><th>OK to upload?</th></tr></thead><tbody>
+<div class="scroll"><table><thead><tr><th>File to download</th><th>Estimated score</th><th>Unique vs GEMSDOE 24-36 and registry?</th><th>Competition download authorized?</th><th>OK to submit?</th></tr></thead><tbody>
 <tr class="pick"><td><code>{e(LIT_NAME)}</code><br><a href="downloads/{e(LIT_NAME)}">download</a></td>
 <td>HOLDOUT-DTI {lit_val:.6f} [{lit_ci[0]:.6f}, {lit_ci[1]:.6f}]</td>
 <td><strong>YES.</strong> Lattice overlap {LIT_WORST*100:.4f}% (&lt;70%); worst non-lattice {LIT_WORST_NONLAT*100:.2f}%.</td>
-<td><strong>YES</strong></td><td><strong>Allowed by rule. Not recommended:</strong> proxy below champion.</td></tr>
-<tr><td><code>{e(bgk['submission_name'])}</code> (main, BGK-PBE)</td>
+<td><strong>NO</strong> (analysis copy: YES)</td><td><strong>NOT OK to submit.</strong> Not recommended for a slot: proxy below champion; holdout, canary and complete uniqueness not cleared.</td></tr>
+<tr><td><code>{e(bgk['submission_name'])}</code> (main, BGK-PBE; described as a synthetic stand-in, IR-SASS3-47)</td>
 <td>Not scored: fail-closed. Holdout is not run once uniqueness fails.</td>
 <td><strong>NO.</strong> Lattice overlap {bgk['literal_audit_2026_10_29']['worst_within_3px_fraction_final_dots']*100:.2f}%. 4,911 non-zero values outside the footprint.</td>
 <td><strong>NO</strong></td><td><strong>NOT OK to submit.</strong></td></tr>
@@ -107,7 +107,7 @@ table_ok = f'''<section><h2>Which file to use: summary table</h2>
 <td>Already in the registry.</td><td>n/a</td><td><strong>NO.</strong> Already scored; resubmitting is not useful.</td></tr>
 </tbody></table></div>
 <p><strong>Reading the gap.</strong> The 37,654-dot LWST file has a proxy of {lwst['value']:.6f}, against the champion proxy {champ['value']:.6f}: essentially tied, with overlapping intervals. Making it compliant means dropping to about 21k dots, and that costs roughly a third of the proxy score. A same-count random control with no lattice constraint scores {same['value']:.6f} [{same['ci95'][0]:.6f}, {same['ci95'][1]:.6f}], so the dot cap alone explains about a fifth of the loss; the forced gap dots and the constrained placement explain the rest.</p>
-<p><strong>Decision needed from the owner:</strong> does the synthetic 13GEMSDOE calibration lattice count as a registry raster under Rule 1? If it does not, the 37,654-dot LWST file becomes OK to download, with a proxy tied with the champion. If it does, the compliant file is the only unique option, and it is weaker on the proxy.</p>
+<p><strong>Binding rule (no exemption authorized):</strong> the literal Rule 1 compares dots against any registry raster, including the 13GEMSDOE calibration lattice. Under that rule the 37,654-dot LWST file fails (99.78% within 3 px of the lattice), and the compliant 21k file passes (68.99%). Option A (excluding halo-saturated lattices) is an unapplied proposal; it is not authorized here and is not a path to clearance. The lattice question is an owner decision, not an agent action (<a href="research/lattice-decision-20261028.md">decision memo</a>).</p>
 </section>'''
 
 submit_steps = f'''<section><h2>How to submit (exact steps)</h2><ol>

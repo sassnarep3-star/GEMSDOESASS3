@@ -124,6 +124,18 @@ def verify() -> dict:
         and card["registry_correlation_and_overlap"]["pre_placement_rank_correlation"] is not None
     )
     check("complete_uniqueness_gate", complete_unique, "full registry / surface gate is not cleared")
+    # Scoped recomputation of the two archived 2026-10-28 candidates (recorded, not gating the
+    # current card): literal Rule 1 covers submissions + calibration rasters, fail-closed.
+    for tag, rel in (("lwst", "evidence/uniqueness_scoped_lwst_20261028.json"),
+                     ("sardeconf", "evidence/uniqueness_scoped_sardeconf_20261028.json")):
+        scoped = json.loads((ROOT / rel).read_text())["summary"]
+        check(
+            f"scoped_literal_registry_rule_{tag}",
+            scoped.get("passes_rule_1") is True,
+            f"archived {tag} candidate blocked by literal registry rule: "
+            f"submissions {scoped['by_scope']['submission']['max_within3']['frac']*100:.2f}%, "
+            f"calibration {scoped['by_scope']['calibration']['max_within3']['frac']*100:.2f}% (limit 70%)",
+        )
     check("holdout_gate", card["holdout_dti"]["status"] == "PASS", f"candidate HOLDOUT-DTI status = {card['holdout_dti']['status']}")
     check("canary_gate", card["leakage_canary"]["status"] == "PASS", "candidate leakage canary not run")
     check("candidate_not_promoted", card["verdict"] == "negative" and card["ok_to_submit"] is False)
@@ -146,9 +158,9 @@ def verify() -> dict:
         "ok": bool(approved and card.get("ok_to_submit") is True),
         "format_and_record_integrity": format_ok,
         "competition_rules_outside_bounds_and_literal_lattice": competition_rules_ok,
-        # Download is approved when the format and the competition rules pass (standing prompt: the download
-        # verdict must be obvious). Submission stays gated by uniqueness, holdout, canary and the verdict.
-        "ok_to_download": bool(format_ok and competition_rules_ok),
+        # Competition-download authorization stays FALSE (fail-closed, as on main; IR-SASS3-65, owner decision).
+        # The repository copy is an audit copy for analysis: see ok_to_download_for_analysis below.
+        "ok_to_download": False,
         "ok_to_download_for_analysis": bool(card.get("ok_to_download_for_analysis")),
         "ok_to_submit": approved and card.get("ok_to_submit") is True,
         "verdict": card["verdict"],

@@ -106,7 +106,7 @@ def test_emitted_geotiff_and_all_automated_gates() -> None:
     assert "holdout_gate" in res["problems"]
     assert "complete_uniqueness_gate" in res["problems"]
     assert "canary_gate" in res["problems"]
-    assert res["ok_to_download"] is True
+    assert res["ok_to_download"] is False  # competition download authorization stays fail-closed (main policy)
     assert res["ok_to_download_for_analysis"] is True
     assert res["ok_to_submit"] is False
     assert res["verdict"] == "negative"
