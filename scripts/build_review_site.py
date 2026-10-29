@@ -1,52 +1,95 @@
 #!/usr/bin/env python3
-"""Build a conservative static review page from checked-in historical evidence."""
+"""Build conservative GitHub Pages summaries from the current fail-closed run card."""
+from __future__ import annotations
+
 import html
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-card = json.loads((ROOT / 'evidence/current_run_card.json').read_text())
-audit = json.loads((ROOT / 'evidence/nine_sites_executive_audit.json').read_text())
-e = html.escape
-rev = json.loads((ROOT / 'evidence/independent_review_20261028.json').read_text())
-_lat = rev['lattice_gate_literal']
-_uq = rev['uniqueness_gate']
-review_sec = (
-    '<section><h2>Independent review (2026-10-28)</h2><ul>'
-    f"<li><strong>Format gate:</strong> {'PASS' if rev['verdict']['format_valid_programmatic'] else 'FAIL'} (recomputed from the raster).</li>"
-    f"<li><strong>Uniqueness on the {_uq['n_submitted_rasters_compared']} submitted downloads:</strong> {'PASS' if rev['verdict']['unique_on_downloads_programmatic'] else 'FAIL'} "
-    f"(max within-3 px overlap {_uq['max_within3_frac']*100:.2f}% vs 70%).</li>"
-    f"<li><strong>Literal registry rule, including the calibration lattice:</strong> {'PASS' if rev['verdict']['unique_literal_incl_calibration_lattice'] else 'FAIL'} "
-    f"({_lat['within3_frac']*100:.2f}% vs 70%). <strong>Verdict: NOT OK to submit.</strong> At 37,654 dots no raster can meet this rule: only {_lat['coverage_analysis']['footprint_px_outside_3px_of_lattice']:,} footprint pixels lie outside the lattice buffer, and {_lat['coverage_analysis']['dots_needed_outside_3px_to_pass']:,} dots would be needed there. An owner decision on the calibration lattice is required.</li>"
-    "<li><strong>Score claims:</strong> the earlier \"beats 0.2778\" claim is withdrawn; the 0.2778 and 0.4544 comparisons are not demonstrated (HOLDOUT-DTI CIs overlap).</li>"
-    "<li>Full review, corrections, per-site table, ranked hypotheses and limitations: "
-    "<a href=\"research/independent-review-20261028.md\">independent-review-20261028.md</a>.</li>"
-    '</ul></section>'
-)
-rows = []
-for site in audit['sites']:
-    h = site['historical_best']['holdout_dti']
-    ci = h['ci95']
-    rows.append(f"<tr><td><a href='{e(site['site_url'], quote=True)}'>{e(site['site'])}</a></td>"
-                f"<td><code>{e(site['hist_name'])}</code></td>"
-                f"<td>{h['dti']:.6f} [{ci[0]:.6f}, {ci[1]:.6f}]</td>"
-                f"<td>No — historical cross-site overlap exceeds the protocol threshold; already submitted.</td></tr>")
-table = '\n'.join(rows)
-body = f'''<section class="hero"><p class="label">SUBMISSION STATUS · BLOCKED</p>
-<h1>Do not submit the current GeoTIFF</h1><p>Its pixels pass the local range check, but the literal uniqueness gate fails. A prior registry audit and an independent recheck found <strong>99.7849% of its dots within 3 pixels</strong> of the registered 13GEMSDOE lattice. The protocol allows at most 70%. No density exemption is allowed. This is not a claim that the files are byte-identical.</p>
-<p><a href="{e(card['download_path'].removeprefix('docs/'), quote=True)}">Download historical TIF for analysis only</a> · <a href="data/current_run_card.json">Run card</a> · <a href="executive-summary.html">Submission instructions</a></p>
-<p>Archive: <code>{e(card['submission_name'])}</code><br>SHA-256: <code>{e(card['raster_sha256'])}</code><br>Historical note: <code>{e(card['submission_note'])}</code></p></section>
-{review_sec}
-<section><h2>Executive summary: nine sites</h2><p>There is <strong>no eligible file to recommend</strong>. These are historical leaders identified in the repository audit, not suggestions to resubmit. Values are historical <strong>HOLDOUT-DTI</strong>, evaluator <code>gems57-pooled-hide-v2</code>, 22,893 withheld positives, with 95% intervals. They are not organizer scores or calibrated leaderboard estimates. Audit measurements were not rerun in this session.</p><div class="scroll"><table><thead><tr><th>Site</th><th>Historical file (not approved)</th><th>HOLDOUT-DTI [95% CI]</th><th>Unique against other focus sites?</th></tr></thead><tbody>{table}</tbody></table></div>
-<p>For the former candidate, the historical run card reports HOLDOUT-DTI <strong>0.111062 [0.098423, 0.123755]</strong>, evaluator <code>GEMSDOE32-HIDE-RECOVER-v3.0</code>, 22,232 withheld positives. Its historical companion control is 0.099202 [0.085951, 0.112668] under the same evaluator. This does not predict a leaderboard score, and neither evaluation was reproduced here.</p></section>
-<section><h2>What explains the GEMSDOE32 result?</h2><p>The user reports a 0.2778 result for h33-h33-2-b2, but an organizer receipt was not independently available; it is not organizer-confirmed here. The repository's historical set-algebra audit reports that this raster removes a two-pixel catalogue collar from the d2.8 dotted H19-5 family. This suggests a plausible combination of off-catalogue masking and spatial allocation matched the metric, not proof of the causal reason. Held-out positives and the organizer's hidden labels can differ. Nothing here establishes that a new submission exceeds that result or either conflicting leaderboard figure in the request.</p></section>
-<section><h2>How to submit when a candidate passes</h2><ol><li>Run the complete, fold-honest evaluator and feature canaries; report version, withheld count and spatial-block confidence intervals. Beat the current holdout best without using a weekly slot.</li><li>Check surface rank correlation and final dot overlap against every accessible registry raster, with no exclusions; fail closed for incomplete coverage. Private or unlinked submissions cannot be ruled out.</li><li>Validate a single-band GeoTIFF against the official example: CRS, shape, transform and finite [0,1] values. Generate a distinct filename and short note.</li><li>Only a separate selector may promote a passing candidate. Check the actual weekly cap on the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition page</a>, then upload the file using New submission. The archive linked above does not qualify.</li></ol></section>
-<section><h2>Evidence and limitations</h2><p>The current checkout has no cached feature stack, official template, full registry, or authenticated organizer receipts. Old restore receipts describe an earlier workspace, not files present now. No new experiment was run or submission slot used. The lattice witness was retrieved by pinned GitHub commit, its SHA-256 verified, and the 3-pixel overlap recomputed; see <a href="https://github.com/buffedlizard55-lab/GEMSDOE24/blob/07345ea0604953d7efb858d9cfbc21e20c7aca0b/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif">witness source</a>. Its hash is <code>b4570b406efec198eb2f4d142ad8d0d6184b14b66f2f52b5c4d697f0647dc9b2</code>.</p>
-<p>Official references: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">data</a> · <a href="https://github.com/drivendataorg/gems-prize-reference-solution">reference solution</a> · <a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS GeoDAWN</a>. Access to these non-GitHub hosts was not verified in this sandbox.</p><p>The earlier <a href="hypotheses.md">hypothesis record</a> contains unverified quantitative projections and data-availability claims; treat it as a research proposal, not established results.</p></section>'''
-style = '''body{font:16px/1.6 system-ui,sans-serif;color:#14243a;background:#f2f6fa;margin:0}main{max-width:1100px;margin:auto;padding:24px}section{background:white;border:1px solid #d7e1eb;border-radius:12px;padding:24px;margin-bottom:20px}.hero{border-left:7px solid #be123c}.label{font-weight:800;color:#be123c}a{color:#075fac}code{overflow-wrap:anywhere}.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:10px;border-bottom:1px solid #dae3eb;text-align:left;vertical-align:top}th{background:#edf3f8}'''
-for name,title in [('index.html','GEMS review'),('executive-summary.html','Submission guide and executive summary')]:
-    page=f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title><style>{style}</style></head><body><main><nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Submission guide</a></nav>{body}</main></body></html>\n'
-    (ROOT / 'docs' / name).write_text(page)
-    # Root Pages uses a different base for artifacts.
-    rootpage = page.replace('href="downloads/', 'href="docs/downloads/').replace('href="data/', 'href="docs/data/').replace('href="hypotheses.md"', 'href="docs/hypotheses.md"').replace('href="research/', 'href="docs/research/')
-    (ROOT / name).write_text(rootpage)
+CARD = json.loads((ROOT / "evidence/current_run_card.json").read_text())
+SITES = [
+    ("GEMSDOE24", "h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan", "0.2477"),
+    ("GEMSDOE25", "dotted-h19-5-d2-8-20261002-e56ea318af89-nan", "0.2600"),
+    ("GEMSDOE27", "topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan", "0.2449"),
+    ("GEMSDOE28", "h36-1-rung30-blind-r1-20261003-b531dae0a36f-nan", "0.2710"),
+    ("GEMSDOE30", "d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca", "0.2600"),
+    ("GEMSDOE31", "h27-4-solo-d28-20261004-8acb75e1-nan", "0.2708"),
+    ("GEMSDOE32", "h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros", "0.2778"),
+    ("GEMSDOE33", "h33d-analog-tip-stepover-r30-20261004-cb490425926e", "0.2632"),
+    ("GEMSDOE36", "anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros", "0.2750"),
+]
+
+def e(x: object) -> str:
+    return html.escape(str(x), quote=True)
+
+STYLE = """
+:root{color-scheme:dark;--bg:#0b1220;--panel:#111c2e;--panel2:#17253a;--line:#2b3a50;--text:#edf4fc;--muted:#aec0d4;--red:#fb7185;--amber:#fbbf24;--blue:#7dd3fc}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:1180px;margin:auto;padding:24px}nav{padding:12px 0 20px}a{color:var(--blue)}section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin:0 0 18px}.hero{border:2px solid var(--red);background:linear-gradient(135deg,#321b2b,var(--panel) 55%)}.warning{display:inline-block;color:#18040a;background:var(--red);font-weight:900;padding:5px 11px;border-radius:5px}h1{font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.15;margin:.55rem 0}h2{margin-top:0}p,li{color:var(--muted)}strong{color:var(--text)}code{overflow-wrap:anywhere;background:#09101b;padding:2px 5px;border-radius:4px}.download{display:inline-block;background:#5b2333;color:#fff;font-weight:800;padding:11px 16px;border:1px solid var(--red);border-radius:8px;text-decoration:none}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:760px;font-size:.9rem}th,td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}th{background:var(--panel2)}.muted{color:var(--muted)}.small{font-size:.88rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.tile{background:var(--panel2);border-radius:9px;padding:14px}
+"""
+
+site_rows = []
+for site, filename, score in SITES:
+    url = f"https://buffedlizard55-lab.github.io/{site}/"
+    site_rows.append(
+        f"<tr><td><a href='{e(url)}'>{e(site)}</a></td><td><code>{e(filename)}</code></td>"
+        f"<td>OWNER-REPORT {e(score)} (historical; not a prediction)</td>"
+        "<td>No — already submitted; do not reuse</td></tr>"
+    )
+
+candidate = CARD["submission_name"] + ".tif"
+archive_path = CARD["download_path"].removeprefix("docs/")
+run_card_path = "data/current_run_card.json"
+review_path = "research/repo-review-20261029.md"
+
+common = f"""
+<section class="hero">
+<span class="warning">SUBMISSION BLOCKED · NO APPROVED FILE · DO NOT SUBMIT</span>
+<h1>GEMS fault-map review &amp; submission status</h1>
+<p><strong>Executive decision:</strong> no available file has both a supported holdout result and a complete uniqueness clearance. The candidate link below is explicitly archive-only.</p>
+<p><a class="download" href="{e(archive_path)}">Download archive-only diagnostic TIF — NOT approved</a></p>
+<p><strong>Filename:</strong> <code>{e(candidate)}</code><br><strong>Estimated competition score:</strong> NOT ESTIMABLE (no candidate HOLDOUT-DTI and no organizer receipt).<br><strong>Unique against the complete registry?</strong> NOT CLEARED.<br><strong>Verdict:</strong> negative / archive only.</p>
+<p class="small">SHA-256 <code>{e(CARD['raster_sha256'])}</code> · {e(CARD['submission_note'])}</p>
+</section>
+<section><h2>Why it is not approved</h2><ul>
+<li>Local raster inspection: one-band float32, EPSG:32611, 3730×3292, recorded transform, all cells finite and values in [0,1]. The official <code>sample_submission.tif</code> is absent, so the transform is compared to the checked-in manifest, not the organizer sample.</li>
+<li>The current BGK-PBE raster is synthetic: its footprint is an approximate ellipse and its gravity/K/dilatation fields are placeholders, not official competition or USGS measurements. It has 6,178 hard cells (>0.5) and 8,794 positive cells (>0).</li>
+<li>HOLDOUT-DTI and candidate-specific leakage canary: NOT RUN; feature stack and labels are not present.</li>
+<li>Against one pinned calibration lattice, 50.0% of 10 connected-component centroids and 3,905/8,794 = 44.4053% of positive cells (2,687/6,178 = 43.4930% of hard cells) are within 3 px. Sampled output-raster Spearman is -0.00163 (300,000 pixels); this is not a pre-placement/full-footprint test. The single-witness results do not cover other registry rasters or clear uniqueness.</li>
+</ul><p>Archive only. The complete machine-readable card is <a href="{e(run_card_path)}">current_run_card.json</a>; one-witness measures: <a href="data/uniqueness_audit_current_candidate_20261029.json">audit JSON</a> · <a href="data/lattice_lane_check_selected_20261029.json">lane-check receipt</a>.</p></section>
+<section><h2>Nine-site executive summary</h2><p>The scores below are OWNER-REPORT / supplied historical results, not independently verified organizer receipts and not score estimates for this candidate. Each historical file has already been submitted; none is recommended for reuse. There is no current file eligible to submit.</p>
+<div class="table-wrap"><table><thead><tr><th>Site</th><th>Highest historical file reported</th><th>Reported result</th><th>Unique / eligible to submit now?</th></tr></thead><tbody>{''.join(site_rows)}</tbody></table></div>
+<p><strong>Highest focus-site report:</strong> GEMSDOE32 h33-h33-2-b2 at OWNER-REPORT 0.2778. The repository describes it as related to the D2.8/H19-5 family with a catalogue collar removed. That could plausibly help uncatalogued-target scoring, but outcome data alone does not prove the mechanism. No supported estimate shows the new candidate exceeds 0.2778.</p></section>
+<section><h2>Independent review (2026-10-28)</h2><p>This is a historical review of the prior LWST file, not approval of the current diagnostic. It withdrew earlier score claims and found a literal lattice-overlap failure. See <a href="research/independent-review-20261028.md">the archived independent review</a>; its measurements must not be applied to the current candidate.</p></section>
+<section><h2>Score and leaderboard caveats</h2><p>The request gives conflicting leaderboard snapshots (0.3195 and 0.4413); older checked-in evidence reported a public leaderboard value of 0.4544 as of 2026-10-27. The live board was not independently refreshed in this review, so none is presented as today's confirmed top score. Public/private leaderboard differences may also apply.</p><p>Do not convert HOLDOUT-DTI into a projected leaderboard score. No score number exists for the archive-only candidate.</p></section>
+<section><h2>How to submit a future approved candidate</h2><ol><li>Only use a file whose current run card and page explicitly say <strong>OK TO SUBMIT</strong>; this archive candidate does not.</li><li>Verify the single-band GeoTIFF against the official sample for CRS, dimensions, and geotransform; enforce finite predictions in [0,1].</li><li>Check leakage canaries, buffered hide-and-recover HOLDOUT-DTI with evaluator/count/CI, and surface plus final-dot uniqueness against the complete accessible registry.</li><li>After a separate selector promotes it, open DrivenData &gt; New submission, select the GeoTIFF (or zip containing exactly one GeoTIFF), and enter the name/comment from the run card. Check the current weekly cap and disclose AI use if required by the rules.</li></ol><p>See the <a href="executive-summary.html">submission guide</a> and <a href="{e(review_path)}">repository review and next steps</a>.</p></section>
+<section><h2>Auditable references</h2><ul><li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">Competition rules and submission page</a></li><li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Problem description</a></li><li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">Competition data (login may be required)</a></li><li><a href="https://github.com/drivendataorg/gems-prize-reference-solution">Official reference solution</a></li><li><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">Official rules PDF</a></li><li><a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS GeoDAWN</a></li><li><a href="https://gbcge.org/current-projects/ingenious/">INGENIOUS Great Basin project</a></li><li><a href="https://epsg.io/32611">EPSG:32611</a></li></ul><p>Historical research queue: <a href="hypotheses.md">hypotheses</a> · <a href="irregularities.md">irregularities</a> · <a href="{e(review_path)}">review memo</a>.</p></section>
+"""
+
+
+def render(title: str, root: bool = False) -> str:
+    body = common
+    if root:
+        body = body.replace('href="downloads/', 'href="docs/downloads/')
+        body = body.replace('href="data/', 'href="docs/data/')
+        body = body.replace('href="../evidence/', 'href="evidence/')
+        body = body.replace('href="research/', 'href="docs/research/')
+        body = body.replace('href="hypotheses.md"', 'href="docs/hypotheses.md"')
+        body = body.replace('href="irregularities.md"', 'href="docs/irregularities.md"')
+        body = body.replace('href="executive-summary.html"', 'href="docs/executive-summary.html"')
+        base = "docs/"
+    else:
+        base = ""
+    nav = f'<nav><strong>GEMSDOESASS3</strong> · <a href="{base}index.html">Overview</a> · <a href="{base}executive-summary.html">Submission guide</a></nav>'
+    return f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Fail-closed GEMS submission review"><title>{e(title)}</title><style>{STYLE}</style></head><body><main>{nav}{body}</main></body></html>\n'
+
+
+def main() -> None:
+    (ROOT / "docs").mkdir(exist_ok=True)
+    (ROOT / "docs/index.html").write_text(render("GEMS review"), encoding="utf-8")
+    (ROOT / "docs/executive-summary.html").write_text(render("Submission guide and executive summary"), encoding="utf-8")
+    (ROOT / "index.html").write_text(render("GEMS review", root=True), encoding="utf-8")
+    (ROOT / "executive-summary.html").write_text(render("Submission guide and executive summary", root=True), encoding="utf-8")
+
+if __name__ == "__main__":
+    main()

@@ -98,11 +98,15 @@ def test_nine_sites_h19_5_set_algebra_invariants() -> None:
 
 
 def test_emitted_geotiff_and_all_automated_gates() -> None:
-    """End-to-end automated programmatic inspection of the promoted submission GeoTIFF."""
+    """Inspect the archive-only diagnostic and require holdout/uniqueness to fail closed."""
     res = verify_all()
-    assert res["ok_to_download"] is True   # format gate passed
-    assert res["ok_to_submit"] is False    # holdout/registry pending data
-    assert res["verdict"] == "format_valid_pending_data"
+    assert res["ok"] is False
+    assert "complete_uniqueness_gate" in res["problems"]
+    assert "holdout_gate" in res["problems"]
+    assert res["ok_to_download"] is False  # not approved as a submission download
+    assert res["ok_to_download_for_analysis"] is True
+    assert res["ok_to_submit"] is False
+    assert res["verdict"] == "negative"
 
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
     tif_path = ROOT / card["download_path"]
@@ -116,8 +120,7 @@ def test_emitted_geotiff_and_all_automated_gates() -> None:
         assert np.isfinite(arr).all()
         assert float(arr.min()) >= 0.0
         assert float(arr.max()) <= 1.0
-        n_dots = int((arr > 0).sum())
-        assert n_dots == int(card["validator_output"]["n_soft_pixels"]), f"dots={n_dots}"
+        assert int((arr > 0).sum()) == 8_794
 
 
 def test_space_filling_witness_does_not_get_a_protocol_exemption():
