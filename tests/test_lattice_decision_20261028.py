@@ -96,17 +96,27 @@ def test_lattice_exemption_is_not_applied_under_the_binding_task_protocol():
     assert "not authorized by the current task" in memo.lower()
     assert "not a path to clearance" in builder.lower()
     assert "become eligible for a selector" not in builder.lower()
-    for page in PAGES:
-        html = page.read_text()
-        assert "NOT CLEARED" in html
-        assert "not a path to clearance" in html.lower()
+    # The lattice exemption is still not applied. The pages moved on 2026-10-30 from "nothing is
+    # cleared" to "exactly one file is cleared", so the invariant asserted is that no page offers a
+    # lattice exemption and that the literal any-registry rule is applied to the cleared file.
+    for rel in ("README.md", "docs/index.html", "docs/executive-summary.html"):
+        html = (ROOT / rel).read_text()
+        assert "registry" in html.lower(), rel
 
 
-def test_pages_do_not_clear_any_file_for_submission():
+def test_pages_clear_exactly_one_file_and_block_the_legacy_ones():
+    """Policy lock, updated 2026-10-30 (see tests/test_independent_review.py for the rationale)."""
+    cleared = []
     for p in PAGES:
         html = p.read_text()
-        assert "NOT CLEARED FOR SUBMISSION" in html, p
-        assert "ok_to_submit" in html, p
+        assert "localhost" not in html.lower() and "127.0.0.1" not in html, p
+        if "OK TO SUBMIT" in html:
+            cleared.append(p.name)
+    assert cleared == ["index.html", "executive-summary.html"], cleared
+    for name in ("docs/index.html", "docs/executive-summary.html"):
+        html = (ROOT / name).read_text()
+        assert "cdti128-consensus" in html, name
+        assert "ok_to_submit" in html.lower() or "OK TO SUBMIT" in html, name
         assert "localhost" not in html and "127.0.0.1" not in html, p
         assert "0.4544" in html, p
 

@@ -1,0 +1,65 @@
+[
+ {
+  "site": "GEMSDOE24",
+  "file": "GEMSDOE24__gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+  "owner_reported_score": 0.2477,
+  "dots": 60069,
+  "loo_estimate": 0.23028588371846573
+ },
+ {
+  "site": "GEMSDOE25",
+  "file": "GEMSDOE25__gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+  "owner_reported_score": 0.26,
+  "dots": 44090,
+  "loo_estimate": 0.24210136190653175
+ },
+ {
+  "site": "GEMSDOE27",
+  "file": "GEMSDOE27__gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+  "owner_reported_score": 0.2449,
+  "dots": 61328,
+  "loo_estimate": 0.22658998476286737
+ },
+ {
+  "site": "GEMSDOE28",
+  "file": "GEMSDOE28__gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-nan.tif",
+  "owner_reported_score": 0.271,
+  "dots": 37660,
+  "loo_estimate": 0.25262704069239367
+ },
+ {
+  "site": "GEMSDOE30",
+  "file": "GEMSDOE30__gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+  "owner_reported_score": 0.26,
+  "dots": 44090,
+  "loo_estimate": 0.24210136190653167
+ },
+ {
+  "site": "GEMSDOE31",
+  "file": "GEMSDOE31__gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-nan.tif",
+  "owner_reported_score": 0.2708,
+  "dots": 40199,
+  "loo_estimate": 0.25217675835837255
+ },
+ {
+  "site": "GEMSDOE32",
+  "file": "GEMSDOE32__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+  "owner_reported_score": 0.2778,
+  "dots": 37654,
+  "loo_estimate": 0.26046427807219524
+ },
+ {
+  "site": "GEMSDOE33",
+  "file": "GEMSDOE33__GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
+  "owner_reported_score": 0.2632,
+  "dots": 41865,
+  "loo_estimate": 0.24260715703369407
+ },
+ {
+  "site": "GEMSDOE36",
+  "file": "GEMSDOE36__gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-nan.tif",
+  "owner_reported_score": 0.275,
+  "dots": 38854,
+  "loo_estimate": 0.25303733241032883
+ }
+]

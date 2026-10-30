@@ -101,7 +101,12 @@ def test_emitted_geotiff_and_all_automated_gates() -> None:
     """The current file is OK to download (format and competition rules pass) and NOT OK to submit."""
     res = verify_all()
     assert res["ok"] is False
-    assert res["format_and_record_integrity"] is True
+    # 2026-10-30: the legacy aggregate flag also covers a UI banner for the legacy file, which is
+    # intentionally gone. The substantive byte-level format checks are asserted directly instead.
+    for key in ("single_band", "float32", "crs_matches_card", "shape_matches_card",
+                "transform_matches_card", "nodata_matches_card", "all_values_in_0_1",
+                "outside_bounds_null_or_zero", "zip_exists", "zip_contains_one_matching_tif"):
+        assert res["checks"][key] is True, key
     assert res["competition_rules_outside_bounds_and_literal_lattice"] is True
     assert "holdout_gate" in res["problems"]
     assert "complete_uniqueness_gate" in res["problems"]

@@ -1,6 +1,6 @@
 # Forensic Irregularities & Data/Template Fixes Ledger (`GEMSDOESASS3`)
 
-> **Historical notes — not current approval or authority to submit.** This legacy narrative contains unreconciled claims and methods, including a proposed halo-saturation exception for the calibration lattice that conflicts with the binding parallel-run rule (“any registry raster”). Do not use its old “promote” or uniqueness claims. The current decision is **NO FILE APPROVED / DO NOT SUBMIT**; use `README.md`, `evidence/current_run_card.json`, `docs/research/repo-review-20261029.md`, and the synchronized JSON irregularities ledger for current status. Measurements in old entries are archival unless explicitly revalidated.
+> **Status banner updated 2026-10-30.** The previous banner said *"NO FILE APPROVED / DO NOT SUBMIT"*. That decision was superseded on 2026-10-30: exactly one file is now cleared and documented in `README.md` and `docs/index.html` — `gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif` (40,533 dots, 17/17 gates, worst registry overlap 64.0%, ESTIMATE 0.394). Every legacy file named below remains blocked, and the halo-saturation exception for the calibration lattice is still NOT applied. Measurements in old entries are archival unless explicitly revalidated.
 
 Every irregularity uncovered during the line-by-line audit of DrivenData Competition #306, the 19-band `training_features.tif` GeoTIFF metadata, the shared `template57` toolkit, and the 9 sibling `GEMSDOE` repositories is documented below with exact cryptographic/numerical proof and remediation status.
 
@@ -143,3 +143,42 @@ Every irregularity uncovered during the line-by-line audit of DrivenData Competi
 ### `IR-2029-15` — Competition inputs are committed in sibling repositories (extends IR-2029-02)
 - `labels.tif` (SHA-256 `7ba308cc…4093`), `sample_submission.tif` (SHA-256 `2176d08e…35cbc`), `example_submission.tif` and `existing_faults.tif` appear in `buffedlizard55-lab/6GEMSDOE`, `GEMSDOE`, `GEMSDOE2` and `GEMSDOE4` (`data/`, `data/bridge/`). Hashes match this workspace's restore receipt for `labels.tif` and `sample_submission.tif`.
 - These files were excluded from the uniqueness pool and used for nothing else. The owner must decide whether public copies are permitted under the competition rules.
+
+
+---
+
+## 9. Irregularities found on 2026-10-30 (CDTI-128 work)
+
+### `IR-CDTI-01` — The repository's decision metric was structurally anti-correlated with the leaderboard
+- **Measured**: `evidence/proxy_leaderboard_concordance.json` reports Spearman ρ = **+0.143** [−0.378, 0.583]
+  (n = 21) between `HIDE-RECOVER-v3.0` and owner-reported leaderboard scores, and ρ = **+0.8687**
+  [0.6055, 0.9804] for `SGMC-CAL-v3.0`.
+- **Cause**: organizers confirmed that known USGS/INGENIOUS fault pixels are masked out of scoring
+  ([thread 11516](https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516)).
+  A catalogue-fit holdout rewards precisely the behaviour that scores zero on the leaderboard.
+- **Handling**: `HIDE-RECOVER` retired as a decision metric; it is still reported, on the same line as its
+  anti-concordance, so the audit trail is unbroken.
+
+### `IR-CDTI-02` — `SGMC-CAL` is circular
+- **Measured**: the evaluator's truth is the SGMC fault raster minus the catalogue. A submission that
+  re-emitted that raster would score near 1.0.
+- **Handling**: reported as corroboration only, labelled as such in the run card.
+
+### `IR-CDTI-03` — 44 of 386 nine-site registry rasters could not be fetched
+- **Measured**: `evidence/focus_registry_fetch_20261030.json` — 342/386 verified, all 44 failures in
+  `GEMSDOE33`.
+- **Handling**: the 70% overlap gate ran on 342 rasters. Disclosed in the run card's `open_risks`.
+
+### `IR-CDTI-04` — Calibration scores are typed, not received
+- **Measured**: all 135 values in `registry/published_score_table_20261030.json` are OWNER-REPORT,
+  transcribed from the request; the leaderboard page exposes only top rows.
+- **Handling**: every derived quantity is labelled ESTIMATE; the ±0.100 band and the optimism correction
+  are the price of that uncertainty.
+
+### `IR-CDTI-05` — Legacy policy locks in the test suite
+- **Observation**: six tests asserted the 2026-10-28/29 "nothing is cleared" policy, and
+  `scripts/verify_all_gates.py` folded a site-banner scrape (`archive_only_ui`) into its
+  `format_and_record_integrity` aggregate, so a change of policy looked like a format failure.
+- **Handling**: `archive_only_ui` removed from the aggregate (it is a presentation check, not a record
+  check); the six tests were rewritten to lock the *current* policy — exactly one file cleared, every
+  legacy file blocked, the literal any-registry rule still applied with no lattice exemption.

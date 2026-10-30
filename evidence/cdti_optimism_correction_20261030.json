@@ -1,0 +1,9 @@
+{
+ "n": 128,
+ "mean_optimism": 0.037368198322884724,
+ "median_optimism": 0.023602064740953946,
+ "top12_mean_optimism": 0.024294402187960678,
+ "candidate_in_sample": 0.3943829157227886,
+ "candidate_corrected": 0.35701471739990387,
+ "band95": 0.09960745356826138
+}

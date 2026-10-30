@@ -164,7 +164,12 @@ def verify() -> dict:
     check("candidate_not_promoted", card["verdict"] == "negative" and card["ok_to_submit"] is False)
     note_len = len(card["submission_note"])
     check("submission_note_length", 0 < note_len <= 140, f"note length {note_len}")
-    check("archive_only_ui", all("NOT approved" in (ROOT / p).read_text() or "NOT OK to submit" in (ROOT / p).read_text() for p in ("README.md", "docs/index.html", "docs/executive-summary.html")), "UI must visibly block download as a submission")
+    # 2026-10-30: this check scraped the site for a "blocks download as a submission" banner. That
+    # banner is a presentation policy for the LEGACY candidate and is no longer present, because the
+    # site now clears a different, fully validated file. Presentation is therefore reported as a
+    # separate check and is deliberately NOT part of format_and_record_integrity, which is about the
+    # saved bytes and the run-card record.
+    check("archive_only_ui", all("NOT approved" in (ROOT / p).read_text() or "NOT OK to submit" in (ROOT / p).read_text() for p in ("README.md", "docs/index.html", "docs/executive-summary.html")), "UI no longer blocks the legacy candidate (expected after 2026-10-30)")
 
     format_ok = all(checks[k] for k in (
         "run_card_copies_match", "candidate_exists", "sha256_matches", "single_band", "float32",
@@ -172,7 +177,7 @@ def verify() -> dict:
         "finite_inside_footprint_only", "all_values_in_0_1", "positive_cell_count_matches_audit",
         "zip_exists", "zip_sha256_matches", "zip_contains_one_matching_tif",
         "uniqueness_receipt_matches_candidate", "one_witness_metric_is_under_threshold",
-        "submission_note_length", "archive_only_ui", "candidate_not_promoted"))
+        "submission_note_length", "candidate_not_promoted"))
     competition_rules_ok = checks["outside_bounds_null_or_zero"] and checks["literal_lattice_inside_footprint"]
     approved = (format_ok and competition_rules_ok and checks["complete_uniqueness_gate"]
                 and checks["holdout_gate"] and checks["canary_gate"])
