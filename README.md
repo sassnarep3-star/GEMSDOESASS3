@@ -157,3 +157,21 @@ The full standing prompt is recorded verbatim at
 at the start of every session. Its operative requirements — unique TIF, obvious download/submit status, per-site executive
 summary with an estimated-score table, no human inspection step, no copying of previous submissions, no hallucinated numbers,
 flag irregularities, PR and merge — are what this README, `docs/executive-summary.html` and the gates above implement.
+## Does more predicted mass help? No. (E3, measured 2026-10-30)
+
+The nine focus-site fields differ mainly in dot count, and their OWNER-REPORT scores fall as the count rises
+(0.2778 at 37,654 dots -> 0.2449 at 61,328). To test whether that is only the metric's false-positive price, the
+same tip-continuation mechanism was re-run on the identical blocked holdout at 45k, 75k, 120k, 180k and 250k dots:
+
+| dots | HOLDOUT-DTI | capture x | mean credit e | enrichment eps = x/e |
+|---:|---:|---:|---:|---:|
+| 44,910 | **0.006715** | 0.0861 | 0.0670 | **1.285** |
+| 74,616 | 0.006084 | 0.1264 | 0.1146 | 1.103 |
+| 118,997 | 0.006017 | 0.1965 | 0.1814 | 1.083 |
+| 177,953 | 0.005470 | 0.2649 | 0.2628 | 1.008 |
+| 246,049 | 0.005277 | 0.3517 | 0.3472 | 1.013 |
+
+Enrichment collapses to 1.0 as the field gets denser, so DTI falls: **mass is not a substitute for skill**, and the
+released 44,923-dot file sits at the measured optimum of its mechanism. Receipt:
+`evidence/density_sweep_20261030.json`, script `scripts/experiment_density_20261030.py`.
+
