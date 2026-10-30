@@ -1,0 +1,150 @@
+{
+ "schema_version": 1,
+ "label": "HOLDOUT-DTI (catalogue-recovery surrogate v1)",
+ "withheld_positive_cells": 747,
+ "sweep": [
+  {
+   "step_px": 2.0,
+   "budget": 12000,
+   "n_dots": 12000,
+   "holdout_dti": 0.004812,
+   "dti_ci95": [
+    0.003006,
+    0.006726
+   ],
+   "capture_x": 0.019301,
+   "e_mean_k": 0.016124,
+   "enrichment_eps": 1.1971
+  },
+  {
+   "step_px": 2.0,
+   "budget": 24000,
+   "n_dots": 22613,
+   "holdout_dti": 0.003923,
+   "dti_ci95": [
+    0.002402,
+    0.00586
+   ],
+   "capture_x": 0.026876,
+   "e_mean_k": 0.023741,
+   "enrichment_eps": 1.132
+  },
+  {
+   "step_px": 2.0,
+   "budget": 40000,
+   "n_dots": 22613,
+   "holdout_dti": 0.003923,
+   "dti_ci95": [
+    0.002402,
+    0.00586
+   ],
+   "capture_x": 0.026876,
+   "e_mean_k": 0.023741,
+   "enrichment_eps": 1.132
+  },
+  {
+   "step_px": 3.0,
+   "budget": 12000,
+   "n_dots": 12000,
+   "holdout_dti": 0.006848,
+   "dti_ci95": [
+    0.004422,
+    0.009496
+   ],
+   "capture_x": 0.027477,
+   "e_mean_k": 0.019279,
+   "enrichment_eps": 1.4252
+  },
+  {
+   "step_px": 3.0,
+   "budget": 24000,
+   "n_dots": 24000,
+   "holdout_dti": 0.006037,
+   "dti_ci95": [
+    0.004335,
+    0.007851
+   ],
+   "capture_x": 0.043608,
+   "e_mean_k": 0.034392,
+   "enrichment_eps": 1.268
+  },
+  {
+   "step_px": 3.0,
+   "budget": 40000,
+   "n_dots": 36880,
+   "holdout_dti": 0.005761,
+   "dti_ci95": [
+    0.004197,
+    0.007198
+   ],
+   "capture_x": 0.061463,
+   "e_mean_k": 0.047277,
+   "enrichment_eps": 1.3001
+  },
+  {
+   "step_px": 4.0,
+   "budget": 12000,
+   "n_dots": 12000,
+   "holdout_dti": 0.006345,
+   "dti_ci95": [
+    0.00403,
+    0.008585
+   ],
+   "capture_x": 0.025459,
+   "e_mean_k": 0.02006,
+   "enrichment_eps": 1.2691
+  },
+  {
+   "step_px": 4.0,
+   "budget": 24000,
+   "n_dots": 24000,
+   "holdout_dti": 0.006916,
+   "dti_ci95": [
+    0.004902,
+    0.009394
+   ],
+   "capture_x": 0.049965,
+   "e_mean_k": 0.037063,
+   "enrichment_eps": 1.3481
+  },
+  {
+   "step_px": 4.0,
+   "budget": 40000,
+   "n_dots": 35149,
+   "holdout_dti": 0.00686,
+   "dti_ci95": [
+    0.005119,
+    0.008847
+   ],
+   "capture_x": 0.070033,
+   "e_mean_k": 0.050802,
+   "enrichment_eps": 1.3785
+  }
+ ],
+ "selected": {
+  "step_px": 4.0,
+  "budget": 45000,
+  "n_dots": 24000,
+  "holdout_dti": 0.006916,
+  "dti_ci95": [
+   0.004902,
+   0.009394
+  ],
+  "capture_x": 0.049965,
+  "e_mean_k": 0.037063,
+  "enrichment_eps": 1.3481,
+  "holdout_selected_budget": 24000,
+  "budget_override_reason": "holdout plateau 24k-35k is statistically flat (overlapping CIs); budget set at 45k by the estimator under the test-set-selection hypothesis, see evidence/score_estimate_20261030.json"
+ },
+ "built_file": {
+  "holdout_dti": 0.006813,
+  "dti_ci95": [
+   0.005298,
+   0.008522
+  ],
+  "capture_x": 0.087375,
+  "e_mean_k": 0.067009,
+  "enrichment_eps": 1.3039,
+  "n_dots": 44923
+ }
+}

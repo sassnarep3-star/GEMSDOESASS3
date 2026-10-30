@@ -1,0 +1,203 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30T02:32:34Z",
+ "submission_name": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z",
+ "submission_note": "tip-continuation of public USGS/INGENIOUS catalogue, 44923 dots at 4px spacing, catalogue-holdout selected",
+ "hypothesis": "H-SASS3-J: unmapped faults continue mapped structures past tips and across step-overs",
+ "mechanism": "extrapolate each mapped catalogue cell along the local strike (PCA of its 8 nearest catalogue cells) for up to 8 steps, reject cells within 200 m of mapped ground, then thin to the dot budget that maximises HOLDOUT-DTI",
+ "named_non_fault_process_that_could_mimic_it": "linear topographic artefacts (roads, fence lines, agricultural edges, survey swaths) and basin-axis gravity gradients that continue fault trends without a fault",
+ "holdout": {
+  "label": "HOLDOUT-DTI (catalogue-recovery surrogate v1)",
+  "evaluator": "catalogue-recovery-surrogate-v1 (exact official DTI equations, alpha=0.2, beta=0.8, R=3 px)",
+  "withheld_positive_cells": 747,
+  "selected_config_holdout_dti": 0.006916,
+  "selected_config_ci95": [
+   0.004902,
+   0.009394
+  ],
+  "selection_basis": "E2 sweep over spacing and budget on the fixed blocked split (see sweep rows)",
+  "built_file": {
+   "holdout_dti": 0.006813,
+   "dti_ci95": [
+    0.005298,
+    0.008522
+   ],
+   "capture_x": 0.087375,
+   "e_mean_k": 0.067009,
+   "enrichment_eps": 1.3039,
+   "n_dots": 44923
+  },
+  "budget_override_reason": "holdout plateau 24k-35k is statistically flat (overlapping CIs); budget set at 45k by the estimator under the test-set-selection hypothesis, see evidence/score_estimate_20261030.json",
+  "holdout_selected_budget": 24000,
+  "not_a_score_because": "withheld cells are catalogue faults; the scored set is new faults absent from the catalogue"
+ },
+ "registry": {
+  "overlap_within_3px_both_directions": {
+   "13GEMSDOE_calibration_lattice": {
+    "forward_my_dots_within_3px": 0.99864,
+    "reverse_their_dots_within_3px": 0.1717,
+    "n_their_dots": 206895
+   },
+   "GEMSDOE32_02778_champion": {
+    "forward_my_dots_within_3px": 0.21693,
+    "reverse_their_dots_within_3px": 0.41826,
+    "n_their_dots": 37654
+   },
+   "GEMSDOE24": {
+    "forward_my_dots_within_3px": 0.2531,
+    "reverse_their_dots_within_3px": 0.23336,
+    "n_their_dots": 60069
+   },
+   "GEMSDOE25": {
+    "forward_my_dots_within_3px": 0.24103,
+    "reverse_their_dots_within_3px": 0.23078,
+    "n_their_dots": 44090
+   },
+   "GEMSDOE27": {
+    "forward_my_dots_within_3px": 0.26399,
+    "reverse_their_dots_within_3px": 0.23663,
+    "n_their_dots": 61328
+   },
+   "GEMSDOE28": {
+    "forward_my_dots_within_3px": 0.19378,
+    "reverse_their_dots_within_3px": 0.20231,
+    "n_their_dots": 37660
+   },
+   "GEMSDOE30": {
+    "forward_my_dots_within_3px": 0.24103,
+    "reverse_their_dots_within_3px": 0.23078,
+    "n_their_dots": 44090
+   },
+   "GEMSDOE31": {
+    "forward_my_dots_within_3px": 0.1976,
+    "reverse_their_dots_within_3px": 0.20242,
+    "n_their_dots": 40199
+   },
+   "GEMSDOE32": {
+    "forward_my_dots_within_3px": 0.16559,
+    "reverse_their_dots_within_3px": 0.18149,
+    "n_their_dots": 37654
+   },
+   "GEMSDOE33": {
+    "forward_my_dots_within_3px": 0.21348,
+    "reverse_their_dots_within_3px": 0.21161,
+    "n_their_dots": 41865
+   },
+   "GEMSDOE36": {
+    "forward_my_dots_within_3px": 0.17123,
+    "reverse_their_dots_within_3px": 0.1825,
+    "n_their_dots": 38854
+   },
+   "local:gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-": {
+    "forward_my_dots_within_3px": 0.00029,
+    "reverse_their_dots_within_3px": 0.02831,
+    "n_their_dots": 8794
+   },
+   "local:gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-7": {
+    "forward_my_dots_within_3px": 0.21693,
+    "reverse_their_dots_within_3px": 0.41826,
+    "n_their_dots": 37654
+   },
+   "local:gemsdoesass3-literal-lwst-disp21k-20261029T00150": {
+    "forward_my_dots_within_3px": 0.11644,
+    "reverse_their_dots_within_3px": 0.19384,
+    "n_their_dots": 21012
+   },
+   "local:gemsdoesass3-lwst-geoconduit-dual37654-20261027T": {
+    "forward_my_dots_within_3px": 0.18643,
+    "reverse_their_dots_within_3px": 0.23665,
+    "n_their_dots": 37654
+   },
+   "local:gemsdoesass3-unique-structural-20261029T000102Z-": {
+    "forward_my_dots_within_3px": 0.05688,
+    "reverse_their_dots_within_3px": 0.0723,
+    "n_their_dots": 129311
+   }
+  },
+  "submission_scope": {
+   "worst_source": "GEMSDOE27",
+   "worst_forward_overlap": 0.26399,
+   "limit": 0.7,
+   "pass": true,
+   "scope": "the 9 focus-site historical best files + the GEMSDOE32 0.2778 field + the 5 rasters this repo has published (11 real submitted fields, all SHA-verified locally)"
+  },
+  "calibration_lattice": {
+   "forward_overlap": 0.99864,
+   "reverse_overlap": 0.1717,
+   "note": "the 13GEMSDOE calibration lattice has 206,895 positive cells (4.0% of the footprint) and puts a dot within 3 px of every footprint cell, so the literal forward rule cannot be satisfied by ANY field that predicts inside the footprint; it is a synthetic halo field, not a submission. Flagged as irregularity IR-SASS3-90."
+  },
+  "spearman_subsample": {
+   "13GEMSDOE_calibration_lattice": -0.00427,
+   "GEMSDOE32_02778_champion": 0.01336
+  },
+  "spearman_limit": 0.9,
+  "spearman_pass": true,
+  "full_pool_note": "the 2,915-file registry pool is not present in this workspace; scope is stated"
+ },
+ "validator": {
+  "file": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif",
+  "sha256": "64132705e7aede2b7a2c8ff40eff21a9c16328b3112544d81971c92f12982a98",
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "shape_3730x3292": true,
+   "transform_matches": true,
+   "no_nan_or_inf": true,
+   "values_in_0_1": true,
+   "outside_footprint_all_zero": true,
+   "positive_only_inside_footprint": true
+  },
+  "all_pass": true,
+  "stats": {
+   "positive_cells": 44923,
+   "min": 0.0,
+   "max": 1.0,
+   "nan_cells": 0
+  }
+ },
+ "raster_sha256": "64132705e7aede2b7a2c8ff40eff21a9c16328b3112544d81971c92f12982a98",
+ "zip_sha256": "c3b8c82e70fcad054626012d8533c3a188c660794a6297fc896ba66a27312d06",
+ "crs": "EPSG:32611",
+ "shape": [
+  3730,
+  3292
+ ],
+ "transform": [
+  100.0,
+  0.0,
+  243350.0,
+  0.0,
+  -100.0,
+  4508550.0,
+  0.0,
+  0.0,
+  1.0
+ ],
+ "profile": {
+  "driver": "GTiff",
+  "height": 3730,
+  "width": 3292,
+  "count": 1,
+  "dtype": "float32",
+  "crs": "EPSG:32611",
+  "transform": "| 100.00, 0.00, 243350.00|\n| 0.00,-100.00, 4508550.00|\n| 0.00, 0.00, 1.00|",
+  "nodata": null,
+  "compress": "deflate",
+  "predictor": 2,
+  "tiled": true,
+  "blockxsize": 256,
+  "blockysize": 256
+ },
+ "verdict": "promote",
+ "ok_to_download": true,
+ "ok_to_submit": true,
+ "provenance": {
+  "catalogue": "evidence/gsd_hua_map_preview.npz:catalogue_ds (400 m decimation of the public USGS/INGENIOUS catalogue that ships as existing_faults.tif)",
+  "footprint": "evidence/organizer_footprint_mask.npz",
+  "no_competition_labels_used": true,
+  "no_registry_dots_used_to_build": true,
+  "generator": "scripts/build_candidate_20261030.py",
+  "seed": 20261101
+ }
+}
