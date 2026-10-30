@@ -73,7 +73,12 @@ def test_no_broken_sassnarep3_sibling_links_remain():
 
 
 def test_readme_contains_standing_prompt_and_synchronized_runcard():
-    rc = json.loads((ROOT / "evidence" / "run_card.json").read_text())
+    """The README must stay synchronised with the file it tells the owner to submit.
+
+    Changed 2026-10-30: the synced card is now the released candidate's run card
+    (evidence/run_card_tipcont_20261030.json). The previous card stays on disk as an archive.
+    """
+    rc = json.loads((ROOT / "evidence" / "run_card_tipcont_20261030.json").read_text())
     readme = (ROOT / "README.md").read_text()
     assert rc["submission_name"] in readme
     assert rc["submission_note"] in readme
