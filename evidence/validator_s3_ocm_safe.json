@@ -8,17 +8,12 @@
   "crs_epsg_32611": true,
   "shape_3730x3292": true,
   "transform_matches_training_grid": true,
-  "no_nan_or_inf": true,
+  "no_inf_anywhere": true,
   "values_in_0_1": true,
   "portal_range_test_all_cells": true,
-  "outside_bounds_null_or_zero": true
- },
- "stats": {
-  "non_finite_cells": 0,
-  "min": 0.0,
-  "max": 1.0,
-  "positive_pixels": 44090,
-  "unique_values": 2
+  "finite_inside_footprint": true,
+  "outside_cells_are_null": true,
+  "nan_outside_and_finite_inside_footprint": true
  },
  "mask": {
   "has_internal_mask_band": true,
@@ -27,9 +22,14 @@
   ],
   "masked_fraction": 0.579175
  },
+ "stats": {
+  "min": 0.0,
+  "max": 1.0,
+  "positive_pixels": 44090,
+  "unique_values": 2
+ },
  "notes": [
-  "internal mask band present (2:per_dataset): outside-bounds cells are null in the GDAL sense",
-  "outside-bounds check: 0 non-zero finite cells outside the footprint"
+  "outside-bounds check: 0 non-null cells outside the footprint, carried by the internal mask band; 0 non-finite cells inside it"
  ],
  "all_hard_checks_pass": true
 }

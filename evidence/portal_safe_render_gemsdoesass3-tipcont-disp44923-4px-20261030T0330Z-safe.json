@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-10-30T03:21:21+00:00",
+  "generated_by": "scripts/make_portal_safe_render.py",
+  "source": {
+    "file": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif",
+    "sha256": "cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277",
+    "bytes": 225955,
+    "declared_nodata": null,
+    "mask_flags": [
+      "8:nodata"
+    ]
+  },
+  "output": {
+    "file": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif",
+    "sha256": "876a5c89bd025b08c5772d3b13f14d55dfe770a54a4773f74c8e64993f8ac861",
+    "bytes": 168840,
+    "zip": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif.zip",
+    "zip_sha256": "9a2ba0a9e94c6a817824e57ff023a271640393edfdbbdb5bbc91f9b0cd6062db",
+    "mask_flags": [
+      "2:per_dataset"
+    ],
+    "declared_nodata": null,
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "crs": "EPSG:32611"
+  },
+  "proof": {
+    "dot_set_symmetric_difference": 0,
+    "positive_cells": 44923,
+    "unique_values_in": [
+      0.0,
+      1.0
+    ],
+    "portal_range_test_all_cells": true,
+    "non_finite_cells_stored": 0,
+    "masked_fraction_output": 0.579175,
+    "masked_fraction_source": 0.579175,
+    "note": "the emission is bit-identical inside the footprint, so every uniqueness, holdout and projection receipt measured on the source file applies to this file unchanged"
+  },
+  "reproduced_by": "python scripts/make_portal_safe_render.py docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif"
+}

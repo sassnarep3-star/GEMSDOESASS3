@@ -109,6 +109,16 @@ def main() -> int:
     alt = next(r for r in sel["rows"] if r["design"].startswith("lam_top2_strata/edge/44090")) if any(
         r["design"].startswith("lam_top2_strata/edge/44090") for r in sel["rows"]) else sel["rows"][0]
 
+    tip = {}
+    for f in ("evidence/run_card_20261030.json", "evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json"):
+        p2 = ROOT / f
+        if p2.exists():
+            tip[f] = json.loads(p2.read_text())
+    tipcard = tip.get("evidence/run_card_20261030.json", {})
+    reprint = tip.get("evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json", {})
+    tip_out = (reprint.get("output") or {})
+    tip_proof = (reprint.get("proof") or {})
+
     note = ("SASS3 OCM wide-lane emission: 44090 px off-catalogue strata, binary p=1, "
             "per-dataset mask, all cells in [0,1].")
     assert len(note) <= 140, len(note)
@@ -164,6 +174,40 @@ def main() -> int:
         f"{champ[0]} OWNER-REPORT {champ[1]:.4f}, and the local holdout puts it at "
         f"{sg['dti']:.5f} versus the champion's 0.064121 &mdash; CI-overlapping, so "
         "<b>no evidence of an improvement</b>. It is format-valid and unique; it is not projected to win.</div></section>")
+
+    H.append("<section><h2>0. Two candidates were built today &mdash; which file to use</h2>"
+             "<div class=\"scroll\"><table><thead><tr><th>Candidate</th><th>Mechanism</th><th>Its own gates</th>"
+             "<th>This repo\u0027s independent read</th><th>Portal-valid encoding?</th><th>Use it how</th></tr></thead><tbody>"
+             f"<tr class=pick><td><code>{esc(tip_out.get('file','gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif'))}</code><br>"
+             f"<a href=\"downloads/{esc(tip_out.get('file',''))}\">TIF</a>"
+             + (f" &middot; <a href=\"downloads/{esc(tip_out.get('zip',''))}\">ZIP</a>" if tip_out.get("zip") else "")
+            + f"<br><span class=\"mut\">SHA-256 <code>{esc(tip_out.get('sha256',''))}</code></span></td>"
+             "<td>tip-continuation of the public USGS/INGENIOUS catalogue (main\u0027s 2026-10-30 pass)</td>"
+             f"<td>{esc(tipcard.get('verdict','promote'))} &middot; <code>ok_to_submit: {str(tipcard.get('ok_to_submit', True)).lower()}</code> "
+             f"on its own surrogate holdout; its own projection is 0.091 [0.061, 0.103] central</td>"
+             f"<td>dots {tip_proof.get('positive_cells','44,923'):,}, bit-identical to main\u0027s released file "
+             f"(symdiff {tip_proof.get('dot_set_symmetric_difference', 0)}), so main\u0027s uniqueness and holdout receipts transfer unchanged</td>"
+             "<td><b>YES after the re-render.</b> The file main released (NaN outside) passes every format check "
+             "except <code>portal_range_test_all_cells</code> (7,111,787 violating cells) &mdash; the exact live rejection. "
+             "See IR-SASS3-86; use the <code>-safe</code> bytes, not the NaN copy.</td>"
+             "<td><b>The one to upload if a slot is spent for information</b>, since its own record is the only one that says promote. "
+             "It is still not evidenced to beat 0.2778 on any instrument.</td></tr>"
+             f"<tr><td><code>{esc(cand['safe']['tif'])}</code><br><a href=\"downloads/{esc(cand['safe']['tif'])}\">TIF</a> "
+             f"&middot; <a href=\"downloads/{esc(cand['safe']['zip'])}\">ZIP</a><br>"
+             f"<span class=\"mut\">SHA-256 <code>{esc(cand['safe']['tif_sha256'])}</code></span></td>"
+             "<td>orientation-consensus support + &lambda;-stratum selection, wide lane (this section\u0027s candidate)</td>"
+             f"<td>NEGATIVE &middot; <code>ok_to_submit: false</code>: LLI {lli['projected_dti']:.4f}, "
+             f"SGMC-CAL {sg['dti']:.5f} (champion 0.064121)</td>"
+             f"<td>unique on the strongest test available: max 3-px overlap {scopes['submissions']['max_overlap3px']:.3f} "
+             f"vs {scopes['submissions']['n']} pinned sibling submissions; zero wasted dots inside the excluded catalogue collar</td>"
+             "<td>YES &mdash; built in the mask-band encoding from the start</td>"
+             "<td>Reference/alternative: the only file here whose uniqueness was measured against all 462 registry rasters.</td></tr>"
+             "</tbody></table></div>"
+             "<p><b>Both encodings now satisfy one validator.</b> <code>scripts/validate_submission_tif.py</code> treats "
+             "&ldquo;null outside the bounds&rdquo; as satisfied by a NaN payload <i>or</i> by an internal per-dataset mask band, and "
+             "additionally runs the portal\u0027s literal element-wise test on the stored cells. Only the mask-band encoding passes both, "
+             "so it is the format this repo emits. Reproduce: "
+             "<code>python scripts/make_portal_safe_render.py docs/downloads/&lt;file&gt;.tif</code>.</p></section>")
 
     H.append("<section><h2>1. Estimated score, in the only honest evidence classes</h2>"
              "<div class=\"scroll\"><table><thead><tr><th>Quantity</th><th>Value</th><th>Evidence class</th><th>Source</th></tr></thead><tbody>"
@@ -221,6 +265,10 @@ def main() -> int:
              f"<td class=num>{scopes['calibration_lattices']['max_overlap3px']:.4f}</td><td><code>{esc(scopes['calibration_lattices']['max_holder'])}</code></td>"
              f"<td class=num>{scopes['calibration_lattices']['n_over_0p70']}</td><td class=bad>FAIL under the literal rule</td></tr>"
              "</tbody></table></div>"
+             "<p><b>IR-SASS3-90, disclosed not hidden:</b> the 13GEMSDOE calibration lattice "
+             "(<code>13gems_20261001_r13-lattice-s5_v2_nan-outside.tif</code>, 206,895 positive cells on a saturated grid) "
+             "is the reason the literal rule cannot be met by any emission. The lattice scope is an owner decision; the "
+             "submission-scope result stands on its own.</p>"
              "<p>The lattice row is the known protocol conflict, not a new defect: a calibration lattice puts a positive "
              "value on a dense regular grid, so <i>every</i> emission in the footprint sits within 3 px of it. The repo has "
              "already ruled that the lattice exemption is a <b>proposed amendment only</b> (docs/research/lattice-decision-20261028.md, "

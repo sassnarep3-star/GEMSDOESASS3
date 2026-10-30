@@ -8,8 +8,11 @@ regenerated wholesale. This script replaces only the block between the sentinels
   <!-- SASS3:CANDIDATE:BANNER-BEGIN --> ... <!-- SASS3:CANDIDATE:BANNER-END -->
 
 which keeps the pages idempotent (run it twice, same bytes) and keeps the download prompt on the overview
-consistent with the SHA-256 in `evidence/candidate_build_receipt.json`. Hrefs are rewritten per page
-location, so the local-link test passes from both the repo root and `docs/`.
+consistent with the receipts. Hrefs are rewritten per page location so the local-link test passes from both
+the repo root and `docs/`.
+
+All numbers come from: evidence/candidate_build_receipt.json, evidence/lane_sweep_s3_ocm_20261030.json and
+the portal-safe re-render receipt for main's promoted candidate (IR-SASS3-86).
 
 Usage:  /home/user/.venv/bin/python scripts/announce_candidate_on_pages.py
 """
@@ -30,55 +33,65 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--receipt", default=str(ROOT / "evidence/candidate_build_receipt.json"))
     ap.add_argument("--lane", default=str(ROOT / "evidence/lane_sweep_s3_ocm_20261030.json"))
+    ap.add_argument("--render", default=str(ROOT / "evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json"))
     ap.add_argument("--pages", default="index.html,docs/index.html")
     args = ap.parse_args()
 
     build = json.loads(Path(args.receipt).read_text())
     lane = json.loads(Path(args.lane).read_text())
+    reprint = json.loads(Path(args.render).read_text())
     subs = [r for r in lane["rows"] if r.get("status") == "ok" and "/docs/downloads/" in r["file"]]
     latt = [r for r in lane["rows"] if r.get("status") == "ok" and "lattice" in r["file"]]
     max_sub = max(r["overlap3px_cand_within_registry"] for r in subs)
-    max_lat = max((r["overlap3px_cand_within_registry"] for r in latt), default=float("nan"))
-    safe, lit = build["safe"], build["literal"]
+    max_lat = max((r["overlap3px_cand_within_registry"] for r in latt), default=0.0)
+    safe = build["safe"]
+    tip = reprint["output"]
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
     for rel in [p.strip() for p in args.pages.split(",") if p.strip()]:
         page = ROOT / rel
-        pre = "docs/" if str(page.parent) == str(ROOT) else ""
-        h = (
-            f"{BEGIN}\n<section class=\"hero ok\"><p class=\"label\">CURRENT CANDIDATE &middot; updated {stamp} "
-            "&middot; one-click download below &middot; NOT OK to submit (ok_to_submit: false) &middot; "
-            "NOT CLEARED FOR SUBMISSION</p>"
-            f"<h2>Download <code>{safe['tif']}</code></h2>"
-            f"<p><a class=\"btn\" href=\"{pre}downloads/{safe['tif']}\">TIF ({safe['tif_bytes']:,} bytes)</a> "
-            f"<a class=\"btn alt\" href=\"{pre}downloads/{safe['zip']}\">ZIP</a> "
-            f"<a href=\"{pre}executive-summary.html\">Submission guide &amp; nine-site table</a> "
-            f"<a href=\"{pre}research/FEED.md\">Status feed</a></p>"
-            f"<p><b>SHA-256</b> <code>{safe['tif_sha256']}</code> &middot; {build['emitted_px']:,} positive pixels "
-            f"&middot; float32, EPSG:32611, 3730&times;3292, binary emission, all stored cells in [0, 1] with a "
-            "GDAL per-dataset mask band outside the footprint.</p>"
-            f"<p><b>Uniqueness:</b> max 3-px dot overlap {max_sub:.4f} against {len(subs)} pinned sibling "
-            f"submissions (cap 0.70 &mdash; PASS), {max_lat:.4f} against the {len(latt)} saturated calibration "
-            "lattices (literal FAIL; the lattice exemption is a proposed amendment, not applied). No exact duplicate "
-            "against any registry raster. <b>SLOT USE BLOCKED:</b> this file is not a path to clearance &mdash; it is "
-            "format-ready and unique, and no instrument shows it beating the 0.2778 champion.</p>"
-            "<p>The 2026-10-29 promoted file <code>gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif</code> "
-            "(and the reference copy <code>" + lit["tif"] + "</code>) is kept for education only: a NaN payload outside the "
-            "footprint is the exact failure mode behind the live portal error &ldquo;Predicted values must be in range "
-            "[0, 1]&rdquo;.</p></section>\n"
-            f"{END}"
-        )
+        pre = "docs/" if page.parent == ROOT else ""
+        parts = [
+            BEGIN,
+            '<section class="hero ok"><p class="label">CURRENT CANDIDATES &middot; updated ' + stamp
+            + " &middot; one-click downloads below &middot; NOT OK to submit without an owner slot decision"
+            " &middot; NOT CLEARED FOR SUBMISSION</p>",
+            "<h2>Which file to download</h2>",
+            "<p><b>If a slot is to be spent for information, use</b> <code>" + tip["file"] + "</code> &mdash; main's "
+            "promoted tip-continuation emission re-rendered in the portal-safe encoding (dot set bit-identical, "
+            "symmetric difference " + str(tip.get("dot_set_symmetric_difference", reprint["proof"]["dot_set_symmetric_difference"]))
+            + "; SHA-256 <code>" + tip["sha256"] + "</code>). The copy main released with a NaN payload is "
+            "<b>rejected by the live form</b> (&ldquo;Predicted values must be in range [0, 1]&rdquo;); see IR-SASS3-86.</p>",
+            "<p><b>The uniqueness-clean alternative</b> is <code>" + safe["tif"] + "</code> (SHA-256 <code>"
+            + safe["tif_sha256"] + "</code>): " + f"{build['emitted_px']:,}" + " px, max 3-px dot overlap "
+            + f"{max_sub:.4f}" + " against all " + str(len(subs)) + " pinned sibling submissions, "
+            + f"{max_lat:.4f}" + " against a saturated calibration lattice (literal FAIL, owner question IR-SASS3-82).</p>",
+            '<p><a class="btn" href="' + pre + "downloads/" + tip["file"] + '">tipcont -safe TIF</a> '
+            '<a class="btn alt" href="' + pre + "downloads/" + str(tip.get("zip", "")) + '">tipcont -safe ZIP</a> '
+            '<a class="btn" href="' + pre + "downloads/" + safe["tif"] + '">s3-ocm TIF</a> '
+            '<a class="btn no" href="' + pre + "downloads/" + safe["zip"] + '">s3-ocm ZIP</a> '
+            '<a href="' + pre + 'executive-summary.html">Submission guide &amp; nine-site table</a> '
+            '<a href="' + pre + 'research/FEED.md">Status feed</a></p>',
+            "<p><b>Neither file is evidenced to beat 0.2778.</b> Every number available for either one is a projection or a "
+            "local HOLDOUT-DTI, and both sit below the champion on the live-calibrated instrument. The portal-validity problem "
+            "is fixed for both: mask-band encoding, all validator checks green, exit code 0. SLOT USE BLOCKED &mdash; no file "
+            "here is a path to clearance.</p></section>",
+            END,
+        ]
+        block = "\n".join(parts)
         txt = page.read_text()
         if BLOCK.search(txt):
-            new = BLOCK.sub(lambda m: h, txt, count=1)
+            new = BLOCK.sub(lambda _m: block, txt, count=1)
+            action = "replaced"
         else:
             i = txt.find("<main>")
             if i < 0:
                 raise SystemExit(f"{rel}: no <main> anchor; add the sentinels by hand once")
             i += len("<main>")
-            new = txt[:i] + "\n" + h + txt[i:]
+            new = txt[:i] + "\n" + block + txt[i:]
+            action = "inserted"
         page.write_text(new)
-        print(f"{rel}: banner {'replaced' if BLOCK.search(txt) else 'inserted'} ({len(h)} chars)")
+        print(f"{rel}: banner {action} ({len(block)} chars)")
     return 0
 
 

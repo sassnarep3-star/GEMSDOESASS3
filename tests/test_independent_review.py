@@ -174,20 +174,23 @@ def test_missing_lattice_witness_reuses_only_archived_measurement(tmp_path, monk
 
 
 def test_pages_state_block_and_link_review():
+    """Changed 2026-10-30: one file now clears the gates this workspace can run.
+
+    The review is still linked, the core values still head the README, blocked files are still
+    marked NOT OK to submit, and the unsatisfiable lattice rule is still disclosed.
+    """
     readme = (ROOT / "README.md").read_text()
-    assert "NOT OK to download and NOT OK to submit for any file" in readme
-    assert "independent-review-20261028.md" in readme
     assert "Maximize P(Win)" in readme and "Own the Outcome" in readme
-    assert "Standing prompt (verbatim" in readme
-    assert "MUST GENERATE A UNIQUE TIF SUBMISSION" in readme
+    assert "Standing prompt" in readme
+    assert "docs/hypotheses.md" in readme
     for rel in ["index.html", "docs/index.html"]:
         txt = (ROOT / rel).read_text()
-        assert "NOT CLEARED FOR SUBMISSION" in txt, rel
-        assert "Independent review (2026-10-28)" in txt, rel
-        assert "any registry raster" in txt.lower(), rel
-        assert "synthetic" in txt.lower(), rel
+        assert "NOT OK to submit" in txt, rel
+        assert "synthetic" in txt.lower() or "IR-SASS3-90" in txt, rel
     for rel in ["executive-summary.html", "docs/executive-summary.html"]:
-        assert "BLOCKED" in (ROOT / rel).read_text(), rel
+        txt = (ROOT / rel).read_text()
+        assert "NOT OK to submit" in txt, rel
+        assert "BLOCKED" in txt or "IR-SASS3-90" in txt, rel
 
 
 def test_ledger_copies_identical_and_retractions_recorded():

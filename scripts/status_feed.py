@@ -184,7 +184,9 @@ def main() -> int:
         ("e3", "evidence/operating_point_E3_design.json", "support-design sweep (E3)"),
         ("e3b", "evidence/operating_point_E3b_selection.json", "selection-rule sweep (E3b)"),
         ("geoprior", "evidence/geothermal_prior_audit_20261030.json", "geothermal/spring proximity audit"),
-        ("runcard", "evidence/run_card_20261030.json", "final protocol run card"),
+        ("runcard", "evidence/run_card_20261030_s3pass.json", "protocol run card for this pass"),
+        ("runcard-main", "evidence/run_card_20261030.json", "protocol run card for main\u2019s promoted tipcont pass"),
+        ("portalsafe", "evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json", "main\u2019s candidate re-rendered in the portal-safe encoding"),
     ]:
         p = ROOT / fn
         a = age_h(p)

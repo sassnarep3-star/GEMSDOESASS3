@@ -28,7 +28,8 @@ def j(p: Path) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--out", default=str(EV / "run_card_20261030.json"))
+    ap.add_argument("--out", default=str(EV / "run_card_20261030_s3pass.json"),
+                    help="main keeps evidence/run_card_20261030.json for its own promoted card")
     args = ap.parse_args()
 
     build = j(EV / "candidate_build_receipt.json")
@@ -54,6 +55,7 @@ def main() -> int:
         "schema_version": 1,
         "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "generated_by": "scripts/write_run_card.py",
+        "session": "2026-10-30 second pass (lane/OCM branch); main\u2019s tipcont card is evidence/run_card_20261030.json",
         "site": "GEMSDOESASS3 (nine focus sites: GEMSDOE24/25/27/28/30/31/32/33/36)",
         "hypothesis": "H-N6 (2026-10-30): a wide-lane, LiDAR-visible-terrain-gated emission off the catalogue "
                       "matches the champion on the local instruments; H-N5 (the higher-lambda 1.4-2 px strand lane) "
@@ -144,6 +146,16 @@ def main() -> int:
                            "holdout_gain_over_champion_gt_10pct": bool(sg["dti"] > champ["holdout_sgmc_cal_dti"] * 1.10),
                            "holdout_ratio": round(sg["dti"] / champ["holdout_sgmc_cal_dti"], 4)},
         "do_not_spend_a_slot": True,
+        "portal_encoding_reconciliation": {
+            "issue": "IR-SASS3-86: main's promoted tipcont raster is portal-invalid as released (NaN payload outside)",
+            "fix": "scripts/make_portal_safe_render.py re-renders it with an identical dot set (symdiff 0)",
+            "file": "docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif",
+            "receipt": "evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json",
+            "validator": "evidence/validator_tipcont_safe_20261030.json",
+            "shared_gate": "scripts/validate_submission_tif.py is now mask-aware: NaN payload and per-dataset mask band "
+                           "both satisfy the official outside-bounds sentence, but only the mask-band encoding passes "
+                           "portal_range_test_all_cells",
+        },
         "evidence_files": [
             "evidence/candidate_build_receipt.json", "evidence/validator_s3_ocm_safe.json",
             "evidence/lane_sweep_s3_ocm_20261030.json", "evidence/focus9_scoreboard_20261030.json",
@@ -155,8 +167,12 @@ def main() -> int:
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     txt = json.dumps(card, indent=2)
-    # json.dumps would emit a bare NaN for a float nan, which is not valid JSON: refuse that here.
-    assert "NaN" not in txt and "Infinity" not in txt, "run card must contain no non-finite values"
+    # json.dumps happily writes a bare NaN/Infinity for a non-finite float, which is not valid JSON and
+    # must never reach a run card. Reject it by parsing with parse_constant (prose mentioning NaN is fine).
+    def _no_constants(tok: str):
+        raise ValueError(f"non-finite constant in run card: {tok}")
+
+    json.loads(txt, parse_constant=_no_constants)
     out.write_text(txt + "\n")
     print(f"wrote {out}")
     print("verdict:", card["verdict"])

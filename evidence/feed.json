@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_utc": "2026-10-30T03:18:17+00:00",
+  "generated_utc": "2026-10-30T03:25:34+00:00",
   "freshness_rule_h": 24.0,
   "counts": {
-    "OK": 17,
+    "OK": 19,
     "STALE": 0,
     "TODO": 1,
     "FAIL": 0,
@@ -17,8 +17,8 @@
       "status": "OK",
       "detail": {
         "branch": "arena/6ced5a8f-gemsdoesass3",
-        "head": "ba99846",
-        "uncommitted_paths": 49
+        "head": "ab31670",
+        "uncommitted_paths": 60
       },
       "next_action": ""
     },
@@ -29,8 +29,8 @@
       "status": "OK",
       "detail": {
         "readme_heading": "Standing prompt",
-        "mirror_age_h": 0.99,
-        "re_read_utc": "2026-10-30T03:18:17+00:00"
+        "mirror_age_h": 1.12,
+        "re_read_utc": "2026-10-30T03:25:34+00:00"
       },
       "next_action": "re-read line by line at session start; do not work from memory"
     },
@@ -43,7 +43,7 @@
         "verified": 28,
         "of": 28,
         "root": ".cache/gems_data",
-        "restore_receipt_age_h": 0.28
+        "restore_receipt_age_h": 0.05
       },
       "next_action": ""
     },
@@ -55,7 +55,7 @@
       "detail": {
         "file": "gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif",
         "sha256": "cdfa5f221fd561f2\u2026",
-        "receipt_age_h": 0.5,
+        "receipt_age_h": 0.62,
         "emitted_px": 44090
       },
       "next_action": ""
@@ -68,7 +68,7 @@
       "detail": {
         "all_hard_checks_pass": true,
         "checks_failed": [],
-        "receipt_age_h": 0.23
+        "receipt_age_h": 0.08
       },
       "next_action": ""
     },
@@ -118,7 +118,7 @@
       "status": "OK",
       "detail": {
         "path": "evidence/focus9_scoreboard_20261030.json",
-        "age_h": 0.04,
+        "age_h": 0.16,
         "bytes": 15853
       },
       "next_action": ""
@@ -130,7 +130,7 @@
       "status": "OK",
       "detail": {
         "path": "evidence/geometry_experiment_E1_partial.log",
-        "age_h": 0.67,
+        "age_h": 0.8,
         "bytes": 4962
       },
       "next_action": ""
@@ -142,7 +142,7 @@
       "status": "OK",
       "detail": {
         "path": "evidence/operating_point_experiment_E2.json",
-        "age_h": 0.64,
+        "age_h": 0.76,
         "bytes": 6152
       },
       "next_action": ""
@@ -154,7 +154,7 @@
       "status": "OK",
       "detail": {
         "path": "evidence/operating_point_E3_design.json",
-        "age_h": 0.59,
+        "age_h": 0.71,
         "bytes": 5761
       },
       "next_action": ""
@@ -166,7 +166,7 @@
       "status": "OK",
       "detail": {
         "path": "evidence/operating_point_E3b_selection.json",
-        "age_h": 0.54,
+        "age_h": 0.67,
         "bytes": 6485
       },
       "next_action": ""
@@ -178,20 +178,44 @@
       "status": "OK",
       "detail": {
         "path": "evidence/geothermal_prior_audit_20261030.json",
-        "age_h": 0.15,
+        "age_h": 0.27,
         "bytes": 5107
       },
       "next_action": ""
     },
     {
       "id": "runcard",
-      "what": "evidence receipt fresh (<= 24 h): final protocol run card",
+      "what": "evidence receipt fresh (<= 24 h): protocol run card for this pass",
+      "how_checked": "mtime of evidence/run_card_20261030_s3pass.json",
+      "status": "OK",
+      "detail": {
+        "path": "evidence/run_card_20261030_s3pass.json",
+        "age_h": 0.05,
+        "bytes": 12249
+      },
+      "next_action": ""
+    },
+    {
+      "id": "runcard-main",
+      "what": "evidence receipt fresh (<= 24 h): protocol run card for main\u2019s promoted tipcont pass",
       "how_checked": "mtime of evidence/run_card_20261030.json",
       "status": "OK",
       "detail": {
         "path": "evidence/run_card_20261030.json",
-        "age_h": 0.04,
-        "bytes": 11364
+        "age_h": 0.06,
+        "bytes": 3824
+      },
+      "next_action": ""
+    },
+    {
+      "id": "portalsafe",
+      "what": "evidence receipt fresh (<= 24 h): main\u2019s candidate re-rendered in the portal-safe encoding",
+      "how_checked": "mtime of evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json",
+      "status": "OK",
+      "detail": {
+        "path": "evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json",
+        "age_h": 0.07,
+        "bytes": 1566
       },
       "next_action": ""
     },
@@ -201,7 +225,7 @@
       "how_checked": "pytest -q --tb=no",
       "status": "OK",
       "detail": {
-        "summary": "62 passed, 2 skipped, 1 warning in 8.08s",
+        "summary": "81 passed, 2 skipped, 1 warning in 10.48s",
         "exit": 0
       },
       "next_action": ""
@@ -212,8 +236,8 @@
       "how_checked": "mtime comparison",
       "status": "OK",
       "detail": {
-        "page_age_h": 0.0,
-        "candidate_age_h": 0.5
+        "page_age_h": 0.01,
+        "candidate_age_h": 0.62
       },
       "next_action": ""
     },
@@ -223,8 +247,8 @@
       "how_checked": "mtime comparison",
       "status": "OK",
       "detail": {
-        "page_age_h": 0.06,
-        "candidate_age_h": 0.5
+        "page_age_h": 0.04,
+        "candidate_age_h": 0.62
       },
       "next_action": ""
     }
