@@ -27,5 +27,8 @@ jobs:
       - name: Run zero-human-intervention GeoTIFF & Run Card gate inspector
         run: python scripts/verify_all_gates.py --expect-blocked
 
+      - name: Verify every published number reproduces from its receipt
+        run: python scripts/verify_session_card.py
+
       - name: Run pytest invariant suite
         run: pytest -v

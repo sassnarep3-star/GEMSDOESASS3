@@ -1,0 +1,58 @@
+{
+  "wellspring_rows": {
+    "n": 27092,
+    "median_d_fault_px": 24.0,
+    "frac_le3px": 0.1158,
+    "frac_le10px": 0.2806,
+    "frac_gt50px": 0.2079
+  },
+  "hot_class_rows": {
+    "n": 1873,
+    "median_d_fault_px": 13.04,
+    "frac_le3px": 0.2557,
+    "frac_le10px": 0.4634,
+    "frac_gt50px": 0.1052
+  },
+  "volcanic_vents": {
+    "n": 21,
+    "median_d_fault_px": 22.2,
+    "frac_le3px": 0.0,
+    "frac_le10px": 0.2857,
+    "frac_gt50px": 0.2857
+  },
+  "temp_c": {
+    "n": 8718,
+    "median": 32.0,
+    "p90": 111.02,
+    "max": 296.54
+  },
+  "geothermquartz_c": {
+    "n": 973,
+    "median": 96.7,
+    "p90": 163.23,
+    "max": 269.11
+  },
+  "unique_spring_grid_cells": 12570,
+  "layers": {
+    "well_features_20220808": 19456,
+    "well_chemistry_20220808": 2953,
+    "well_temperature_20220808": 2225,
+    "spring_chemistry_20220808": 1014,
+    "spring_temperature_20220808": 945,
+    "spring_features_20220808": 499
+  },
+  "thermalclass_counts": {
+    "NULL": 18413,
+    "": 3170,
+    "Warm": 2245,
+    "Hot": 1873,
+    "Cold": 783,
+    "Unknown": 487,
+    "Hot ": 121
+  },
+  "vent_rock_types": {
+    "Basalt": 20,
+    "Rhyolite": 1
+  },
+  "vent_ages": []
+}

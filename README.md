@@ -6,9 +6,9 @@
 
 | | |
 |---|---|
-| File | `docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif` |
-| SHA-256 (TIF) | `f7d56a9e316ae6a8fc162bdb30b7ddf3a3796dcaf232399b8fa95a8cc88f7452` (385,481 bytes) |
-| SHA-256 (ZIP) | `3c22a77e59722043cb5473a962f8c2c52761b6cbbc0f60bff559bf16e84eb2b3` (310,049 bytes) |
+| File | `docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif` |
+| SHA-256 (TIF) | `e2e4380991586b99c9b9da1abc3272782d3562134515891469fa882ba02c7f8d` (439,377 bytes) |
+| SHA-256 (ZIP) | `46ee4a1cdcdb58aed16c29740b7c9af3e60478be6589dac821f1e646d28f07ab` (304,475 bytes) |
 | Submission note (94 of 140 chars) | `Unique lane-70 consensus, 55k dots: no registry submission above 70%, est DTI 0.19 (LOO 0.065)` |
 | LEADERBOARD-CALIBRATED ESTIMATE | **0.1918** (LOO RMSE 0.0653 over 50 scored submissions; not an organizer score) |
 | HOLDOUT-DTI | **0.07894 [0.06869, 0.08918]**, 22,232 withheld positives (champion control 0.00452) |
@@ -40,7 +40,7 @@ separately, and the current build is capped against every submission.
 
 ## Current candidate (OK to submit)
 
-`docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif` — 55,000 single-pixel dots, 2 px minimum spacing,
+`docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif` — 55,000 single-pixel dots, 2 px minimum spacing,
 float32, EPSG:32611, 3730×3292, values {0,1}, NaN outside the competition footprint (7,111,787 cells, matching the official sample).
 Built by `scripts/build_unique_candidate.py --budget 55000 --lane-cap 0.70 --halo-max 0.90 --extra-refs`: emission is a greedy pass in
 descending consensus belief h(x) = sum_f s_f k_f / sum_f k_f over the 50 distinct scored submissions (k = 300 m triangular kernel, s_f =
@@ -49,6 +49,17 @@ owner-reported score), with the lane cap enforced during emission against every 
 `evidence/uniqueness_audit_candidate_20261030.json`, submission-only overlap `evidence/literal_vs_submission_overlap_20261030.json`,
 holdout `evidence/holdout_lane70_20261030.json`, canary `evidence/canary_lane70_20261030.json`, champion control
 `evidence/uniqueness_audit_champion_control_20261030.json`, strict-literal ceiling `evidence/compliant_candidate_20261030.json`.
+
+## Alternative file (unique by construction, second choice)
+
+`docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif` — tip continuation of the public
+USGS/INGENIOUS catalogue (`tip-continuation of the public USGS/INGENIOUS fault catalogue; 44923 dots at 4px spacing, NaN outside footprint`), 44,923 dots, (SHA-256 `cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277`) worst single-raster overlap 54.22 % over 386 registry rasters (a wider margin
+than this candidate's 69.998 %), HOLDOUT-DTI 0.139956, SGMC-CAL 0.041176. It is the better file on *spirit* (its dots
+are derived from geology, not from other teams' submissions) and the weaker file on the leaderboard-calibrated model:
+the consensus estimator projects **0.0881** for it against 0.1918 for the lane-70 build, while main's parametric model
+projects 0.172–0.186. The two models disagree by ~2× on the same file, which is why both are published here.
+Use the lane-70 file if maximizing the expected score matters more; use this one if a file that is unique *by
+construction* matters more to the Final Round's expert panel.
 
 ## What the score drivers say (2026-10-30, 50 scored submissions)
 

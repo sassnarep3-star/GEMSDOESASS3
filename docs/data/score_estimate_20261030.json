@@ -1,0 +1,346 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30T02:33:03Z",
+ "label": "MODEL-PROJECTION",
+ "warning": "not a leaderboard score. M (withheld-fault mass) is unknown and is swept; eps for a new file comes from the catalogue-recovery holdout, whose transfer to the organizer's new faults is unproven",
+ "formula": "S = x/(x + 0.2N/M + 0.8(1-x)), x = min(1, eps*e)",
+ "candidate": {
+  "file": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif",
+  "n_dots": 44923,
+  "e_mean_k": 0.067009,
+  "covered_footprint_fraction": 0.17105
+ },
+ "candidate_eps_holdout": 1.3039,
+ "candidate_projection": {
+  "central_skill_hypothesis": 0.0906,
+  "range_skill_hypothesis": [
+   0.0605,
+   0.1031
+  ],
+  "range_selection_hypothesis": [
+   0.2682,
+   0.3478
+  ],
+  "basis": "skill hypothesis: enrichment measured on the catalogue holdout (this file) and M swept 30k-300k; selection hypothesis: the scored subset is fault-dense, so any field inherits the champion-implied enrichment (inverse solve). Both are projections, not scores"
+ },
+ "candidate_eps_selection_hypothesis": 4.63,
+ "candidate_grid": [
+  {
+   "withheld_fault_mass_px": 30494,
+   "enrichment_eps": 1.0,
+   "enrichment_basis": "area-proportional (no enrichment)",
+   "projected_dti": 0.0605
+  },
+  {
+   "withheld_fault_mass_px": 30494,
+   "enrichment_eps": 1.304,
+   "enrichment_basis": "catalogue-holdout enrichment (this file, measured)",
+   "projected_dti": 0.0786
+  },
+  {
+   "withheld_fault_mass_px": 30494,
+   "enrichment_eps": 4.63,
+   "enrichment_basis": "champion-implied enrichment under the test-set-selection hypothesis",
+   "projected_dti": 0.2682
+  },
+  {
+   "withheld_fault_mass_px": 30494,
+   "enrichment_eps": 2.0,
+   "enrichment_basis": "twice area-proportional, for sensitivity",
+   "projected_dti": 0.1195
+  },
+  {
+   "withheld_fault_mass_px": 60988,
+   "enrichment_eps": 1.0,
+   "enrichment_basis": "area-proportional (no enrichment)",
+   "projected_dti": 0.0697
+  },
+  {
+   "withheld_fault_mass_px": 60988,
+   "enrichment_eps": 1.304,
+   "enrichment_basis": "catalogue-holdout enrichment (this file, measured)",
+   "projected_dti": 0.0906
+  },
+  {
+   "withheld_fault_mass_px": 60988,
+   "enrichment_eps": 4.63,
+   "enrichment_basis": "champion-implied enrichment under the test-set-selection hypothesis",
+   "projected_dti": 0.3074
+  },
+  {
+   "withheld_fault_mass_px": 60988,
+   "enrichment_eps": 2.0,
+   "enrichment_basis": "twice area-proportional, for sensitivity",
+   "projected_dti": 0.1376
+  },
+  {
+   "withheld_fault_mass_px": 121976,
+   "enrichment_eps": 1.0,
+   "enrichment_basis": "area-proportional (no enrichment)",
+   "projected_dti": 0.0755
+  },
+  {
+   "withheld_fault_mass_px": 121976,
+   "enrichment_eps": 1.304,
+   "enrichment_basis": "catalogue-holdout enrichment (this file, measured)",
+   "projected_dti": 0.098
+  },
+  {
+   "withheld_fault_mass_px": 121976,
+   "enrichment_eps": 4.63,
+   "enrichment_basis": "champion-implied enrichment under the test-set-selection hypothesis",
+   "projected_dti": 0.3316
+  },
+  {
+   "withheld_fault_mass_px": 121976,
+   "enrichment_eps": 2.0,
+   "enrichment_basis": "twice area-proportional, for sensitivity",
+   "projected_dti": 0.1488
+  },
+  {
+   "withheld_fault_mass_px": 300000,
+   "enrichment_eps": 1.0,
+   "enrichment_basis": "area-proportional (no enrichment)",
+   "projected_dti": 0.0795
+  },
+  {
+   "withheld_fault_mass_px": 300000,
+   "enrichment_eps": 1.304,
+   "enrichment_basis": "catalogue-holdout enrichment (this file, measured)",
+   "projected_dti": 0.1031
+  },
+  {
+   "withheld_fault_mass_px": 300000,
+   "enrichment_eps": 4.63,
+   "enrichment_basis": "champion-implied enrichment under the test-set-selection hypothesis",
+   "projected_dti": 0.3478
+  },
+  {
+   "withheld_fault_mass_px": 300000,
+   "enrichment_eps": 2.0,
+   "enrichment_basis": "twice area-proportional, for sensitivity",
+   "projected_dti": 0.1564
+  }
+ ],
+ "focus9_rows": [
+  {
+   "site": "GEMSDOE32",
+   "file": "GEMSDOE32__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+   "n_dots": 37654,
+   "e_mean_k": 0.058615,
+   "owner_reported_score": 0.2778,
+   "model_projection_same_parameters": 0.2635
+  },
+  {
+   "site": "GEMSDOE36",
+   "file": "GEMSDOE36__gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif",
+   "n_dots": 38854,
+   "e_mean_k": 0.06032,
+   "owner_reported_score": 0.275,
+   "model_projection_same_parameters": 0.2652
+  },
+  {
+   "site": "GEMSDOE28",
+   "file": "GEMSDOE28__gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+   "n_dots": 37660,
+   "e_mean_k": 0.060258,
+   "owner_reported_score": 0.271,
+   "model_projection_same_parameters": 0.2705
+  },
+  {
+   "site": "GEMSDOE31",
+   "file": "GEMSDOE31__gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif",
+   "n_dots": 40199,
+   "e_mean_k": 0.062423,
+   "owner_reported_score": 0.2708,
+   "model_projection_same_parameters": 0.2677
+  },
+  {
+   "site": "GEMSDOE33",
+   "file": "GEMSDOE33__GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
+   "n_dots": 41865,
+   "e_mean_k": 0.065074,
+   "owner_reported_score": 0.2632,
+   "model_projection_same_parameters": 0.2708
+  },
+  {
+   "site": "GEMSDOE25",
+   "file": "GEMSDOE25__gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+   "n_dots": 44090,
+   "e_mean_k": 0.06788,
+   "owner_reported_score": 0.26,
+   "model_projection_same_parameters": 0.2719
+  },
+  {
+   "site": "GEMSDOE30",
+   "file": "GEMSDOE30__gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+   "n_dots": 44090,
+   "e_mean_k": 0.06788,
+   "owner_reported_score": 0.26,
+   "model_projection_same_parameters": 0.2719
+  },
+  {
+   "site": "GEMSDOE27",
+   "file": "GEMSDOE27__gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+   "n_dots": 61328,
+   "e_mean_k": 0.078138,
+   "owner_reported_score": 0.2449,
+   "model_projection_same_parameters": 0.2443
+  },
+  {
+   "site": "GEMSDOE24",
+   "file": "GEMSDOE24__gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "n_dots": 60069,
+   "e_mean_k": 0.076302,
+   "owner_reported_score": 0.2477,
+   "model_projection_same_parameters": 0.2428
+  }
+ ],
+ "focus9_fit": {
+  "withheld_fault_mass_M_px": 3965.0,
+  "enrichment_eps": 12.811,
+  "rmse": 0.00868,
+  "n_points": 9,
+  "rows": [
+   {
+    "site": "GEMSDOE32",
+    "n_dots": 37654,
+    "observed": 0.2778,
+    "model": 0.263526
+   },
+   {
+    "site": "GEMSDOE36",
+    "n_dots": 38854,
+    "observed": 0.275,
+    "model": 0.265153
+   },
+   {
+    "site": "GEMSDOE28",
+    "n_dots": 37660,
+    "observed": 0.271,
+    "model": 0.270484
+   },
+   {
+    "site": "GEMSDOE31",
+    "n_dots": 40199,
+    "observed": 0.2708,
+    "model": 0.267671
+   },
+   {
+    "site": "GEMSDOE33",
+    "n_dots": 41865,
+    "observed": 0.2632,
+    "model": 0.270806
+   },
+   {
+    "site": "GEMSDOE25",
+    "n_dots": 44090,
+    "observed": 0.26,
+    "model": 0.271934
+   },
+   {
+    "site": "GEMSDOE30",
+    "n_dots": 44090,
+    "observed": 0.26,
+    "model": 0.271934
+   },
+   {
+    "site": "GEMSDOE27",
+    "n_dots": 61328,
+    "observed": 0.2449,
+    "model": 0.244292
+   },
+   {
+    "site": "GEMSDOE24",
+    "n_dots": 60069,
+    "observed": 0.2477,
+    "model": 0.242831
+   }
+  ],
+  "caveat": "M and eps are degenerate in this family because e(N) barely varies over 37k-61k dots; the fit is therefore informative about scale, not about either parameter separately"
+ },
+ "inverse_champion_02778": [
+  {
+   "withheld_fault_mass_px": 30494,
+   "captured_credit_x": 0.308,
+   "implied_enrichment_eps": 5.25,
+   "implied_gain_over_area_proportional": 5.25
+  },
+  {
+   "withheld_fault_mass_px": 60988,
+   "captured_credit_x": 0.2716,
+   "implied_enrichment_eps": 4.63,
+   "implied_gain_over_area_proportional": 4.63
+  },
+  {
+   "withheld_fault_mass_px": 121976,
+   "captured_credit_x": 0.2535,
+   "implied_enrichment_eps": 4.32,
+   "implied_gain_over_area_proportional": 4.32
+  },
+  {
+   "withheld_fault_mass_px": 300000,
+   "captured_credit_x": 0.2427,
+   "implied_enrichment_eps": 4.14,
+   "implied_gain_over_area_proportional": 4.14
+  }
+ ],
+ "blind_ceiling": [
+  {
+   "n_dots": 12000,
+   "e_expected": 0.03582,
+   "score_eps1": 0.0254,
+   "score_eps_fit": 0.3065,
+   "score_eps_2": 0.0505
+  },
+  {
+   "n_dots": 24000,
+   "e_expected": 0.06931,
+   "score_eps1": 0.0342,
+   "score_eps_fit": 0.4058,
+   "score_eps_2": 0.068
+  },
+  {
+   "n_dots": 40000,
+   "e_expected": 0.11059,
+   "score_eps1": 0.0389,
+   "score_eps_fit": 0.3314,
+   "score_eps_2": 0.0773
+  },
+  {
+   "n_dots": 60000,
+   "e_expected": 0.15724,
+   "score_eps1": 0.0408,
+   "score_eps_fit": 0.2484,
+   "score_eps_2": 0.0809
+  },
+  {
+   "n_dots": 100000,
+   "e_expected": 0.23622,
+   "score_eps1": 0.0401,
+   "score_eps_fit": 0.1654,
+   "score_eps_2": 0.0796
+  },
+  {
+   "n_dots": 150000,
+   "e_expected": 0.31299,
+   "score_eps1": 0.0371,
+   "score_eps_fit": 0.1167,
+   "score_eps_2": 0.0737
+  },
+  {
+   "n_dots": 200000,
+   "e_expected": 0.37098,
+   "score_eps1": 0.0338,
+   "score_eps_fit": 0.0902,
+   "score_eps_2": 0.0672
+  },
+  {
+   "n_dots": 300000,
+   "e_expected": 0.44787,
+   "score_eps1": 0.028,
+   "score_eps_fit": 0.062,
+   "score_eps_2": 0.0556
+  }
+ ]
+}

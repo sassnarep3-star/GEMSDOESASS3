@@ -1,0 +1,261 @@
+{
+ "schema_version": 1,
+ "label": "HOLDOUT-DTI on shared instruments; not an organizer score",
+ "evaluator_versions": {
+  "sgmc": "GEMSDOE32-SGMC-CAL-v3.0",
+  "hide_recover": "GEMSDOE32-HIDE-RECOVER-v3.0"
+ },
+ "n_withheld_positives_sgmc": 62703,
+ "family_reference_band": {
+  "GEMSDOE24": 0.057932,
+  "GEMSDOE25/30": 0.06059,
+  "GEMSDOE27": 0.05826,
+  "GEMSDOE28 h36": 0.062967,
+  "GEMSDOE28 h27-4": 0.06301,
+  "GEMSDOE31": 0.06301,
+  "GEMSDOE32 champion": 0.064121,
+  "GEMSDOE36": 0.064444,
+  "source": "evidence/proxy_leaderboard_concordance.json (rerun here reproduces them)"
+ },
+ "live_dot_keying_auc": {
+  "lidar_valid": 0.1911,
+  "det_elev_slope": 0.6594,
+  "lidar_upface_max": 0.6048,
+  "lidar_lapneg_max": 0.5914,
+  "lidar_downface_max": 0.5868,
+  "lidar_ex_max": 0.5851,
+  "lidar_relief": 0.5825,
+  "lidar_step_max": 0.5769,
+  "tmi_hg": 0.5665,
+  "det_elev": 0.5521,
+  "iso_grav": 0.5477,
+  "lidar_coh100": 0.4584,
+  "depth_base": 0.4662,
+  "geod_dilaterate": 0.5327,
+  "tmi_vg": 0.4707,
+  "grav_vg": 0.5276,
+  "grav_slope": 0.5256,
+  "geod_2ndinv": 0.5256,
+  "tmi": 0.5051,
+  "geod_shearrate": 0.4977
+ },
+ "rows": [
+  {
+   "surface": "edgeconsensus",
+   "target_px": 40000,
+   "emitted_px": 40025,
+   "sgmc_cal_dti": 0.015536698691664201,
+   "sgmc_cal_ci95": [
+    0.010048203270583794,
+    0.021536409524571146
+   ],
+   "sgmc_raw_dti": 0.024053139157367797,
+   "hr_dti": 0.014053388670623038,
+   "hr_ci95": [
+    0.00841352376823494,
+    0.02036449800544634
+   ],
+   "d_catalogue_p90_px": 41.23,
+   "coverage_sgmc_raw": 0.024053
+  },
+  {
+   "surface": "edgeconsensus",
+   "target_px": 80000,
+   "emitted_px": 80026,
+   "sgmc_cal_dti": 0.02017970455572147,
+   "sgmc_cal_ci95": [
+    0.014273726424291037,
+    0.026676154838987446
+   ],
+   "sgmc_raw_dti": 0.039686115919399835,
+   "hr_dti": 0.01724145666125371,
+   "hr_ci95": [
+    0.011128471759118021,
+    0.02408301179249724
+   ],
+   "d_catalogue_p90_px": 43.05,
+   "coverage_sgmc_raw": 0.039686
+  },
+  {
+   "surface": "edgeconsensus",
+   "target_px": 160000,
+   "emitted_px": 160447,
+   "sgmc_cal_dti": 0.022287763887294375,
+   "sgmc_cal_ci95": [
+    0.016562538772670228,
+    0.028470238609280565
+   ],
+   "sgmc_raw_dti": 0.05725942104609752,
+   "hr_dti": 0.01885928819769941,
+   "hr_ci95": [
+    0.013654490673068264,
+    0.025070212889880615
+   ],
+   "d_catalogue_p90_px": 45.69,
+   "coverage_sgmc_raw": 0.057259
+  },
+  {
+   "surface": "edgeconsensus",
+   "target_px": 320000,
+   "emitted_px": 320032,
+   "sgmc_cal_dti": 0.02180769180922691,
+   "sgmc_cal_ci95": [
+    0.016157940870594644,
+    0.0275246084228876
+   ],
+   "sgmc_raw_dti": 0.07131636334743229,
+   "hr_dti": 0.019125858895712597,
+   "hr_ci95": [
+    0.014791479396840949,
+    0.024181833053761138
+   ],
+   "d_catalogue_p90_px": 49.0,
+   "coverage_sgmc_raw": 0.071316
+  },
+  {
+   "surface": "ocm",
+   "target_px": 40000,
+   "emitted_px": 40000,
+   "sgmc_cal_dti": 0.013115185936086626,
+   "sgmc_cal_ci95": [
+    0.009766440726193235,
+    0.01684805590012923
+   ],
+   "sgmc_raw_dti": 0.0203019124605289,
+   "hr_dti": 0.016041317630587706,
+   "hr_ci95": [
+    0.00937984311038787,
+    0.023740062944913414
+   ],
+   "d_catalogue_p90_px": 45.0,
+   "coverage_sgmc_raw": 0.020302
+  },
+  {
+   "surface": "ocm",
+   "target_px": 80000,
+   "emitted_px": 80000,
+   "sgmc_cal_dti": 0.016415145094331757,
+   "sgmc_cal_ci95": [
+    0.012858388911549055,
+    0.01964005094512337
+   ],
+   "sgmc_raw_dti": 0.032279256261132934,
+   "hr_dti": 0.020485694122219646,
+   "hr_ci95": [
+    0.014339927153155303,
+    0.027578544946756794
+   ],
+   "d_catalogue_p90_px": 50.7,
+   "coverage_sgmc_raw": 0.032279
+  },
+  {
+   "surface": "ocm",
+   "target_px": 160000,
+   "emitted_px": 160000,
+   "sgmc_cal_dti": 0.01975563984111802,
+   "sgmc_cal_ci95": [
+    0.01651465250528553,
+    0.02323964124618714
+   ],
+   "sgmc_raw_dti": 0.050672555271509025,
+   "hr_dti": 0.021088638192272826,
+   "hr_ci95": [
+    0.016348224609163298,
+    0.026674540833731882
+   ],
+   "d_catalogue_p90_px": 56.3,
+   "coverage_sgmc_raw": 0.050673
+  },
+  {
+   "surface": "ocm",
+   "target_px": 320000,
+   "emitted_px": 320000,
+   "sgmc_cal_dti": 0.02015268418189346,
+   "sgmc_cal_ci95": [
+    0.017003886718435755,
+    0.023548145326998473
+   ],
+   "sgmc_raw_dti": 0.06580703754681973,
+   "hr_dti": 0.020419172997395815,
+   "hr_ci95": [
+    0.016296320608695136,
+    0.02505703342741334
+   ],
+   "d_catalogue_p90_px": 59.14,
+   "coverage_sgmc_raw": 0.065807
+  },
+  {
+   "surface": "hybrid_edge_x_ocm",
+   "target_px": 40000,
+   "emitted_px": 40061,
+   "sgmc_cal_dti": 0.014653332305455216,
+   "sgmc_cal_ci95": [
+    0.010017778600069102,
+    0.019437872303990914
+   ],
+   "sgmc_raw_dti": 0.02269716646000256,
+   "hr_dti": 0.016439883388323043,
+   "hr_ci95": [
+    0.009759972349408138,
+    0.023763018323776464
+   ],
+   "d_catalogue_p90_px": 43.17,
+   "coverage_sgmc_raw": 0.022697
+  },
+  {
+   "surface": "hybrid_edge_x_ocm",
+   "target_px": 80000,
+   "emitted_px": 80174,
+   "sgmc_cal_dti": 0.018705126317627677,
+   "sgmc_cal_ci95": [
+    0.013886917365455097,
+    0.023720191472638104
+   ],
+   "sgmc_raw_dti": 0.036829862355493945,
+   "hr_dti": 0.02091273685375182,
+   "hr_ci95": [
+    0.015035123291530502,
+    0.027679376033426337
+   ],
+   "d_catalogue_p90_px": 45.0,
+   "coverage_sgmc_raw": 0.03683
+  },
+  {
+   "surface": "hybrid_edge_x_ocm",
+   "target_px": 160000,
+   "emitted_px": 160206,
+   "sgmc_cal_dti": 0.02175256217839172,
+   "sgmc_cal_ci95": [
+    0.016945820352051118,
+    0.02666084463468553
+   ],
+   "sgmc_raw_dti": 0.055868242665379896,
+   "hr_dti": 0.02199078677437741,
+   "hr_ci95": [
+    0.01657098872102342,
+    0.028290524582046554
+   ],
+   "d_catalogue_p90_px": 48.84,
+   "coverage_sgmc_raw": 0.055868
+  },
+  {
+   "surface": "hybrid_edge_x_ocm",
+   "target_px": 320000,
+   "emitted_px": 320052,
+   "sgmc_cal_dti": 0.022083513757292478,
+   "sgmc_cal_ci95": [
+    0.01767558160452473,
+    0.026875864149322394
+   ],
+   "sgmc_raw_dti": 0.07223640729302501,
+   "hr_dti": 0.020728851707639776,
+   "hr_ci95": [
+    0.0165117964966068,
+    0.025731635936318185
+   ],
+   "d_catalogue_p90_px": 53.04,
+   "coverage_sgmc_raw": 0.072236
+  }
+ ],
+ "runtime_s": 73.5
+}

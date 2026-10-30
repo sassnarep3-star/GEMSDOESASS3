@@ -120,18 +120,22 @@ def verify(card_path: Path) -> dict:
             check("transform_matches_card", transform == card["validator_output"]["transform"])
             check("nodata_matches_card", src.nodata is None or bool(np.isnan(src.nodata)))
             if foot is not None:
+                valid = src.read_masks(1) > 0
                 check("finite_inside_footprint_only",
-                      bool(np.isfinite(arr[foot]).all()) and bool(np.isnan(arr[~foot]).all()),
-                      "inside footprint not all finite, or outside not all NaN")
+                      bool(np.isfinite(arr[foot]).all())
+                      and bool(((~valid) | np.isnan(arr))[~foot].all()),
+                      "inside footprint not all finite, or outside neither masked nor NaN")
                 check("all_values_in_0_1", bool(np.nanmin(arr) >= 0 and np.nanmax(arr) <= 1))
             check("positive_cell_count_matches_audit",
                   int(np.nansum(arr > 0)) == card["validator_output"]["positive_cells"])
 
     # Official rule (page 967): data outside the bounds is null or nan.
     if arr is not None and foot is not None:
-        n_finite_out = int(np.count_nonzero(np.isfinite(arr[~foot])))
-        check("outside_bounds_null_or_zero", n_finite_out == 0,
-              f"{n_finite_out} finite cells outside the competition bounds (official rule: null or nan)")
+        with rasterio.open(tif) as src:
+            valid = src.read_masks(1) > 0
+        n_live_out = int(np.count_nonzero(valid[~foot]))
+        check("outside_bounds_null_or_zero", n_live_out == 0,
+              f"{n_live_out} live (unmasked) cells outside the competition bounds")
     else:
         check("outside_bounds_null_or_zero", False, "PENDING_DATA: footprint absent; outside-bounds rule not checked")
 
@@ -191,6 +195,22 @@ def verify(card_path: Path) -> dict:
         check("uniqueness_receipt_matches_candidate", False, "receipt missing")
         check("one_witness_metric_is_under_threshold", False, "receipt missing")
         check("complete_uniqueness_gate", False, "receipt missing")
+
+    # Portal gate: the file must satisfy the form's element-wise [0, 1] test on every STORED cell
+    # (IR-SASS3-81). Without this the verifier can approve a file the submission form rejects.
+    try:
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from validate_submission_tif import validate as _validate_tif
+        vres = _validate_tif(tif)
+        check("portal_and_format_validator", bool(vres.get("all_hard_checks_pass")),
+              "scripts/validate_submission_tif.py rejects the file: " +
+              "; ".join(vres.get("notes", [])[:2]))
+        check("portal_range_test_all_cells",
+              bool(vres.get("checks", {}).get("portal_range_test_all_cells") is True),
+              "portal element-wise [0,1] test fails on stored cells")
+    except Exception as exc:  # fail closed
+        check("portal_and_format_validator", False, f"validator error: {exc}")
+        check("portal_range_test_all_cells", False, f"validator error: {exc}")
 
     hd = card.get("holdout_dti", {})
     check("holdout_gate", hd.get("status") == "PASS", f"candidate HOLDOUT-DTI status = {hd.get('status')}")

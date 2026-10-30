@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "generated_utc": "20261030T030010Z",
+  "experiment": "EXP3_SARPU_LEGAL21K",
+  "lane": "H-SASS3-I: supervised SAR-PU dual-objective HGB, legal literal-cap pack",
+  "budget_policy": {
+    "tau": 0.69,
+    "inside": 14498,
+    "gap": 6514,
+    "total": 21012,
+    "inside_share": 0.69
+  },
+  "leakage_canary": {
+    "all_passed": true,
+    "worst_channel": "curv_s2",
+    "worst_symmetric_auc": 0.588299,
+    "n_channels": 51
+  },
+  "hide_and_recover": {
+    "score_label": "HOLDOUT-DTI",
+    "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "b_visible_px": 2.0,
+    "n_withheld_positives": 22232,
+    "pooled_dti": 0.09587992630994639,
+    "ci95": [
+      0.08285245476520159,
+      0.10962043915941373
+    ]
+  },
+  "sgmc": {
+    "score_label": "HOLDOUT-DTI",
+    "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+    "n_withheld_positives": 62703,
+    "calibrated": 0.029683387654084136,
+    "calibrated_ci95": [
+      0.02476314775362481,
+      0.034243786017687405
+    ],
+    "raw": 0.038604853345098666,
+    "raw_ci95": [
+      0.031742716620609915,
+      0.04586347783651377
+    ]
+  },
+  "champion_reference": {
+    "note": "37,654-dot champion \u2014 NOT a legal alternative under Rule 1; reference only",
+    "hide_recover_pooled_dti": 0.09920232315251679,
+    "hide_recover_ci95": [
+      0.08595140754809347,
+      0.11266835751415871
+    ],
+    "sgmc_calibrated": 0.0641209376417646,
+    "sgmc_calibrated_ci95": [
+      0.056730181217206584,
+      0.0716486609703412
+    ]
+  },
+  "output": {
+    "tif": "/home/user/GEMSDOESASS3/docs/downloads/gemsdoesass3-exp3-sarpu-legal21k-20261030T030010Z-nan.tif",
+    "tif_sha256": "5ef3ba1525817e52ac1e22b1c4f0e8bc512e1792dabd3a3cc34a237e65b1b789",
+    "zip_sha256": "36852f019a858404a1e0915d12675f93dd4ea9d848a23cadd4411cbc84f6fb7d"
+  },
+  "format_audit_passed": true,
+  "elapsed_s": 557.1
+}

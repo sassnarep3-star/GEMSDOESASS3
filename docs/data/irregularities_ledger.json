@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-27T15:00:00Z",
+ "generated_utc": "2026-10-30",
  "repository": "sassnarep3-star/GEMSDOESASS3",
  "irregularities": [
   {
@@ -518,12 +518,129 @@
   },
   {
    "id": "IR-SASS3-73",
-   "severity": "HIGH (FIXED, WITH CORRECTION)",
-   "title": "Uniqueness audit mislabelled a halo-excluded overlap as literal",
-   "finding": "scripts/audit_unique_candidate.py excluded references whose own 300 m band covers more than HALO_MAX (50 %) of the footprint from the number it reported as max_frac_within_3px_literal. For the 2026-10-30 55,000-dot build that excluded the 13GEMSDOE lattice (true overlap 99.54 %) and gemsdoe67-ovtr-ml-cover-tau3p0 (76.31 %, a real submission), so the published claim '0 of 2,627 above the cap, max 63.96 %' was true only for the halo-excluded class.",
-   "resolution": "Recomputed independently from the rasters (evidence/independent_recheck_candidate_20261030.json), rewrote the report to carry separate literal / submission-only / lattice numbers, rebuilt the candidate with the cap enforced against every submission (evidence/literal_vs_submission_overlap_20261030.json: 0 of 52 above 70 %, max 0.699982), and recorded the lattice exclusion with its arithmetic in docs/research/lane-decision-20261030.md.",
-   "impact": "The earlier file would have failed the lane rule against a real sibling submission; it was removed and replaced.",
-   "status": "closed"
+   "severity": "HIGH (OPEN)",
+   "title": "data/restore_receipt.json says 28 files were restored into .cache/gems_data, but that directory is absent in this workspace",
+   "finding": "On 2026-10-30 `ls -la .cache` returns no such directory and `find / -name labels.tif` finds no copy. The receipt (status 'restored', 28 files, SHA-256 pins) therefore cannot be re-verified here. Labels (`labels.tif`) and `training_features.tif` are absent, so no holdout or canary can be run in this checkout.",
+   "resolution": "Receipt treated as a historical record, not as evidence of present data. Owner must supply the DrivenData-account files (rules \u00a73.1) into .cache/gems_data or data/ and re-run scripts/restore_data.py. Not resolved in this session. (amended 2026-10-30, second pass: .cache/gems_data was restored from registry/data_manifest.json and all groups verified - scripts/restore_data.py --group all; the blocked holdout was then run, see IR-SASS3-84.)"
+  },
+  {
+   "id": "IR-SASS3-74",
+   "severity": "HIGH (RESOLVED 2026-10-30)",
+   "title": "Shared validator failed a correct file: 'no_nan_or_inf' contradicted the official NaN-outside rule, and zeros outside were accepted",
+   "finding": "scripts/validate_submission_tif.py set all_hard_checks_pass=false for the committed candidate because NaN outside the footprint was counted as a failure. The outside-bounds check also accepted finite zeros outside the footprint, which the official page (page 967: 'data outside the bounds is null or nan') and this repo's own notes reject. It also failed closed when sample_submission.tif was absent, although evidence/organizer_footprint_mask.npz (sample SHA recorded) was committed for exactly this.",
+   "resolution": "Fixed in scripts/validate_submission_tif.py: checks are now nan_outside_and_finite_inside_footprint and no_inf_anywhere; footprint falls back to the committed mask after SHA and pixel-count checks. Regression tests in tests/test_official_metric_and_validator.py (zero outside rejected, NaN inside rejected, committed candidate passes). Candidate re-validated on its pixels: 0 finite cells outside, 0 NaN inside."
+  },
+  {
+   "id": "IR-SASS3-75",
+   "severity": "MEDIUM (RESOLVED 2026-10-30)",
+   "title": "Leaderboard figures in the repo and in the request disagree with the live page",
+   "finding": "Live leaderboard (fetched 2026-10-30, 'best public DW-Tversky'): #1 xiaofanhu 0.4544, #2 cfld__ 0.3916, #3 Batik Shirt Brothers 0.3911, #4 BrandenKMurray 0.3841, #5 op01 0.3642. README (2026-10-29) lists #4 0.3724 and #5 0.3635. The request quotes 0.4413 and 0.3195 as the top score. None of the quoted values is the live #1.",
+   "resolution": "README and the executive summary now quote the 2026-10-30 page values with source and date. The 0.4413 and 0.3195 figures are recorded as unverified user-supplied numbers. Public-board values are not private-test scores."
+  },
+  {
+   "id": "IR-SASS3-76",
+   "severity": "MEDIUM (OPEN)",
+   "title": "The 0.2778 champion figure is owner-reported, and the GEMSDOE32 site itself says no receipt links the raster to the score",
+   "finding": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html (fetched 2026-10-30) labels the 0.2778 score 'OWNER-REPORT (owner-provided submission-log claim; no submission-page receipt linking this raster hash to the score is present in this repository)'. This session has the same status.",
+   "resolution": "Kept as OWNER-REPORT in every table. No explanation of why 0.2778 scored highest can be confirmed without the labels and an organizer receipt."
+  },
+  {
+   "id": "IR-SASS3-77",
+   "severity": "MEDIUM (OPEN)",
+   "title": "Uniqueness receipts for the current candidate were not re-run this session",
+   "finding": "evidence/literal_audit_...-nan.json (386 rasters, worst within-3px 68.99%) was not recomputed here: the registry rasters are not in this workspace. The validator and gates only confirm that the receipt's SHA-256 matches the candidate bytes.",
+   "resolution": "Reported as a receipt-based result. A fresh run needs the registry fetch (scripts/fetch_registry_rasters.py) and network access to GitHub, which is allowed. Not done here."
+  },
+  {
+   "id": "IR-SASS3-78",
+   "severity": "LOW (OPEN)",
+   "title": "Outside-bounds convention for the owner's zero-filled files conflicts with the official rule",
+   "finding": "Owner-scored files (for example the 0.2778 champion, named '-zeros') use zeros outside the bounds. Official page 967 requires null or NaN outside the bounds. The owner-reported scores therefore came from files the rules describe as non-compliant, or the portal accepts zeros. Which applies is not verifiable from this workspace.",
+   "resolution": "This repo now treats zeros outside as NOT compliant (validator is strict). The question of how the portal scored zero-filled files is left open for the owner to check on the submission page."
+  },
+  {
+   "id": "IR-SASS3-79",
+   "severity": "LOW (OPEN)",
+   "title": "README gives 99.9\u2013100% within-3-px overlap for the focus-site historical files; the receipt gives 86.7\u2013100%",
+   "finding": "evidence/focus_site_candidate_audit_20261028.json (9 historical rows, 72 pairs) has min 0.86719 and max 1.0. The executive summary (build_review_site.py) and the receipt agree on 86.7-100%. The README's 'GEMSDOE32 ... 99.9-100%' sentence does not.",
+   "resolution": "Recorded here. The README sentence should be corrected to the receipt range. Not changed in this session's README edit except as noted in the README status block."
+  },
+  {
+   "id": "IR-SASS3-80",
+   "severity": "MEDIUM (OPEN)",
+   "title": "File-name suffixes (-nan / -zeros / -allfinite) differ between the request and the owner registry for the focus-site files",
+   "finding": "Request labels vs registry/owner_reported_scores_focus.json: GEMSDOE25 is '-nan' in the request but '-zeros' in the registry (gems25-dotted-h19-5-d2-8-...-zeros.tif), and GEMSDOE28 h36/h27/h32/h38 are '-nan' in the request but '-allfinite' in the registry. The scores match. The suffix encodes the outside-bounds convention: '-zeros' is non-compliant under page 967. Which file was actually uploaded is not verifiable from this workspace.",
+   "resolution": "Scores kept as typed. The per-site table reports the registry names and this entry. Owner should confirm the uploaded file name and outside-bounds convention on each submission page. Relates to IR-SASS3-78."
+  },
+  {
+   "id": "IR-SASS3-81",
+   "severity": "HIGH (RESOLVED 2026-10-30)",
+   "title": "A raster that satisfies the official format sentence can still be rejected by the live portal",
+   "finding": "The 2026-10-29 README claimed the disp21k file 'meets the official format (NaN outside, the official rule)'. The live form compares every stored cell with [0, 1] element-wise and NaN compares False, so that file is rejected with 'Predicted values must be in range [0, 1]' (7,111,787 non-finite cells measured on the released bytes). The page-967 sentence and the portal implementation are different tests.",
+   "resolution": "scripts/validate_submission_tif.py now runs portal_range_test_all_cells over all stored cells and fails closed (tests/test_portal_range_gate.py). The shippable encoding stores 0.0 outside the footprint with a GDAL per-dataset mask band carrying the nulls; the NaN copy is kept only as a labelled failure-mode reference. Reconciled with IR-SASS3-74 by making the outside-bounds check mask-aware, so both readings can pass on one file."
+  },
+  {
+   "id": "IR-SASS3-82",
+   "severity": "MEDIUM (OPEN, owner decision)",
+   "title": "The literal 70% lane rule is unsatisfiable while the six calibration lattices are in scope",
+   "finding": "Measured on 2026-10-30 against all 462 SHA-verified registry rasters: the S3 OCM candidate's maximum 3-px dot overlap is 0.4467 against the 451 pinned sibling submissions (PASS) and 0.9976 against a saturated calibration lattice (FAIL). A lattice that puts a value on every grid cell contains any emission within 3 px by construction, so the literal rule rejects every possible file.",
+   "resolution": "Not resolved by the agent. Both scopes are printed on the page and in the run card; the lattice exemption remains a proposed amendment that is not applied (docs/research/lattice-decision-20261028.md). Owner must rule on scope before a slot is spent. Cross-referenced as IR-SASS3-90, which main's pages already cite."
+  },
+  {
+   "id": "IR-SASS3-83",
+   "severity": "LOW (RESOLVED 2026-10-30)",
+   "title": "Per-site links published for manual review pointed at local directory names, and the contents API cannot serve the rasters",
+   "finding": "scripts/focus_site_scoreboard.py first built sibling URLs from owner_reported_scores_focus.json's repo_dir field (e.g. 'GEMSDOE32-main'), which is a local folder name and 404s. Separately, gh api repos/.../contents/<raster> 404s for the >1 MB GeoTIFF blobs even where the path exists at the pinned commit.",
+   "resolution": "URLs are now pinned permalinks built from registry/sibling_registry_manifest_20261028.json source_repos[site].url + commit; the champion permalink was verified against git/trees/<ref>:docs/downloads (156 entries, file present). Reviewers must use the blob URL or the sparse git fetch, not the contents API."
+  },
+  {
+   "id": "IR-SASS3-84",
+   "severity": "MEDIUM (PROCESS)",
+   "title": "Sandbox scratch state is not durable; measurements must be re-verified after a filesystem reset",
+   "finding": "Mid-session /home/user/registry disappeared and gitignored caches rolled back while tracked files survived. The nine-site scoreboard had been run against paths that no longer existed. Related: IR-SASS3-73 (main) reported .cache/gems_data absent for the same reason.",
+   "resolution": "Re-ran the scoreboard after restoring: all nine rows reproduced exactly (dots, HOLDOUT-DTI, LLI), and the candidate bytes still match evidence/candidate_build_receipt.json. scripts/status_feed.py now re-hashes the candidate, re-verifies every registry/data_manifest.json entry and reports STALE receipts with the regeneration command. Run it at session start; refetch siblings with scripts/fetch_sibling_registry_git.sh."
+  },
+  {
+   "id": "IR-SASS3-85",
+   "severity": "LOW (SOURCE DATA)",
+   "title": "The pinned GDR wellspring extract double-counts locations and splits the 'Hot' class",
+   "finding": "gdr_wellspring_in_footprint.csv holds 27,092 rows for 12,570 distinct grid cells (six unioned feature layers); thermalclass contains 'Hot' (1,873) and 'Hot ' with a trailing space (121) plus '', NULL and Unknown; dist_known_fault_px is in 100-m grid pixels, not metres; age is empty for all 21 volcanic-vent records.",
+   "resolution": "Documented with numbers in docs/research/geothermal-vents.md (section 4) so any future filter strips and normalises before counting. No ranking used these fields."
+  },
+  {
+   "id": "IR-SASS3-86",
+   "severity": "HIGH (RESOLVED 2026-10-30)",
+   "title": "main's promoted 2026-10-30 candidate was portal-invalid as released (NaN payload), and its validator required that encoding",
+   "finding": "main's Decision table marks docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif ok_to_submit: true with the note '... NaN outside footprint'. Measured with the merged validator: all checks pass except portal_range_test_all_cells = False (7,111,787 violating stored cells) - the exact live rejection this task was asked to fix. The repo test tests/test_candidate_20261030.py asserted np.isnan(arr[~footprint]).all(), so the gate and the portal were mutually exclusive.",
+   "resolution": "Reconciled without changing any score-bearing byte: scripts/make_portal_safe_render.py re-renders the file with an identical dot set (dot_set_symmetric_difference 0, 44,923 positive cells, values {0,1}) as docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif, which passes all 11 checks including the mask-aware outside-bounds check. Receipt evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json; validator receipt evidence/validator_tipcont_safe_20261030.json. The original file and the original test are kept unchanged; their uniqueness/holdout/projection receipts transfer because the emission is bit-identical inside the footprint."
+  },
+  {
+   "id": "IR-SASS3-87",
+   "severity": "LOW (RESOLVED 2026-10-30)",
+   "title": "README and pages cited IR-SASS3-90/91/92, which were not in the ledger",
+   "finding": "main's 2026-10-30 README and executive summary reference IR-SASS3-90, 91 and 92 (the lattice anomaly, the owner-report provenance of the nine focus scores, and the stale leaderboard figures) and its pages are contract-tested for the IR-SASS3-90 token, but registry-side evidence/irregularities_ledger.json stopped at IR-SASS3-80, so the citations pointed at nothing.",
+   "resolution": "The three records are added below, each cross-referenced to the independent measurement made in this workspace, and the numbering gap 81-86 is used by this branch's own findings. No existing entry was edited except the dated amendment on IR-SASS3-73."
+  },
+  {
+   "id": "IR-SASS3-90",
+   "severity": "HIGH (OPEN, owner decision)",
+   "title": "The literal lane rule is unsatisfiable inside the footprint (saturated calibration lattice)",
+   "finding": "Independently re-measured on 2026-10-30 by scripts/lane_sweep.py over 462 SHA-verified registry rasters: the 13GEMSDOE calibration lattice (13gems_20261001_r13-lattice-s5_v2_nan-outside.tif, 206,895 positive cells on a saturated grid) sits within 3 px of 99.76% of any candidate's dots, so the 70% cap cannot be met by any emission while lattices are in scope. Every submission-only candidate measured here passes at 0.4467 max.",
+   "resolution": "DISCLOSED, NOT HIDDEN, and not waived: both scopes are printed on the pages and in both run cards (also IR-SASS3-82). Owner must rule on whether calibration lattices count for the uniqueness rule before a weekly slot is spent; the lattice exemption remains a proposed amendment (docs/research/lattice-decision-20261028.md)."
+  },
+  {
+   "id": "IR-SASS3-91",
+   "severity": "MEDIUM (OPEN)",
+   "title": "The nine focus scores are OWNER-REPORT, not organizer receipts",
+   "finding": "0.2477/0.2600/0.2449/0.2710/0.2600/0.2708/0.2778/0.2632/0.2750 come from the task prompt; registry/sibling_registry_manifest_20261028.json verifies the rasters' bytes, not their scores, and the GEMSDOE32 site itself does not link the 0.2778 figure to a submission receipt.",
+   "resolution": "Labelled OWNER-REPORT everywhere it appears (README table, pages, run cards, evidence/focus9_scoreboard_20261030.json.evidence_labels). Only the public leaderboard render is treated as organizer-scaled."
+  },
+  {
+   "id": "IR-SASS3-92",
+   "severity": "LOW (RESOLVED 2026-10-30)",
+   "title": "Prompt-quoted leaderboard highs conflict with the live page",
+   "finding": "The task prompt quotes 0.4413 and 0.3195 as the top score; the repo recorded 0.4544 (#1 xiaofanhu). Re-fetched 2026-10-30: #1 is 0.4544 with 34 submissions, #2 0.3916, #10 0.3405, and 0.3195 does not appear in the visible top 23.",
+   "resolution": "All three figures are reported as renders of a moving public leaderboard, with the fetch date; the repo's pages cite 0.4544 as current and keep 0.4413/0.3195 as stale-quote evidence rather than silently replacing them."
   }
  ]
 }

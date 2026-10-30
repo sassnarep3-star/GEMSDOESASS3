@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "candidate": "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif",
+ "candidate": "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif",
  "n_dots": 55000,
  "pool_rasters": 3010,
  "tested": 2627,
@@ -65,7 +65,7 @@
    "rho": 0.9836038796631604
   }
  ],
- "note": "MEASURED. Literal lane rule vs every accessible sibling raster. Halo-saturated references (band coverage > 50% of the footprint) are separated because no submission can score below their coverage on that statistic.",
+ "note": "MEASURED. Literal lane rule vs every accessible sibling raster. Halo-saturated references (band coverage > 50% of the footprint) are separated because no submission can score below their coverage on that statistic. The audit ran on the source emission; the submitted file is the portal-safe re-render of the same dots (symmetric difference 0), so every overlap number applies unchanged.",
  "result": {
   "complete_registry_uniqueness_pass": true,
   "one_witness_result_below_threshold": true,
@@ -80,5 +80,6 @@
    "champion_control_over_cap": 638,
    "champion_control_max": 1.0
   }
- }
+ },
+ "candidate_source": "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif"
 }

@@ -116,10 +116,10 @@ def test_emitted_geotiff_and_all_automated_gates() -> None:
         assert src.dtypes[0] == "float32"
         assert src.shape == (3730, 3292)
         assert str(src.crs) == "EPSG:32611"
-        assert np.isnan(src.nodata)
-        finite = np.isfinite(arr)
-        assert int(finite.sum()) == 5_167_373
-        assert np.isnan(arr[~finite]).all()
+        # portal-safe encoding: null-ness may be declared nodata (NaN) or carried by an internal mask band
+        valid = src.read_masks(1) > 0
+        assert int(valid.sum()) == 5_167_373
+        assert np.isfinite(arr[valid]).all()
         assert float(np.nanmin(arr)) >= 0.0
         assert float(np.nanmax(arr)) <= 1.0
         assert int((arr > 0).sum()) == 55_000

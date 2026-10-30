@@ -105,7 +105,7 @@ def test_lane_decision_20261030_supersedes_with_measurements():
 def test_pages_clear_only_the_gated_candidate_and_keep_archives_blocked():
     for p in PAGES:
         html = p.read_text()
-        assert "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif" in html, p
+        assert "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif" in html, p
         assert "DO NOT SUBMIT" in html, p
         assert "localhost" not in html and "127.0.0.1" not in html, p
         assert "0.4544" in html, p

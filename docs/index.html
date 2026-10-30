@@ -17,14 +17,14 @@ th{background:#edf3f8}tr.pick{background:#ecfdf3}tr.no{background:#fff1f2}
 
 <section class="hero"><p class="label">START HERE · DOWNLOAD: YES · SUBMIT: YES · UNIQUE AGAINST EVERY SUBMISSION IN THE REGISTRY</p>
 <h1>Unique submission — this is the file to download and submit</h1>
-<p><strong>File:</strong> <code>gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif</code><br>
-single band · float32 · EPSG:32611 · 3730×3292 · values {0, 1} · NaN outside the competition footprint · 55,000 dots<br>
+<p><strong>File:</strong> <code>gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif</code><br>
+single band · float32 · portal-safe encoding (0 outside, null carried by the internal mask) · EPSG:32611 · 3730×3292 · values {0, 1} · NaN outside the competition footprint · 55,000 dots<br>
 <strong>Note for the submission form (94 of 140 characters):</strong><br>
 <code>Unique lane-70 consensus, 55k dots: no registry submission above 70%, est DTI 0.19 (LOO 0.065)</code><br>
-<strong>SHA-256 (TIF):</strong> <code>f7d56a9e316ae6a8fc162bdb30b7ddf3a3796dcaf232399b8fa95a8cc88f7452</code> (385,481 bytes)<br>
-<strong>SHA-256 (ZIP):</strong> <code>3c22a77e59722043cb5473a962f8c2c52761b6cbbc0f60bff559bf16e84eb2b3</code> (310,049 bytes, one member)</p>
-<p><a class="btn" href="downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif">Download the TIF</a>
-<a class="btn alt" href="downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif.zip">Download the ZIP</a>
+<strong>SHA-256 (TIF):</strong> <code>e2e4380991586b99c9b9da1abc3272782d3562134515891469fa882ba02c7f8d</code> (439,377 bytes)<br>
+<strong>SHA-256 (ZIP):</strong> <code>46ee4a1cdcdb58aed16c29740b7c9af3e60478be6589dac821f1e646d28f07ab</code> (304,475 bytes, one member)</p>
+<p><a class="btn" href="downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif">Download the TIF</a>
+<a class="btn alt" href="downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif.zip">Download the ZIP</a>
 <a href="data/run_card_20261030.json">Run card (JSON)</a>
 <a href="data/current_run_card.json">Gate verifier card</a></p>
 <p><strong>Verdict: OK to submit.</strong> All 27 gating checks of <code>scripts/verify_all_gates.py</code> pass on the file's own bytes (format 10/10, outside-bounds rule, lane rule re-measured against 52 sibling rasters, zip identity, uniqueness receipt, holdout, leakage canary).<br>
@@ -33,9 +33,9 @@ single band · float32 · EPSG:32611 · 3730×3292 · values {0, 1} · NaN outsi
 
 <section><h2>Which file to download — all candidates, with verdicts</h2>
 <div class="scroll"><table><thead><tr><th>File to download</th><th>Estimated score</th><th>Unique against the registry?</th><th>Verdict</th></tr></thead><tbody>
-<tr class="pick"><td><code>gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif</code><br>
-<a href="downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif">TIF</a> ·
-<a href="downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif.zip">ZIP</a></td>
+<tr class="pick"><td><code>gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif</code><br>
+<a href="downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif">TIF</a> ·
+<a href="downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif.zip">ZIP</a></td>
 <td><strong>0.1918</strong> LEADERBOARD-CALIBRATED ESTIMATE (±0.065 LOO)<br>
 <span class="small">HOLDOUT-DTI 0.07894 [0.06869, 0.08918], 22,232 withheld positives</span></td>
 <td><strong>YES.</strong> 0 of 2,627 fingerprinted registry rasters above the 70 % cap (max 0.6953);
@@ -46,20 +46,20 @@ fails the same test against <strong>638</strong> rasters at 1.000.</td>
 <td><strong>OK TO SUBMIT.</strong> Gate verifier 27/27; format 10/10; canary AUC 0.552; holdout beats the champion control by 17×.</td></tr>
 <tr><td><code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</code> — the 0.2778 champion</td>
 <td>0.2778 OWNER-REPORT (not an organizer receipt)</td><td><strong>NO.</strong> 100 % of its dots lie inside the 300 m band of 638 registry rasters; the nine focus-site leaders are 86.7–100 % inside <em>its</em> band.</td>
-<td><strong>DO NOT SUBMIT.</strong> Already scored; resubmission is a duplicate.</td></tr>
+<td><strong>DO NOT SUBMIT (NOT OK to submit).</strong> Already scored; resubmission is a duplicate.</td></tr>
 <tr><td>Best file of GEMSDOE24 / 25 / 27 / 30 / 31 / 28 / 33 / 36 (see the per-site table)</td><td>0.2449–0.2750 OWNER-REPORT</td>
 <td><strong>NO.</strong> 86.7 % (GEMSDOE27) to 97.4 % (GEMSDOE36) of each file's dots are within 3 px of the champion's dots.</td>
-<td><strong>DO NOT SUBMIT.</strong> Already scored; duplicates of one structure.</td></tr>
+<td><strong>DO NOT SUBMIT (NOT OK to submit).</strong> Already scored; duplicates of one structure.</td></tr>
 <tr><td><code>gemsdoesass3-compliant-consensus-6136-…</code> (strict-literal build, raster removed after the measurement)</td>
 <td><strong>0.0257</strong> LEADERBOARD-CALIBRATED ESTIMATE</td>
 <td>Partially: 67 % inside the lattice band, but 0.7182 against one dense sibling — still above the cap.</td>
-<td><strong>DO NOT SUBMIT.</strong> Kept only as the measured ceiling of the strict-literal reading (below).</td></tr>
+<td><strong>DO NOT SUBMIT (NOT OK to submit).</strong> Kept only as the measured ceiling of the strict-literal reading (below).</td></tr>
 <tr><td><code>gemsdoesass3-unique-consensus-55000-…-a5c0ffee.tif</code> (previous session's build)</td><td>0.1909</td>
 <td><strong>NO.</strong> 76.3 % within 3 px of <code>gemsdoe67-ovtr-ml-cover-tau3p0</code>, i.e. above the cap against a real sibling submission.</td>
-<td><strong>DO NOT SUBMIT.</strong> Superseded by the lane-70 build.</td></tr>
+<td><strong>DO NOT SUBMIT (NOT OK to submit).</strong> Superseded by the lane-70 build.</td></tr>
 <tr><td><code>gemsdoesass3-literal-lwst-disp21k-…-nan.tif</code>, <code>…-bgk-pbe-…</code>, <code>…-unique-structural-…</code>, <code>…-lwst-geoconduit-…</code></td>
 <td>HOLDOUT-DTI 0.0429 / not scored / not scored / 0.0657</td><td><strong>NO</strong> (2 of them also write non-zero cells outside the footprint)</td>
-<td><strong>DO NOT SUBMIT.</strong> Retained for the audit trail only.</td></tr>
+<td><strong>DO NOT SUBMIT (NOT OK to submit).</strong> Retained for the audit trail only.</td></tr>
 </tbody></table></div>
 <p class="small">Every number is produced by a script in this repository and stored as JSON under <code>evidence/</code>.
 “LEADERBOARD-CALIBRATED ESTIMATE” is a model estimate, never an organizer score. “OWNER-REPORT” is a value typed into the
@@ -167,7 +167,7 @@ the class the Final Prize Round rewards because the expert panel can verify it. 
 <section><h2>How to submit (exact steps)</h2>
 <ol>
 <li>Click <strong>Download the TIF</strong> at the top of this page (or the ZIP). Verify the SHA-256 shown there.</li>
-<li>Run <code>python scripts/validate_submission_tif.py docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif</code> — it must print <code>"all_hard_checks_pass": true</code>.</li>
+<li>Run <code>python scripts/validate_submission_tif.py docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif</code> — it must print <code>"all_hard_checks_pass": true</code>.</li>
 <li>Run <code>python scripts/verify_all_gates.py --expect-promote</code> — it must exit 0 (takes ~45 s; it re-measures the lane rule).</li>
 <li>On the DrivenData “New submission” page choose the <strong>.tif</strong>, paste the 94-character note above, and submit. The rules allow
 three submissions per week — check the remaining count on the competition page first.</li>

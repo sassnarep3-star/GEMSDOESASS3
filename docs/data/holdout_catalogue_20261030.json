@@ -1,0 +1,126 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30T02:35:06Z",
+ "experiment": "E1 catalogue hide-and-recover (spatially blocked)",
+ "evaluator_version": "catalogue-recovery-surrogate-v1 (exact official DTI equations, alpha=0.2, beta=0.8, R=3 px)",
+ "label": "HOLDOUT-DTI (catalogue-recovery surrogate v1)",
+ "not_the_leaderboard_metric_because": "the scored set is expert-mapped faults absent from the catalogue; this experiment can only measure recovery of catalogue faults that were hidden from the placement rules",
+ "withheld_positive_cells": 747,
+ "visible_positive_cells": 3059,
+ "holdout_blocks": {
+  "block_cells": 40,
+  "block_km": 4.0,
+  "n_blocks": 262,
+  "fraction": 0.2,
+  "seed": 20261030
+ },
+ "n_dots_per_strategy": 24000,
+ "footprint_cells": 5167373,
+ "masking_applied": false,
+ "masking_note": "known-fault masking (organizer confirmed) is not applied; this is conservative for catalogue-proximity strategies, which are the ones masking would reward",
+ "inputs": {
+  "catalogue": "evidence/gsd_hua_map_preview.npz:catalogue_ds (400 m decimation of the public catalogue)",
+  "catalogue_npz_sha256": "7cfdebd3ae2d52fee04d39fa1c222422e9fd1659e1bde2004c259f8fb6e1eec8",
+  "footprint": "evidence/organizer_footprint_mask.npz"
+ },
+ "rows": [
+  {
+   "strategy": "S1_uniform_random",
+   "n_dots": 24000,
+   "tp_w": 39.287,
+   "fp_w": 23898.34,
+   "fn_w": 707.713,
+   "holdout_dti": 0.007295,
+   "dti_ci95": [
+    0.005514,
+    0.009047
+   ],
+   "capture_fraction_x": 0.052593,
+   "mean_k_over_footprint_e": 0.04185087,
+   "enrichment_eps": 1.2567,
+   "covered_footprint_fraction": 0.12572
+  },
+  {
+   "strategy": "S2_jittered_lattice",
+   "n_dots": 23993,
+   "tp_w": 30.988,
+   "fp_w": 23932.326,
+   "fn_w": 716.012,
+   "holdout_dti": 0.005749,
+   "dti_ci95": [
+    0.004311,
+    0.007521
+   ],
+   "capture_fraction_x": 0.041483,
+   "mean_k_over_footprint_e": 0.04255986,
+   "enrichment_eps": 0.9747,
+   "covered_footprint_fraction": 0.12944
+  },
+  {
+   "strategy": "S3_annulus_400_2000m",
+   "n_dots": 24000,
+   "tp_w": 30.096,
+   "fp_w": 23643.402,
+   "fn_w": 716.904,
+   "holdout_dti": 0.005644,
+   "dti_ci95": [
+    0.003878,
+    0.007454
+   ],
+   "capture_fraction_x": 0.04029,
+   "mean_k_over_footprint_e": 0.03601283,
+   "enrichment_eps": 1.1188,
+   "covered_footprint_fraction": 0.09838
+  },
+  {
+   "strategy": "S4_tip_extrapolation",
+   "n_dots": 24000,
+   "tp_w": 39.884,
+   "fp_w": 23950.881,
+   "fn_w": 707.116,
+   "holdout_dti": 0.007392,
+   "dti_ci95": [
+    0.005176,
+    0.009582
+   ],
+   "capture_fraction_x": 0.053392,
+   "mean_k_over_footprint_e": 0.03442204,
+   "enrichment_eps": 1.5511,
+   "covered_footprint_fraction": 0.08684
+  },
+  {
+   "strategy": "S5_tip60_lattice40",
+   "n_dots": 24000,
+   "tp_w": 33.963,
+   "fp_w": 23959.137,
+   "fn_w": 713.037,
+   "holdout_dti": 0.006294,
+   "dti_ci95": [
+    0.004251,
+    0.008282
+   ],
+   "capture_fraction_x": 0.045466,
+   "mean_k_over_footprint_e": 0.03453825,
+   "enrichment_eps": 1.3164,
+   "covered_footprint_fraction": 0.08722
+  }
+ ],
+ "champion_reference": {
+  "strategy": "REFERENCE_champion_gemsdoe32_field (not a candidate)",
+  "n_dots": 37654,
+  "tp_w": 2.64,
+  "fp_w": 37651.302,
+  "fn_w": 744.36,
+  "holdout_dti": 0.000325,
+  "dti_ci95": [
+   0.000168,
+   0.000536
+  ],
+  "capture_fraction_x": 0.003535
+ },
+ "decision": {
+  "best_strategy": "S4_tip_extrapolation",
+  "best_holdout_dti": 0.007392,
+  "reading": "strategy with the highest HOLDOUT-DTI at equal dot budget; the winner is used to build the candidate only if its enrichment exceeds the uniform baseline"
+ }
+}

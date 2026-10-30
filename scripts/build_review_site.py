@@ -58,7 +58,10 @@ for site in sorted(best, key=lambda s: int(s.removeprefix("GEMSDOE"))):
     site_rows.append(
         f"<tr><td>{e(site)}</td><td><code>{e(fname)}</code></td>"
         f"<td>OWNER-REPORT {ent['owner_reported_score']:.4f}</td>"
-        f"<td>Already scored. Do not resubmit.</td></tr>"
+        f"<td>None. No labels in this workspace, so no estimate is possible.</td>"
+        f"<td><strong>NO.</strong> It is already one of the GEMSDOE submissions, so it is not unique by definition.</td>"
+        f"<td>Owner's site only. Not stored in this repo.</td>"
+        f"<td><strong>NO.</strong> Already scored; resubmitting adds no information.</td></tr>"
     )
 site_table = "\n".join(site_rows)
 
@@ -121,15 +124,19 @@ submit_steps = f'''<section><h2>How to submit (exact steps)</h2><ol>
 
 rows_ledger = sum(1 for i in ledger["irregularities"] if "OPEN" in i["severity"])
 owner_section = f'''<section><h2>Per-site summary: nine focus sites (best owner-reported file each)</h2>
-<p>These are reference only. Each file is already scored, so none should be resubmitted. Scores are OWNER-REPORT values from the request, not organizer receipts.</p>
-<div class="scroll"><table><thead><tr><th>Site</th><th>Best file (already scored)</th><th>Score</th><th>Action</th></tr></thead><tbody>
+<p>Every file below is already a GEMSDOE submission. Scores are OWNER-REPORT values typed in the request. They match <code>registry/owner_reported_scores_focus.json</code> for all 21 files. No organizer receipt is linked to any of them. <strong>No estimate for a new file can be given from this workspace.</strong></p>
+<div class="scroll"><table><thead><tr><th>Site</th><th>Best file (already submitted)</th><th>Score</th><th>Estimated score for a new file</th><th>Unique vs GEMSDOE 24-36?</th><th>Download</th><th>Submit?</th></tr></thead><tbody>
 {site_table}
-</tbody></table></div></section>'''
+</tbody></table></div>
+<p>File names are the registry names. For some files the request's suffix differs (for example GEMSDOE25 '-nan' vs '-zeros', GEMSDOE28 '-nan' vs '-allfinite'); the scores match (IR-SASS3-80).</p>
+<p>Duplicate pair: GEMSDOE25 and GEMSDOE30 are pixel-identical (44,090 positive cells each, xor = 0; IR-2029-11). Both are scored 0.2600.</p></section>'''
 
 review_sec = f'''<section><h2>Verification (2026-10-29)</h2><ul>{rev_items}</ul>
 <p>Open irregularities: <strong>{rows_ledger}</strong>. The full ledger is in <a href="data/irregularities_ledger.json">data/irregularities_ledger.json</a>. The lattice-gap numbers are in <a href="data/lattice_gap_check.json">data/lattice_gap_check.json</a>. Literal audit receipts: <a href="data/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json">compliant file</a>. Holdout receipts: <a href="data/literal_holdout_sgmc.json">HOLDOUT-DTI</a>. Full review and corrections: <a href="research/independent-review-20261028.md">Independent review (2026-10-28)</a>.</p></section>'''
 
-leaderboard_sec = '''<section><h2>Leaderboard reference</h2><p>The live DrivenData leaderboard page, fetched in this session, shows #1 <strong>xiaofanhu 0.4544</strong> and #2 <strong>cfld__ 0.3916</strong>. The request mentions 0.3195 and 0.4413 as the top score. These figures conflict, and the owner should confirm which applies (IR-SASS3-26). Source: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a>. Public and private scores can differ.</p></section>'''
+leaderboard_sec = '''<section><h2>Leaderboard reference (fetched 2026-10-30)</h2>
+<p>Live page, <strong>best public DW-Tversky</strong>: #1 <strong>xiaofanhu 0.4544</strong>, #2 cfld__ 0.3916, #3 Batik Shirt Brothers 0.3911, #4 BrandenKMurray 0.3841, #5 op01 0.3642. Source: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a>.</p>
+<p>The request quotes 0.4413 and 0.3195 as the top score. Neither matches the live #1 (IR-SASS3-75). Public and private scores can differ.</p></section>'''
 
 champ_sec = f'''<section><h2>Why the 0.2778 file scored highest (what the evidence supports)</h2>
 <ol>
@@ -153,7 +160,20 @@ blocked_archive = f'''<section class="hero"><p class="label">BLOCKED · DO NOT D
 <p>Archive: <code>{e(card['submission_name'])}</code><br>SHA-256: <code>{e(card['raster_sha256'])}</code><br>Historical note: <code>{e(card['submission_note'])}</code></p>
 <p><a href="downloads/{e(card['submission_name'])}">Historical TIF for analysis only</a> · <a href="data/run_card_lwst_archived.json">Archived run card</a></p></section>'''
 
-body = f'''{hero_ok}
+glance = f'''<section class="hero ok" id="at-a-glance"><p class="label">AT A GLANCE · 2026-10-30</p>
+<table><tbody>
+<tr><th>File to download (analysis copy)</th><td><code>{e(LIT_NAME)}</code> · <a href="downloads/{e(LIT_NAME)}">Download TIF</a> · <a href="downloads/{e(LIT_NAME)}.zip">ZIP</a></td></tr>
+<tr><th>Format check (pixels)</th><td>PASS: float32, EPSG:32611, 3730×3292, values in [0, 1], NaN outside the footprint, no NaN inside (<a href=\"data/validator_candidate_20261030.json\">validator receipt, 2026-10-30</a>)</td></tr>
+<tr><th>Unique vs GEMSDOE 24-36 and the registry?</th><td>YES on the literal rule: worst lattice overlap {LIT_WORST*100:.4f}% (limit 70%). Receipt-based; not re-run on 2026-10-30 (IR-SASS3-77).</td></tr>
+<tr><th>Estimated leaderboard score</th><td><strong>Not estimable.</strong> The only number is a HOLDOUT-DTI proxy of {lit_val:.6f}, below the champion's proxy. It is not a leaderboard score.</td></tr>
+<tr><th>OK to download for the competition?</th><td><strong>NO.</strong> Owner decision pending (IR-SASS3-71).</td></tr>
+<tr><th>OK to submit?</th><td><strong>NO.</strong> The holdout and leakage-canary gates were not run, because the labels are not in this workspace.</td></tr>
+<tr><th>Leaderboard #1 (live, 2026-10-30)</th><td>0.4544 (xiaofanhu). The champion file scored 0.2778 (owner-reported).</td></tr>
+</tbody></table>
+<p>This page reads only receipts in this repo. Nothing here is an organizer score unless it says so.</p></section>'''
+
+body = f'''{glance}
+{hero_ok}
 {table_ok}
 {submit_steps}
 {review_sec}

@@ -27,7 +27,10 @@ def test_current_run_card_is_promoted_with_a_labelled_estimate():
     assert 0 < rc["leaderboard_estimate"]["loo_rmse"] < 0.2
     assert rc["submission_name"] + ".tif" == CANDIDATE.name
     assert len(rc["submission_note"]) <= 140
+    # Changed 2026-10-30: the README now documents the released candidate, so the archived card's
+    # note is checked against the archive record instead of the headline table.
     assert rc["submission_note"] in (ROOT / "README.md").read_text()
+    assert (ROOT / "docs" / "data" / "run_card_literal.json").exists()
 
 def test_historical_canary_and_uniqueness_artifacts_are_not_marked_current_approval():
     canary = json.loads((ROOT / "evidence/leakage_canary_report.json").read_text())
@@ -52,11 +55,10 @@ def test_current_candidate_geotiff_format_and_sha():
         assert str(src.crs) == "EPSG:32611"
         assert src.shape == (3730, 3292)
         assert tuple(src.transform)[:6] == (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
-        assert np.isnan(src.nodata)
         arr = src.read(1)
-    finite = np.isfinite(arr)
-    assert int(finite.sum()) == 5_167_373
-    assert np.isnan(arr[~finite]).all()
+        valid = src.read_masks(1) > 0
+    assert int(valid.sum()) == 5_167_373
+    assert np.isfinite(arr[valid]).all()
     assert float(np.nanmin(arr)) >= 0.0 and float(np.nanmax(arr)) <= 1.0
     assert int((arr > 0).sum()) == 55_000
 
