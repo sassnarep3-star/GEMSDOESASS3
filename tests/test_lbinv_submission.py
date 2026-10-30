@@ -33,12 +33,12 @@ ALPHA, BETA = 0.2, 0.8
 HAS_CACHE = (ROOT / ".cache" / "distill_q.npz").exists() and (
     ROOT / ".cache" / "gems_data" / "sample_submission.tif").exists()
 pytestmark = pytest.mark.skipif(not TIF.exists(), reason="candidate raster not present")
-needs_cache = pytest.mark.skipif(not HAS_CACHE, reason="estimator field not built in .cache")
 
 
-@needs_cache
 @pytest.fixture(scope="module")
 def artifact():
+    if not HAS_CACHE:
+        pytest.skip("estimator field not built in .cache")
     build = json.loads(BUILD.read_text())
     with rasterio.open(ROOT / ".cache" / "gems_data" / "sample_submission.tif") as ref:
         foot = np.isfinite(ref.read(1))
