@@ -8,6 +8,8 @@ import shutil
 import sys
 from pathlib import Path
 
+import json
+import pathlib
 import numpy as np
 import pytest
 import rasterio
@@ -69,11 +71,36 @@ def test_rejects_values_outside_unit_interval():
 # ---------- shared validator (footprint rule) --------------------------------------------------
 
 @pytest.mark.skipif(not CANDIDATE.exists(), reason="candidate raster not present")
-def test_validator_passes_committed_candidate():
+def test_validator_gate_on_the_released_encoding():
+    """Amended 2026-10-30 (IR-SASS3-86): the released NaN-outside encoding is format-correct but portal-invalid.
+
+    main's tipcont file stores NaN outside the footprint, which satisfies the official sentence ("null or nan") but not
+    the live form's element-wise [0, 1] test on stored cells. The repo gate therefore has to fail it, and the portal-safe
+    re-render - whose dot set is bit-identical - has to pass everything. Both facts are pinned so the gate can never again
+    be satisfied by bytes the portal will reject.
+    """
     rec = v.validate(CANDIDATE)
-    assert rec["checks"]["nan_outside_and_finite_inside_footprint"] is True
-    assert rec["checks"]["values_in_0_1"] is True
-    assert rec["all_hard_checks_pass"] is True
+    c = rec["checks"]
+    assert c["single_band"] and c["dtype_float32"] and c["crs_epsg_32611"]
+    assert c["shape_3730x3292"] and c["transform_matches_training_grid"]
+    assert c["values_in_0_1"] and c["no_inf_anywhere"]
+    assert c["finite_inside_footprint"] and c["outside_cells_are_null"]
+    assert c["portal_range_test_all_cells"] is False, "a NaN payload must fail the portal\u0027s element-wise test"
+    assert rec["all_hard_checks_pass"] is False
+    assert "portal range gate FAIL" in " ".join(rec["notes"])
+
+    safe = CANDIDATE.with_name(CANDIDATE.stem + "-safe.tif")
+    if safe.exists():
+        rec2 = v.validate(safe)
+        assert rec2["all_hard_checks_pass"] is True, rec2["checks"]
+        assert rec2["checks"]["portal_range_test_all_cells"] is True
+        assert rec2["stats"]["positive_pixels"] == rec["stats"]["positive_pixels"], "a re-render must not move a dot"
+        assert rec2["mask"]["has_internal_mask_band"] is True
+        receipt = pathlib.Path(__file__).resolve().parents[1] / "evidence/validator_tipcont_safe_20261030.json"
+        if receipt.exists():
+            stored = json.loads(receipt.read_text())
+            assert stored["sha256"] == rec2["sha256"], "the safe-render receipt must match the bytes on disk"
+            assert stored["checks"] == rec2["checks"], "the safe-render receipt must match the current gate"
 
 
 def _copy_with_edit(tmp_path, edit):

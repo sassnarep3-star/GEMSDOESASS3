@@ -43,6 +43,39 @@ Receipts: [`evidence/run_card_tipcont_20261030.json`](evidence/run_card_tipcont_
 | `gemsdoesass3-lwst-geoconduit-dual37654-…-zeros.tif`, `gemsdoesass3-gsdhua3-sar-deconf-…-zeros.tif` | archive | **NOT OK to submit** | Already-scored-family geometry, fails the lane rule |
 | Any of the nine focus-site files | n/a | **NOT OK to submit** | Already scored; 88–100% mutual dot overlap (duplicates of each other) |
 
+## Second pass, same day (this branch) — uniqueness lane, nine-site holdout table, and the portal reconciliation
+
+**Standing prompt re-read** line by line at session start and again before writing this section (§ *Standing prompt* below); `scripts/status_feed.py` reports MISSING if the README heading or the mirror `docs/research/standing-prompt-as-recorded-20261027.md` disappears. Core Values applied: **Maximize P(Win)** and **Own the Outcome** — here that means publishing a negative verdict instead of spending a slot, and repairing main's release rather than quietly replacing it.
+
+**THE LIVE REJECTION IS FIXED, AND IT EXPOSED A CONFLICT (IR-SASS3-86, IR-SASS3-81).** The portal error *Predicted values must be in range [0, 1]* is produced by an element-wise test on the **stored** array, where NaN compares False. Measured: a NaN-outside raster of this grid has 7,111,787 violating cells and is rejected; so is main's promoted `gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif`, whose own README row says `ok_to_submit: true`. The repo's validator had meanwhile been tightened to *require* NaN outside (IR-SASS3-74), which made gate and portal mutually exclusive. Resolution, without touching any score-bearing byte:
+
+- `scripts/validate_submission_tif.py` now (a) runs `portal_range_test_all_cells` and (b) reads "null outside the bounds" **mask-aware**: a NaN payload *or* a finite payload covered by an internal GDAL per-dataset mask band both satisfy the official sentence; only the mask-band form also passes the portal test.
+- `scripts/make_portal_safe_render.py` re-renders any released raster into that encoding and proves the emission is unchanged: `dot_set_symmetric_difference = 0`, 44,923 positive cells, values [0.0, 1.0].
+- **So the file to download from main's lane is `docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif`** (SHA-256 `876a5c89bd025b08c5772d3b13f14d55dfe770a54a4773f74c8e64993f8ac861`), not the NaN copy. Receipts: `evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json`, `evidence/validator_tipcont_safe_20261030.json`. main's card, test and released bytes stay in place; this is an additive correction.
+
+**MUST GENERATE A UNIQUE TIF SUBMISSION — done, and uniqueness was measured on the final dots against every pinned sibling raster.** `docs/downloads/gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif` (ZIP beside it), 44,090 px, binary `p = 1`, float32, EPSG:32611, 3730 × 3292, no non-finite stored cell, per-dataset mask band (masked fraction 0.579175), SHA-256 `cdfa5f221fd561f2f6c46ed9bc9bec1e2fea162caedb77bc7ba981234cc8f532`.
+
+- Submission name: `gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe` · note (110 chars, limit 140): `SASS3 OCM wide-lane emission: 44090 px off-catalogue strata, binary p=1, per-dataset mask, all cells in [0,1].`
+- Lane test over all 462 SHA-verified registry rasters (`scripts/lane_sweep.py`): max 3-px overlap **0.4467** vs the 451 sibling *submissions* (cap 0.70, PASS), **0.9976** vs one saturated calibration *lattice* (literal FAIL → open owner question, IR-SASS3-82), no exact duplicate anywhere, `|Spearman|` ≤ 0.0144 on a 5-file pilot (not re-run on the full sweep, IR-SASS3-84 limitation).
+- Score, in the only honest classes: LLI-PROJECTION (NOT A SCORE) **0.1530** [0.1309, 0.1751] vs the champion's OWNER-REPORT 0.2778; HOLDOUT-DTI (`GEMSDOE32-SGMC-CAL-v3.0`, 62,703 withheld positives) **0.06539** [0.05802, 0.07180] vs champion 0.064121 [0.056730, 0.071649] → CI-overlapping, no improvement shown; hide-and-recover 0.0 by construction. Run card: `evidence/run_card_20261030_s3pass.json`.
+- Nine focus sites re-measured in-project on SHA-verified sibling bytes with both holdouts and the pairwise lane-overlap matrix: `scripts/focus_site_scoreboard.py` → `evidence/focus9_scoreboard_20261030.json`. Six of the nine overlap another focus file by 0.98–1.00 at 3 px; ours overlaps by ≤0.44.
+
+**Why 0.2778, and can we beat it (this pass' answer).** Best operating point on a saturated plateau, and the plateau is a **discovery ceiling**: after the 3-experiment budget (E1 geometry, E2 mass/operating point, E3+E3b support and selection rule — all recorded under `evidence/operating_point_*.json`), nothing buildable from the 19 official bands plus the pinned 100 m LiDAR morphometry exceeds SGMC-CAL ≈ 0.065 or LLI ≈ 0.29; the best design found (λ-optimal 1.4–2 px strand lane, LLI 0.2916 [0.2696, 0.3137]) sits at 0.9326 dot overlap with the family control, so protocol logged it as duplicate and stopped instead of shipping it. This corroborates main's independent E3 result ("more predicted mass does not substitute for enrichment", IR-SASS3-75/`docs/research/why-02778-20261030.md`): 45k → 180k dots moves enrichment 1.29 → 1.01.
+
+**New hypotheses and reusable research:** H-N5 (strand-lane emission) and H-N6 (LiDAR-coverage exclusion gate) with measured status in `docs/research/hypotheses-20261030-strand-lane.md`; `docs/research/geothermal-vents.md` — official GDR 1391 / GeoDAWN / 3DEP sources with links, and the measured reason a temperature prior is the *wrong* lever here (46.3% of Hot-class springs sit within 1 km of the organizer-excluded catalogue halo) — plus `scripts/geothermal_prior_audit.py` (7 s, re-runnable for any emission).
+
+**Feed, so nothing is checked by hand:** `python scripts/status_feed.py` regenerates `docs/research/FEED.md` + `evidence/feed.json`, re-hashing the candidates, verifying every `registry/data_manifest.json` entry, checking page/registry freshness, both lane scopes and `pytest -q`, exiting non-zero on FAIL/MISSING. Pages are generated from receipts (`scripts/build_executive_summary.py`, `scripts/announce_candidate_on_pages.py`), so they cannot drift from the evidence.
+
+```bash
+python scripts/restore_data.py --group all          # 28 files, SHA-256 verified (fixes IR-SASS3-73's absent-cache complaint)
+bash scripts/fetch_sibling_registry_git.sh          # sibling rasters by sparse git + sha verify (NOT the contents API)
+python scripts/build_candidate.py --mass 44090 --mode wide
+python scripts/validate_submission_tif.py docs/downloads/<file>.tif --out evidence/validator.json
+python scripts/lane_sweep.py --candidate docs/downloads/<file>.tif --registry /tmp/registry_git --skip-correlation
+python scripts/make_portal_safe_render.py docs/downloads/<released>.tif
+python scripts/write_run_card.py && python scripts/status_feed.py
+```
+
 ## The nine focus sites, highest-scoring submission each — measured, not asserted
 
 All nine files were fetched by blobless sparse `git clone` and verified byte-for-byte against the SHA-256 in

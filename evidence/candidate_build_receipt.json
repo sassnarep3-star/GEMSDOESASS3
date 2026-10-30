@@ -1,0 +1,102 @@
+{
+ "schema_version": 1,
+ "built_utc": "2026-10-30T02:48:34+00:00",
+ "mode": "wide",
+ "mass_target": 44090,
+ "emitted_px": 44090,
+ "support_pool_px": 875875,
+ "safe": {
+  "tif": "gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif",
+  "tif_bytes": 163670,
+  "tif_sha256": "cdfa5f221fd561f2f6c46ed9bc9bec1e2fea162caedb77bc7ba981234cc8f532",
+  "zip": "gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif.zip",
+  "zip_bytes": 124336,
+  "zip_sha256": "2ceaecbd6f01f6c123d26f0a73a534df18d2140a3cb9fb12839246fb9854f596",
+  "header": {
+   "crs": "EPSG:32611",
+   "shape": [
+    3730,
+    3292
+   ],
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "dtype": "float32",
+   "count": 1,
+   "nodata": null,
+   "mask_flags": [
+    "2"
+   ]
+  }
+ },
+ "literal": {
+  "tif": "gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-nan.tif",
+  "tif_bytes": 193875,
+  "tif_sha256": "45c3b8c634aa31857669b1e2e40dd613662759c86d364e939e39f7a59029e31e",
+  "zip": "gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-nan.tif.zip",
+  "zip_bytes": 148965,
+  "zip_sha256": "edd86cf25b90cdeec7da8ac6966bbd34b733fe58c33fbd53455cb5ab21c4a7e9",
+  "header": {
+   "crs": "EPSG:32611",
+   "shape": [
+    3730,
+    3292
+   ],
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "dtype": "float32",
+   "count": 1,
+   "nodata": null,
+   "mask_flags": [
+    "1"
+   ]
+  }
+ },
+ "projections": {
+  "lli": {
+   "evidence_class": "LLI-PROJECTION (NOT A SCORE)",
+   "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+   "projected_dti": 0.153018,
+   "uncertainty_band_loo_mae": [
+    0.1309,
+    0.1751
+   ],
+   "loo_mae": 0.0221,
+   "loo_spearman": 0.9259,
+   "off_cat_dots": 44090,
+   "caveat": "Model projection conditioned on d_catalogue_px x d_H19-5_px strata; NOT an organizer score. Under-projects genuinely novel off-H19-5 discoveries that were not probed by historical rasters."
+  },
+  "holdout_sgmc_cal": {
+   "evaluator": "GEMSDOE32-SGMC-CAL-v3.0",
+   "n_withheld_positives": 62703,
+   "dti": 0.06539130879655806,
+   "ci95": [
+    0.05802473442445649,
+    0.0717971121897092
+   ]
+  },
+  "holdout_hide_recover": {
+   "evaluator": "GEMSDOE32-HIDE-RECOVER-v3.0",
+   "n_withheld_positives": 22232,
+   "dti": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ]
+  },
+  "lane_overlap_vs_gems25_family_3px": 0.3727,
+  "median_d_catalogue_px": 14.866068747318506,
+  "median_d_H19_5_px": 3.1622776601683795
+ }
+}

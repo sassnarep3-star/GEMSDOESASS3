@@ -1,0 +1,249 @@
+{
+ "schema_version": 1,
+ "label": "LLI-PROJECTION (NOT A SCORE) + HOLDOUT-DTI on two local instruments",
+ "lli_model": "LLI-v1-S0, 40-stratum intensity inverted from 111 live owner-reported scores; LOO MAE 0.0221",
+ "lambda_table": {
+  "rows_d_catalogue_px": [
+   ">50",
+   "1",
+   "1.4-2",
+   "2.2-3",
+   "3-5",
+   "5-10",
+   "10-20",
+   "20-50"
+  ],
+  "cols_d_H19-5_px": [
+   ">5",
+   "on",
+   "1",
+   "1.4-2",
+   "2.2-5"
+  ],
+  "lambda": [
+   [
+    3.828933938412177e-06,
+    3.600292023610354e-06,
+    0.002221714849827074,
+    0.0062966598855482385,
+    3.6783987691886e-06
+   ],
+   [
+    4.7446628120466036e-07,
+    4.461338835220509e-07,
+    0.00027530607726592414,
+    0.0007802570762413168,
+    4.5581256111419473e-07
+   ],
+   [
+    6.179265578695832e-07,
+    5.810275374971423e-07,
+    0.0003585480010372528,
+    0.0010161766778263653,
+    5.936326733437993e-07
+   ],
+   [
+    1.4421034904133011e-06,
+    1.3559893634280694e-06,
+    0.0008367714855292936,
+    0.002371530913030091,
+    1.3854069538683793e-06
+   ],
+   [
+    4.0607924254302335e-06,
+    3.818305255189805e-06,
+    0.002356249279501792,
+    0.00667794983669739,
+    3.901141701553431e-06
+   ],
+   [
+    5.566858715881493e-05,
+    5.234437928084306e-05,
+    0.03230134777695347,
+    0.09154667207275341,
+    5.3479967474280804e-05
+   ],
+   [
+    7.187634748900327e-07,
+    6.758430537410016e-07,
+    0.000417057988297053,
+    0.0011820024091128976,
+    6.905051703424316e-07
+   ],
+   [
+    7.166313860556601e-05,
+    6.738382809902855e-05,
+    0.04158208571528054,
+    0.11784962012618978,
+    6.88456904932188e-05
+   ]
+  ],
+  "K_estimate_px": 16948.275747155356
+ },
+ "rows": [
+  {
+   "support": "ctl_family_d2_8_44k",
+   "emitted_px": 44090,
+   "lli_projected_dti": 0.27109,
+   "lli_band_loo_mae": [
+    0.249,
+    0.2932
+   ],
+   "sgmc_cal_dti": 0.060592489973569044,
+   "sgmc_cal_ci95": [
+    0.05352096345462408,
+    0.06759350058315708
+   ],
+   "hr_dti": 0.09920232315251679,
+   "frac_within_3px_of_family_control": 1.0,
+   "median_d_catalogue_px": 15.0,
+   "median_d_H19_5_px": 0.0
+  },
+  {
+   "support": "S1_hband_x_cat4_50",
+   "emitted_px": 292786,
+   "lli_projected_dti": 0.212639,
+   "lli_band_loo_mae": [
+    0.1906,
+    0.2347
+   ],
+   "sgmc_cal_dti": 0.03724079866532167,
+   "sgmc_cal_ci95": [
+    0.032704591639894164,
+    0.04186808354064114
+   ],
+   "hr_dti": 0.0,
+   "frac_within_3px_of_family_control": 0.891,
+   "median_d_catalogue_px": 17.0,
+   "median_d_H19_5_px": 2.0
+  },
+  {
+   "support": "S2_hband_or_hon_x_cat4_50",
+   "emitted_px": 447959,
+   "lli_projected_dti": 0.164459,
+   "lli_band_loo_mae": [
+    0.1424,
+    0.1865
+   ],
+   "sgmc_cal_dti": 0.02875427552017231,
+   "sgmc_cal_ci95": [
+    0.025023659030524434,
+    0.03251266898849207
+   ],
+   "hr_dti": 0.0,
+   "frac_within_3px_of_family_control": 0.9249,
+   "median_d_catalogue_px": 16.97056274847714,
+   "median_d_H19_5_px": 1.4142135623730951
+  },
+  {
+   "support": "S3_hband_x_cat4_50_AND_edge_top",
+   "emitted_px": 43118,
+   "lli_projected_dti": 0.132842,
+   "lli_band_loo_mae": [
+    0.1108,
+    0.1549
+   ],
+   "sgmc_cal_dti": 0.025492472476155263,
+   "sgmc_cal_ci95": [
+    0.0196599911361698,
+    0.031158631039914522
+   ],
+   "hr_dti": 0.0,
+   "frac_within_3px_of_family_control": 0.8897,
+   "median_d_catalogue_px": 16.1245154965971,
+   "median_d_H19_5_px": 2.0
+  },
+  {
+   "support": "S4_S1_plus_topedge",
+   "emitted_px": 632345,
+   "lli_projected_dti": 0.110917,
+   "lli_band_loo_mae": [
+    0.0888,
+    0.133
+   ],
+   "sgmc_cal_dti": 0.028485056849462308,
+   "sgmc_cal_ci95": [
+    0.023629401558500015,
+    0.03370594027132364
+   ],
+   "hr_dti": 0.011058672235132867,
+   "frac_within_3px_of_family_control": 0.5133,
+   "median_d_catalogue_px": 16.492422502470642,
+   "median_d_H19_5_px": 2.23606797749979
+  },
+  {
+   "support": "S5_edge_top_120k",
+   "emitted_px": 120363,
+   "lli_projected_dti": 0.036327,
+   "lli_band_loo_mae": [
+    0.0143,
+    0.0584
+   ],
+   "sgmc_cal_dti": 0.022029559471840834,
+   "sgmc_cal_ci95": [
+    0.016311095151884572,
+    0.028119453894425595
+   ],
+   "hr_dti": 0.018813692240441122,
+   "frac_within_3px_of_family_control": 0.2882,
+   "median_d_catalogue_px": 15.0,
+   "median_d_H19_5_px": 5.0
+  },
+  {
+   "support": "S6_edge_top_40k",
+   "emitted_px": 40025,
+   "lli_projected_dti": 0.025291,
+   "lli_band_loo_mae": [
+    0.0032,
+    0.0474
+   ],
+   "sgmc_cal_dti": 0.015536698691664201,
+   "sgmc_cal_ci95": [
+    0.009806920272498288,
+    0.021283480304667885
+   ],
+   "hr_dti": 0.014053388670623038,
+   "frac_within_3px_of_family_control": 0.2886,
+   "median_d_catalogue_px": 14.560219778561036,
+   "median_d_H19_5_px": 4.47213595499958
+  },
+  {
+   "support": "S7_dil1_of_S3",
+   "emitted_px": 115114,
+   "lli_projected_dti": 0.104245,
+   "lli_band_loo_mae": [
+    0.0822,
+    0.1263
+   ],
+   "sgmc_cal_dti": 0.02184512341154192,
+   "sgmc_cal_ci95": [
+    0.017106644492621125,
+    0.026464806267823788
+   ],
+   "hr_dti": 0.0,
+   "frac_within_3px_of_family_control": 0.7806,
+   "median_d_catalogue_px": 16.0312195418814,
+   "median_d_H19_5_px": 2.0
+  },
+  {
+   "support": "S8_S1_x_lidarvalid",
+   "emitted_px": 229658,
+   "lli_projected_dti": 0.199632,
+   "lli_band_loo_mae": [
+    0.1776,
+    0.2217
+   ],
+   "sgmc_cal_dti": 0.03223889755476637,
+   "sgmc_cal_ci95": [
+    0.027411057239066953,
+    0.0363109157642686
+   ],
+   "hr_dti": 0.0,
+   "frac_within_3px_of_family_control": 0.8918,
+   "median_d_catalogue_px": 16.55294535724685,
+   "median_d_H19_5_px": 2.0
+  }
+ ],
+ "runtime_s": 83.4,
+ "caveat": "LLI is fit on historical rasters, so projections for supports that leave the probed geometry are extrapolations; SGMC-CAL and hide-and-recover disagree with each other and with live scores (see docstring). No number here is an organizer score."
+}

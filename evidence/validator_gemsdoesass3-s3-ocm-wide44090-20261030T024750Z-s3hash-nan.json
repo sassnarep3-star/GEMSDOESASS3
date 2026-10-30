@@ -1,0 +1,33 @@
+{
+ "file": "gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-nan.tif",
+ "sha256": "45c3b8c634aa31857669b1e2e40dd613662759c86d364e939e39f7a59029e31e",
+ "bytes": 193875,
+ "checks": {
+  "single_band": true,
+  "dtype_float32": true,
+  "crs_epsg_32611": true,
+  "shape_3730x3292": true,
+  "transform_matches_training_grid": true,
+  "no_nan_or_inf": false,
+  "values_in_0_1": true,
+  "portal_range_test_all_cells": false,
+  "outside_bounds_null_or_zero": true
+ },
+ "stats": {
+  "non_finite_cells": 7111787,
+  "min": 0.0,
+  "max": 1.0,
+  "positive_pixels": 44090,
+  "unique_values": 2
+ },
+ "mask": {
+  "has_internal_mask_band": false,
+  "mask_flags": []
+ },
+ "notes": [
+  "portal range gate FAIL: 7111787 non-finite stored cells make the element-wise [0,1] test False (this is the 'Predicted values must be in range [0, 1]' error)",
+  "7111787 non-finite cells",
+  "outside-bounds check: 0 non-zero finite cells outside the footprint"
+ ],
+ "all_hard_checks_pass": false
+}
