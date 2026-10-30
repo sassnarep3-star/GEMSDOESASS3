@@ -1,5 +1,30 @@
 # GEMSDOESASS3 — read first
 
+## Status — 2026-10-30 (read first)
+
+**One-line answer:** no file is cleared to download for the competition or to submit. One format-valid, literal-unique TIF exists for analysis. Its score cannot be estimated in this workspace, because the competition labels are not here.
+
+| Question | Answer |
+|---|---|
+| File to download (analysis only) | `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (SHA-256 `7035c254…fe49a`) |
+| Format (pixels, 2026-10-30) | PASS. float32, EPSG:32611, 3730×3292, values in [0, 1], NaN outside the footprint, no NaN inside. Receipt: `evidence/validator_candidate_20261030.json` |
+| Estimated leaderboard score | **Not estimable.** HOLDOUT-DTI proxy 0.042851 [0.038871, 0.046157] (`GEMSDOE32-SGMC-CAL-v3.0`, 62,703 withheld positives). It is below the champion's proxy 0.064121 and is not a leaderboard estimate. |
+| Unique (literal rule) | YES: worst lattice overlap 68.9987% (limit 70%). Receipt-based, not re-run on 2026-10-30 (IR-SASS3-77) |
+| OK to download for the competition? | **NO.** Owner decision pending (IR-SASS3-71) |
+| OK to submit? | **NO.** Holdout and leakage-canary gates not run; labels absent (IR-SASS3-73) |
+| Leaderboard top (live, 2026-10-30) | **0.4544** (xiaofanhu). The 0.4413 and 0.3195 figures in the request do not match (IR-SASS3-75) |
+| Champion 0.2778 (GEMSDOE32) | OWNER-REPORT. No organizer receipt (IR-SASS3-76) |
+
+**Where to look:** [executive summary](executive-summary.html) (the at-a-glance table is first) · [session review](docs/research/session-20261030-review.md) (verified sources, ranked hypotheses, blocked items) · run card `evidence/run_card_20261030.json`.
+
+**Changed this session:** the shared validator now enforces the official NaN-outside rule and rejects zeros outside (IR-SASS3-74, 78); a regression suite covers the metric and validator (`tests/test_official_metric_and_validator.py`); the leaderboard figures were corrected to the live page; the Pages builder entry points were repaired (`scripts/build_site.py` imported a missing `main`); the irregularity ledger gained IR-SASS3-73 to 80.
+
+**Official facts checked this session (links in the review):** the metric, the outside-bounds rule and the [0, 1] range (problem page 967); three submissions per week and the DrivenData-account requirement for labels (NLR rules §3.1–3.2); known USGS/INGENIOUS fault pixels are masked from scoring (DrivenData forum thread 11516, staff reply).
+
+**Next:** the owner supplies `training_features.tif` and `labels.tif` from a DrivenData account (rules §3.1), then the rank-1 hypothesis (H-S30-2) runs under the validation plan. Until then no submission is recommended.
+
+---
+
 ## Decision (2026-10-29)
 
 **Status: NOT OK to download and NOT OK to submit for any file** (competition download and submission). The repository holds one analysis copy of the compliant file, described here; it is not a competition-download authorization. The current candidate is the 21k dispersed LWST file with NaN outside the footprint (`docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif`, SHA-256 `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`). It meets the official format (NaN outside, the official rule), and it passes the literal any-registry rule (386 rasters, inside-footprint lattice overlap 68.99%, limit 70%). It is a download for analysis. Competition-download authorization stays NO (`ok_to_download` false, fail-closed as on main; owner decision, IR-SASS3-71). Submission is blocked by three gates: the spatially-blocked holdout (HOLDOUT-DTI below the champion; hide-and-recover not run), the leakage canary (not run on this raster), and complete uniqueness (binary surface only). The validator (`python scripts/verify_all_gates.py`) reports `ok_to_download_for_analysis: true`, `ok_to_download: false`, `ok_to_submit: false`. Earlier notes said the zeros-outside file was format-valid; that was wrong under the official rule (IR-SASS3-70).
@@ -36,8 +61,8 @@ Checks run on this branch, all reproducible from the scripts named. They support
 - **Exact file names** for the nine focus sites, each matched by SHA-256 to its GitHub copy: `evidence/focus9_file_table.json`. Owner-reported scores are typed in the prompt and are not organizer receipts.
 - **Duplicate pair:** GEMSDOE25 (`…-zeros.tif`) and GEMSDOE30 (`…-91eae1ca.tif`) are pixel-identical (44,090 positive cells each; xor = 0) with different file hashes, and both owner scores are 0.2600 (IR-2029-11).
 - **Competition inputs in sibling repos:** `labels.tif` and `sample_submission.tif` are committed in several GEMSDOE repos, and their hashes match this workspace's restore receipt. They were not used for scoring (IR-2029-02, IR-2029-15). Owner decision needed.
-- **Leaderboard** (fetched 2026-10-29): #1 0.4544, #2 0.3916, #3 0.3911, #4 0.3724, #5 0.3635 (op01).
-- **Tests:** `pytest -q` on the merged tree: 48 passed, 3 skipped.
+- **Leaderboard** (fetched 2026-10-30, best public DW-Tversky): #1 0.4544, #2 0.3916, #3 0.3911, #4 0.3841, #5 0.3642 (op01). The 2026-10-29 values (#4 0.3724, #5 0.3635) were stale.
+- **Tests:** `pytest -q` on 2026-10-30: 58 passed, 3 skipped.
 
 **Decision still needed (owner):** how to treat dense rasters in the lane rule (keep the literal rule, exclude dense rasters from the overlap test, or redefine dots for them). Whichever is chosen, the structural file fails the footprint rule and cannot be downloaded or submitted as it stands.
 
