@@ -31,6 +31,19 @@ EXPECTED_SHAPE = (3730, 3292)
 EXPECTED_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
 
 
+def portal_range_gate(arr: np.ndarray) -> tuple[bool, int]:
+    """Reproduce the portal's literal element-wise range test on the *stored* array.
+
+    The DrivenData submission form compares every stored cell against [0, 1]; NaN and Inf compare
+    False, so a file that puts NaN outside the footprint is rejected with
+    "Predicted values must be in range [0, 1]" even when all its real values are legal. A raster that
+    wants to advertise "null outside the bounds" must therefore carry a GDAL mask band instead of a
+    NaN payload. Returns (passes, number of violating cells).
+    """
+    bad = int(np.count_nonzero(~((arr >= 0.0) & (arr <= 1.0))))
+    return bad == 0, bad
+
+
 def _footprint(shape):
     """Boolean mask of finite cells of sample_submission.tif, or None if absent or of the wrong shape."""
     for cand in (Path(".cache/gems_data/sample_submission.tif"), Path("/tmp/gems_data/sample_submission.tif")):
@@ -56,10 +69,34 @@ def validate(path: Path) -> dict:
         checks["transform_matches_training_grid"] = all(abs(a - b) < 1e-9 for a, b in zip(tf, EXPECTED_TRANSFORM))
         arr = ds.read(1).astype(np.float64)
         nodata = ds.nodata
+        try:
+            mask_flags = sorted({str(int(f.value)) + ":" + f.name for grp in ds.mask_flag_enums for f in grp})
+        except Exception:  # noqa: BLE001
+            mask_flags = []
+        try:
+            masked = ds.read(1, masked=True)
+            masked_frac = float(np.ma.getmaskarray(masked).mean())
+        except Exception:  # noqa: BLE001
+            masked_frac = 0.0
     finite = np.isfinite(arr)
     checks["no_nan_or_inf"] = bool(finite.all())
     vals = arr[finite]
     checks["values_in_0_1"] = bool(vals.size > 0 and vals.min() >= 0.0 and vals.max() <= 1.0)
+    # PORTAL GATE (added 2026-10-30). The DrivenData form compares the *stored* array against
+    # [0, 1] element-wise, and every comparison with NaN is False, so a file that stores NaN outside
+    # the footprint is rejected with "Predicted values must be in range [0, 1]" even though all its
+    # real values are legal. Reproduce that literal test here and fail closed on it.
+    checks["portal_range_test_all_cells"], n_range_bad = portal_range_gate(arr)
+    if not checks["portal_range_test_all_cells"]:
+        notes.append(
+            f"portal range gate FAIL: {n_range_bad} stored cells violate the element-wise [0,1] test "
+            "(this is the 'Predicted values must be in range [0, 1]' error)")
+    # A GDAL mask band may carry the "outside bounds is null" requirement instead of NaN payloads.
+    flags = mask_flags
+    has_mask = bool(flags)
+    if has_mask:
+        notes.append(f"internal mask band present ({','.join(flags)}): outside-bounds cells are null in the GDAL sense")
+    stats_masked = {"has_internal_mask_band": has_mask, "mask_flags": flags, "masked_fraction": round(masked_frac, 6)}
     if not checks["no_nan_or_inf"]:
         notes.append(f"{int((~finite).sum())} non-finite cells")
     if nodata is not None:
@@ -83,11 +120,13 @@ def validate(path: Path) -> dict:
         "bytes": path.stat().st_size,
         "checks": checks,
         "stats": {
+            "non_finite_cells": int((~finite).sum()),
             "min": float(vals.min()) if vals.size else None,
             "max": float(vals.max()) if vals.size else None,
             "positive_pixels": int((vals > 0).sum()),
             "unique_values": int(np.unique(vals).size),
         },
+        "mask": stats_masked,
         "notes": notes,
         "all_hard_checks_pass": ok,
     }

@@ -1,0 +1,35 @@
+{
+ "file": "gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif",
+ "sha256": "cdfa5f221fd561f2f6c46ed9bc9bec1e2fea162caedb77bc7ba981234cc8f532",
+ "bytes": 163670,
+ "checks": {
+  "single_band": true,
+  "dtype_float32": true,
+  "crs_epsg_32611": true,
+  "shape_3730x3292": true,
+  "transform_matches_training_grid": true,
+  "no_nan_or_inf": true,
+  "values_in_0_1": true,
+  "portal_range_test_all_cells": true,
+  "outside_bounds_null_or_zero": true
+ },
+ "stats": {
+  "non_finite_cells": 0,
+  "min": 0.0,
+  "max": 1.0,
+  "positive_pixels": 44090,
+  "unique_values": 2
+ },
+ "mask": {
+  "has_internal_mask_band": true,
+  "mask_flags": [
+   "2:per_dataset"
+  ],
+  "masked_fraction": 0.579175
+ },
+ "notes": [
+  "internal mask band present (2:per_dataset): outside-bounds cells are null in the GDAL sense",
+  "outside-bounds check: 0 non-zero finite cells outside the footprint"
+ ],
+ "all_hard_checks_pass": true
+}

@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-10-30T03:09:29+00:00",
+  "generated_by": "scripts/geothermal_prior_audit.py",
+  "grid": {
+    "height": 3730,
+    "width": 3292,
+    "cell_m": 100.0,
+    "kernel_radius_px": 3
+  },
+  "emissions": {
+    "sass3_candidate": "/home/user/GEMSDOESASS3/docs/downloads/gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif",
+    "family_champion": "/tmp/registry_git/GEMSDOE32/docs/downloads/gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+    "random_control": "44090 uniform footprint cells, seed 20261030"
+  },
+  "layers": {
+    "hot_springs_any": 12570,
+    "hot_springs_class_Hot": 928,
+    "volcanic_vents": 21,
+    "qfault_trace_centroids": 1125,
+    "catalogue_labels": 60988
+  },
+  "rows": [
+    {
+      "layer": "hot_springs_any",
+      "candidate": {
+        "label": "candidate",
+        "n_dots": 44090,
+        "median_d_layer_px": 25.06,
+        "frac_within_3px": 0.0353,
+        "frac_beyond_10px": 0.8176,
+        "frac_on_layer": 0.0017
+      },
+      "champion": {
+        "label": "champion",
+        "n_dots": 37654,
+        "median_d_layer_px": 24.413,
+        "frac_within_3px": 0.0357,
+        "frac_beyond_10px": 0.8145,
+        "frac_on_layer": 0.0016
+      },
+      "control": {
+        "label": "control",
+        "n_dots": 44090,
+        "median_d_layer_px": 128.763,
+        "frac_within_3px": 0.019,
+        "frac_beyond_10px": 0.9097,
+        "frac_on_layer": 0.001
+      },
+      "p_candidate_farther_than_control": 0.2376,
+      "p_champion_farther_than_control": 0.2313
+    },
+    {
+      "layer": "hot_springs_class_Hot",
+      "candidate": {
+        "label": "candidate",
+        "n_dots": 44090,
+        "median_d_layer_px": 115.953,
+        "frac_within_3px": 0.0028,
+        "frac_beyond_10px": 0.9828,
+        "frac_on_layer": 0.0001
+      },
+      "champion": {
+        "label": "champion",
+        "n_dots": 37654,
+        "median_d_layer_px": 102.179,
+        "frac_within_3px": 0.003,
+        "frac_beyond_10px": 0.9819,
+        "frac_on_layer": 0.0002
+      },
+      "control": {
+        "label": "control",
+        "n_dots": 44090,
+        "median_d_layer_px": 255.82,
+        "frac_within_3px": 0.0014,
+        "frac_beyond_10px": 0.9912,
+        "frac_on_layer": 0.0001
+      },
+      "p_candidate_farther_than_control": 0.2762,
+      "p_champion_farther_than_control": 0.2451
+    },
+    {
+      "layer": "volcanic_vents",
+      "candidate": {
+        "label": "candidate",
+        "n_dots": 44090,
+        "median_d_layer_px": 519.168,
+        "frac_within_3px": 0.0002,
+        "frac_beyond_10px": 0.9986,
+        "frac_on_layer": 0.0
+      },
+      "champion": {
+        "label": "champion",
+        "n_dots": 37654,
+        "median_d_layer_px": 484.575,
+        "frac_within_3px": 0.0002,
+        "frac_beyond_10px": 0.997,
+        "frac_on_layer": 0.0
+      },
+      "control": {
+        "label": "control",
+        "n_dots": 44090,
+        "median_d_layer_px": 718.41,
+        "frac_within_3px": 0.0,
+        "frac_beyond_10px": 0.9996,
+        "frac_on_layer": 0.0
+      },
+      "p_candidate_farther_than_control": 0.3681,
+      "p_champion_farther_than_control": 0.3289
+    },
+    {
+      "layer": "qfault_trace_centroids",
+      "candidate": {
+        "label": "candidate",
+        "n_dots": 44090,
+        "median_d_layer_px": 52.631,
+        "frac_within_3px": 0.0017,
+        "frac_beyond_10px": 0.9697,
+        "frac_on_layer": 0.0
+      },
+      "champion": {
+        "label": "champion",
+        "n_dots": 37654,
+        "median_d_layer_px": 61.717,
+        "frac_within_3px": 0.002,
+        "frac_beyond_10px": 0.9773,
+        "frac_on_layer": 0.0002
+      },
+      "control": {
+        "label": "control",
+        "n_dots": 44090,
+        "median_d_layer_px": 62.801,
+        "frac_within_3px": 0.0026,
+        "frac_beyond_10px": 0.9731,
+        "frac_on_layer": 0.0001
+      },
+      "p_candidate_farther_than_control": 0.4238,
+      "p_champion_farther_than_control": 0.4861
+    },
+    {
+      "layer": "catalogue_labels",
+      "candidate": {
+        "label": "candidate",
+        "n_dots": 44090,
+        "median_d_layer_px": 14.866,
+        "frac_within_3px": 0.0,
+        "frac_beyond_10px": 0.629,
+        "frac_on_layer": 0.0
+      },
+      "champion": {
+        "label": "champion",
+        "n_dots": 37654,
+        "median_d_layer_px": 19.647,
+        "frac_within_3px": 0.0577,
+        "frac_beyond_10px": 0.6983,
+        "frac_on_layer": 0.0
+      },
+      "control": {
+        "label": "control",
+        "n_dots": 44090,
+        "median_d_layer_px": 122.442,
+        "frac_within_3px": 0.0364,
+        "frac_beyond_10px": 0.8914,
+        "frac_on_layer": 0.0048
+      },
+      "p_candidate_farther_than_control": 0.1639,
+      "p_champion_farther_than_control": 0.2132
+    }
+  ],
+  "caveat": "Distances are 100 m-grid px on EPSG:32611; spring/vent points are derived extracts, not the authoritative GDR layer. No number here is a score. AUC 0.5 = the prior adds no ranking information for that emission. p_*_farther_than_control < 0.5 = closer than random."
+}
