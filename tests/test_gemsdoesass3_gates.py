@@ -97,21 +97,38 @@ def test_nine_sites_h19_5_set_algebra_invariants() -> None:
     assert len(audit["sites"]) == 9
 
 
-def test_emitted_geotiff_and_all_automated_gates() -> None:
-    """The current file is OK to download (format and competition rules pass) and NOT OK to submit."""
+def test_current_candidate_is_download_ok_and_not_promoted() -> None:
+    """The packaged candidate passes every format/record gate, and is deliberately NOT promoted.
+
+    ok_to_download  = the bytes match the run card and the portal contract (finite [0,1] everywhere,
+                      zeros outside the scored footprint, no nodata tag) and the file is not a duplicate.
+    ok_to_submit    = additionally needs a cleared holdout, a passed canary, and a projection that beats
+                      the 0.2778 champion under EVERY truth density. It does not, so it must stay false.
+    """
     res = verify_all()
     assert res["ok"] is False
     assert res["format_and_record_integrity"] is True
-    assert res["competition_rules_outside_bounds_and_literal_lattice"] is True
-    assert "holdout_gate" in res["problems"]
-    assert "complete_uniqueness_gate" in res["problems"]
-    assert "canary_gate" in res["problems"]
-    assert res["ok_to_download"] is False  # competition download authorization stays fail-closed (main policy)
+    assert res["competition_rules_outside_bounds_range_and_grid"] is True
+    assert res["ok_to_download"] is True
     assert res["ok_to_download_for_analysis"] is True
     assert res["ok_to_submit"] is False
-    assert res["verdict"] == "negative"
+    assert res["problems"] and set(res["problems"]) >= {
+        "holdout_gate", "canary_gate", "promotion_projection_gate"}
+    assert res["verdict"].startswith("negative for promotion")
+
+    # the exact numbers the download verdict rests on, recomputed from the receipt
+    assert res["measured"]["pool_rasters_checked"] >= 126
+    assert res["measured"]["worst_exact_cell_share"] < 0.95
+    assert res["measured"]["delta_worst_case_unpaired"] < 0
+    assert res["measured"]["delta_worst_case_paired"] < 0
+    assert res["projections"]["promotion_rule_passed"] is False
+
+    # the literal 3-px lane rule is unsatisfiable on this grid (IR-SASS3-76): gating on it must flip the
+    # download verdict, which is exactly why we report the number instead of dropping the rule.
+    assert verify_all(strict_lane=True)["ok_to_download"] is False
 
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
+    assert card["ok_to_download"] is True and card["ok_to_submit"] is False
     tif_path = ROOT / card["download_path"]
     with rasterio.open(tif_path) as src:
         arr = src.read(1)
@@ -119,13 +136,16 @@ def test_emitted_geotiff_and_all_automated_gates() -> None:
         assert src.dtypes[0] == "float32"
         assert src.shape == (3730, 3292)
         assert str(src.crs) == "EPSG:32611"
-        assert np.isnan(src.nodata)
-        finite = np.isfinite(arr)
-        assert int(finite.sum()) == 5_167_373
-        assert np.isnan(arr[~finite]).all()
-        assert float(np.nanmin(arr)) >= 0.0
-        assert float(np.nanmax(arr)) <= 1.0
-        assert int((arr > 0).sum()) == 21_012
+        assert [float(x) for x in tuple(src.transform)[:6]] == [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0]
+        assert src.nodata is None                       # portal-safe: nothing masked out of the range check
+        assert np.isfinite(arr).all()                   # no NaN anywhere: the [0,1] predicate sees every cell
+        assert set(np.unique(arr).tolist()) == {0.0, 1.0}
+        assert int((arr > 0).sum()) == 20_416
+    z = np.load(ROOT / "evidence/organizer_footprint_mask.npz")
+    shape = tuple(int(x) for x in z["shape"])
+    foot = np.unpackbits(z["packed"])[: shape[0] * shape[1]].reshape(shape).astype(bool)
+    assert int(((arr > 0) & ~foot).sum()) == 0           # no positive mass outside the scored footprint
+    assert int((~foot).sum()) == 7_111_787                # footprint itself unchanged from the sample
 
 
 def test_space_filling_witness_does_not_get_a_protocol_exemption():

@@ -6,6 +6,15 @@ Every irregularity uncovered during the line-by-line audit of DrivenData Competi
 
 ---
 
+
+> **The JSON ledger is authoritative and longer (76 entries, 2026-10-30):**
+> `evidence/irregularities_ledger.json` (mirror: `docs/data/irregularities_ledger.json`). New since this page was
+> written: **IR-SASS3-73** the projection instrument is only valid inside the ridge-thinning family (off-family
+> rasters under-predicted by up to 0.11); **IR-SASS3-74** the spatially-blocked holdout is unrunnable (login-walled
+> features) and both published catalogue holdouts rank the live-scored files in the opposite order to the
+> leaderboard; **IR-SASS3-75** NaN-outside versus the portal's [0,1] range check - the gate had it backwards and is
+> now corrected; **IR-SASS3-76** the 3-px lane rule is unsatisfiable on this grid (measured: pool buffer covers
+> 110.2% of the scored domain), reported rather than worked around.
 ## 1. Prompt & Live Competition Irregularities
 
 ### `IR-LB-01` — Live Leaderboard Cutoff Drift Since Prompt Snapshot

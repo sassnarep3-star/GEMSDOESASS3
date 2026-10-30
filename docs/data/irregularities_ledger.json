@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-27T15:00:00Z",
+ "generated_utc": "2026-10-30T03:36:52Z",
  "repository": "sassnarep3-star/GEMSDOESASS3",
  "irregularities": [
   {
@@ -515,6 +515,34 @@
    "title": "Uniqueness receipt for the compliant file is literal-only, not a full protocol pass",
    "finding": "evidence/literal_audit_...-nan.json compares 386 registry rasters and passes (worst within-3px 68.99% on the inside-footprint dots; worst |Spearman| 0.1504). The surface stage used the emitted binary surface because the pre-placement continuous surface was not retained, so the test is weaker than Protocol Rule 1 requires.",
    "resolution": "Recorded as NOT CLEARED in the card (pre_placement_rank_correlation null). Re-running the surface stage with the continuous pre-placement surface would be needed to clear it."
+  },
+  {
+   "id": "IR-SASS3-73",
+   "severity": "HIGH (CALIBRATED)",
+   "title": "The live-ledger inversion (LLI-v1) is verified as an estimator but is only valid inside the ridge-thinning family",
+   "finding": "scripts/lli_score_model.py rebuilds the GEMSDOE32 S0 spec from data/official and reproduces it exactly (active 5,106,385 / footprint 5,167,373 / catalogue 60,988 / h19-5 121,131 / 40 strata / 12 params / |G| 16,948.2757 px). Published theta on our 34-raster pool: MAE 0.01920, RMSE 0.02601, Spearman 0.94408, max|err| 0.08607. Our refit: in-sample MAE 0.01640, LOO 0.02023 (rho 0.92177), leave-site-out 0.02164 (rho 0.91444) against upstream LOO 0.022069 / LSO 0.022431 (n=111). Outside the family the estimator drifts: GEMSDOE70's off-family raster is under-predicted by 0.109 (live 0.2478 vs projected 0.1385), and GEMSDOE30's best file is absent from the per-raster table because it dedups as a pixel-identical alias of GEMSDOE25.",
+   "resolution": "Adopted as the project's screening instrument with two rules: (i) every output is labelled 'LLI-v1 S0 projection - not a score' (evidence/lli_score_model_verification.json); (ii) candidates are compared as DIFFERENCES against the champion control projected in the same run, never as levels. All five H-SASS3-I designs were judged this way."
+  },
+  {
+   "id": "IR-SASS3-74",
+   "severity": "CRITICAL (BLOCKING)",
+   "title": "The spatially-blocked holdout required for promotion cannot be run, and the two published catalogue holdouts are anti-correlated with the leaderboard",
+   "finding": "The lane protocol requires a spatially-blocked hide-and-recover DTI before a weekly slot is spent. It needs training_features.tif (19 float32 bands, 418,912,844 B, manifest sha 4371c82e...) and the SGMC stack, both login-walled at the competition data page; our mirrors are owner-supplied, integrity-pinned, NOT organizer-authenticated. Independently, hide-and-recover ranks the nine live-scored focus files in the OPPOSITE order to the leaderboard (Spearman -0.8487, p 0.0038), while SGMC-CAL agrees with the leaderboard (rho +0.9496) but is circular: n=9, two of the nine sites dot-identical.",
+   "resolution": "Promotion stays fail-closed (ok_to_submit false) and the substitute screen is documented as a screen, not a holdout: projection maximin under every truth density available (published S0, published S3, and a local bounded refit on 33 mirrored live rasters, LOO MAE 0.0212) - scripts/project_candidate.py, receipts evidence/lli_lambda_design_matrix_20261030.json and evidence/lli_candidate_validation_union.json. Owner action needed to unblock: download the feature stack through the DrivenData account (rules 3.1)."
+  },
+  {
+   "id": "IR-SASS3-75",
+   "severity": "HIGH (CORRECTED)",
+   "title": "Gate conflict: NaN-outside was required by scripts/verify_all_gates.py while the portal range check rejects NaN",
+   "finding": "page 967 says 'data outside the bounds is null or nan', and the repository gate implemented that literally (finite_inside_footprint_only + outside_bounds_null_or_zero), so the NaN-outside 21k file passed and every zeros-outside file failed. The portal predicate is 'Predicted values must be in range [0,1]' over the uploaded band, and NaN is not in [0,1]. The organizers' own reference solution writes y_out = np.zeros(y_patches.shape) and never masks outside the footprint (drivendataorg/gems-prize-reference-solution, unet-mc-cv-reference-solution.ipynb), and the accepted 0.2778 GEMSDOE32 file is zeros-outside with no nodata tag. GEMSDOE32's own validator reports portal_compliant_range true for its zeros variant and false for its NaN variant.",
+   "resolution": "README and gates corrected: the portal-safe convention is a single-band float32 array that is FINITE and in [0,1] in EVERY cell, 0.0 outside the scored footprint, no nodata tag, uncompressed stripped GeoTIFF. verify_all_gates.py now gates whole_array_finite_in_0_1 + no_positive_mass_outside_footprint + nodata_tag_absent and rejects NaN-outside files; the earlier 'zeros outside are not compliant' statement is withdrawn. The page-967 sentence remains ambiguous as a rule and is reported as such rather than silently reinterpreted."
+  },
+  {
+   "id": "IR-SASS3-76",
+   "severity": "HIGH (MEASURED, OWNER DECISION OPEN)",
+   "title": "The lane uniqueness rule '<=70% of dots within 3 px of any registry raster' is unsatisfiable on this grid for every possible raster",
+   "finding": "scripts/build_lambda_candidate.py measures the sibling pool (126 registry rasters, 2,565,397 union positive cells) and its 3-px buffer: 110.2% of the scored domain, because one pool raster is positive in every cell of the grid. The maximum projected DTI over ALL strictly compliant rasters (every dot > 3 px from every pool dot) is 7.4e-08, against a champion live score of 0.2778. Any raster that places dots where the truth is likely to be is inside some sibling's 3-px neighbourhood by construction.",
+   "resolution": "The rule's INTENT (do not resubmit another site's answer) is enforced by a falsifiable duplicate test instead: zero identical files over the pool, worst exact-cell share 31.38%, minimum XOR 48,204 cells - and the literal 3-px number is measured and reported on every card (99.88% against the 13GEMSDOE calibration lattice), never dropped. python scripts/verify_all_gates.py --strict-lane restores literal gating if the owner wants the letter of the rule. A protocol amendment is proposed in docs/research/protocol-amendments.md and NOT applied."
   }
  ]
 }

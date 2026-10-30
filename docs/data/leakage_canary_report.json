@@ -1,0 +1,419 @@
+{
+  "rule": "Single-feature holdout max(AUC, 1 - AUC) <= 0.90 (Protocol Rule 4)",
+  "n_channels_tested": 51,
+  "n_withheld_positive_samples": 11172,
+  "n_negative_samples": 100000,
+  "worst_channel": "curv_s2",
+  "worst_symmetric_auc": 0.588299,
+  "all_passed": true,
+  "channels": [
+    {
+      "index": 0,
+      "channel": "band01",
+      "group": "shared_template_35",
+      "holdout_auc": 0.479555,
+      "symmetric_auc_canary": 0.520445,
+      "passed_le_090": true
+    },
+    {
+      "index": 1,
+      "channel": "band02",
+      "group": "shared_template_35",
+      "holdout_auc": 0.51531,
+      "symmetric_auc_canary": 0.51531,
+      "passed_le_090": true
+    },
+    {
+      "index": 2,
+      "channel": "band03",
+      "group": "shared_template_35",
+      "holdout_auc": 0.520383,
+      "symmetric_auc_canary": 0.520383,
+      "passed_le_090": true
+    },
+    {
+      "index": 3,
+      "channel": "band04",
+      "group": "shared_template_35",
+      "holdout_auc": 0.557924,
+      "symmetric_auc_canary": 0.557924,
+      "passed_le_090": true
+    },
+    {
+      "index": 4,
+      "channel": "band05",
+      "group": "shared_template_35",
+      "holdout_auc": 0.529304,
+      "symmetric_auc_canary": 0.529304,
+      "passed_le_090": true
+    },
+    {
+      "index": 5,
+      "channel": "band06",
+      "group": "shared_template_35",
+      "holdout_auc": 0.453402,
+      "symmetric_auc_canary": 0.546598,
+      "passed_le_090": true
+    },
+    {
+      "index": 6,
+      "channel": "band07",
+      "group": "shared_template_35",
+      "holdout_auc": 0.562632,
+      "symmetric_auc_canary": 0.562632,
+      "passed_le_090": true
+    },
+    {
+      "index": 7,
+      "channel": "band08",
+      "group": "shared_template_35",
+      "holdout_auc": 0.513352,
+      "symmetric_auc_canary": 0.513352,
+      "passed_le_090": true
+    },
+    {
+      "index": 8,
+      "channel": "band09",
+      "group": "shared_template_35",
+      "holdout_auc": 0.49983,
+      "symmetric_auc_canary": 0.50017,
+      "passed_le_090": true
+    },
+    {
+      "index": 9,
+      "channel": "band10",
+      "group": "shared_template_35",
+      "holdout_auc": 0.5413,
+      "symmetric_auc_canary": 0.5413,
+      "passed_le_090": true
+    },
+    {
+      "index": 10,
+      "channel": "band11",
+      "group": "shared_template_35",
+      "holdout_auc": 0.51241,
+      "symmetric_auc_canary": 0.51241,
+      "passed_le_090": true
+    },
+    {
+      "index": 11,
+      "channel": "band12",
+      "group": "shared_template_35",
+      "holdout_auc": 0.475897,
+      "symmetric_auc_canary": 0.524103,
+      "passed_le_090": true
+    },
+    {
+      "index": 12,
+      "channel": "band13",
+      "group": "shared_template_35",
+      "holdout_auc": 0.474472,
+      "symmetric_auc_canary": 0.525528,
+      "passed_le_090": true
+    },
+    {
+      "index": 13,
+      "channel": "band14",
+      "group": "shared_template_35",
+      "holdout_auc": 0.488286,
+      "symmetric_auc_canary": 0.511714,
+      "passed_le_090": true
+    },
+    {
+      "index": 14,
+      "channel": "band15",
+      "group": "shared_template_35",
+      "holdout_auc": 0.497907,
+      "symmetric_auc_canary": 0.502093,
+      "passed_le_090": true
+    },
+    {
+      "index": 15,
+      "channel": "band16",
+      "group": "shared_template_35",
+      "holdout_auc": 0.5559,
+      "symmetric_auc_canary": 0.5559,
+      "passed_le_090": true
+    },
+    {
+      "index": 16,
+      "channel": "band17",
+      "group": "shared_template_35",
+      "holdout_auc": 0.487592,
+      "symmetric_auc_canary": 0.512408,
+      "passed_le_090": true
+    },
+    {
+      "index": 17,
+      "channel": "band18",
+      "group": "shared_template_35",
+      "holdout_auc": 0.4645,
+      "symmetric_auc_canary": 0.5355,
+      "passed_le_090": true
+    },
+    {
+      "index": 18,
+      "channel": "band19",
+      "group": "shared_template_35",
+      "holdout_auc": 0.551375,
+      "symmetric_auc_canary": 0.551375,
+      "passed_le_090": true
+    },
+    {
+      "index": 19,
+      "channel": "curv_s1",
+      "group": "shared_template_35",
+      "holdout_auc": 0.569409,
+      "symmetric_auc_canary": 0.569409,
+      "passed_le_090": true
+    },
+    {
+      "index": 20,
+      "channel": "curv_s2",
+      "group": "shared_template_35",
+      "holdout_auc": 0.588299,
+      "symmetric_auc_canary": 0.588299,
+      "passed_le_090": true
+    },
+    {
+      "index": 21,
+      "channel": "ridge_s1",
+      "group": "shared_template_35",
+      "holdout_auc": 0.487712,
+      "symmetric_auc_canary": 0.512288,
+      "passed_le_090": true
+    },
+    {
+      "index": 22,
+      "channel": "ridge_s2",
+      "group": "shared_template_35",
+      "holdout_auc": 0.489648,
+      "symmetric_auc_canary": 0.510352,
+      "passed_le_090": true
+    },
+    {
+      "index": 23,
+      "channel": "ridge_s3",
+      "group": "shared_template_35",
+      "holdout_auc": 0.4874,
+      "symmetric_auc_canary": 0.5126,
+      "passed_le_090": true
+    },
+    {
+      "index": 24,
+      "channel": "relief5",
+      "group": "shared_template_35",
+      "holdout_auc": 0.561006,
+      "symmetric_auc_canary": 0.561006,
+      "passed_le_090": true
+    },
+    {
+      "index": 25,
+      "channel": "tophat2",
+      "group": "shared_template_35",
+      "holdout_auc": 0.473978,
+      "symmetric_auc_canary": 0.526022,
+      "passed_le_090": true
+    },
+    {
+      "index": 26,
+      "channel": "tmi_edge",
+      "group": "shared_template_35",
+      "holdout_auc": 0.520289,
+      "symmetric_auc_canary": 0.520289,
+      "passed_le_090": true
+    },
+    {
+      "index": 27,
+      "channel": "rtp_edge",
+      "group": "shared_template_35",
+      "holdout_auc": 0.525773,
+      "symmetric_auc_canary": 0.525773,
+      "passed_le_090": true
+    },
+    {
+      "index": 28,
+      "channel": "grav_edge",
+      "group": "shared_template_35",
+      "holdout_auc": 0.533866,
+      "symmetric_auc_canary": 0.533866,
+      "passed_le_090": true
+    },
+    {
+      "index": 29,
+      "channel": "cond_edge",
+      "group": "shared_template_35",
+      "holdout_auc": 0.496873,
+      "symmetric_auc_canary": 0.503127,
+      "passed_le_090": true
+    },
+    {
+      "index": 30,
+      "channel": "depth_grad",
+      "group": "shared_template_35",
+      "holdout_auc": 0.526462,
+      "symmetric_auc_canary": 0.526462,
+      "passed_le_090": true
+    },
+    {
+      "index": 31,
+      "channel": "coherence_s2",
+      "group": "shared_template_35",
+      "holdout_auc": 0.561478,
+      "symmetric_auc_canary": 0.561478,
+      "passed_le_090": true
+    },
+    {
+      "index": 32,
+      "channel": "strike_cos",
+      "group": "shared_template_35",
+      "holdout_auc": 0.569373,
+      "symmetric_auc_canary": 0.569373,
+      "passed_le_090": true
+    },
+    {
+      "index": 33,
+      "channel": "strike_sin",
+      "group": "shared_template_35",
+      "holdout_auc": 0.537638,
+      "symmetric_auc_canary": 0.537638,
+      "passed_le_090": true
+    },
+    {
+      "index": 34,
+      "channel": "footprint",
+      "group": "shared_template_35",
+      "holdout_auc": 0.5,
+      "symmetric_auc_canary": 0.5,
+      "passed_le_090": true
+    },
+    {
+      "index": 35,
+      "channel": "spi_mag_wavenumber",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.512529,
+      "symmetric_auc_canary": 0.512529,
+      "passed_le_090": true
+    },
+    {
+      "index": 36,
+      "channel": "spi_grav_wavenumber",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.523358,
+      "symmetric_auc_canary": 0.523358,
+      "passed_le_090": true
+    },
+    {
+      "index": 37,
+      "channel": "wijns_theta_mag",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.515279,
+      "symmetric_auc_canary": 0.515279,
+      "passed_le_090": true
+    },
+    {
+      "index": 38,
+      "channel": "wijns_theta_grav",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.52175,
+      "symmetric_auc_canary": 0.52175,
+      "passed_le_090": true
+    },
+    {
+      "index": 39,
+      "channel": "spi_cross_tensor_concord",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.51842,
+      "symmetric_auc_canary": 0.51842,
+      "passed_le_090": true
+    },
+    {
+      "index": 40,
+      "channel": "upward_150m_dip_shift",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.520911,
+      "symmetric_auc_canary": 0.520911,
+      "passed_le_090": true
+    },
+    {
+      "index": 41,
+      "channel": "basement_detachment_flexure",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.534202,
+      "symmetric_auc_canary": 0.534202,
+      "passed_le_090": true
+    },
+    {
+      "index": 42,
+      "channel": "transtensional_slip_dilation",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.541544,
+      "symmetric_auc_canary": 0.541544,
+      "passed_le_090": true
+    },
+    {
+      "index": 43,
+      "channel": "hydrothermal_alteration_trough",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.470707,
+      "symmetric_auc_canary": 0.529293,
+      "passed_le_090": true
+    },
+    {
+      "index": 44,
+      "channel": "claycap_lateral_boundary",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.501673,
+      "symmetric_auc_canary": 0.501673,
+      "passed_le_090": true
+    },
+    {
+      "index": 45,
+      "channel": "ingenious_thermal_upflow_aniso",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.507381,
+      "symmetric_auc_canary": 0.507381,
+      "passed_le_090": true
+    },
+    {
+      "index": 46,
+      "channel": "lidar_scarp_polarity_asymmetry",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.552079,
+      "symmetric_auc_canary": 0.552079,
+      "passed_le_090": true
+    },
+    {
+      "index": 47,
+      "channel": "piedmont_breakline_deconf",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.522726,
+      "symmetric_auc_canary": 0.522726,
+      "passed_le_090": true
+    },
+    {
+      "index": 48,
+      "channel": "steerable_multiscale_aniso_2km",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.541924,
+      "symmetric_auc_canary": 0.541924,
+      "passed_le_090": true
+    },
+    {
+      "index": 49,
+      "channel": "mimic_veto_clean_gate",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.517052,
+      "symmetric_auc_canary": 0.517052,
+      "passed_le_090": true
+    },
+    {
+      "index": 50,
+      "channel": "lwst_unsupervised_conduit_index",
+      "group": "lwst_geoconduit_16",
+      "holdout_auc": 0.551128,
+      "symmetric_auc_canary": 0.551128,
+      "passed_le_090": true
+    }
+  ]
+}

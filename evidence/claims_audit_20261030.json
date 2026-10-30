@@ -1,0 +1,722 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30T03:54:45Z",
+ "purpose": "reconcile prose numbers against evidence receipts (anti-hallucination pass)",
+ "claims": 55,
+ "reconciled": 55,
+ "mismatches": [],
+ "rows": [
+  {
+   "id": "shipped_sha256_is_the_same_file_everywhere",
+   "receipt_value": "9a380fb58ce7125815fb4c02a13bbee0b515bca52314ffbc1a5f66f6785354c6",
+   "expected": "9a380fb58ce7125815fb4c02a13bbee0b515bca52314ffbc1a5f66f6785354c6",
+   "note": "card, README and audit agree on the digest",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "shipped_bytes",
+   "receipt_value": 49162447,
+   "expected": 49162447,
+   "note": "the .tif is uncompressed, like the accepted champion",
+   "value_matches": true,
+   "rendered_in": [
+    "n/a"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "positive_cells",
+   "receipt_value": 20416,
+   "expected": 20416,
+   "note": "dot count quoted in prose",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "emitted_value",
+   "receipt_value": 1.0,
+   "expected": 1.0,
+   "note": "binary surface is optimal under a max",
+   "value_matches": true,
+   "rendered_in": [
+    "n/a"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "outside_mode_is_zeros",
+   "receipt_value": "zeros",
+   "expected": "zeros",
+   "note": "portal-safe convention (IR-SASS3-75)",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/research/hypotheses-ranked-20261030.md",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "nodata_tag",
+   "receipt_value": null,
+   "expected": null,
+   "note": "no nodata tag: nothing escapes the range check",
+   "value_matches": true,
+   "rendered_in": [
+    "n/a"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "crs_and_shape",
+   "receipt_value": "EPSG:32611 3292x3730",
+   "expected": "EPSG:32611 3292x3730",
+   "note": "grid facts",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "transform",
+   "receipt_value": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "expected": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "note": "grid facts",
+   "value_matches": true,
+   "rendered_in": [
+    "n/a"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "duplicate_test_pool_size",
+   "receipt_value": 122,
+   "expected": 122,
+   "note": "the pool the uniqueness verdict rests on",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "packager_pool_sweep",
+   "receipt_value": 126,
+   "expected": 126,
+   "note": "the pool the packager XOR sweep covers",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "buffer_measurement_pool",
+   "receipt_value": 130,
+   "expected": 130,
+   "note": "the pool the infeasibility proof covers",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "identical_sibling_files",
+   "receipt_value": [],
+   "expected": [],
+   "note": "0 duplicates",
+   "value_matches": true,
+   "rendered_in": [
+    "n/a"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "worst_exact_cell_share",
+   "receipt_value": 0.3138,
+   "expected": 0.3138,
+   "note": "uniqueness margin quoted in prose",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "min_xor_cells",
+   "receipt_value": 48204,
+   "expected": 48204,
+   "note": "falsifiable duplicate test",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "worst_3px_overlap",
+   "receipt_value": 1.0,
+   "expected": 1.0,
+   "note": "literal lane number, reported not hidden",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "lattice_3px_overlap",
+   "receipt_value": 0.998775,
+   "expected": 0.998775,
+   "note": "overlap against the 13GEMSDOE calibration lattice",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "lane_gate_disclosed_as_infeasible",
+   "receipt_value": "NOT",
+   "expected": "NOT",
+   "note": "IR-SASS3-76",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "pool_buffer_coverage",
+   "receipt_value": 1.0,
+   "expected": 1.0,
+   "note": "the 3-px rule leaves two usable cells",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "cells_left_for_a_lane_compliant_raster",
+   "receipt_value": 2,
+   "expected": 2,
+   "note": "IR-SASS3-76",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "strict_compliance_ceiling",
+   "receipt_value": 7.408e-08,
+   "expected": 7.408e-08,
+   "note": "upper bound over strictly compliant rasters",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "pool_union_dots",
+   "receipt_value": 2565397,
+   "expected": 2565397,
+   "note": "pool size in the lane report",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "proj_S0_candidate",
+   "receipt_value": 0.401,
+   "expected": 0.401,
+   "note": "lane report table + card bracket",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "proj_S3_candidate",
+   "receipt_value": 0.2346,
+   "expected": 0.2346,
+   "note": "lane report table",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "proj_local_candidate",
+   "receipt_value": 0.1614,
+   "expected": 0.1614,
+   "note": "third density",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "proj_S0_champion",
+   "receipt_value": 0.286,
+   "expected": 0.286,
+   "note": "control",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "proj_S3_champion",
+   "receipt_value": 0.2843,
+   "expected": 0.2843,
+   "note": "control",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "proj_local_champion",
+   "receipt_value": 0.2664,
+   "expected": 0.2664,
+   "note": "control",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "paired_delta_S0",
+   "receipt_value": 0.115,
+   "expected": 0.115,
+   "note": "README bracket",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "index.html",
+    "docs/index.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "paired_delta_S3",
+   "receipt_value": -0.0496,
+   "expected": -0.0496,
+   "note": "README bracket",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "paired_delta_local",
+   "receipt_value": -0.1051,
+   "expected": -0.1051,
+   "note": "README bracket",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "delta_worst_unpaired",
+   "receipt_value": -0.1246,
+   "expected": -0.1246,
+   "note": "the promotion rule outcome",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "delta_best",
+   "receipt_value": 0.1346,
+   "expected": 0.1346,
+   "note": "bracket sentence",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "densities_tested",
+   "receipt_value": 3,
+   "expected": 3,
+   "note": "not a single-density comparison",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/research/hypotheses-ranked-20261030.md",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "promotion_rule_passed",
+   "receipt_value": false,
+   "expected": false,
+   "note": "the verdict",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/research/hypotheses-ranked-20261030.md",
+    "index.html",
+    "docs/index.html",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "ok_to_download",
+   "receipt_value": true,
+   "expected": true,
+   "note": "download flag in the README table",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "ok_to_submit",
+   "receipt_value": false,
+   "expected": false,
+   "note": "submission flag in the README table",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "E1_S0",
+   "receipt_value": 0.3983,
+   "expected": 0.3983,
+   "note": "E1",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "E1_worst",
+   "receipt_value": -0.1265,
+   "expected": -0.1265,
+   "note": "E1",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "E2_worst",
+   "receipt_value": -0.1204,
+   "expected": -0.1204,
+   "note": "E2",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "E4_dots",
+   "receipt_value": 17489,
+   "expected": 17489,
+   "note": "E4",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "E4_worst",
+   "receipt_value": -0.1141,
+   "expected": -0.1141,
+   "note": "E4",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "E5_worst",
+   "receipt_value": -0.0195,
+   "expected": -0.0195,
+   "note": "E5",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/research/hypotheses-ranked-20261030.md",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "E5_dots",
+   "receipt_value": 56295,
+   "expected": 56295,
+   "note": "E5",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/research/hypotheses-ranked-20261030.md",
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "footprint_px",
+   "receipt_value": 5167373,
+   "expected": 5167373,
+   "note": "scored domain",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "outside_px",
+   "receipt_value": 7111787,
+   "expected": 7111787,
+   "note": "outside the bounds",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "catalogue_px",
+   "receipt_value": 60988,
+   "expected": 60988,
+   "note": "labels.tif positives",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "active_px",
+   "receipt_value": 5106385,
+   "expected": 5106385,
+   "note": "scored minus catalogue",
+   "value_matches": true,
+   "rendered_in": [
+    "README.md",
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "lli_mae",
+   "receipt_value": 0.0192,
+   "expected": 0.0192,
+   "note": "instrument accuracy",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "index.html",
+    "docs/index.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "lli_spearman",
+   "receipt_value": 0.94408,
+   "expected": 0.94408,
+   "note": "instrument rank agreement",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "lli_refit_loo",
+   "receipt_value": 0.02023,
+   "expected": 0.02023,
+   "note": "cross-validation claim",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "lli_refit_lso",
+   "receipt_value": 0.02164,
+   "expected": 0.02164,
+   "note": "cross-validation claim",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "lli_upstream_loo",
+   "receipt_value": 0.022069,
+   "expected": 0.022069,
+   "note": "published fit comparison",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "lli_g_px",
+   "receipt_value": 16948.2757,
+   "expected": 16948.2757,
+   "note": "spec reproduction",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/executive-summary.html"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "local_refit_pool_n",
+   "receipt_value": 33,
+   "expected": 33,
+   "note": "the third density's pool",
+   "value_matches": true,
+   "rendered_in": [
+    "n/a"
+   ],
+   "prose_ok": true
+  },
+  {
+   "id": "local_refit_loo_mae",
+   "receipt_value": 0.0212,
+   "expected": 0.0212,
+   "note": "\u00b10.02 error claim",
+   "value_matches": true,
+   "rendered_in": [
+    "docs/research/lane-H-SASS3-I-20261030.md",
+    "docs/research/hypotheses-ranked-20261030.md"
+   ],
+   "prose_ok": true
+  }
+ ],
+ "external_claims_not_locally_verifiable": [
+  {
+   "claim": "leaderboard #1 0.4544 (xiaofanhu), #2 0.3916, #5 0.3642, fetched 2026-10-30",
+   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+   "class": "LEADERBOARD-PAGE (public split); fetched, not an organizer receipt"
+  },
+  {
+   "claim": "live scores of the nine focus-site files (0.2449-0.2778)",
+   "source": "reg32/docs/score-ledger.csv and site mirrors",
+   "class": "OWNER-REPORT; not organizer receipts"
+  }
+ ]
+}

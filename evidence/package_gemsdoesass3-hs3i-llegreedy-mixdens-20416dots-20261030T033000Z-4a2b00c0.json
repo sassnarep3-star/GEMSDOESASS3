@@ -1,0 +1,64 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30T03:48:59Z",
+ "submission_name": "gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0",
+ "file": "docs/downloads/gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0.tif",
+ "zip": "gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0.tif.zip",
+ "sha256_tif": "9a380fb58ce7125815fb4c02a13bbee0b515bca52314ffbc1a5f66f6785354c6",
+ "sha256_zip": "788612f6f5000b3619665cb61b0312aed4ef8171ab560188f6b905460dfde2af",
+ "bytes": 49162447,
+ "mask_sha256": "4a2b00c0621c3897937522a237ac93c4951a6b8b13c3062ebad36b9241e33696",
+ "positive_cells": 20416,
+ "emitted_value": 1.0,
+ "outside_mode": "zeros (portal-safe; whole array finite and in [0,1])",
+ "grid": {
+  "width": 3292,
+  "height": 3730,
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "pixel_size_m": 100.0,
+  "dtype": "float32",
+  "bands": 1,
+  "nodata": null
+ },
+ "calibration_lattice_3px_overlap": 0.9987754702194357,
+ "worst_sibling_exact_cell_share": {
+  "frac": 0.31377351097178685,
+  "file": "GEMSDOE22__h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif"
+ },
+ "identical_sibling_files": [],
+ "pool_size_checked": 126,
+ "projections": {
+  "candidate": {
+   "published_S0": 0.40102205904210453,
+   "published_S3": 0.2346081157709498,
+   "local_convex": 0.1613832846859984
+  },
+  "champion_control": {
+   "published_S0": 0.2859769304489411,
+   "published_S3": 0.28425492877968683,
+   "local_convex": 0.2664481530200482
+  },
+  "evidence_class": "PROJECTION (LLI-v1), never a score; the champion control's 0.2778 is OWNER-REPORT; the instrument's leave-one-out error on live scores is MAE 0.019-0.022"
+ },
+ "gates": {
+  "G1_whole_array_finite_in_0_1": true,
+  "G2_grid_matches_organizer_sample": true,
+  "G3_no_positive_mass_outside_footprint": true,
+  "G4_no_duplicate_of_any_sibling_raster": true,
+  "G5_lane_3px_overlap_under_70pct": false,
+  "G6_projection_beats_champion_under_every_density": false
+ },
+ "ok_to_download": true,
+ "ok_to_submit": false,
+ "holdout_status_used": "NOT RUN",
+ "slot_recommended": false,
+ "note": "ok_to_download true means the file is portal-valid and not a duplicate. ok_to_submit additionally requires beating the champion's projection under every truth density. The catalogue holdout was NOT run (training_features.tif is login-walled)."
+}

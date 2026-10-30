@@ -9,7 +9,8 @@ Checks the requirements stated in the official problem description
   * single layer, dtype float32
   * values in [0, 1] (the source of the "Predicted values must be in range [0, 1]" error)
   * no NaN / Inf anywhere in the raster
-  * nodata handling is reported explicitly (official text: data outside bounds is null or nan)
+  * no nodata tag, and every cell outside the scored footprint is 0.0 (the portal-safe convention;
+    page 967's "null or nan" wording describes the sample, not the upload predicate - see IR-SASS3-75)
 
 Exit code 0 only when every hard check passes. Writes a JSON receipt when --out is given.
 Runs the outside-bounds check against sample_submission.tif when it is present; without it the check is PENDING and the
@@ -26,20 +27,34 @@ from pathlib import Path
 import numpy as np
 import rasterio
 
+ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_CRS = "EPSG:32611"
 EXPECTED_SHAPE = (3730, 3292)
 EXPECTED_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
 
 
 def _footprint(shape):
-    """Boolean mask of finite cells of sample_submission.tif, or None if absent or of the wrong shape."""
-    for cand in (Path(".cache/gems_data/sample_submission.tif"), Path("/tmp/gems_data/sample_submission.tif")):
-        if cand.exists():
+    """Boolean mask of the scored region, or None if it cannot be established.
+
+    Search order: the SHA-pinned organizer sample in `data/official/` (this repo), then the workspace caches,
+    then the packed bitmap `evidence/organizer_footprint_mask.npz` exported from the sample by
+    scripts/export_footprint_mask.py. Failing closed on all three keeps a missing footprint from passing.
+    """
+    for cand in (ROOT / "data/official/sample_submission.tif", Path(".cache/gems_data/sample_submission.tif"),
+                 Path("/tmp/gems_data/sample_submission.tif")):
+        if cand.is_file():
             with rasterio.open(cand) as src:
                 a = src.read(1)
             if a.shape != tuple(shape):
                 return None
             return np.isfinite(a)
+    packed = ROOT / "evidence/organizer_footprint_mask.npz"
+    if packed.is_file():
+        z = np.load(packed)
+        mshape = tuple(int(x) for x in z["shape"])
+        if mshape != tuple(shape):
+            return None
+        return np.unpackbits(z["packed"])[: mshape[0] * mshape[1]].reshape(mshape).astype(bool)
     return None
 
 
@@ -62,20 +77,28 @@ def validate(path: Path) -> dict:
     checks["values_in_0_1"] = bool(vals.size > 0 and vals.min() >= 0.0 and vals.max() <= 1.0)
     if not checks["no_nan_or_inf"]:
         notes.append(f"{int((~finite).sum())} non-finite cells")
+    checks["nodata_tag_absent"] = nodata is None
     if nodata is not None:
-        notes.append(f"nodata declared = {nodata}; official text asks outside-bounds cells to be null or NaN")
-    # Competition text (page 967): "data outside the bounds is null or nan". Non-zero finite cells outside the
-    # organizer footprint fail the rule. Zeros outside are the convention of the owner-scored files (see IR-SASS3-27).
+        notes.append(f"nodata declared = {nodata}; a nodata/NaN tag removes cells from the [0,1] range check "
+                     f"and is what the portal rejects (IR-SASS3-75)")
+    # Portal-safe outside-bounds convention (IR-SASS3-75): every cell outside the scored footprint must be 0.0,
+    # and the whole array must stay finite and in [0,1] because the portal range check runs over all cells.
+    # page 967's sentence "data outside the bounds is null or nan" describes the sample submission, not the
+    # upload predicate: NaN is not in [0,1], so NaN-outside files are rejected here on purpose.
     # Fail closed: without the footprint this check is PENDING and the validator does not pass.
     footprint = _footprint(arr.shape)
     if footprint is None:
-        checks["outside_bounds_null_or_zero"] = False
-        notes.append("PENDING_DATA: outside-bounds check NOT run; sample_submission.tif footprint is not in this workspace (login-walled). Fails closed.")
+        checks["outside_bounds_are_zero"] = False
+        notes.append("PENDING_DATA: outside-bounds check NOT run; no sample_submission.tif or packed footprint "
+                     "mask in this checkout. Fails closed.")
     else:
         outside = arr[~footprint]
-        n_nonzero_out = int(np.count_nonzero(np.isfinite(outside) & (outside != 0)))
-        checks["outside_bounds_null_or_zero"] = n_nonzero_out == 0
-        notes.append(f"outside-bounds check: {n_nonzero_out} non-zero finite cells outside the footprint")
+        n_nonzero_out = int(np.count_nonzero(outside != 0.0))      # NaN != 0.0, so NaN-outside fails here too
+        n_pos_in = int(np.count_nonzero(arr[footprint] > 0.0))
+        checks["outside_bounds_are_zero"] = n_nonzero_out == 0
+        notes.append(f"outside-bounds check: {n_nonzero_out} non-zero cells outside the footprint "
+                     f"(NaN counts as non-zero); {n_pos_in:,} positive cells inside; footprint source "
+                     f"{'data/official or cache' if (ROOT / 'data/official/sample_submission.tif').is_file() else 'packed mask'}")
     ok = all(checks.values())
     return {
         "file": path.name,

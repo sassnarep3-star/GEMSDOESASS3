@@ -1,0 +1,89 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>How to submit</title><style>
+:root{--bg:#0d1117;--card:#161b22;--tx:#e6edf3;--mut:#8b949e;--ok:#2ea043;--no:#db61a2;--warn:#d29922;--acc:#58a6ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:28px 20px 80px}h1{font-size:28px;margin:.2em 0 .4em}h2{font-size:21px;margin:1.7em 0 .5em;border-bottom:1px solid #21262d;padding-bottom:6px}
+h3{font-size:17px;margin:1.3em 0 .4em}a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+.card{background:var(--card);border:1px solid #21262d;border-radius:10px;padding:16px 18px;margin:14px 0}
+.k{color:var(--mut);font-size:12.5px;letter-spacing:.03em;text-transform:uppercase}
+.big{font-size:26px;font-weight:700}.btn{display:inline-block;background:var(--ok);color:#fff;padding:11px 16px;border-radius:8px;font-weight:650;margin:6px 8px 6px 0}
+.btn.sec{background:#21262d;color:var(--tx)}.btn.no{background:#420c33}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px}th,td{border:1px solid #21262d;padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#1c2128}code{background:#1c2128;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.ok{color:var(--ok);font-weight:650}.no{color:var(--no);font-weight:650}.warn{color:var(--warn);font-weight:650}
+ul{margin:.4em 0 .4em 1.2em}li{margin:.25em 0}.small{font-size:12.5px;color:var(--mut)}
+.pill{display:inline-block;border:1px solid #21262d;border-radius:999px;padding:1px 9px;font-size:12px;margin-right:6px}
+nav{position:sticky;top:0;background:#0d1117ee;border-bottom:1px solid #21262d;padding:10px 16px;margin-bottom:8px;z-index:9}
+nav a{margin-right:14px;font-size:13.5px}
+</style>
+</head><body><main>
+<nav><a href="docs/index.html">Start here</a><a href="docs/executive-summary.html">Executive summary</a>
+<a href="docs/submission-guide.html">How to submit</a></nav>
+<h1>Exactly how to submit into the GEMS Prize challenge</h1>
+<div class=card><p style="font-size:17px"><span class="ok">OK to download and OK to upload — portal-valid format, not a duplicate</span> <span class="no">NOT OK to submit as a promoted entry — the projection does not beat the champion under every truth density and the holdout gate is unrunnable</span></p>
+<p class=small><b>How to read the numbers on this page.</b> <span class=pill>OWNER-REPORT</span>
+= a live score copied from a submission page (the champion 0.2778 and the focus-9 column).
+<span class=pill>PROJECTION</span> = output of the LLI-v1 score model (calibrated on 34 hash-verified live
+rasters, LOO MAE 0.019-0.022), never a score: our candidate projects
+0.1614-0.4010 against the champion control's 0.2664-0.2860 under the same
+instrument, which is a screen for spending a slot, not a result. The spatially-blocked holdout that would be
+required to call it an improvement is NOT RUN (IR-SASS3-74). The lattice exemption is not a path to clearance.</p>
+<p class=small>Gate flags on this file: <code>ok_to_download=true</code>,
+<code>ok_to_submit=false</code>. NOT CLEARED FOR SUBMISSION — the promotion gates are not met; the proposed lattice exemption is not a path to clearance.</p>
+<p class=small>Read this before you upload: gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0 is <b>OK to download; NOT OK to submit</b>. "OK to download" means the bytes,
+the grid and the value range satisfy what the portal checks and that the file is not a copy of any sibling
+submission. "NOT OK to submit" is a <i>promotion</i> verdict, not a format failure: this repository will not
+call a file an improvement until it beats the champion under every truth density we can fit and clears a
+spatially-blocked holdout. Uploading it anyway is a legitimate <b>experiment</b> (3 slots per week, rules §3.2)
+whose product is a measurement, not a podium — and that measurement is the only way to settle which truth
+density is right.</p><ol>
+<li>Download <code>gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0.tif</code> (or the .zip) from the <a href="docs/index.html">start page</a>.
+Both are accepted: the portal takes “a single-band GeoTIFF (.tif), or a .zip containing a single GeoTIFF”.
+The .tif is 49.2 MB because it is uncompressed and stripped — deliberately, it is the byte
+profile of the accepted 0.2778 file; the .zip is the identical bytes deflated (100 KB), and the inner
+file's SHA-256 is in the receipt.</li>
+<li>Check the receipt beside it: <code>gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0-audit.json</code> — SHA-256, gate list, dot count. If
+<code>ok_to_download</code> is not <code>true</code>, stop. Locally,
+<code>python scripts/verify_all_gates.py --expect-download-ok</code> must exit 0.</li>
+<li>Open the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">submission page</a> →
+<i>New submission</i> → attach the file → add the note below → submit.</li>
+<li>Note to paste (≤140 chars, unique to this file): <code>LLI-lambda submodular max-credit emission, 20,416 dots in the scarp-foot halo; XOR-unique; projection 0.161-0.401; not promoted</code></li>
+<li>Name/label of the submission: <code>gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0</code>. Weekly cap is 3 submissions (rules §3.2); record the
+submission in <code>docs/data/</code> so the slot ledger stays honest.</li>
+</ol></div>
+
+<h2>What the portal checks, and why the previous download failed</h2>
+<div class=card>
+<p>Submission format, <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official problem page</a>:
+single layer, float32, values in [0, 1], EPSG:32611, 100 m cells, same bounds as the training data, and
+“data outside the bounds is null or nan”.</p>
+<p>The file this site previously offered wrote <b>NaN</b> outside the footprint (the literal reading of that
+sentence). The portal's range check rejected it with <i>“Predicted values must be in range [0, 1]”</i> — NaN is
+not in [0, 1]. Two independent pieces of evidence say 0.0 is what the organizers expect and accept:</p>
+<ul><li>the organizer reference solution initialises its output map with <code>np.zeros</code> and writes the
+result without any nodata tag
+(<a href="https://github.com/drivendataorg/gems-prize-reference-solution">repo</a>, notebook cells
+<code>y_out = np.zeros(y_patches.shape)</code> → <code>predicted_faults_example.tif</code>);</li>
+<li>the sibling GEMSDOE32 validator records <code>outside_mode:"zeros" → portal_compliant_range:true</code> and
+<code>outside_mode:"nan" → false</code> for the same dot field
+(<a href="https://github.com/buffedlizard55-lab/GEMSDOE32/blob/main/docs/research/validation_summary.json">receipt</a>).</li></ul>
+<p>Our file therefore: GTiff, 1 band, 3292×3730, float32, EPSG:32611, transform
+(100, 0, 243350, 0, −100, 4508550), no nodata tag, no NaN anywhere, values exactly {0, 1}, 0 outside the
+scored footprint. That profile is copied from the file the portal already accepted and scored 0.2778.</p>
+</div>
+
+<h2>What “validated for submission” means here (no human inspector)</h2>
+<div class=card><table>
+<tr><th>gate</th><th>check</th><th>how it is measured</th></tr>
+<tr><td>G1 range</td><td>whole array finite, in [0,1]</td><td><code>scripts/validate_submission_tif.py</code> + packager</td></tr>
+<tr><td>G2 grid</td><td>shape/CRS/transform/dtype/bands == organizer sample</td><td>rasterio metadata vs <code>sample_submission.tif</code></td></tr>
+<tr><td>G3 bounds</td><td>no positive mass outside the footprint</td><td>footprint = finite cells of the sample</td></tr>
+<tr><td>G4 uniqueness</td><td>no identical mask / no ≥95% subsumption among all mirrored sibling rasters</td><td>XOR of positive-cell masks, per file</td></tr>
+<tr><td>G5 lane</td><td>3-px overlap vs every sibling + calibration lattice (reported)</td><td>cell-hash neighbour test</td></tr>
+<tr><td>G6 projection</td><td>beats the champion under <i>every</i> truth density</td><td><code>scripts/lli_validate_candidate.py</code></td></tr>
+</table>
+<p class=small>Run everything with <code>python scripts/verify_all_gates.py</code>; it exits 0 only when the
+recorded gates and the run card agree. The catalogue holdout is a separate gate and is
+NOT RUN — blocked on the login-walled feature stack.</p>
+</div>
+</main></body></html>

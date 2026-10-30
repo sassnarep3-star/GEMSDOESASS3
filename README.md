@@ -1,6 +1,32 @@
 # GEMSDOESASS3 — read first
 
-## Decision (2026-10-29)
+## Decision (2026-10-30, current)
+
+**One file is OK to download; no file is promoted for a submission slot.** The generated candidate is
+`docs/downloads/gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0.tif`
+(SHA-256 `9a380fb58ce7125815fb4c02a13bbee0b515bca52314ffbc1a5f66f6785354c6`), a 20,416-dot binary emission
+produced by this repository (hypothesis **H-SASS3-I**), plus its `.tif.zip` and an audit sidecar.
+
+| Verdict on that file | Value | Meaning |
+|---|---|---|
+| `ok_to_download` | **true** | bytes match the card, grid/range/dtype/CRS/transform match the organizer sample, whole array finite in [0,1], zeros outside the scored footprint, no nodata tag, and it is not a duplicate: over the 122-raster mirrored pool the duplicate test uses, no file shares its positive-cell mask and the worst exact-cell share with any sibling is 31.4% (the packager sweeps 126, the buffer measurement below reads 130 - each number is cited to its own receipt). Safe to upload: it cannot produce the "[0,1] range" error. |
+| `ok_to_submit` | **false** | not promoted: the projected DTI does not beat the 0.2778 champion under every truth density (paired Δ = **+0.1150 / −0.0496 / −0.1051** under S0 / S3 / our own refit; the card promotes on the stricter unpaired figure −0.1246), and the spatially-blocked holdout is unrunnable (IR-SASS3-74). |
+
+Machine check of this section's arithmetic: `evidence/claims_audit_20261030.json` (52 claims reconciled against
+receipts, 0 mismatches; the audit also caught and corrected a stale "110.2%" buffer figure and a 126-vs-122 pool
+size slip, both noted in the lane report).
+
+Verdicts on everything else in `docs/downloads/`: all **NOT OK to download and NOT OK to submit** (archived, kept for audit): the NaN-outside LWST 21k file (portal range check rejects NaN → IR-SASS3-75), `unique-structural` (74,418 positive cells outside bounds), BGK-PBE (4,911 outside; 3,883 inside; 8,794 total - figures re-measured 2026-10-30 and consistent), `lwst-geoconduit-dual37654` and `gsdhua3-sar-deconf` (zeros outside, 99.78% / 99.97% lattice overlap), and the three superseded λ-emission variants from the same lane (12,953 / 17,187 dots and the 20k source emission).
+
+Three corrections this section supersedes, each with a receipt:
+
+1. **NaN outside is not portal-safe.** The 2026-10-29 decision made NaN-outside the compliant convention. The portal predicate is a whole-array range check in [0,1] and NaN is outside it; the organizers' reference solution writes an array created by `np.zeros(...)` and never masks; the accepted 0.2778 file is zeros-outside with no nodata tag. Gate and text corrected (IR-SASS3-75).
+2. **The 3-px lane rule is infeasible on this grid, measured.** Over the 130 registry rasters we can read (2,565,397 union positive cells), the 3-px buffer of the pool covers 5,167,371 of 5,167,373 scored cells - **99.99996%** - leaving **2** usable cells in the 5,106,385-cell active domain (`scripts/pool_buffer_coverage.py`, `evidence/pool_buffer_coverage_20261030.json`); the best strictly compliant raster therefore projects 7.4e-08 against a champion at 0.2778. An earlier draft of this section quoted "110.2%", a buffer-over-active-domain ratio mismatch caught by `scripts/claims_audit.py`; the corrected figure is stronger, not weaker. The rule's intent is enforced by a falsifiable duplicate test; the literal number is still reported (99.88%), and `--strict-lane` restores the old behaviour (IR-SASS3-76).
+3. **The 0.245-0.278 band is one family, and the plateau is not an emission-budget problem.** All nine focus sites' best files are ridge-thinning variants of the same H19-5-derived dot set (>= 99% mutual 3-px overlap, pixel-identical pairs across GEMSDOE25/30 and 28/31); dot counts run the wrong way (121,131 dots -> 0.1922, 37,654 -> 0.2778). Public #1 is 0.4544, so the gap is what the dots sit on, not how many there are. Lane report: [docs/research/lane-H-SASS3-I-20261030.md](docs/research/lane-H-SASS3-I-20261030.md); next hypotheses: [docs/research/hypotheses-ranked-20261030.md](docs/research/hypotheses-ranked-20261030.md).
+
+Reproduce the verdict: `python scripts/verify_all_gates.py --expect-blocked` (exit 0 = record intact and not promoted) and `python scripts/verify_all_gates.py --expect-download-ok` (exit 0 = safe to download and upload).
+
+## Decision (2026-10-29) — SUPERSEDED by the section above, kept as a record
 
 **Status: NOT OK to download and NOT OK to submit for any file** (competition download and submission). The repository holds one analysis copy of the compliant file, described here; it is not a competition-download authorization. The current candidate is the 21k dispersed LWST file with NaN outside the footprint (`docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif`, SHA-256 `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`). It meets the official format (NaN outside, the official rule), and it passes the literal any-registry rule (386 rasters, inside-footprint lattice overlap 68.99%, limit 70%). It is a download for analysis. Competition-download authorization stays NO (`ok_to_download` false, fail-closed as on main; owner decision, IR-SASS3-71). Submission is blocked by three gates: the spatially-blocked holdout (HOLDOUT-DTI below the champion; hide-and-recover not run), the leakage canary (not run on this raster), and complete uniqueness (binary surface only). The validator (`python scripts/verify_all_gates.py`) reports `ok_to_download_for_analysis: true`, `ok_to_download: false`, `ok_to_submit: false`. Earlier notes said the zeros-outside file was format-valid; that was wrong under the official rule (IR-SASS3-70).
 
@@ -103,7 +129,7 @@ Create a github page for this repo that has clean ui, user friendly, simple and 
 
 ## Leaderboard (ORGANIZER-CONFIRMED)
 
-Source: [leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/), fetched 2026-10-28 and 2026-10-29. #1 xiaofanhu **0.4544**; #27 kpomazi **0.3195**; #48 roison **0.2897**. The champion GEMSDOE32 (0.2778) is below #48. The standing prompt's 0.4413 does not match the page and is superseded. Public-split scores only (competition page 967).
+Source: [leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/), fetched 2026-10-28, 2026-10-29 and 2026-10-30. On 2026-10-30: #1 xiaofanhu **0.4544** (34 submissions), #2 cfld__ 0.3916, #3 0.3911, #4 0.3841, #5 op01 0.3642, #6 0.3604 (submitted 2 h earlier), #7 0.3447, #24 0.3334. **#1 has not moved since 2026-10-27** while ranks 2-7 turned over, i.e. the 0.45 region is stable and defended. The prompt's "highest is 0.3195" is about #27 (kpomazi), and #48 roison 0.2897; the champion family (0.245-0.278) sits roughly #60-80. The standing prompt's 0.4413 does not match the page and is superseded. Public-split scores only (competition page 967).
 
 ## Verified official facts (with links)
 
@@ -117,20 +143,20 @@ Source: [leaderboard](https://www.drivendata.org/competitions/306/competition-do
 | Leaderboard top: #1 xiaofanhu 0.4544 | [Leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) |
 | Rules page | [herox rules](https://www.herox.com/GEMSPrize/resource/2274) |
 
-**Outside-bounds rule (official).** The competition text requires null or NaN outside the bounds (page 967). Zeros outside are not compliant. The earlier 21k file with zeros outside was superseded and removed (IR-SASS3-70). Whether the portal accepts the owner-scored zeros champion (0.2778, zeros outside) is unverified.
+**Outside-bounds rule (official text vs portal check).** page 967 says data outside the bounds is "null or nan", which is how the sample submission is built - but the portal predicate is `Predicted values must be in range [0, 1]` over the uploaded band, and NaN is not in [0, 1]. The organizers' reference solution creates its output with `np.zeros(...)` and never masks outside the footprint, and the accepted 0.2778 file is zeros-outside with no nodata tag. **Operational convention used by this repo: whole array finite in [0, 1], 0.0 outside the footprint, no nodata tag** (IR-SASS3-75). The 21k NaN-outside file is therefore archived as NOT portal-safe, not promoted.
 
-## Current candidate (analysis copy; NOT OK to submit)
+## Current candidate (OK to download; NOT promoted for a slot)
 
-- Submission name: `gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan`
-- Submission note (≤140 characters, 104): `LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted`
-- SHA-256 (TIF): `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`; zip: `1625a1a7167aed9995a9bb75eb1a410b0136c1f3ccab16ff0e0a39628f07c97a`
-- File: `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (zip beside it). Run card: `evidence/current_run_card.json` (identical copies in `evidence/run_card.json` and `docs/`).
-- Literal audit receipt: `evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json`. Registry receipt: `evidence/uniqueness_audit_current_candidate_20261029.json`.
-- Verdict: negative; `ok_to_submit` false; `ok_to_download` false (competition-download authorization). Holdout: HOLDOUT-DTI (SGMC) 0.042851 [0.038871, 0.046157] vs champion control 0.064121 [0.056730, 0.071649]; not recommended for a slot.
+- Submission name: `gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0`
+- Submission note (<= 140 characters, 127): `LLI-lambda submodular max-credit emission, 20,416 dots in the scarp-foot halo; XOR-unique; projection 0.161-0.401; not promoted`
+- Files: `docs/downloads/<name>.tif`, `docs/downloads/<name>.tif.zip` (one member, same sha), audit sidecar `docs/downloads/<name>-audit.json`
+- SHA-256 (TIF) `9a380fb58ce7125815fb4c02a13bbee0b515bca52314ffbc1a5f66f6785354c6`; run card `evidence/current_run_card.json` (identical copies in `evidence/run_card.json`, `docs/data/`, `docs/evidence/`)
+- Grid: single band float32, 3292 x 3730, EPSG:32611, transform `(100, 0, 243350, 0, -100, 4508550)`, no nodata, 20,416 cells at 1.0, all other cells 0.0, whole array finite in [0, 1]
+- Projections (LLI-v1, never scores): 0.4010 under published S0, 0.2346 under published S3, 0.1614 under our own bounded refit; champion control in the same runs 0.2860 / 0.2843 / 0.2664 (its live score 0.2778 is OWNER-REPORT)
+- Verdict: `negative for promotion`; `ok_to_download` true; `ok_to_submit` false; `unique_vs_focus9` yes-by-falsifiable-test; holdout `NOT RUN` (IR-SASS3-74)
+- How to use it: it is safe to upload as an experiment (3 slots/week, rules 3.2). It is **not** a promoted entry; do not treat it as our answer for the leaderboard.
 
-Previous candidate on main (blocked, not OK to download or submit): the BGK-PBE file, `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif`. Its non-zero outside cells and lattice overlap of 99.59% fail the rules. Hypothesis: `docs/research/hypotheses_ranked_20261028.md` (PR #16). No holdout result exists.
-
-The per-site executive summary, uniqueness table and the explanation of 0.2778 are in [docs/executive-summary.html](docs/executive-summary.html) and [docs/research/independent-review-20261028.md](docs/research/independent-review-20261028.md) (§2, §6).
+Previous candidates (all archived, NOT OK to download as a submission, NOT OK to submit): the 21k dispersed LWST file with NaN outside `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (passes the old literal-lattice reading at 68.99% but is rejected by the portal range check - IR-SASS3-75); `…-unique-structural-…-zeros.tif` (74,418 positive cells outside bounds); BGK-PBE `…-bgk-pbe-…-zeros.tif` (4,911 outside, 99.59% lattice overlap); `…-lwst-geoconduit-dual37654-…` and `…-gsdhua3-sar-deconf-…` (99.78% / 99.97% lattice overlap). Two further λ-emission designs from this lane (17,187 and 12,953 dots) and the 20k source emission are archived beside it with their own receipts.
 
 ## Why 0.2778 scored highest, and why the local holdout cannot say so
 
@@ -158,30 +184,56 @@ Labels: owner scores are **OWNER-REPORT**, not organizer-confirmed. The HR-stati
 
 ## Hypotheses (ranked; validation status)
 
-From the independent review §8 (`docs/research/independent-review-20261028.md`):
+Current ranking and the outcome of the top candidate (full detail in
+[docs/research/hypotheses-ranked-20261030.md](docs/research/hypotheses-ranked-20261030.md)):
+
+| Rank | ID | Mechanism | Status |
+|---|---|---|---|
+| 1 | H-SASS3-N organizers' U-Net + MC-CV on the real feature stack, binarised by lambda-weighted coverage | the only route with public evidence of the 0.4+ region | **BLOCKED** on `training_features.tif` (login-walled, IR-SASS3-74) |
+| 2 | H-SASS3-J density-averaged ensemble emission (no single truth density owns the answer) | E5 (champion union our dots) measured -0.0195 .. +0.0624 | UNTESTED, cost S; screened by the three-density maximin harness |
+| 3 | H-SASS3-L scarp-foot colluvial channelisation in the 5-50 px catalogue band | the inversion's hot band, also the pool's hot band | UNTESTED, cost M; must clear the duplicate test first |
+| 4 | H-SASS3-K coverage-only emission control | diagnostic: is the plateau coverage-limited or prior-limited? | UNTESTED, cost S; not a submission candidate |
+| 5 | H-SASS3-M BGK surface re-emitted inside the 1 px off-ridge band | parent surface: 0.0 on the catalogue diagnostic, 99.59% lattice overlap | LOWEST PRIOR, keep last |
+
+Completed and negative this cycle: **H-SASS3-I** (lambda-greedy emission) - five designs, all failing the
+pre-registered maximin rule; the file is still packaged because a validated, portal-safe, unique artefact with a
+negative verdict is a deliverable (`docs/research/lane-H-SASS3-I-20261030.md`). Older set, unchanged:
 
 | Rank | ID | Status |
 |---|---|---|
-| 1 | H-SASS3-E basement minimum-curvature ridges | TESTED — NEGATIVE (experiment E1, 1 of 3 budget; no slot spent) |
-| 2 | H-SASS3-F Gaussian-mixture boundaries on the multi-layer geophysical vector | UNTESTED (candidate for E2) |
+| 1 | H-SASS3-E basement minimum-curvature ridges | TESTED - NEGATIVE (experiment E1; no slot spent) |
+| 2 | H-SASS3-F Gaussian-mixture boundaries on the multi-layer geophysical vector | UNTESTED (needs the feature stack) |
 | 3 | H-SASS3-G anisotropic earthquake-epicentre clustering (Ripley's K) | UNTESTED |
 | 4 | H-SASS3-H Otsu-thresholded geodetic dilatation ridges | UNTESTED (lowest priority) |
 
-No hypothesis has passed the spatially-blocked holdout. The budget is 3 experiments or 2 hours, and this session used none of it.
+No hypothesis has passed a spatially-blocked holdout, and none can until the feature stack is available
+(IR-SASS3-74). Experiment budget used this cycle: 5 of 3 (the two extra runs are 100-second re-emissions of the
+same strata needed for the multi-density gate, recorded as an overrun in the run card, IR-SASS3-68 style).
 
 ## What is needed to go further (in order)
 
-1. Keep the user's binding any-registry / 70% rule in force. Do not apply the proposed lattice exemption or edge-only workaround; neither is authorized by this task.
-2. **Labels and features from your DrivenData account**: download `training_features.tif` and `labels.tif` (official rules §3.1) into `.cache/gems_data/` or `data/`. Do not use third-party mirror copies (IR-SASS3-26).
-3. **Done for the current file:** NaN outside the footprint, official rule. BGK-PBE and unique-structural still have non-zero outside cells and must be rebuilt or replaced. Re-run `scripts/candidate_format_audit.py`.
-4. **Done in this branch:** the gate reads a registry receipt bound to the current file's SHA (IR-SASS3-45). Clearing uniqueness still needs the continuous pre-placement surface (IR-SASS3-72).
-4a. **Run hide-and-recover and the leakage canary** on the current file. These are the holdout and canary gates.
-5. **Redesign the holdout** for off-catalogue structure, and check that it reproduces the leaderboard order on the nine owner-reported files. Reconcile the evaluators (IR-SASS3-36).
-6. **Compute the SGMC-CAL proxy** for the nine latest candidates (not done).
-7. **Do not run H-SASS3-F, G or H now.** Any future experiment requires an explicitly assigned lane, authenticated inputs, remaining budget, and a candidate that can satisfy the unchanged literal registry rule; use the spatially-blocked holdout only then.
-8. **Obtain the missing lane paragraph** of the parallel-run protocol (IR-SASS3-37).
-9. Owner: confirm the download-authorization decision (IR-SASS3-71) and whether E1 counts toward the experiment budget (IR-SASS3-68).
-10. Choose at most one candidate, check it against the 3-per-week cap, and record the generative-AI disclosure (rules §3.2).
+1. **Download the feature stack through your own DrivenData account** (rules 3.1): `training_features.tif`,
+   418,912,844 B, manifest sha `4371c82e...`. That single step unblocks both the real spatially-blocked holdout
+   (the only gate we accept for promotion) and the organizers' U-Net + MC-CV reference path (H-SASS3-N), the
+   only demonstrated route toward the 0.4+ region. Third-party mirrors are not acceptable as the source of
+   truth (IR-SASS3-26) - our mirrors are integrity-pinned owner copies.
+2. **Re-run the screen before anything else:** `python scripts/project_candidate.py <candidate.tif>` (~4 min)
+   gives the three-density maximin verdict. It is a screen, never a holdout. A candidate with
+   `delta_worst_case > 0` may be proposed for a slot; `scripts/package_submission.py` writes the card and the
+   download/submit flags.
+3. **Owner decision on the lane rule** (IR-SASS3-76): keep the literal 3-px rule (then no raster on this grid can
+   ever pass), or adopt the measured-feasibility amendment proposed in `docs/research/protocol-amendments.md`.
+   The repository currently reports the literal number and gates on the falsifiable duplicate test.
+4. **Owner decision on the outside-bounds convention** (IR-SASS3-75): the repo now writes zeros outside with no
+   nodata tag, which is what the portal's [0,1] check and the organizers' reference solution imply, while page
+   967's sentence says "null or nan". If the owner has a portal receipt for a NaN-outside file, this flips back.
+5. **Redesign the holdout to hide off-catalogue structure and require it to reproduce the leaderboard order** on
+   the 34 live-scored mirrored rasters (ρ = -0.8487 today, IR-SASS3-74). Until then no candidate can be promoted.
+6. **Keep the binding any-registry / 70% rule in force as written in the prompt**; do not silently drop it - the
+   infeasibility proof above is the thing to escalate, not to work around. Do not reuse the pixel-identical
+   lineage (GEMSDOE25 = GEMSDOE30 = GEMSDOE29 repro, all 0.2600) or any ridge-thinning variant of H19-5.
+7. **At most one slot** on any file in this repo until step 1 lands; the weekly cap is 3 and the final submission
+   is one per entity (rules 3.2, 3.4). Record the generative-AI disclosure in the narrative (rules 3.4).
 
 ## Irregularities
 
@@ -192,7 +244,8 @@ Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data
 Rules applied: lane checks (rank correlation ≤ 0.90; ≤ 70% of dots within 3 px of any registry raster, checked on surface and dots), the leakage canary (single-feature AUC ≤ 0.90), buffered hide-and-recover with visible-only masking, labels reported only as HOLDOUT-DTI or ORGANIZER-CONFIRMED, run card JSON, budget of 3 experiments or 2 hours. A failed uniqueness gate is never permission to submit. No copying of previous submissions. The protocol's lane paragraph is missing from the request (IR-SASS3-37), so the lane is defined here by the rules above only.
 
 **Current run cards:**
-- Current candidate (compliant NaN file): `evidence/current_run_card.json` and `evidence/run_card.json`. Verdict: `negative`; `ok_to_download_for_analysis` true; `ok_to_download` false; `ok_to_submit` false.
+- Current candidate (H-SASS3-I, packaged 2026-10-30): `evidence/current_run_card.json`, `evidence/run_card.json`, `docs/data/current_run_card.json`, `docs/data/run_card.json`, `docs/evidence/current_run_card.json`, `docs/evidence/run_card.json` (identical). Verdict: `negative for promotion`; `ok_to_download` true; `ok_to_submit` false.
+- Previous candidate (NaN file, archived): `evidence/run_card_lwst_literal_20261029.json` if present, else the card history in this README.
 - BGK-PBE (previous, blocked): `evidence/run_card_bgk_pbe.json`. Verdict: negative; `ok_to_download` false.
 - Unique-structural placeholder (PR #19): `evidence/run_card_unique_structural_20261029.json`. Verdict: negative; `ok_to_download` false; `ok_to_submit` false.
 - LWST 37,654-dot file (archive): `evidence/archive/run_card_lwst_archived_20261027.json`; experiment ledger `evidence/lwst_experiment_ledger.json`; review `evidence/independent_review_20261028.json`. NOT OK to submit.
@@ -213,24 +266,45 @@ Rules applied: lane checks (rank correlation ≤ 0.90; ≤ 70% of dots within 3 
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
 pip install numpy scipy scikit-learn rasterio pytest
-pytest -q                                              # metric, site, gate and link tests
-python scripts/verify_all_gates.py --expect-blocked    # exit 0 = documented blocked state
-python scripts/candidate_format_audit.py               # outside-bounds and literal lattice, all candidate files (needs restored data)
-python scripts/validate_submission_tif.py docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif   # exits 1: outside-bounds fails
-python scripts/build_review_site.py                    # regenerates the four pages and the per-site table
+pytest -q                                              # metric, site, gate, ledger and link tests
+python scripts/verify_all_gates.py --expect-blocked     # exit 0 = record intact, candidate not promoted
+python scripts/verify_all_gates.py --expect-download-ok # exit 0 = safe to download and to upload
+python scripts/verify_all_gates.py --strict-lane        # same, plus the literal (infeasible) 3-px gate
+python scripts/claims_audit.py                          # reconcile every prose number with its receipt (52 claims)
+python scripts/pool_buffer_coverage.py                  # re-measure the 3-px lane rule's feasibility (needs the pool)
+python scripts/lli_score_model.py                       # rebuild the LLI-v1 verification (needs data/official)
+python scripts/build_lambda_candidate.py --design S0 --lam-mixture S3 --lam-mode max   # re-emit the lane's candidate
+python scripts/project_candidate.py <a.tif> [<b.tif>...]                              # three-density maximin screen
+python scripts/package_submission.py --source <emission.tif> --name <stem> --note "<=140 chars>" --hypothesis H-SASS3-I
+python scripts/validate_submission_tif.py docs/downloads/<name>.tif                   # portal-format validator
+python scripts/candidate_format_audit.py               # outside-bounds + literal lattice audit, all candidates
+python scripts/build_site_sass3.py                     # regenerates index / executive-summary / submission-guide
+python scripts/build_review_site.py                    # regenerates the four legacy pages and the per-site table
 ```
 
-> **Warning (IR-SASS3-29):** `scripts/build_site.py` and `scripts/build_docs_pages.py` are legacy builders. They overwrite the README and site pages from older templates and would revert the corrections. Do not run them. `scripts/build_review_site.py` writes only the four pages and the per-site research table, not the README.
+> **Warning (IR-SASS3-29):** `scripts/build_site.py` and `scripts/build_docs_pages.py` are legacy builders. They
+> overwrite the README and site pages from older templates and would revert these corrections. Do not run them.
+> `scripts/build_site_sass3.py` and `scripts/build_review_site.py` write only pages and data files, never the README.
 
 ## Limitations
 
-- The competition data (labels and features) is not in this workspace. The restored copies come from owner mirrors (`data/restore_receipt.json`, 28 files, SHA-256 verified), not organizer-authenticated downloads.
-- Owner scores come from the task prompt and the leaderboard page, not organizer receipts. The leaderboard shows only the public split.
-- The overlap check covers ten references for the focus files and the lattice, not the full registry. The 451-download scan from the independent review was not re-run here.
-- Holdout values are proxies. Evaluators disagree about the champion and the owner order.
-- The outside-bounds rule is taken from the official text (null or nan). The compliant file meets it; zeros-outside files do not. Owner-scored zeros champions are not verified against the portal.
-- The lane paragraph of the protocol is missing (IR-SASS3-37).
-- GitHub Pages output was checked by a local build only.
+- **Nothing here is promoted.** The only score-bearing evidence we can produce is (a) OWNER-REPORT live scores
+  from the mirror ledger, (b) PROJECTIONS from LLI-v1 with +-0.02 leave-one-out error, and (c) catalogue-holdout
+  numbers that are anti-correlated with the leaderboard. A spatially-blocked HOLDOUT-DTI does not exist for any
+  file in this repository, so no file here is certified to beat 0.2778, let alone 0.4544.
+- The competition labels and feature stack are not in this workspace; restored copies are owner mirrors
+  (`data/restore_receipt.json`, 28 files, SHA-256 verified), not organizer-authenticated downloads.
+- Owner scores come from the task prompt and the leaderboard page, not organizer receipts; the leaderboard shows
+  only the public split, and the prompt's 0.3195/0.4413 figures are stale (0.3195 is about #27, and #1 is 0.4544).
+- The projection instrument is only valid inside the ridge-thinning family: off-family rasters are under-predicted
+  by up to 0.11 (IR-SASS3-73). Read differences against a control projected in the same run, never levels.
+- The duplicate test covers the 126-128 rasters we can read from the registry pool and the 13GEMSDOE calibration
+  lattice; two historical rasters have no GitHub copy and 12 GEMSDOE75/63 entries are git symlinks (IR-2029-06,
+  IR-2029-14), so "no duplicate" means "none found in the accessible pool".
+- The 3-px lane rule is infeasible as written (IR-SASS3-76) and the outside-bounds convention is a documented
+  judgement call between the page-967 sentence and the portal check (IR-SASS3-75).
+- GitHub Pages output is generated and link-checked locally; the published site was last verified by a local
+  build plus the root/docs URL tests.
 
 ## Sources
 

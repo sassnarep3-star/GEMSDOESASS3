@@ -67,20 +67,42 @@ def test_uniqueness_audit_is_labeled_as_archived_subset_only():
     assert uq["pass"] is False  # fail closed without source rasters and surface scan
 
 
-def test_current_candidate_is_fail_closed_and_not_a_score_claim():
+def test_current_candidate_is_fail_closed_on_promotion_and_labelled_as_projections():
+    """The 2026-10-30 card: download permitted, promotion refused, and no number presented as a score."""
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
-    audit = json.loads((ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").read_text())
-    assert card["verdict"] == "negative"
+    assert card["verdict"].startswith("negative for promotion")
     assert card["ok_to_submit"] is False
+    assert card["ok_to_download"] is True
     assert card["holdout_dti"]["status"] in ("NOT RUN", "NOT PASS")  # fail-closed: never PASS here
-    assert card["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
-    assert audit["candidate_sha256"] == card["raster_sha256"]
-    assert audit["result"]["one_witness_result_below_threshold"] is True
-    assert audit["result"]["complete_registry_uniqueness_pass"] is False
+    # IR-SASS3-76: the lane rule is infeasible, so the card must disclose the conflict instead of dropping it
+    assert card["registry_correlation_and_overlap"]["literal_uniqueness_gate"].startswith(
+        ("NOT SATISFIABLE", "NOT CLEARED", "CLEARED"))
     assert 0 < len(card["submission_note"]) <= 140
 
+    bracket = card["projection_bracket"]
+    assert bracket["promotion_rule_passed"] is False
+    assert "PROJECTION" in bracket["evidence_class"] and "OWNER-REPORT" in bracket["evidence_class"]
+    assert bracket["candidate"] and set(bracket["candidate"]) == set(bracket["champion_control"])
 
-def test_fail_closed_verifier_reports_format_integrity_but_no_approval():
+    # the current packager receipt, not an archived one, is what the download verdict rests on
+    audit = json.loads((ROOT / f"docs/downloads/{card['submission_name']}-audit.json").read_text())
+    assert audit["sha256_tif"] == card["raster_sha256"]
+    assert audit["identical_sibling_files"] == []
+    assert audit["worst_sibling_exact_cell_share"]["frac"] < 0.95
+    assert audit["gates"]["G1_whole_array_finite_in_0_1"] is True
+    assert audit["gates"]["G6_projection_beats_champion_under_every_density"] is False
+
+    # no page may present a projection as a score or claim clearance
+    for rel in ["README.md", "index.html", "executive-summary.html", "docs/index.html",
+                "docs/executive-summary.html", "docs/submission-guide.html"]:
+        txt = (ROOT / rel).read_text()
+        assert "NOT OK to submit" in txt or "NOT CLEARED FOR SUBMISSION" in txt, rel
+        if rel.endswith(".html"):
+            assert "PROJECTION" in txt and "OWNER-REPORT" in txt, rel
+            assert "beats the 0.2778 champion" not in txt.replace("does not beat the 0.2778 champion", "")
+
+
+def test_fail_closed_verifier_reports_download_ok_and_no_promotion():
     import subprocess
 
     proc = subprocess.run(
@@ -90,9 +112,15 @@ def test_fail_closed_verifier_reports_format_integrity_but_no_approval():
     assert proc.returncode == 0, proc.stdout + proc.stderr
     result = json.loads(proc.stdout)
     assert result["format_and_record_integrity"] is True
+    assert result["competition_rules_outside_bounds_range_and_grid"] is True
+    assert result["ok_to_download"] is True
     assert result["ok_to_submit"] is False
-    assert result["checks"]["complete_uniqueness_gate"] is False
+    # the three promotion gates stay red on purpose (IR-SASS3-74 and the maximin rule)
     assert result["checks"]["holdout_gate"] is False
+    assert result["checks"]["canary_gate"] is False
+    assert result["checks"]["promotion_projection_gate"] is False
+    # uniqueness is gated on the falsifiable duplicate test, and it passes
+    assert result["checks"]["not_a_duplicate_of_any_sibling_raster"] is True
 
 
 def test_experiment_e1_is_negative_and_spends_no_slot():

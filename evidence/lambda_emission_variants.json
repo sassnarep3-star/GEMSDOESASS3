@@ -1,0 +1,64 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30T03:28:42Z",
+ "mechanism": "H-SASS3-I submodular max-credit greedy emission on LLI-inverted truth density",
+ "evidence_class": "every DTI number here is a PROJECTION (LLI-v1), never a score",
+ "design": "S0",
+ "theta_source": "evidence/lli_score_model_verification.json (published S0 fit, verified locally)",
+ "inputs": {
+  "labels.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "sample_submission.tif": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+  "h19-5": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d"
+ },
+ "registry_pool_rasters": 126,
+ "scored_domain_px": 5106385,
+ "g_estimate_px": 16948.275747155356,
+ "lane_feasibility_ceiling": {
+  "reachable_truth_px": 0.0010044510709121823,
+  "g_total_px": 16948.275747155356,
+  "max_projected_dti": 7.408209771710873e-08,
+  "meaning": "upper bound over ALL strictly lane-compliant rasters, assuming zero false positives and unit kernel credit"
+ },
+ "variants": {
+  "A_unconstrained": {
+   "file": "gemsdoesass3-llegreedy-s0xs3meadots-17k-20261030T034000Z-822d0fbc.tif",
+   "zip": "gemsdoesass3-llegreedy-s0xs3meadots-17k-20261030T034000Z-822d0fbc.tif.zip",
+   "dots": 17489,
+   "sha256": "c3d0e3b9dcc9977c2d647827ce88e4c627c5ca997e2df8eaa0b122db65119da5",
+   "mask_sha256": "822d0fbcee571c8355cf6e662789e317a46d77666105772298f6976955fd4170",
+   "bytes": 49162396,
+   "projected_live_dti": 0.38647301233043685,
+   "projected_tp": 6941.980635478481,
+   "projected_fp": 15076.88789776983,
+   "projected_fn": 10006.295111676875,
+   "N_mass": 17489.0,
+   "kernel_credit_per_dot": 1.0,
+   "worst_sibling_3px_overlap": 1.0,
+   "worst_sibling": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif",
+   "top5_overlaps": [
+    {
+     "frac": 1.0,
+     "file": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif"
+    },
+    {
+     "frac": 1.0,
+     "file": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-allfinite.tif"
+    },
+    {
+     "frac": 1.0,
+     "file": "19GEMSDOE__h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif"
+    },
+    {
+     "frac": 0.9994282120189834,
+     "file": "GEMSDOE22__h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif"
+    },
+    {
+     "frac": 0.9988564240379667,
+     "file": "GEMSDOE22__h23-a-dti-optimal-emission-6pct-20261002-e2ec4b49-nan.tif"
+    }
+   ],
+   "n_siblings_compared": 126,
+   "secs": 55.1
+  }
+ }
+}

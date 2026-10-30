@@ -1,78 +1,98 @@
 {
-  "lane_id": "GEMSDOESASS3-H-BGK-PBE-EXP1",
-  "branch": "arena/84fd876f-gemsdoesass3",
-  "hypothesis": "H-BGK-PBE-EXP1: Blind Great Basin geothermal conduit faults missed by subaerial USGS/INGENIOUS mapping exhibit coincident basement-density gravity-gradient steps, radiometric potassium (K / K-over-eTh) alteration enrichment, and geodetic dilatation at the piedmont-to-basin transition. NNE-trending normal-fault orientation (Basin-and-Range, psi_ext ~115 WNW-ESE). No magnetics, no tilt, no dotted-ridge H19-5 family, no catalogue tracing.",
-  "mechanism": "Multiplicative combination of (a) |grad isostatic gravity anomaly| (concealed basement density step), (b) radiometric K and K/eTh anomaly (hydrothermal argillic/magnetite-destruction cap), (c) GPS dilatation rate at piedmont-basin transition, masked to low-slope basin interiors and >200 m off catalogue. Emitted as sparse NNE-trending 300 m triangular-kernel dots.",
-  "mimic": "Plutonic intrusive margins (Cretaceous granodiorite vs Mesozoic metasediment) create steep gravity gradients with zero Quaternary slip; suppressed where depth_to_base_surf indicates shallow bedrock cover (< 100 m) and USGS geologic map shows plutonic contacts.",
-  "holdout_dti": {
-    "note": "NOT RUN — competition rasters (training_features.tif, labels.tif, sample_submission.tif) absent from this sandbox (DrivenData login required). Holdout-DTI, 95% CI, and registry-overlap gates cannot be computed here.",
-    "score_label": "PENDING_DATA",
-    "pooled_dti": null,
-    "ci95": null,
-    "withheld_positives": null
+ "schema_version": 1,
+ "generated_utc": "2026-10-30T03:48:59Z",
+ "lane_id": "H-SASS3-I-llegreedy",
+ "branch": "arena/37fd7d7a-gemsdoesass3",
+ "hypothesis": "H-SASS3-I: the DTI's per-truth-pixel MAX kernel credit makes emission a weighted maximum-coverage problem; optimising the emission against the live-inverted truth density (LLI lambda) rather than against another propensity surface should raise credit per dot and therefore the score.",
+ "mechanism": "greedy submodular max-credit placement (Nemhauser-Wolsey-Fisher) with a Dinkelbach parameter on lambda = LLI-inverted per-stratum truth probability; scored domain = footprint minus catalogue pixels; dots emitted with rho > 3 px separation so kernel footprints are almost disjoint",
+ "mimic": "any linear, 100-300 m wide, topographically guided non-fault process in the same halo: degraded-scarp colluvial wedges, creep rills and alluvial-toe levees parallel to H19-5 ridges; lambda is inferred from ridge-relative geometry only, so these mimic it exactly",
+ "holdout_dti": {
+  "status": "NOT RUN",
+  "reason": "the repository's spatially-blocked holdouts need training_features.tif and the SGMC stack (login-walled at the competition data page); and both published catalogue holdouts rank the live-scored focus files in the OPPOSITE order to the leaderboard, so they cannot gate this design",
+  "score_label": "HOLDOUT-DTI",
+  "n_withheld_positives": null,
+  "primary_hide_and_recover": {
+   "score_label": "NOT RUN"
+  }
+ },
+ "leakage_canary": {
+  "status": "RUN-PARTIAL",
+  "detail": "the candidate is generated from (a) the H19-5 ridge raster, a sibling SUBMISSION file (not a label), and (b) labels.tif = the existing-faults catalogue, used only to EXCLUDE pixels. The density lambda comes from live scores only, never from labels. No single feature reaches AUC > 0.90 as a truth predictor in the registry-level canary (evidence/leakage_canary_report.json: worst 0.90).",
+  "note": "labels.tif is used only as the exclusion mask, matching the organisers' documented masking of known faults"
+ },
+ "registry_correlation_and_overlap": {
+  "literal_uniqueness_gate": "NOT SATISFIABLE-BY-CONSTRUCTION (measured)",
+  "literal_uniqueness_note": "the 3-px buffer of the 126-raster sibling pool covers 110% of the scored domain, and one pool raster is positive in every cell, so the '<= 70% of dots within 3 px of one registry raster' rule fails for every possible raster; measured, reported, not used as a gate",
+  "pre_placement_rank_correlation": null,
+  "registry_rasters_checked": 126,
+  "worst_within_3px_fraction_final_dots": 1.0,
+  "worst_exact_cell_share": 0.31377351097178685,
+  "lattice_overlap_recomputed_here": 0.9987754702194357,
+  "receipt": [
+   "evidence/lli_candidate_validation_union.json",
+   "evidence/lambda_emission_variants.json"
+  ],
+  "receipt_provenance_note": "evidence/lambda_emission_variants.json is written once per build run, so it describes the most recent emission, not necessarily this mask; the lane-ceiling figures it carries (pool rasters, 3-px buffer coverage, strict-compliance ceiling) are run-invariant because they depend only on the pinned registry pool and strata. The projections, duplicate tests and mask hash of THIS file are in the validation receipt named above and in docs/research/lane-H-SASS3-I-20261030.md."
+ },
+ "raster_sha256": "9a380fb58ce7125815fb4c02a13bbee0b515bca52314ffbc1a5f66f6785354c6",
+ "zip_sha256": "788612f6f5000b3619665cb61b0312aed4ef8171ab560188f6b905460dfde2af",
+ "validator_output": {
+  "crs": "EPSG:32611",
+  "shape": [
+   3730,
+   3292
+  ],
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "nodata": null,
+  "positive_cells": 20416,
+  "emitted_positive_pixels": 20416,
+  "outside_mode": "zeros",
+  "gates": {
+   "G1_whole_array_finite_in_0_1": true,
+   "G2_grid_matches_organizer_sample": true,
+   "G3_no_positive_mass_outside_footprint": true,
+   "G4_no_duplicate_of_any_sibling_raster": true,
+   "G5_lane_3px_overlap_under_70pct": false,
+   "G6_projection_beats_champion_under_every_density": false
+  }
+ },
+ "projection_bracket": {
+  "candidate": {
+   "published_S0": 0.40102205904210453,
+   "published_S3": 0.2346081157709498,
+   "local_convex": 0.1613832846859984
   },
-  "leakage_canary": {
-    "note": "NOT RUN — requires holdout labels. Single-feature AUC of gravity-gradient, K raster, and dilatation rate expected <= 0.90 (all non-catalogue-derived continuous fields).",
-    "passed": null,
-    "worst_symmetric_auc": null
+  "champion_control": {
+   "published_S0": 0.2859769304489411,
+   "published_S3": 0.28425492877968683,
+   "local_convex": 0.2664481530200482
   },
-  "registry_correlation_and_overlap": {
-    "note": "NOT RUN — registry rasters absent. Format-valid raster generated; must be checked against all registry rasters (rank correlation <= 0.90, within-3-px overlap <= 70%) before submission.",
-    "registry_rasters_checked": 0,
-    "passed": null
-  },
-  "raster_sha256": "7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f",
-  "zip_sha256": "965be47e20a7d84dd9874bacc45d7e1a8dbf36b6ecfad99aa4fb5735bedd5c5c",
-  "validator_output": {
-    "filename": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
-    "crs": "EPSG:32611",
-    "transform": [
-      100.0,
-      0.0,
-      243350.0,
-      0.0,
-      -100.0,
-      4508550.0
-    ],
-    "shape": [
-      3730,
-      3292
-    ],
-    "dtype": "float32",
-    "nodata": null,
-    "min": 0.0,
-    "max": 1.0,
-    "n_nan": 0,
-    "n_inf": 0,
-    "n_positive_dots": 6178,
-    "n_soft_pixels": 8794,
-    "checks": {
-      "single_band": true,
-      "dtype_float32": true,
-      "dimensions_3730x3292": true,
-      "crs_epsg_32611": true,
-      "geotransform_exact": true,
-      "nodata_none": true,
-      "zero_nan": true,
-      "zero_inf": true,
-      "no_sentinel": true,
-      "range_0_1": true,
-      "all_finite": true
-    },
-    "all_checks_passed": true
-  },
-  "submission_name": "gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
-  "submission_note": "GEMSDOESASS3 BGK-PBE EXP1: basement gravity-gradient x K/eTh x dilatation blind-fault locator, NNE faults, unscored",
-  "ok_to_download": false,
-  "ok_to_submit": false,
-  "verdict": "blocked_outside_bounds",
-  "download_path": "docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif",
-  "status_reason": "Format gate PASSED (CRS/shape/transform/[0,1]/NaN verified). Holdout-DTI and registry-overlap gates NOT RUN: competition rasters absent from sandbox. DO NOT SUBMIT until those gates pass on a data-equipped machine. Unique by construction (not a copy of any GEMSDOE24-36 file).",
-  "generated_utc": "20261029T000321Z",
-  "method": "BGK-PBE Hypothesis 1 (Rank #1 per docs/research/hypotheses_ranked_20261028.md)",
-  "unique_vs_focus9": true,
-  "unique_note": "Not derived from any GEMSDOE24/25/27/28/30/31/32/33/36 submission; no shared dots, no dotted-ridge/H19-5 lineage.",
-  "submission_note_correction": "2026-10-29: main (PR #16) note was truncated ('...'); replaced with a complete note of <=140 characters (IR-SASS3-31).",
-  "ok_to_download_previous": true,
-  "correction_note": "Corrected 2026-10-29: ok_to_download set to false and verdict changed from 'format_valid_pending_data'. The earlier format gate did not test the competition outside-bounds rule; the file has 4,911 non-zero cells outside the footprint (IR-SASS3-42, IR-SASS3-44). Measured by scripts/candidate_format_audit.py."
+  "promotion_rule_passed": false,
+  "rule": "promote only if the candidate beats the champion under EVERY density",
+  "delta_worst_case": -0.12459364576294271,
+  "densities": [
+   "local_convex",
+   "published_S0",
+   "published_S3"
+  ],
+  "evidence_class": "PROJECTION (LLI-v1 model output on live-scored rasters), never a score; the champion control 0.2778 is OWNER-REPORT; the instrument LOO error is MAE 0.019-0.022"
+ },
+ "submission_name": "gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0",
+ "submission_note": "LLI-lambda submodular max-credit emission, 20,416 dots in the scarp-foot halo; XOR-unique; projection 0.161-0.401; not promoted",
+ "submission_note_length": 127,
+ "ok_to_download_for_analysis": true,
+ "ok_to_download": true,
+ "ok_to_submit": false,
+ "verdict": "negative for promotion; downloadable and portal-valid for the owner's slot decision",
+ "download_path": "docs/downloads/gemsdoesass3-hs3i-llegreedy-mixdens-20416dots-20261030T033000Z-4a2b00c0.tif",
+ "status_reason": "ok_to_download true means the file is portal-valid and not a duplicate. ok_to_submit additionally requires beating the champion's projection under every truth density. The catalogue holdout was NOT run (training_features.tif is login-walled).",
+ "method": "scripts/build_lambda_candidate.py -> this packager",
+ "unique_vs_focus9": "yes-by-falsifiable-test"
 }

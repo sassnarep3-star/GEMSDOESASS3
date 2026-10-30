@@ -1,0 +1,113 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30T03:31:50Z",
+ "evidence_class": "PROJECTIONS (LLI-v1 model outputs); never scores. Champion row is the control whose live score 0.2778 is OWNER-REPORT.",
+ "densities": [
+  "local_convex",
+  "published_S0",
+  "published_S3"
+ ],
+ "local_convex_fit": {
+  "n_rasters_matched": 33,
+  "loo_mae": 0.02123467558230365,
+  "loo_spearman": 0.9201203208556151,
+  "g_px": 13448.704753978704,
+  "lambda_max": 0.02468115343457142,
+  "lambda_min": 5.85410297469937e-15,
+  "examples": [
+   {
+    "file": "GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
+    "live": 0.2632
+   },
+   {
+    "file": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+    "live": 0.2477
+   },
+   {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+    "live": 0.26
+   },
+   {
+    "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+    "live": 0.2449
+   },
+   {
+    "file": "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-nan.tif",
+    "live": 0.271
+   },
+   {
+    "file": "gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-nan.tif",
+    "live": 0.2708
+   }
+  ]
+ },
+ "candidates": {
+  "e5_champ_union_ours.tif": {
+   "role": "candidate",
+   "sha256": "65d206faf0e0318c4be866615d776c252e98a0d98f00e29b02bdfc37012d61da",
+   "projections": {
+    "published_S0": {
+     "projected_dti": 0.34834891374674926,
+     "tp": 8938.599627314949,
+     "fp": 51567.81655255655,
+     "fn": 8009.676119840407,
+     "dots": 56295,
+     "N_mass": 56295.0
+    },
+    "published_S3": {
+     "projected_dti": 0.2939421254151633,
+     "tp": 7765.98522364815,
+     "fp": 52317.3855262917,
+     "fn": 10238.317824100854,
+     "dots": 56295,
+     "N_mass": 56295.0
+    },
+    "local_convex": {
+     "projected_dti": 0.24697869647040183,
+     "tp": 5576.51526596141,
+     "fp": 53523.32719411275,
+     "fn": 7872.189488017294,
+     "dots": 56295,
+     "N_mass": 56295.0
+    }
+   },
+   "delta_vs_champion": {
+    "published_S0": 0.0624,
+    "published_S3": 0.0097,
+    "local_convex": -0.0195
+   },
+   "delta_worst_case": -0.0195,
+   "maximin_beats_champion": false
+  },
+  "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": {
+   "role": "champion_control",
+   "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+   "projections": {
+    "published_S0": {
+     "projected_dti": 0.2859769304489411,
+     "tp": 6250.470056621846,
+     "fp": 35239.194043863165,
+     "fn": 10697.80569053351,
+     "dots": 37654,
+     "N_mass": 37654.0
+    },
+    "published_S3": {
+     "projected_dti": 0.28425492877968683,
+     "tp": 6456.893506322875,
+     "fp": 35101.647132059865,
+     "fn": 11547.409541426128,
+     "dots": 37654,
+     "N_mass": 37654.0
+    },
+    "local_convex": {
+     "projected_dti": 0.2664481530200482,
+     "tp": 5035.620383961118,
+     "fp": 35664.874733193436,
+     "fn": 8413.084370017586,
+     "dots": 37654,
+     "N_mass": 37654.0
+    }
+   }
+  }
+ }
+}
