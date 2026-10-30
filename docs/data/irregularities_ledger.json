@@ -515,6 +515,62 @@
    "title": "Uniqueness receipt for the compliant file is literal-only, not a full protocol pass",
    "finding": "evidence/literal_audit_...-nan.json compares 386 registry rasters and passes (worst within-3px 68.99% on the inside-footprint dots; worst |Spearman| 0.1504). The surface stage used the emitted binary surface because the pre-placement continuous surface was not retained, so the test is weaker than Protocol Rule 1 requires.",
    "resolution": "Recorded as NOT CLEARED in the card (pre_placement_rank_correlation null). Re-running the surface stage with the continuous pre-placement surface would be needed to clear it."
+  },
+  {
+   "id": "IR-SASS3-73",
+   "severity": "HIGH (OPEN)",
+   "title": "data/restore_receipt.json says 28 files were restored into .cache/gems_data, but that directory is absent in this workspace",
+   "finding": "On 2026-10-30 `ls -la .cache` returns no such directory and `find / -name labels.tif` finds no copy. The receipt (status 'restored', 28 files, SHA-256 pins) therefore cannot be re-verified here. Labels (`labels.tif`) and `training_features.tif` are absent, so no holdout or canary can be run in this checkout.",
+   "resolution": "Receipt treated as a historical record, not as evidence of present data. Owner must supply the DrivenData-account files (rules \u00a73.1) into .cache/gems_data or data/ and re-run scripts/restore_data.py. Not resolved in this session."
+  },
+  {
+   "id": "IR-SASS3-74",
+   "severity": "HIGH (RESOLVED 2026-10-30)",
+   "title": "Shared validator failed a correct file: 'no_nan_or_inf' contradicted the official NaN-outside rule, and zeros outside were accepted",
+   "finding": "scripts/validate_submission_tif.py set all_hard_checks_pass=false for the committed candidate because NaN outside the footprint was counted as a failure. The outside-bounds check also accepted finite zeros outside the footprint, which the official page (page 967: 'data outside the bounds is null or nan') and this repo's own notes reject. It also failed closed when sample_submission.tif was absent, although evidence/organizer_footprint_mask.npz (sample SHA recorded) was committed for exactly this.",
+   "resolution": "Fixed in scripts/validate_submission_tif.py: checks are now nan_outside_and_finite_inside_footprint and no_inf_anywhere; footprint falls back to the committed mask after SHA and pixel-count checks. Regression tests in tests/test_official_metric_and_validator.py (zero outside rejected, NaN inside rejected, committed candidate passes). Candidate re-validated on its pixels: 0 finite cells outside, 0 NaN inside."
+  },
+  {
+   "id": "IR-SASS3-75",
+   "severity": "MEDIUM (RESOLVED 2026-10-30)",
+   "title": "Leaderboard figures in the repo and in the request disagree with the live page",
+   "finding": "Live leaderboard (fetched 2026-10-30, 'best public DW-Tversky'): #1 xiaofanhu 0.4544, #2 cfld__ 0.3916, #3 Batik Shirt Brothers 0.3911, #4 BrandenKMurray 0.3841, #5 op01 0.3642. README (2026-10-29) lists #4 0.3724 and #5 0.3635. The request quotes 0.4413 and 0.3195 as the top score. None of the quoted values is the live #1.",
+   "resolution": "README and the executive summary now quote the 2026-10-30 page values with source and date. The 0.4413 and 0.3195 figures are recorded as unverified user-supplied numbers. Public-board values are not private-test scores."
+  },
+  {
+   "id": "IR-SASS3-76",
+   "severity": "MEDIUM (OPEN)",
+   "title": "The 0.2778 champion figure is owner-reported, and the GEMSDOE32 site itself says no receipt links the raster to the score",
+   "finding": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html (fetched 2026-10-30) labels the 0.2778 score 'OWNER-REPORT (owner-provided submission-log claim; no submission-page receipt linking this raster hash to the score is present in this repository)'. This session has the same status.",
+   "resolution": "Kept as OWNER-REPORT in every table. No explanation of why 0.2778 scored highest can be confirmed without the labels and an organizer receipt."
+  },
+  {
+   "id": "IR-SASS3-77",
+   "severity": "MEDIUM (OPEN)",
+   "title": "Uniqueness receipts for the current candidate were not re-run this session",
+   "finding": "evidence/literal_audit_...-nan.json (386 rasters, worst within-3px 68.99%) was not recomputed here: the registry rasters are not in this workspace. The validator and gates only confirm that the receipt's SHA-256 matches the candidate bytes.",
+   "resolution": "Reported as a receipt-based result. A fresh run needs the registry fetch (scripts/fetch_registry_rasters.py) and network access to GitHub, which is allowed. Not done here."
+  },
+  {
+   "id": "IR-SASS3-78",
+   "severity": "LOW (OPEN)",
+   "title": "Outside-bounds convention for the owner's zero-filled files conflicts with the official rule",
+   "finding": "Owner-scored files (for example the 0.2778 champion, named '-zeros') use zeros outside the bounds. Official page 967 requires null or NaN outside the bounds. The owner-reported scores therefore came from files the rules describe as non-compliant, or the portal accepts zeros. Which applies is not verifiable from this workspace.",
+   "resolution": "This repo now treats zeros outside as NOT compliant (validator is strict). The question of how the portal scored zero-filled files is left open for the owner to check on the submission page."
+  },
+  {
+   "id": "IR-SASS3-79",
+   "severity": "LOW (OPEN)",
+   "title": "README gives 99.9\u2013100% within-3-px overlap for the focus-site historical files; the receipt gives 86.7\u2013100%",
+   "finding": "evidence/focus_site_candidate_audit_20261028.json (9 historical rows, 72 pairs) has min 0.86719 and max 1.0. The executive summary (build_review_site.py) and the receipt agree on 86.7-100%. The README's 'GEMSDOE32 ... 99.9-100%' sentence does not.",
+   "resolution": "Recorded here. The README sentence should be corrected to the receipt range. Not changed in this session's README edit except as noted in the README status block."
+  },
+  {
+   "id": "IR-SASS3-80",
+   "severity": "MEDIUM (OPEN)",
+   "title": "File-name suffixes (-nan / -zeros / -allfinite) differ between the request and the owner registry for the focus-site files",
+   "finding": "Request labels vs registry/owner_reported_scores_focus.json: GEMSDOE25 is '-nan' in the request but '-zeros' in the registry (gems25-dotted-h19-5-d2-8-...-zeros.tif), and GEMSDOE28 h36/h27/h32/h38 are '-nan' in the request but '-allfinite' in the registry. The scores match. The suffix encodes the outside-bounds convention: '-zeros' is non-compliant under page 967. Which file was actually uploaded is not verifiable from this workspace.",
+   "resolution": "Scores kept as typed. The per-site table reports the registry names and this entry. Owner should confirm the uploaded file name and outside-bounds convention on each submission page. Relates to IR-SASS3-78."
   }
  ]
 }
