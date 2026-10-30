@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "generated_utc": "20261030T022642Z",
+  "lane": "H-SASS3-I: SDR spaced-density retention of the audited LWST evidence set",
+  "variant": "sdr1_spaced_dense",
+  "inputs": {
+    "lwst_raster": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif",
+    "lwst_sha256": "bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a",
+    "lattice": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+    "tau": 0.69,
+    "density_radius_px": 10,
+    "block_chebyshev": 2,
+    "min_euclid_spacing_px": 3.0
+  },
+  "counts": {
+    "gap_pixels_G": 6514,
+    "K_target_inside": 14498,
+    "inside_dots_kept": 14498,
+    "spacing_rejections": 8507,
+    "gap_dots": 6514,
+    "total_dots": 21012,
+    "literal_cap_total": 21713.333333333336
+  },
+  "output": {
+    "tif": "docs/downloads/gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif",
+    "tif_sha256": "cd536eff185adf3ebd70a71beedf6e016d7986449a62ec2feaef54bd49455a18",
+    "zip_sha256": "3e6f2a4e83d550dc8497dbaedafd12ad8e462d832d602438bb8cfcd73704ffa6",
+    "bytes": 277234,
+    "moved_note": "TIF+zip moved from repo root to docs/downloads after build; SHAs unchanged."
+  },
+  "format_audit": {
+    "filename": "gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif",
+    "size_bytes": 277234,
+    "sha256": "cd536eff185adf3ebd70a71beedf6e016d7986449a62ec2feaef54bd49455a18",
+    "mode": "nan",
+    "geometry_reference": "/home/user/GEMSDOESASS3/.cache/gems_data/sample_submission.tif",
+    "crs": "EPSG:32611",
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "shape": [
+      3730,
+      3292
+    ],
+    "dtype": "float32",
+    "nodata": null,
+    "nodata_repr": "nan",
+    "emitted_positive_pixels": 21012,
+    "footprint_fraction": 0.004066,
+    "on_catalogue_positive_pixels": 0,
+    "in_footprint_finite_pixels": 5167373,
+    "in_footprint_min": 0.0,
+    "in_footprint_max": 1.0,
+    "full_grid_finite_pixels": 5167373,
+    "checks": {
+      "exact_reference_grid_match": true,
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_zero_nan": true,
+      "in_footprint_zero_inf": true,
+      "in_footprint_zero_sentinel": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_compliant": true,
+      "zero_on_catalogue_leakage": true,
+      "validator_range_0_1_guaranteed": true
+    },
+    "all_checks_passed": true
+  },
+  "label_free": true,
+  "sgmc_free": true,
+  "elapsed_s": 6.0
+}

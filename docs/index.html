@@ -74,6 +74,7 @@ tr.pick{background:#ecfdf3}
 <section>
 <h2>Uniqueness — checked against any registry raster, literally (471 of them)</h2>
 <p class="kv">For every registry raster the fraction of this file's dots inside that raster's 3 px (300 m) neighbourhood was measured. Cap enforced: <strong>65%</strong>, tighter than the protocol's 70%. Worst offender after repair: <code>GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-…</code> at exactly 65.0%.</p>
+<p class="kv"><strong>One file is explicitly NOT OK to submit</strong> — kept on the record rather than deleted: the exp3 binary-surface experiment (21,012 dots, SHA-256 <code>5ef3ba15…b789</code>) reaches <strong>83.25%</strong> overlap with a single registry raster and fails the any-registry rule outright. It is <strong>NOT OK to submit</strong>; no download button is offered for it.</p>
 <p class="kv"><strong>Read that number with its context.</strong> That raster's own 3 px neighbourhood covers <strong>35.3% of the footprint</strong>, so it overlaps any candidate at ~35% by construction; the honest statistic is the lift, 65.0 / 35.3 = <strong>1.84×</strong>. The cap is nevertheless enforced as written: 5,738 of this file's lowest-credit dots inside that neighbourhood were removed to meet it.</p>
 <p class="kv">Rank-correlation uniqueness (|φ| ≤ 0.90 against any single registry raster) is satisfied by construction: this surface is sparse (1.6% of the footprint) and no registry raster shares that exact support.</p>
 </section>

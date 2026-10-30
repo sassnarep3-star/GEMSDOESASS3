@@ -1,0 +1,72 @@
+{
+  "gems24_d1p5 (LB 0.2477)": {
+    "dots": 60069,
+    "pooled_dti": 0.09720385946561562,
+    "ci95": [
+      0.08411403431092085,
+      0.11106569814941615
+    ],
+    "evaluator": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "n_withheld": 22232
+  },
+  "gems25_d2p8 (LB 0.2600)": {
+    "dots": 44090,
+    "pooled_dti": 0.09920232315251679,
+    "ci95": [
+      0.08595140754809347,
+      0.11266835751415871
+    ],
+    "evaluator": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "n_withheld": 22232
+  },
+  "gems27_tgc (LB 0.2449)": {
+    "dots": 61328,
+    "pooled_dti": 0.09677777415544304,
+    "ci95": [
+      0.08389152196166949,
+      0.11040609226946944
+    ],
+    "evaluator": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "n_withheld": 22232
+  },
+  "gems28_h27_4 (LB 0.2708)": {
+    "dots": 40199,
+    "pooled_dti": 0.03005741418614669,
+    "ci95": [
+      0.02520494879134809,
+      0.03580210219679912
+    ],
+    "evaluator": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "n_withheld": 22232
+  },
+  "lattice_s5 (LB 0.0904)": {
+    "dots": 206895,
+    "pooled_dti": 0.08582961112190075,
+    "ci95": [
+      0.07591200467116978,
+      0.09552551843611826
+    ],
+    "evaluator": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "n_withheld": 22232
+  },
+  "h19_5 (LB 0.1922)": {
+    "dots": 121131,
+    "pooled_dti": 0.07342354624497222,
+    "ci95": [
+      0.062350088338253444,
+      0.0860477183306207
+    ],
+    "evaluator": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "n_withheld": 22232
+  },
+  "h16_1 (LB 0.1855)": {
+    "dots": 123939,
+    "pooled_dti": 0.07259569532091399,
+    "ci95": [
+      0.06151144972289259,
+      0.08566147497194819
+    ],
+    "evaluator": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "n_withheld": 22232
+  }
+}
