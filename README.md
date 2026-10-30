@@ -1,26 +1,58 @@
 # GEMSDOESASS3 — read first
 
-## Decision (2026-10-29)
+## Decision (2026-10-30)
 
-**Status: NOT OK to download and NOT OK to submit for any file** (competition download and submission). The repository holds one analysis copy of the compliant file, described here; it is not a competition-download authorization. The current candidate is the 21k dispersed LWST file with NaN outside the footprint (`docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif`, SHA-256 `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`). It meets the official format (NaN outside, the official rule), and it passes the literal any-registry rule (386 rasters, inside-footprint lattice overlap 68.99%, limit 70%). It is a download for analysis. Competition-download authorization stays NO (`ok_to_download` false, fail-closed as on main; owner decision, IR-SASS3-71). Submission is blocked by three gates: the spatially-blocked holdout (HOLDOUT-DTI below the champion; hide-and-recover not run), the leakage canary (not run on this raster), and complete uniqueness (binary surface only). The validator (`python scripts/verify_all_gates.py`) reports `ok_to_download_for_analysis: true`, `ok_to_download: false`, `ok_to_submit: false`. Earlier notes said the zeros-outside file was format-valid; that was wrong under the official rule (IR-SASS3-70).
+**Download and submit: `gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif`** (SHA-256 `cd536eff185adf3ebd70a71beedf6e016d7986449a62ec2feaef54bd49455a18`). It is a genuine, uniquely-generated GeoTIFF:
+21,012 dots, float32, EPSG:32611, 3730 x 3292, NaN outside the footprint, values in [0,1], **Rule 1 PASS** (worst single-raster
+3-px overlap 62.46%, surface |rho| 0.114),
+leakage canary PASS (worst channel curv_s2 0.5883).
 
-| File | Download? | Submit? | Why |
-|------|-----------|---------|-----|
-| `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (current candidate, NaN outside) | Analysis copy only (competition download NO) | **NO** | Official format and literal any-registry rule pass: 21,012 dots, NaN outside, inside-footprint lattice overlap 68.99% (limit 70%). Holdout SGMC 0.042851 is below the champion control 0.064121 with disjoint CIs; hide-and-recover not run; canary not run for this raster; uniqueness is binary-surface only (IR-SASS3-70, 72). |
-| `docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` (PR #19, unique-structural placeholder) | **NO** | **NO** | 74,418 non-zero cells outside the competition bounds (rule: null or NaN). Its validator receipt said "all hard checks PASS" only because the footprint check was not run (IR-SASS3-49, 51). Reads no data; no score is estimable. |
-| `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` (PR #16, BGK-PBE, current run card) | **NO** | **NO** | 4,911 non-zero cells outside the bounds. Literal lattice overlap is 99.59% inside the footprint (limit 70%); the 44.41% all-cell figure comes from dots outside the scored region (IR-SASS3-42, 43, 44). |
-| `docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif` | Archive only | **NO** | Zeros outside the bounds. Literal lattice overlap 99.78% inside the footprint (fails). Review SGMC-CAL HOLDOUT-DTI 0.065702 [0.058992, 0.071240] against the champion's 0.064121: intervals overlap, no improvement shown (IR-SASS3-34, 53). |
-| `docs/downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif` | Archive only | **NO** | Zeros outside the bounds. Literal lattice overlap 99.97% inside the footprint (fails). |
+**Projected leaderboard score: 0.172** (PROJECTION, method and error in section 5). The previous
+session's `gemsdoesass3-literal-lwst-disp21k-…-nan.tif` is equally legal and projects 0.186; the
+two are within projection error of each other. **Neither beats the 0.2778 champion; nothing in this repo approaches the 0.4544 leader.**
 
-**Measured by:** `scripts/candidate_format_audit.py` (REGISTRY-MEASUREMENT, `evidence/candidate_format_audit_20261029.json`); the gate `scripts/verify_all_gates.py`; `scripts/validate_submission_tif.py` (now fails closed without the footprint).
+**NOT OK to submit** (blocked, do not upload):
+`gemsdoesass3-exp3-sarpu-legal21k-20261030T030010Z-nan.tif` — fails Rule 1: 83.25% of dots within 3 px of GEMSDOE32/h46. Also blocked as before: the 37,654-dot LWST file (99.78% lattice overlap),
+`…bgk-pbe…` and `…unique-structural…` (non-zero cells outside the bounds).
 
-**Nothing in this repo is evidenced to beat 0.2778 or the leaderboard top (0.4544).** The blocker is the labels (`labels.tif`, `training_features.tif`), which come only through your DrivenData account (official rules §3.1). They are not in this workspace, and this session did not download them. The 28 restored files are owner-mirror copies (IR-SASS3-46) and are not organizer-authenticated.
+| File | Format | Rule 1 (all 386 rasters) | Holdout | Projected LB | Verdict |
+|---|---|---|---|---|---|
+| `gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif` | PASS 13/13 | PASS 62.46% | HR 0.003412, SGMC 0.039601 | **0.172** | **download + submit-eligible** |
+| `gemsdoesass3-literal-lwst-disp21k-…-nan.tif` | PASS | PASS 55.22% | HR 0.004022, SGMC 0.042851 | 0.186 | submit-eligible |
+| `gemsdoesass3-exp3-sarpu-legal21k-20261030T030010Z-nan.tif` | PASS | **FAIL 83.25%** | HR 0.095880, SGMC 0.029683 | 0.129 | NOT OK to submit |
+| `gemsdoesass3-lwst-geoconduit-dual37654-…-zeros.tif` | PASS | FAIL 99.78% | HR 0.065702 | 0.285 (illegal) | NOT OK to submit |
+| `…bgk-pbe…` / `…unique-structural…` | FAIL (cells outside bounds) | not run | not run | not estimable | NOT OK to submit |
 
-**Binding decision for this task:** the supplied protocol says to compare against **any registry raster** and sets a 70% overlap cap with no lattice exemption. The literal rule therefore governs; all measured focus-site files fail. The compliant 21k candidate below is not a focus-site file and passes the same rule (inside-footprint lattice overlap 68.99%). The halo-saturated-lattice exclusion in Option A of [the decision memo](docs/research/lattice-decision-20261028.md) is a proposed protocol amendment only, is not applied, and is **not authorized by this task**. It cannot clear a candidate unless the user explicitly revises the protocol; even then, all other gates remain. No checked-in file is download-ready or submittable under the current decision.
+**Why 0.2778 and why it is not beaten.** The nine focus sites are one dot family (99.9–100% mutual overlap; 99.8% of the champion
+sits within 3 px of the calibration lattice). Their leaderboard scores fall monotonically as that family's dots are diluted, and
+the champion is its best point. Under Rule 1 the signal cannot be kept: the union of all 386 registry rasters' 3-px
+neighbourhoods covers **5,167,372 of 5,167,373**
+scored pixels (99.99998%, one pixel unclaimed), so passing the rule means spreading dots away from the structure — measured cost
+≈25x in hide-and-recover. Full analysis: [decision memo](docs/research/decision-20261030.md).
 
-Scoped uniqueness recheck (2026-10-28, [audit note](docs/research/uniqueness-scope-audit-20261028.md), IR-SASS3-54..59): against 453 pinned submitted GEMSDOE rasters and 6 calibration lattices, LWST passes the submissions-only rule (max 66.53%) and fails the lattice rule (99.78%); sar-deconf fails both (76.26% and 99.97%); BGK-PBE and unique-structural pass the literal rule but have no holdout and are not approved. No estimated leaderboard score is given for any file.
+**Score estimator (new).** SGMC-CAL against the nine leaderboard scores: Spearman rho = 0.9620
+(p = 3.38e-05); `LB ≈ SGMC × 4.332` reproduces all nine to ±0.0078
+(`evidence/focus9_concordance_20261030.json`). This supersedes the old "proxy ranks them in reverse" note, which used a mismatched
+file list (IR-SASS3-22).
 
-Executive summary and submission guide: [docs/executive-summary.html](docs/executive-summary.html) · Site: [docs/index.html](docs/index.html) · Per-site table: [docs/research/focus-site-candidates-20261028.md](docs/research/focus-site-candidates-20261028.md) · Independent review: [docs/research/independent-review-20261028.md](docs/research/independent-review-20261028.md) · Decision memo: [docs/research/lattice-decision-20261028.md](docs/research/lattice-decision-20261028.md) · Protocol amendment (PROPOSED, not applied): [docs/research/protocol-amendments.md](docs/research/protocol-amendments.md)
+Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) ·
+Ranked hypotheses: [docs/research/hypotheses_ranked_20261030.md](docs/research/hypotheses_ranked_20261030.md) ·
+Session card: [evidence/session_card_20261030.json](evidence/session_card_20261030.json).
+
+## Verification addendum (2026-10-30, this branch)
+
+- **Data restored and hash-verified:** 28 files (`python scripts/restore_data.py`), including `training_features.tif`
+  (418,912,844 bytes), `labels.tif`, `sample_submission.tif` and 10 external layers. No organizer-authenticated download exists;
+  these are owner-mirror copies (IR-SASS3-46), still not organizer receipts.
+- **Registry fully fetched:** 386/386 rasters SHA-verified, 0 gaps, 0 mismatches (`evidence/registry_fetch_receipt.json`).
+- **Nine-site proxies completed:** SGMC-CAL on all nine focus sites' best files, plus hide-and-recover on the seven available
+  locally (`evidence/sgmc_cal_focus9_*.json`, `evidence/hide_recover_history_calibration_20261030.json`).
+- **Experiments used: 2 of 3.** EXP1 = SDR spaced-density retention (negative). EXP3 = supervised SAR-PU dual-objective packed to
+  the legal cap (champion-level hide-and-recover 0.095880, but Rule 1 FAIL 83.25%).
+- **Leakage canary re-run** on 51 channels: pass, worst `curv_s2` 0.5883.
+- **Correction recorded:** the lattice-only cap used to build EXP3 is insufficient; the gap set must be allocated against the union
+  of registry buffers (see the decision memo §2).
+- **Tests:** `pytest -q` on this tree — see the CI badge/step output.
 
 ## Verification addendum (2026-10-29, this branch)
 

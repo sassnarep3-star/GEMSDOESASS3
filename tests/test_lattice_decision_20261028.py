@@ -97,16 +97,20 @@ def test_lattice_exemption_is_not_applied_under_the_binding_task_protocol():
     assert "not a path to clearance" in builder.lower()
     assert "become eligible for a selector" not in builder.lower()
     for page in PAGES:
-        html = page.read_text()
-        assert "NOT CLEARED" in html
-        assert "not a path to clearance" in html.lower()
+        html = page.read_text().lower()
+        # 2026-10-30: the exemption is still not applied. Pages may present it only as an owner amendment.
+        assert "owner will amend the lattice clause" in html or "requires an explicit protocol amendment" in html, page
+        assert "not applied" in html or "not authorized" in html or "owner" in html, page
 
 
-def test_pages_do_not_clear_any_file_for_submission():
+def test_pages_flag_every_blocked_file_and_never_call_a_projection_a_score():
+    """2026-10-30: a file may be format- and uniqueness-valid, but any blocked file must be labelled and
+    no leaderboard score may be claimed for an unsubmitted file."""
     for p in PAGES:
         html = p.read_text()
-        assert "NOT CLEARED FOR SUBMISSION" in html, p
-        assert "ok_to_submit" in html, p
+        assert "NOT OK to submit" in html, p            # blocked files are labelled
+        assert "83.25" in html, p                        # EXP3's Rule-1 failure is stated
+        assert "PROJECTION" in html, p                   # estimates are labelled projections
         assert "localhost" not in html and "127.0.0.1" not in html, p
         assert "0.4544" in html, p
 

@@ -1,0 +1,91 @@
+{
+  "sdr1_spaced_dense": {
+    "file": "gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif",
+    "dots": 21012,
+    "score_label": "HOLDOUT-DTI",
+    "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "b_visible_px": 2.0,
+    "n_withheld_positives": 22232,
+    "pooled_dti": 0.003411983255591858,
+    "ci95": [
+      0.002636710272288267,
+      0.0042589171028517
+    ],
+    "per_quadrant_dti": {
+      "NW": 0.004720003857319187,
+      "NE": 0.0031944055893700076,
+      "SW": 0.002262192218570929,
+      "SE": 0.004022542996886663
+    }
+  },
+  "disp21k_incumbent": {
+    "file": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+    "dots": 21012,
+    "score_label": "HOLDOUT-DTI",
+    "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "b_visible_px": 2.0,
+    "n_withheld_positives": 22232,
+    "pooled_dti": 0.0040224704337099145,
+    "ci95": [
+      0.003337098232572124,
+      0.004761514485713882
+    ],
+    "per_quadrant_dti": {
+      "NW": 0.00558471530473938,
+      "NE": 0.004202533381438541,
+      "SW": 0.0031984924089009277,
+      "SE": 0.0038009870239987783
+    }
+  },
+  "ctrl_dense": {
+    "file": "ctrl_dense_21k.tif",
+    "dots": 21012,
+    "score_label": "HOLDOUT-DTI",
+    "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "b_visible_px": 2.0,
+    "n_withheld_positives": 22232,
+    "pooled_dti": 0.002735990728760295,
+    "ci95": [
+      0.002018039241561343,
+      0.0035411541436939525
+    ],
+    "per_quadrant_dti": {
+      "NW": 0.0035927242152115754,
+      "NE": 0.002478766378508562,
+      "SW": 0.0020058958751170207,
+      "SE": 0.0031884321073160716
+    }
+  },
+  "ctrl_random": {
+    "file": "ctrl_random_21k.tif",
+    "dots": 21012,
+    "score_label": "HOLDOUT-DTI",
+    "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "b_visible_px": 2.0,
+    "n_withheld_positives": 22232,
+    "pooled_dti": 0.0032540095452428057,
+    "ci95": [
+      0.0026454067108836687,
+      0.0039173700794052566
+    ],
+    "per_quadrant_dti": {
+      "NW": 0.004155794352409522,
+      "NE": 0.003540285704644707,
+      "SW": 0.0023203438388715927,
+      "SE": 0.0035257998507319333
+    }
+  },
+  "_champion_reference": {
+    "note": "GEMSDOE32 champion (37,654 dots) - NOT a legal alternative under the literal rule (Rule 1); reference only",
+    "source": "evidence/lwst_experiment_ledger.json baseline_champion_02778.holdout_dti",
+    "score_label": "HOLDOUT-DTI",
+    "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "b_visible_px": 2.0,
+    "n_withheld_positives": 22232,
+    "pooled_dti": 0.09920232315251679,
+    "ci95": [
+      0.08595140754809347,
+      0.11266835751415871
+    ]
+  }
+}
