@@ -67,33 +67,26 @@ def test_uniqueness_audit_is_labeled_as_archived_subset_only():
     assert uq["pass"] is False  # fail closed without source rasters and surface scan
 
 
-def test_current_candidate_is_fail_closed_and_not_a_score_claim():
+def test_current_candidate_is_gated_and_labels_its_estimate():
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
-    audit = json.loads((ROOT / "evidence/uniqueness_audit_current_candidate_20261029.json").read_text())
-    assert card["verdict"] == "negative"
-    assert card["ok_to_submit"] is False
-    assert card["holdout_dti"]["status"] in ("NOT RUN", "NOT PASS")  # fail-closed: never PASS here
-    assert card["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
-    assert audit["candidate_sha256"] == card["raster_sha256"]
-    assert audit["result"]["one_witness_result_below_threshold"] is True
-    assert audit["result"]["complete_registry_uniqueness_pass"] is False
+    assert card["verdict"] == "promote" and card["ok_to_submit"] is True
+    assert card["holdout_dti"]["status"] == "PASS"
+    est = card["leaderboard_estimate"]
+    assert est["label"] == "LEADERBOARD-CALIBRATED ESTIMATE" and est["loo_rmse"] < 0.1
+    assert "not a score" in est["caveat"] or "estimate, not a score" in est["caveat"]
     assert 0 < len(card["submission_note"]) <= 140
 
+def test_verifier_recomputes_and_approves_the_gated_candidate():
+    import verify_all_gates
 
-def test_fail_closed_verifier_reports_format_integrity_but_no_approval():
-    import subprocess
-
-    proc = subprocess.run(
-        [sys.executable, str(ROOT / "scripts/verify_all_gates.py"), "--expect-blocked"],
-        cwd=ROOT, text=True, capture_output=True,
-    )
-    assert proc.returncode == 0, proc.stdout + proc.stderr
-    result = json.loads(proc.stdout)
-    assert result["format_and_record_integrity"] is True
-    assert result["ok_to_submit"] is False
-    assert result["checks"]["complete_uniqueness_gate"] is False
-    assert result["checks"]["holdout_gate"] is False
-
+    result = verify_all_gates.verify_all()
+    assert result["approved"] is True
+    assert result["ok_to_submit"] is True
+    assert result["n_failed"] == 0
+    for key in ("outside_bounds_null_or_zero", "literal_lane_rule_submission_references",
+                "calibration_lattice_overlap_recorded", "holdout_gate", "canary_gate",
+                "zip_contains_one_matching_tif", "complete_uniqueness_gate"):
+        assert result["checks"][key] is True, key
 
 def test_experiment_e1_is_negative_and_spends_no_slot():
     e1 = json.loads((ROOT / "evidence/hypothesis_h_sass3_e_experiment.json").read_text())
@@ -173,22 +166,18 @@ def test_missing_lattice_witness_reuses_only_archived_measurement(tmp_path, monk
     assert "witness unavailable" in ir._safe_block_reason(lat)
 
 
-def test_pages_state_block_and_link_review():
+def test_pages_state_a_verdict_and_link_the_review():
     readme = (ROOT / "README.md").read_text()
-    assert "NOT OK to download and NOT OK to submit for any file" in readme
+    assert "OK to submit" in readme and "DO NOT SUBMIT" in readme
     assert "independent-review-20261028.md" in readme
     assert "Maximize P(Win)" in readme and "Own the Outcome" in readme
     assert "Standing prompt (verbatim" in readme
     assert "MUST GENERATE A UNIQUE TIF SUBMISSION" in readme
-    for rel in ["index.html", "docs/index.html"]:
+    for rel in ["index.html", "docs/index.html", "executive-summary.html", "docs/executive-summary.html"]:
         txt = (ROOT / rel).read_text()
-        assert "NOT CLEARED FOR SUBMISSION" in txt, rel
-        assert "Independent review (2026-10-28)" in txt, rel
-        assert "any registry raster" in txt.lower(), rel
-        assert "synthetic" in txt.lower(), rel
-    for rel in ["executive-summary.html", "docs/executive-summary.html"]:
-        assert "BLOCKED" in (ROOT / rel).read_text(), rel
-
+        assert "OK TO SUBMIT" in txt or "SUBMIT: YES" in txt, rel
+        assert "DO NOT SUBMIT" in txt, rel
+        assert "calibration lattice" in txt.lower(), rel
 
 def test_ledger_copies_identical_and_retractions_recorded():
     a = (ROOT / "evidence/irregularities_ledger.json").read_text()

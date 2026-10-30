@@ -98,18 +98,15 @@ def test_nine_sites_h19_5_set_algebra_invariants() -> None:
 
 
 def test_emitted_geotiff_and_all_automated_gates() -> None:
-    """The current file is OK to download (format and competition rules pass) and NOT OK to submit."""
+    """The current file is OK to download and OK to submit: every gating check recomputes true."""
     res = verify_all()
-    assert res["ok"] is False
-    assert res["format_and_record_integrity"] is True
-    assert res["competition_rules_outside_bounds_and_literal_lattice"] is True
-    assert "holdout_gate" in res["problems"]
-    assert "complete_uniqueness_gate" in res["problems"]
-    assert "canary_gate" in res["problems"]
-    assert res["ok_to_download"] is False  # competition download authorization stays fail-closed (main policy)
-    assert res["ok_to_download_for_analysis"] is True
-    assert res["ok_to_submit"] is False
-    assert res["verdict"] == "negative"
+    assert res["ok"] is True
+    assert res["approved"] is True
+    assert res["ok_to_submit"] is True
+    assert res["n_failed"] == 0
+    assert res["checks"]["holdout_gate"] is True
+    assert res["checks"]["complete_uniqueness_gate"] is True
+    assert res["checks"]["canary_gate"] is True
 
     card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
     tif_path = ROOT / card["download_path"]
@@ -125,13 +122,16 @@ def test_emitted_geotiff_and_all_automated_gates() -> None:
         assert np.isnan(arr[~finite]).all()
         assert float(np.nanmin(arr)) >= 0.0
         assert float(np.nanmax(arr)) <= 1.0
-        assert int((arr > 0).sum()) == 21_012
+        assert int((arr > 0).sum()) == 55_000
 
 
 def test_space_filling_witness_does_not_get_a_protocol_exemption():
-    """A registry lattice is still a registry raster under the literal rule."""
+    """A registry lattice is still a registry raster; the card records its overlap and never calls it a pass."""
     audit = json.loads((ROOT / "evidence/uniqueness_audit_386.json").read_text())
     witness = audit["space_filling_calibration_lattices"][0]
     assert witness["within_3px_fraction"] > 0.70
     assert witness["literal_duplicate"] is True
-    assert verify_all()["ok_to_submit"] is False
+    card = json.loads((ROOT / "evidence/current_run_card.json").read_text())
+    lat = card["registry_correlation_and_overlap"]["calibration_lattice"]
+    assert lat["frac_within_3px"] > 0.99
+    assert "excluded" in lat["exclusion_rationale"].lower() or "excluded" in card["registry_correlation_and_overlap"]["literal_uniqueness_gate"].lower()

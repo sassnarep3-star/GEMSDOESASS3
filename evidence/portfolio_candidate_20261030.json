@@ -1,0 +1,77 @@
+{
+ "schema_version": 1,
+ "name": "gemsdoesass3-consensus-lane-portfolio-607-20261030T032000Z-c0ffee00",
+ "file": "docs/downloads/gemsdoesass3-consensus-lane-portfolio-607-20261030T032000Z-c0ffee00.tif",
+ "sha256": "fc3a61b68ebeaf46f1dc5f48d039c8270ba534cd40d1b025abefc15de3ab389f",
+ "zip": "docs/downloads/gemsdoesass3-consensus-lane-portfolio-607-20261030T032000Z-c0ffee00.tif.zip",
+ "zip_sha256": "980429fee7132fa15da5cf57a67c18c26e69d4228eec361867c5c29792f8cbb8",
+ "n_dots": 607,
+ "frac_within_champion_band": 0.0,
+ "lane_cap": 0.62,
+ "estimate": 0.0039976434826437,
+ "estimator": "consensus belief, anchored on champion",
+ "loo_rmse": 0.06532037022731757,
+ "loo_spearman": 0.695207207407828,
+ "loo_p": 2.1161684440855565e-08,
+ "K_hat": 12691.0,
+ "anchor": {
+  "name": "h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros",
+  "score": 0.2778
+ },
+ "overlaps_top10": [
+  {
+   "name": "gems46-r11f-scarp-radiometric-fusion-00e049b51218-zeros",
+   "score": 0.1589,
+   "frac_within_3px": 0.5700164744645799
+  },
+  {
+   "name": "gems75-trlt-radon-loco-ridge-20261021-zeros",
+   "score": 0.1627,
+   "frac_within_3px": 0.5370675453047776
+  },
+  {
+   "name": "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00",
+   "score": 0.1839,
+   "frac_within_3px": 0.5354200988467874
+  },
+  {
+   "name": "gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-allfinite",
+   "score": 0.225,
+   "frac_within_3px": 0.5222405271828665
+  },
+  {
+   "name": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00",
+   "score": 0.128,
+   "frac_within_3px": 0.5074135090609555
+  },
+  {
+   "name": "gems27-h29-hydrothermal-piedmont-celf-20261025-511898747886-allfinite",
+   "score": 0.219,
+   "frac_within_3px": 0.48599670510708404
+  },
+  {
+   "name": "gemsdoe36-kpl36-exp3-20261026-fc869911e88c-zeros",
+   "score": 0.1647,
+   "frac_within_3px": 0.3953871499176277
+  },
+  {
+   "name": "gems49-gate_ortho_w0.25-40k-20261006T213721Z-nan",
+   "score": 0.2376,
+   "frac_within_3px": 0.20593080724876442
+  },
+  {
+   "name": "gems73-h73-mcsc-seamfree-blakely-37654dots-20261021T073716Z-b27ac445-nan",
+   "score": 0.1917,
+   "frac_within_3px": 0.13344316309719934
+  },
+  {
+   "name": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan",
+   "score": 0.1152,
+   "frac_within_3px": 0.11367380560131796
+  }
+ ],
+ "stop_A": "empty_support",
+ "stop_B": "exhausted_support",
+ "credit_A": 0.0,
+ "credit_B": 65.0995198115706
+}

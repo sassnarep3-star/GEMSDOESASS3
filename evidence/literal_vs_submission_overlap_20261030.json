@@ -1,0 +1,341 @@
+{
+ "candidate": "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif",
+ "sha256": "f7d56a9e316ae6a8fc162bdb30b7ddf3a3796dcaf232399b8fa95a8cc88f7452",
+ "lattice": {
+  "ref": "scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "frac": 0.995182,
+  "coverage": 0.9987,
+  "dots": 206895
+ },
+ "submission_max": {
+  "ref": "extra/gemsdoe67-ovtr-ml-cover-tau3p0-20261012-nan.tif",
+  "frac": 0.699982,
+  "coverage": 0.5481,
+  "dots": 167597
+ },
+ "n_submission_refs": 52,
+ "n_submission_over_70": 0,
+ "n_pool_tested": 2627,
+ "n_pool_over_70": 0,
+ "max_pool": 0.6952727272727273,
+ "rows": [
+  {
+   "ref": "scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "frac": 0.995182,
+   "coverage": 0.9987,
+   "dots": 206895
+  },
+  {
+   "ref": "extra/gemsdoe67-ovtr-ml-cover-tau3p0-20261012-nan.tif",
+   "frac": 0.699982,
+   "coverage": 0.5481,
+   "dots": 167597
+  },
+  {
+   "ref": "extra/gemsdoe63-cvarlw-thin-s3p17-54864-20261011T220606Z-c58f60c4-nan.tif",
+   "frac": 0.645836,
+   "coverage": 0.2507,
+   "dots": 54864
+  },
+  {
+   "ref": "scored/gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+   "frac": 0.582455,
+   "coverage": 0.2036,
+   "dots": 123779
+  },
+  {
+   "ref": "focus/gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+   "frac": 0.579709,
+   "coverage": 0.1852,
+   "dots": 61328
+  },
+  {
+   "ref": "scored/gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+   "frac": 0.579709,
+   "coverage": 0.1852,
+   "dots": 61328
+  },
+  {
+   "ref": "scored/gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif",
+   "frac": 0.578964,
+   "coverage": 0.1961,
+   "dots": 121131
+  },
+  {
+   "ref": "scored/gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+   "frac": 0.578945,
+   "coverage": 0.2086,
+   "dots": 123939
+  },
+  {
+   "ref": "focus/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "frac": 0.575945,
+   "coverage": 0.1808,
+   "dots": 60069
+  },
+  {
+   "ref": "scored/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "frac": 0.575945,
+   "coverage": 0.1808,
+   "dots": 60069
+  },
+  {
+   "ref": "extra/gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif",
+   "frac": 0.568491,
+   "coverage": 0.1719,
+   "dots": 44090
+  },
+  {
+   "ref": "focus/gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+   "frac": 0.568491,
+   "coverage": 0.1719,
+   "dots": 44090
+  },
+  {
+   "ref": "focus/gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+   "frac": 0.568491,
+   "coverage": 0.1719,
+   "dots": 44090
+  },
+  {
+   "ref": "scored/gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+   "frac": 0.568491,
+   "coverage": 0.1719,
+   "dots": 44090
+  },
+  {
+   "ref": "scored/gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+   "frac": 0.568491,
+   "coverage": 0.1719,
+   "dots": 44090
+  },
+  {
+   "ref": "extra/gems29-wormrank-d28-20261003-59dcaf6dd11d-zeros.tif",
+   "frac": 0.563873,
+   "coverage": 0.1696,
+   "dots": 41338
+  },
+  {
+   "ref": "focus/gems28-h32-1-prethin-tip-euler-d2-8-20261003-31e35eee884e-allfinite.tif",
+   "frac": 0.552909,
+   "coverage": 0.1667,
+   "dots": 42294
+  },
+  {
+   "ref": "scored/8GEMSDOE_Hedge-v2_submission.tif",
+   "frac": 0.551945,
+   "coverage": 0.2836,
+   "dots": 227507
+  },
+  {
+   "ref": "focus/GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
+   "frac": 0.545491,
+   "coverage": 0.1662,
+   "dots": 41865
+  },
+  {
+   "ref": "focus/gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+   "frac": 0.528964,
+   "coverage": 0.1601,
+   "dots": 40199
+  },
+  {
+   "ref": "focus/gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif",
+   "frac": 0.528964,
+   "coverage": 0.1601,
+   "dots": 40199
+  },
+  {
+   "ref": "scored/gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+   "frac": 0.528964,
+   "coverage": 0.1601,
+   "dots": 40199
+  },
+  {
+   "ref": "scored/gemsdoe-ens12-adopted-7f00890a.tif",
+   "frac": 0.528582,
+   "coverage": 0.2429,
+   "dots": 172974
+  },
+  {
+   "ref": "focus/gems28-h38-1-hf-euler-r30-r1-20261003-56a9f473edc7-allfinite.tif",
+   "frac": 0.519309,
+   "coverage": 0.1584,
+   "dots": 37860
+  },
+  {
+   "ref": "focus/gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+   "frac": 0.518855,
+   "coverage": 0.1575,
+   "dots": 37660
+  },
+  {
+   "ref": "extra/gemsdoe48-h59-cover-ds-belief-b2xh33d-20261008T184547Z-b79c4c61d8d8.tif",
+   "frac": 0.516418,
+   "coverage": 0.1657,
+   "dots": 37723
+  },
+  {
+   "ref": "focus/gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif",
+   "frac": 0.501673,
+   "coverage": 0.1546,
+   "dots": 38854
+  },
+  {
+   "ref": "focus/gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+   "frac": 0.496527,
+   "coverage": 0.1509,
+   "dots": 37654
+  },
+  {
+   "ref": "scored/gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+   "frac": 0.482818,
+   "coverage": 0.272,
+   "dots": 69281
+  },
+  {
+   "ref": "scored/gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+   "frac": 0.449491,
+   "coverage": 0.2631,
+   "dots": 174232
+  },
+  {
+   "ref": "focus/gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-allfinite.tif",
+   "frac": 0.421491,
+   "coverage": 0.1699,
+   "dots": 37654
+  },
+  {
+   "ref": "extra/gems49-gate_ortho_w0.25-40k-20261006T213721Z-nan.tif",
+   "frac": 0.337873,
+   "coverage": 0.1532,
+   "dots": 40000
+  },
+  {
+   "ref": "focus/gems30-MSDB1-edge44090-20261025-e7856ec3f14a.tif",
+   "frac": 0.337109,
+   "coverage": 0.1828,
+   "dots": 44090
+  },
+  {
+   "ref": "extra/gems73-h73-mcsc-seamfree-blakely-37654dots-20261021T073716Z-b27ac445-nan.tif",
+   "frac": 0.332273,
+   "coverage": 0.1488,
+   "dots": 37654
+  },
+  {
+   "ref": "extra/gems46-r11f-scarp-radiometric-fusion-00e049b51218-zeros.tif",
+   "frac": 0.324891,
+   "coverage": 0.2042,
+   "dots": 44090
+  },
+  {
+   "ref": "extra/gems70-p5-dual-submod300-oof38k-20261020.tif",
+   "frac": 0.313273,
+   "coverage": 0.1256,
+   "dots": 37654
+  },
+  {
+   "ref": "focus/gems27-h29-hydrothermal-piedmont-celf-20261025-511898747886-allfinite.tif",
+   "frac": 0.3092,
+   "coverage": 0.1204,
+   "dots": 37654
+  },
+  {
+   "ref": "extra/gems75-trlt-radon-loco-ridge-20261021-zeros.tif",
+   "frac": 0.305255,
+   "coverage": 0.1553,
+   "dots": 36800
+  },
+  {
+   "ref": "extra/gems76-ptcf-tiltworm-submod39k-20261021T034000Z-6316481d-zeros.tif",
+   "frac": 0.298836,
+   "coverage": 0.1289,
+   "dots": 39200
+  },
+  {
+   "ref": "extra/gems91-s17-lftg-20261025T160014Z-7b6bf90844-zeros.tif",
+   "frac": 0.274182,
+   "coverage": 0.1401,
+   "dots": 37654
+  },
+  {
+   "ref": "extra/gemsdoe82-h82-submodular-punoisyor-20261021T235456Z-fe137199-zeros.tif",
+   "frac": 0.263345,
+   "coverage": 0.1247,
+   "dots": 37654
+  },
+  {
+   "ref": "focus/gems25-h66-mgd-flank-sapd3-0-k3p5-20261025-da617550a0e9-zeros.tif",
+   "frac": 0.230291,
+   "coverage": 0.1822,
+   "dots": 44832
+  },
+  {
+   "ref": "focus/gems24-gvc1-negative-geothermal-lineament-submod-20261025-abe8e51c719d-zeros.tif",
+   "frac": 0.2198,
+   "coverage": 0.1359,
+   "dots": 37654
+  },
+  {
+   "ref": "extra/gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-nan.tif",
+   "frac": 0.205527,
+   "coverage": 0.1584,
+   "dots": 37654
+  },
+  {
+   "ref": "focus/gemsdoe33-s33-seisdil-strain-seismicity-37654-20261026-3463540a7e02-zeros.tif",
+   "frac": 0.197891,
+   "coverage": 0.1361,
+   "dots": 37654
+  },
+  {
+   "ref": "focus/gemsdoe36-kpl36-exp3-20261026-fc869911e88c-zeros.tif",
+   "frac": 0.186382,
+   "coverage": 0.0831,
+   "dots": 37654
+  },
+  {
+   "ref": "extra/gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif",
+   "frac": 0.168564,
+   "coverage": 0.1307,
+   "dots": 33766
+  },
+  {
+   "ref": "focus/gems28-s21-puhgb-20261026-16bbf281ba9b-allfinite.tif",
+   "frac": 0.166836,
+   "coverage": 0.1272,
+   "dots": 37654
+  },
+  {
+   "ref": "extra/gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif",
+   "frac": 0.151273,
+   "coverage": 0.1336,
+   "dots": 37913
+  },
+  {
+   "ref": "extra/gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+   "frac": 0.128364,
+   "coverage": 0.1221,
+   "dots": 44090
+  },
+  {
+   "ref": "extra/gemsdoe72-h72-1-sgmc-offcatalogue-20261020T195456Z-6e6525e5-nan.tif",
+   "frac": 0.086455,
+   "coverage": 0.0872,
+   "dots": 27823
+  },
+  {
+   "ref": "scored/gemsdoe9-PLACEHOLDER-2314b599.tif",
+   "frac": 0.045182,
+   "coverage": 0.0629,
+   "dots": 147684
+  },
+  {
+   "ref": "focus/gems28-s18-mxtp-20261025-3e95505c011a-allfinite.tif",
+   "frac": 0.038764,
+   "coverage": 0.0511,
+   "dots": 11082
+  }
+ ]
+}

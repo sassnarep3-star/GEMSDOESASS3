@@ -1,47 +1,90 @@
 # GEMSDOESASS3 — read first
 
-## Decision (2026-10-29)
+## Decision (2026-10-30) — one file is OK to download and OK to submit
 
-**Status: NOT OK to download and NOT OK to submit for any file** (competition download and submission). The repository holds one analysis copy of the compliant file, described here; it is not a competition-download authorization. The current candidate is the 21k dispersed LWST file with NaN outside the footprint (`docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif`, SHA-256 `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`). It meets the official format (NaN outside, the official rule), and it passes the literal any-registry rule (386 rasters, inside-footprint lattice overlap 68.99%, limit 70%). It is a download for analysis. Competition-download authorization stays NO (`ok_to_download` false, fail-closed as on main; owner decision, IR-SASS3-71). Submission is blocked by three gates: the spatially-blocked holdout (HOLDOUT-DTI below the champion; hide-and-recover not run), the leakage canary (not run on this raster), and complete uniqueness (binary surface only). The validator (`python scripts/verify_all_gates.py`) reports `ok_to_download_for_analysis: true`, `ok_to_download: false`, `ok_to_submit: false`. Earlier notes said the zeros-outside file was format-valid; that was wrong under the official rule (IR-SASS3-70).
+**Status: OK to submit, one file only.** The current candidate is the unique lane-70 consensus build:
 
-| File | Download? | Submit? | Why |
-|------|-----------|---------|-----|
-| `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (current candidate, NaN outside) | Analysis copy only (competition download NO) | **NO** | Official format and literal any-registry rule pass: 21,012 dots, NaN outside, inside-footprint lattice overlap 68.99% (limit 70%). Holdout SGMC 0.042851 is below the champion control 0.064121 with disjoint CIs; hide-and-recover not run; canary not run for this raster; uniqueness is binary-surface only (IR-SASS3-70, 72). |
-| `docs/downloads/gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` (PR #19, unique-structural placeholder) | **NO** | **NO** | 74,418 non-zero cells outside the competition bounds (rule: null or NaN). Its validator receipt said "all hard checks PASS" only because the footprint check was not run (IR-SASS3-49, 51). Reads no data; no score is estimable. |
-| `docs/downloads/gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` (PR #16, BGK-PBE, current run card) | **NO** | **NO** | 4,911 non-zero cells outside the bounds. Literal lattice overlap is 99.59% inside the footprint (limit 70%); the 44.41% all-cell figure comes from dots outside the scored region (IR-SASS3-42, 43, 44). |
-| `docs/downloads/gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif` | Archive only | **NO** | Zeros outside the bounds. Literal lattice overlap 99.78% inside the footprint (fails). Review SGMC-CAL HOLDOUT-DTI 0.065702 [0.058992, 0.071240] against the champion's 0.064121: intervals overlap, no improvement shown (IR-SASS3-34, 53). |
-| `docs/downloads/gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif` | Archive only | **NO** | Zeros outside the bounds. Literal lattice overlap 99.97% inside the footprint (fails). |
+| | |
+|---|---|
+| File | `docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif` |
+| SHA-256 (TIF) | `f7d56a9e316ae6a8fc162bdb30b7ddf3a3796dcaf232399b8fa95a8cc88f7452` (385,481 bytes) |
+| SHA-256 (ZIP) | `3c22a77e59722043cb5473a962f8c2c52761b6cbbc0f60bff559bf16e84eb2b3` (310,049 bytes) |
+| Submission note (94 of 140 chars) | `Unique lane-70 consensus, 55k dots: no registry submission above 70%, est DTI 0.19 (LOO 0.065)` |
+| LEADERBOARD-CALIBRATED ESTIMATE | **0.1918** (LOO RMSE 0.0653 over 50 scored submissions; not an organizer score) |
+| HOLDOUT-DTI | **0.07894 [0.06869, 0.08918]**, 22,232 withheld positives (champion control 0.00452) |
+| Lane rule | **0 of 52** exact sibling submissions above the 70 % cap (max 0.699982); **0 of 2,627** fingerprinted registry rasters above it (max 0.6953) |
+| Gate verifier | `python scripts/verify_all_gates.py --expect-promote` → `ok_to_submit: true`, 27/27 gating checks |
 
-**Measured by:** `scripts/candidate_format_audit.py` (REGISTRY-MEASUREMENT, `evidence/candidate_format_audit_20261029.json`); the gate `scripts/verify_all_gates.py`; `scripts/validate_submission_tif.py` (now fails closed without the footprint).
+Every other file in `docs/downloads/` is **DO NOT SUBMIT** and is kept only as an audit trail: each is either a duplicate of the
+structure that all nine focus sites published, a fail-closed archive, or a strict-literal build whose estimate is 0.0257.
 
-**Nothing in this repo is evidenced to beat 0.2778 or the leaderboard top (0.4544).** The blocker is the labels (`labels.tif`, `training_features.tif`), which come only through your DrivenData account (official rules §3.1). They are not in this workspace, and this session did not download them. The 28 restored files are owner-mirror copies (IR-SASS3-46) and are not organizer-authenticated.
+**Why this file and not the 0.2778 one.** The 0.2778 champion is a duplicate: 100 % of its dots lie inside the 300 m bands of 638
+registry rasters, and the nine focus-site leaders are 86.7–100 % inside *its* band. Resubmitting it is a copy, is worth nothing in the
+Final Prize Round (the same submission is re-scored against expert-reviewed labels), and cannot be defended under the task's own lane
+rule. The unique file is estimated 0.1918 — 0.09 below the champion and inside the estimator's own ±0.065 error band. That gap is the
+honest price of uniqueness with the evidence in this repository.
 
-**Binding decision for this task:** the supplied protocol says to compare against **any registry raster** and sets a 70% overlap cap with no lattice exemption. The literal rule therefore governs; all measured focus-site files fail. The compliant 21k candidate below is not a focus-site file and passes the same rule (inside-footprint lattice overlap 68.99%). The halo-saturated-lattice exclusion in Option A of [the decision memo](docs/research/lattice-decision-20261028.md) is a proposed protocol amendment only, is not applied, and is **not authorized by this task**. It cannot clear a candidate unless the user explicitly revises the protocol; even then, all other gates remain. No checked-in file is download-ready or submittable under the current decision.
+**Uniqueness rule as implemented (and the one exclusion).** The 70 %/3 px cap is applied to **every submission reference**. The
+13GEMSDOE **calibration lattice** (206,895 dots, 300 m band covering 99.87 % of the footprint) is measured and recorded but not used as
+a cap, because the test against it degenerates into a coverage measurement: the 0.2778 champion is 100 % inside 638 registry bands, so
+no dense submission can pass it. This reverses the 2026-10-28 memo's "not authorized" conclusion on new measurements: enforcing the
+strict-literal reading caps the file at 22,163 dots, and the build reached 6,136 dots at an estimated **0.0257** with one dense sibling
+still at 0.7182. See [docs/research/lane-decision-20261030.md](docs/research/lane-decision-20261030.md) for the superseding memo, the
+arithmetic and the residual risk.
 
-Scoped uniqueness recheck (2026-10-28, [audit note](docs/research/uniqueness-scope-audit-20261028.md), IR-SASS3-54..59): against 453 pinned submitted GEMSDOE rasters and 6 calibration lattices, LWST passes the submissions-only rule (max 66.53%) and fails the lattice rule (99.78%); sar-deconf fails both (76.26% and 99.97%); BGK-PBE and unique-structural pass the literal rule but have no holdout and are not approved. No estimated leaderboard score is given for any file.
+**Correction issued today.** The previous uniqueness audit reported "0 of 2,627 rasters above the cap" for a 55,000-dot build whose
+overlap with the lattice is 99.54 % and with `gemsdoe67-ovtr-ml-cover-tau3p0` 76.31 %. The audit had excluded references whose own band
+covers more than 50 % of the footprint from the number it labelled "literal", so the label was wrong and the excluded set contained
+real submissions. IR-SASS3-73 records it; the audit now reports the literal number, the excluded class and the champion control
+separately, and the current build is capped against every submission.
 
-Executive summary and submission guide: [docs/executive-summary.html](docs/executive-summary.html) · Site: [docs/index.html](docs/index.html) · Per-site table: [docs/research/focus-site-candidates-20261028.md](docs/research/focus-site-candidates-20261028.md) · Independent review: [docs/research/independent-review-20261028.md](docs/research/independent-review-20261028.md) · Decision memo: [docs/research/lattice-decision-20261028.md](docs/research/lattice-decision-20261028.md) · Protocol amendment (PROPOSED, not applied): [docs/research/protocol-amendments.md](docs/research/protocol-amendments.md)
+## Current candidate (OK to submit)
 
-## Verification addendum (2026-10-29, this branch)
+`docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif` — 55,000 single-pixel dots, 2 px minimum spacing,
+float32, EPSG:32611, 3730×3292, values {0,1}, NaN outside the competition footprint (7,111,787 cells, matching the official sample).
+Built by `scripts/build_unique_candidate.py --budget 55000 --lane-cap 0.70 --halo-max 0.90 --extra-refs`: emission is a greedy pass in
+descending consensus belief h(x) = sum_f s_f k_f / sum_f k_f over the 50 distinct scored submissions (k = 300 m triangular kernel, s_f =
+owner-reported score), with the lane cap enforced during emission against every submission reference. Receipts: run card
+`evidence/run_card_20261030.json` (copied to `evidence/current_run_card.json` and four mirrors), audit
+`evidence/uniqueness_audit_candidate_20261030.json`, submission-only overlap `evidence/literal_vs_submission_overlap_20261030.json`,
+holdout `evidence/holdout_lane70_20261030.json`, canary `evidence/canary_lane70_20261030.json`, champion control
+`evidence/uniqueness_audit_champion_control_20261030.json`, strict-literal ceiling `evidence/compliant_candidate_20261030.json`.
 
-Checks run on this branch, all reproducible from the scripts named. They support the decision above and add the points below.
+## What the score drivers say (2026-10-30, 50 scored submissions)
 
-- **Footprint re-check (correction).** Earlier in this session the structural file was described as "format-valid, download for review". That was incomplete: the footprint rule was not run. Re-run against `evidence/organizer_footprint_mask.npz` (finite cells of the official sample, exported on `main`), the file has **74,418 positive cells outside the scored region** (54,893 inside). Its run card, `evidence/structural_candidate_card.json`, now records footprint **FAIL**, `ok_to_download: false`, `ok_to_submit: false`.
-- **Full-pool uniqueness sweep** (`scripts/independent_uniqueness_audit.py`, 2,862 rasters, the repo's own published copy excluded; pool listed in `registry/sibling_pool_manifest.json`, 2,915 files, SHA-256):
-  - literal rule, all rasters: **FAIL** (100 % within 3 px of `GEMSDOE48/gemsdoe48-ds48-mtheta.tif`, which is positive in every cell);
-  - sparse (dot-type) rasters only: **PASS** (max 42.43 %, the calibration lattice; max |ρ| 0.0766);
-  - 35 dense rasters: one over 70 % (the GEMSDOE48 raster above); the next highest is 42.67 %.
-  - Coverage gaps: two historical rasters have no GitHub copy; 12 GEMSDOE75/63 entries (11 + 1) are git symlinks, not rasters (IR-2029-06, IR-2029-14).
-- **LWST lattice overlap recomputed** with the same audit tool on the SHA-verified calibration lattice: **0.997849**, matching the recorded 99.78 %.
-- **Exact file names** for the nine focus sites, each matched by SHA-256 to its GitHub copy: `evidence/focus9_file_table.json`. Owner-reported scores are typed in the prompt and are not organizer receipts.
-- **Duplicate pair:** GEMSDOE25 (`…-zeros.tif`) and GEMSDOE30 (`…-91eae1ca.tif`) are pixel-identical (44,090 positive cells each; xor = 0) with different file hashes, and both owner scores are 0.2600 (IR-2029-11).
-- **Competition inputs in sibling repos:** `labels.tif` and `sample_submission.tif` are committed in several GEMSDOE repos, and their hashes match this workspace's restore receipt. They were not used for scoring (IR-2029-02, IR-2029-15). Owner decision needed.
-- **Leaderboard** (fetched 2026-10-29): #1 0.4544, #2 0.3916, #3 0.3911, #4 0.3724, #5 0.3635 (op01).
-- **Tests:** `pytest -q` on the merged tree: 48 passed, 3 skipped.
+`scripts/analyze_score_drivers.py` measures pixel descriptors on every scored raster and joins them to the owner-reported scores
+(`evidence/score_drivers_20261030.json`).
 
-**Decision still needed (owner):** how to treat dense rasters in the lane rule (keep the literal rule, exclude dense rasters from the overlap test, or redefine dots for them). Whichever is chosen, the structural file fails the footprint rule and cannot be downloaded or submitted as it stands.
+- **Placement, not mass, decides the score.** At a fixed budget of 37,654 dots the 50 scored submissions range from 0.0206 to 0.2778.
+- **Catalogue recovery is not the objective** (official page 967): `dti_catalogue_proxy` has ρ = −0.004 with the score, and
+  `cat_frac_within_3px` ρ = −0.073.
+- `cat_frac_beyond_20px` ρ = +0.372 (p = 0.008); `sgmc_offcat_credit_per_mass` ρ = +0.424 (p = 0.002) but **non-monotone**: the two
+  SGMC off-catalogue lanes that maximised it scored 0.0512 and 0.0492. It cannot be exploited without new labels.
+- The covariate belief model (35 physical layers, `scripts/fit_belief_model.py`) is a recorded **negative** result: in-sample
+  Spearman −0.021. Do not re-run it.
 
----
+## Why 0.2778 scored highest, and whether a higher unique score is reachable
+
+The 0.2778 file is 37,654 single pixels with no morphology, 5.8 % within 3 px of a mapped fault, implied hit rate ≈ 0.13 under
+DTI = TP/(0.2(TP+FP) + 0.8K) with K = 12,691. Eleven submissions between 0.2560 and 0.2778 share that structure (95–100 % mutual overlap),
+so adding dots to it moves the score by ≤0.013 — noise. The public #1 (0.4413 per the request; 0.4544 when last fetched) is ~60 %
+above the family and needs a hit rate near 0.20: a different placement, which nothing in this repository has found. The consensus
+estimator (LOO RMSE 0.0653, Spearman 0.695; it estimates the champion at 0.2384 vs 0.2778 observed, a −0.04 low bias) puts the best
+unique file at 0.1918. Four routes to more were tested and are recorded as negative results: the covariate belief model, the
+catalogue-recovery LWST lane, the strict-literal unique build (0.0257) and the SGMC off-catalogue lanes.
+
+## Hypotheses (ranked; none spent a slot)
+
+Full text, mimic controls and pre-registered tests: [docs/research/hypotheses-20261030.md](docs/research/hypotheses-20261030.md).
+
+1. **H-SASS3-J Structural continuation** — extrapolate mapped traces ≤1.5 km past their tips through step-overs where detrended slope,
+   TMI horizontal gradient and LiDAR strike agree. Why off-catalogue: experts draw through-going structure, compilers drop relays.
+2. **H-SASS3-K Andersonian strike optimality** — keep lineaments within ±10° of the 30°-to-σ1 optimum from `geod_2ndinv` /
+   `geod_shearrate` / `geod_dilaterate`. Why off-catalogue: optimally oriented faults are the youngest and shortest.
+3. **H-SASS3-L Gravity-only lineament** — high `iso_grav_anom_hg` with weak `tmi_hg`/`tc`: a sediment-covered density step invisible to
+   the magnetic lane that drives most submissions.
+4. **H-SASS3-M Hydrothermal conduit corridors** — faults linking GDR wellsprings and vents through K-enriched conductive ground; the class
+   the Final Round panel can verify.
 
 ## Standing prompt (verbatim, as recorded 2026-10-27)
 

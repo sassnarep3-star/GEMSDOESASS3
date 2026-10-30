@@ -1,0 +1,8 @@
+{
+ "canary": "candidate proximity field (triangular 3 px) vs public catalogue labels",
+ "auc": 0.5520413974880304,
+ "n_pos": 60988,
+ "n_neg": 200000,
+ "threshold": 0.9,
+ "status": "PASS"
+}

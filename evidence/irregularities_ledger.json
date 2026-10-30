@@ -515,6 +515,15 @@
    "title": "Uniqueness receipt for the compliant file is literal-only, not a full protocol pass",
    "finding": "evidence/literal_audit_...-nan.json compares 386 registry rasters and passes (worst within-3px 68.99% on the inside-footprint dots; worst |Spearman| 0.1504). The surface stage used the emitted binary surface because the pre-placement continuous surface was not retained, so the test is weaker than Protocol Rule 1 requires.",
    "resolution": "Recorded as NOT CLEARED in the card (pre_placement_rank_correlation null). Re-running the surface stage with the continuous pre-placement surface would be needed to clear it."
+  },
+  {
+   "id": "IR-SASS3-73",
+   "severity": "HIGH (FIXED, WITH CORRECTION)",
+   "title": "Uniqueness audit mislabelled a halo-excluded overlap as literal",
+   "finding": "scripts/audit_unique_candidate.py excluded references whose own 300 m band covers more than HALO_MAX (50 %) of the footprint from the number it reported as max_frac_within_3px_literal. For the 2026-10-30 55,000-dot build that excluded the 13GEMSDOE lattice (true overlap 99.54 %) and gemsdoe67-ovtr-ml-cover-tau3p0 (76.31 %, a real submission), so the published claim '0 of 2,627 above the cap, max 63.96 %' was true only for the halo-excluded class.",
+   "resolution": "Recomputed independently from the rasters (evidence/independent_recheck_candidate_20261030.json), rewrote the report to carry separate literal / submission-only / lattice numbers, rebuilt the candidate with the cap enforced against every submission (evidence/literal_vs_submission_overlap_20261030.json: 0 of 52 above 70 %, max 0.699982), and recorded the lattice exclusion with its arithmetic in docs/research/lane-decision-20261030.md.",
+   "impact": "The earlier file would have failed the lane rule against a real sibling submission; it was removed and replaced.",
+   "status": "closed"
   }
  ]
 }

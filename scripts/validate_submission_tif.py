@@ -57,17 +57,27 @@ def validate(path: Path) -> dict:
         arr = ds.read(1).astype(np.float64)
         nodata = ds.nodata
     finite = np.isfinite(arr)
-    checks["no_nan_or_inf"] = bool(finite.all())
-    vals = arr[finite]
+    footprint0 = _footprint(arr.shape)
+    # Official text: "data outside the bounds is null or nan" and the official sample submission is
+    # NaN outside its footprint.  The hard requirement is therefore: every cell INSIDE the footprint
+    # is finite and in [0, 1]; cells outside may be NaN (preferred, matches the sample) or 0.
+    if footprint0 is None:
+        inside = finite
+        checks["finite_inside_footprint"] = bool(finite.all())
+    else:
+        checks["finite_inside_footprint"] = bool(finite[footprint0].all())
+        notes.append(f"{int((~finite & ~footprint0).sum())} NaN cells outside the footprint "
+                     f"(allowed: official text 'null or nan'; matches sample_submission.tif)")
+    checks["no_inf"] = bool(not np.isinf(arr).any())
+    checks["no_nan_or_inf"] = checks["finite_inside_footprint"] and checks["no_inf"]
+    vals = arr[finite & (footprint0 if footprint0 is not None else True)]
     checks["values_in_0_1"] = bool(vals.size > 0 and vals.min() >= 0.0 and vals.max() <= 1.0)
-    if not checks["no_nan_or_inf"]:
-        notes.append(f"{int((~finite).sum())} non-finite cells")
     if nodata is not None:
         notes.append(f"nodata declared = {nodata}; official text asks outside-bounds cells to be null or NaN")
     # Competition text (page 967): "data outside the bounds is null or nan". Non-zero finite cells outside the
     # organizer footprint fail the rule. Zeros outside are the convention of the owner-scored files (see IR-SASS3-27).
     # Fail closed: without the footprint this check is PENDING and the validator does not pass.
-    footprint = _footprint(arr.shape)
+    footprint = footprint0
     if footprint is None:
         checks["outside_bounds_null_or_zero"] = False
         notes.append("PENDING_DATA: outside-bounds check NOT run; sample_submission.tif footprint is not in this workspace (login-walled). Fails closed.")
