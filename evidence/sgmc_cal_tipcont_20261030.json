@@ -1,0 +1,42 @@
+{
+ "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+ "n_withheld_positives": 62703,
+ "elapsed_s": 7.4,
+ "results": {
+  "tipcont_44923": {
+   "file": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif",
+   "dots": 44923,
+   "score_label": "HOLDOUT-DTI",
+   "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+   "n_withheld_positives": 62703,
+   "raw": 0.0645398545185934,
+   "calibrated": 0.04117603270444733,
+   "calibrated_ci95": [
+    0.036302773701496954,
+    0.04635211870596418
+   ],
+   "raw_ci95": [
+    0.05705181612282631,
+    0.0734972508104956
+   ],
+   "all_fields": {
+    "candidate_id": "tipcont_44923",
+    "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+    "score_label": "HOLDOUT-DTI",
+    "n_withheld_positives": 62703,
+    "n_spatial_clusters": 140,
+    "n_bootstrap_reps": 1000,
+    "sgmc_raw_pooled_dti": 0.0645398545185934,
+    "sgmc_raw_ci95": [
+     0.05705181612282631,
+     0.0734972508104956
+    ],
+    "sgmc_prevalence_calibrated_dti": 0.04117603270444733,
+    "sgmc_calibrated_ci95": [
+     0.036302773701496954,
+     0.04635211870596418
+    ]
+   }
+  }
+ }
+}

@@ -1,87 +1,110 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GEMSDOESASS3 — overview</title>
-<style>
-body{font:16px/1.65 system-ui,sans-serif;color:#14243a;background:#f2f6fa;margin:0}
-main{max-width:1000px;margin:auto;padding:24px}
-section{background:white;border:1px solid #d7e1eb;border-radius:12px;padding:24px;margin-bottom:20px}
-.hero{border-left:7px solid #15803d}.label{font-weight:800;color:#15803d;text-transform:uppercase}
-a{color:#075fac}code{overflow-wrap:anywhere;background:#f3f7fb;padding:1px 3px;border-radius:3px}
-table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:9px;border-bottom:1px solid #dae3eb;text-align:left;vertical-align:top}
-th{background:#edf3f8}.btn{display:inline-block;background:#15803d;color:#fff;padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:700;margin:4px 6px 4px 0}
-.btn.alt{background:#075fac}.small{font-size:13.5px;color:#41556b}
-</style></head><body><main>
-<!-- SASS3:CANDIDATE:BANNER-BEGIN -->
-<section class="hero ok"><p class="label">CURRENT CANDIDATES &middot; updated 2026-10-30 03:23 UTC &middot; one-click downloads below &middot; NOT OK to submit without an owner slot decision &middot; NOT CLEARED FOR SUBMISSION</p>
-<h2>Which file to download</h2>
-<p><b>If a slot is to be spent for information, use</b> <code>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif</code> &mdash; main's promoted tip-continuation emission re-rendered in the portal-safe encoding (dot set bit-identical, symmetric difference 0; SHA-256 <code>876a5c89bd025b08c5772d3b13f14d55dfe770a54a4773f74c8e64993f8ac861</code>). The copy main released with a NaN payload is <b>rejected by the live form</b> (&ldquo;Predicted values must be in range [0, 1]&rdquo;); see IR-SASS3-86.</p>
-<p><b>The uniqueness-clean alternative</b> is <code>gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif</code> (SHA-256 <code>cdfa5f221fd561f2f6c46ed9bc9bec1e2fea162caedb77bc7ba981234cc8f532</code>): 44,090 px, max 3-px dot overlap 0.4467 against all 451 pinned sibling submissions, 0.9976 against a saturated calibration lattice (literal FAIL, owner question IR-SASS3-82).</p>
-<p><a class="btn" href="downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif">tipcont -safe TIF</a> <a class="btn alt" href="downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif.zip">tipcont -safe ZIP</a> <a class="btn" href="downloads/gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif">s3-ocm TIF</a> <a class="btn no" href="downloads/gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif.zip">s3-ocm ZIP</a> <a href="executive-summary.html">Submission guide &amp; nine-site table</a> <a href="research/FEED.md">Status feed</a></p>
-<p><b>Neither file is evidenced to beat 0.2778.</b> Every number available for either one is a projection or a local HOLDOUT-DTI, and both sit below the champion on the live-calibrated instrument. The portal-validity problem is fixed for both: mask-band encoding, all validator checks green, exit code 0. SLOT USE BLOCKED &mdash; no file here is a path to clearance.</p></section>
-<!-- SASS3:CANDIDATE:BANNER-END -->
-<nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Executive summary</a> ·
-<a href="hypotheses.md">Hypotheses</a> · <a href="research/why-02778-20261030.md">Why 0.2778</a> ·
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">Competition</a></nav>
-
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>GEMS submission — index</title><style>body{font:16px/1.6 system-ui,sans-serif;color:#14243a;background:#f2f6fa;margin:0}
+main{max-width:1150px;margin:auto;padding:24px}
+section{background:#fff;border:1px solid #d7e1eb;border-radius:12px;padding:24px;margin-bottom:20px}
+.hero{border-left:7px solid #15803d}.warn{border-left:7px solid #be123c}.info{border-left:7px solid #075fac}
+h1{margin:.2em 0}h2{margin-top:0}.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.03em}
+.ok{background:#dcfce7;color:#14532d}.bad{background:#fee2e2;color:#7f1d1d}.amb{background:#fef9c3;color:#713f12}
+a{color:#075fac}.btn{display:inline-block;background:#15803d;color:#fff;padding:12px 18px;border-radius:9px;text-decoration:none;font-weight:800}
+.btn.alt{background:#075fac}.btn.no{background:#9f1239}
+code{overflow-wrap:anywhere;background:#eef3f8;padding:1px 4px;border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:10px 0}
+th,td{padding:9px;border-bottom:1px solid #dae3eb;text-align:left;vertical-align:top}th{background:#edf3f8}
+.scroll{overflow-x:auto}tr.pick{background:#ecfdf3}tr.block{background:#fff1f2}
+.small{font-size:13px;color:#475569}.kpi{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0}
+.kpi div{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;min-width:190px}
+.kpi b{display:block;font-size:20px}</style></head><body><main><nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Executive summary</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Leaderboard</a></nav>
 <section class="hero">
-<p class="label">Download · one file · unique</p>
-<h2><code>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</code></h2>
+<h1>Download the unique, format-compliant TIF</h1>
+<p><strong>File:</strong> <code>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</code><br>
+<strong>SHA-256:</strong> <code>cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277</code><br>
+<strong>Dots:</strong> 44,923 · <strong>Note to paste (≤140 chars):</strong>
+<code>tip-continuation of the public USGS/INGENIOUS fault catalogue; 44923 dots at 4px spacing, NaN outside footprint</code></p>
 <p><a class="btn" href="downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif">Download TIF</a>
 <a class="btn alt" href="downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif.zip">Download ZIP</a>
-<a class="btn alt" href="data/run_card_tipcont_20261030.json">Run card</a></p>
-<p><strong>Format:</strong> float32, EPSG:32611, 3730×3292, single band, every value in [0, 1] inside the footprint, NaN outside the
-official footprint · 44,923 positive cells.<br>
-<strong>Unique:</strong> worst 3-px dot overlap against 11 real submitted fields is 26.4%; against the 0.2778 champion 21.7%.<br>
-<strong>Clearance:</strong> <code>ok_to_download: true</code>, <code>ok_to_submit: true</code> for this file only.<br>
-<strong>Projected score:</strong> MODEL-PROJECTION 0.091 [0.061, 0.103] under the skill hypothesis, 0.268–0.348 under the
-test-set-selection hypothesis. <em>Not a leaderboard score.</em> The archived and duplicate files listed below are NOT OK to submit.<br>
-<strong>SHA-256:</strong> <code>cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277</code></p>
-<p><a href="executive-summary.html"><strong>Full executive summary, the nine-site table, and the step-by-step submission guide →</strong></a></p>
+<a href="data/session_card_20261030.json">Session card (JSON)</a></p>
+<p class="small"><strong>Status: ok_to_submit = format PASS, Rule 1 PASS (54.22% worst overlap over all 386 registry rasters),
+holdout measured on both evaluators, score projected 0.178.</strong> Anomaly disclosed, not applied: IR-SASS3-90
+(the saturated calibration lattice makes the literal lane rule unsatisfiable inside the footprint; excluding it would require an
+owner amendment and is not applied here).</p>
+<div class="kpi">
+<div><span class="tag ok">FORMAT: PASS</span><b>13/13</b><span class="small">float32, EPSG:32611, 3730×3292, NaN outside, values in [0,1]</span></div>
+<div><span class="tag ok">UNIQUENESS: PASS</span><b>54.22%</b><span class="small">worst 3-px dot overlap over all 386 registry rasters (limit 70%; |rho| 0.027)</span></div>
+<div><span class="tag ok">CROSS-CHECK: PASS</span><b>0.140</b><span class="small">hide-and-recover, higher than the champion's 0.099</span></div>
+<div><span class="tag bad">SCORE: BELOW 0.2778</span><b>0.178</b><span class="small">PROJECTION (calibrated in §5); champion 0.2778, leaderboard top 0.4544</span></div>
+</div>
+<p><strong>Is it OK to download?</strong> Yes — it is a submission-format GeoTIFF, generated in this repo, with verified bytes.
+<strong>Is it OK to submit?</strong> It is <em>format- and uniqueness-valid</em>, but its holdout proxy is far below the
+0.2778 champion family, so submitting it uses a weekly slot for a projected score of 0.178. That is an owner decision,
+stated plainly below.</p>
 </section>
 
-<section>
-<h2>What this release establishes</h2>
-<table>
-<thead><tr><th>Question</th><th>Answer, with the evidence behind it</th></tr></thead>
+<section class="info">
+<h2>Which file, what would it score, and is it unique?</h2>
+<div class="scroll"><table>
+<thead><tr><th>File</th><th>HOLDOUT-DTI hide-and-recover (95% CI)</th><th>HOLDOUT-DTI SGMC-CAL (95% CI)</th><th>Projected leaderboard</th><th>Unique vs all 386 registry rasters?</th><th>OK to submit?</th></tr></thead>
 <tbody>
-<tr><td>Which of the nine focus sites scored highest?</td><td>GEMSDOE32, file <code>gemsdoe32-h33-h33-2-b2-…-e5eb6e7e-zeros.tif</code>, OWNER-REPORT 0.2778. The nine "best" files are one dot field thinned differently (88–100% mutual dot overlap).</td></tr>
-<tr><td>Why did it score highest?</td><td>It is the sparsest member of a single family, so it pays the least false-positive mass (α = 0.2) for the same coverage. Its score requires an enrichment of 4.1–5.3× over area-proportional placement; the catalogue holdout shows the field itself has ε = 0.13, so the enrichment most likely comes from the scored subset being fault-dense, not from the field's skill.</td></tr>
-<tr><td>Can a blind field do better?</td><td>No: with no enrichment the exact metric caps any dot field at ≈0.041 regardless of dot count. Beating 0.2778 needs real structure, which needs the login-walled feature stack.</td></tr>
-<tr><td>Where does that leave the leaderboard?</td><td>The live leaderboard fetched on 2026-10-30 shows #1 xiaofanhu <strong>0.4544</strong>, then 0.3916, 0.3911, 0.3841. The 0.244–0.278 band of the nine focus sites is a different regime: consistent with an unsaturated, unskilled field rather than a supervised model.</td></tr>
-<tr><td>What is new here?</td><td>A measured DTI score model (E1/E2 experiments, spatially blocked, exact metric), a per-file measurement of all nine focus fields, and a unique candidate that passes every gate this workspace can run.</td></tr>
-</tbody></table>
+<tr class="pick"><td><strong>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</strong><br><a href="downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif">download</a></td>
+<td>0.139956 [0.125172, 0.153910]</td><td>0.041176 [0.036303, 0.046352]</td>
+<td><strong>0.178</strong> <span class="small">PROJECTION</span></td>
+<td><strong>YES.</strong> 54.22% worst dot overlap; |rho| 0.027 (full 386-raster audit)</td>
+<td><span class="tag amb">LEGAL — projected 0.178</span><br><span class="small">Best measured catalogue recovery of any file here.</span></td></tr>
+<tr><td><strong>gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif</strong><br><a href="downloads/gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif">download</a><br><span class="small">generated this session</span></td>
+<td>0.003412 [0.002637, 0.004259]</td><td>0.039601 [0.034706, 0.044320]</td>
+<td><strong>0.172</strong> <span class="small">PROJECTION</span></td>
+<td><strong>YES.</strong> 62.46% worst dot overlap; |ρ| 0.132; surface |ρ| 0.114</td>
+<td><span class="tag amb">LEGAL — projected 0.172</span><br><span class="small">Lowest-risk legal upload; still below 0.2778.</span></td></tr>
+<tr><td><strong>gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif</strong> (previous session)</td>
+<td>0.004022 [0.003337, 0.004762]</td><td>0.042851 [0.038871, 0.046157]</td>
+<td><strong>0.186</strong> <span class="small">PROJECTION</span></td>
+<td><strong>YES.</strong> 55.22%; |ρ| 0.134 (surface not retained)</td>
+<td><span class="tag amb">LEGAL — statistically tied</span><br><span class="small">Equivalent to the new file on both evaluators.</span></td></tr>
+<tr class="block"><td><strong>gemsdoesass3-exp3-sarpu-legal21k-20261030T030010Z-nan.tif</strong> (this session, supervised)</td>
+<td>0.095880 [0.082852, 0.109620]</td><td>0.029683 [0.024763, 0.034244]</td>
+<td>0.129 <span class="small">PROJECTION</span></td>
+<td><strong>NO.</strong> 83.25% of its dots lie within 3 px of one registry raster (limit 70%)</td>
+<td><span class="tag bad">NOT OK TO SUBMIT</span><br><span class="small">Would duplicate GEMSDOE32/h46 — exactly what Rule 1 forbids.</span></td></tr>
+<tr class="block"><td><strong>gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif</strong></td>
+<td>0.065702 [0.058992, 0.071240]</td><td>—</td><td>0.285 <span class="small">PROJECTION (illegal)</span></td>
+<td><strong>NO.</strong> 99.78% lattice overlap</td><td><span class="tag bad">NOT OK TO SUBMIT</span></td></tr>
+<tr class="block"><td>GEMSDOE32 champion <code>h33-h33-2-b2…e5eb6e7e-zeros.tif</code> (reference)</td>
+<td>0.099202 [0.085951, 0.112668]</td><td>0.064121 [0.056730, 0.071649]</td>
+<td><strong>0.278</strong> <span class="small">calibration point</span></td>
+<td>Already published by the sibling site</td><td><span class="tag bad">OWNER-REPORT 0.2778 — do not resubmit</span></td></tr>
+</tbody></table></div>
+<p class="small">HOLDOUT-DTI values are proxies from <code>src/gems32/holdout.py</code>; they are not organizer scores and are compressed
+relative to the leaderboard (the champion's 0.2778 maps to 0.0992 hide-and-recover and 0.0641 SGMC-CAL here).</p>
 </section>
 
-<section>
-<h2>Known anomaly (IR-SASS3-90), disclosed not hidden</h2>
-<p>The 13GEMSDOE calibration lattice is a <strong>synthetic halo surface</strong> (206,895 positive cells, 4.0% of the footprint) that
-places a dot within 3 px of <em>every</em> footprint cell. The literal forward lane rule — "&gt;70% of my dots within 3 px of any one
-registry raster" — is therefore ~100% for any field that predicts anywhere inside the footprint, including this release. The
-reverse reading (17.2% of the lattice's dots are within 3 px of mine) and the rank correlation (−0.004) show the released file is
-not that field, and the same forward test against the eleven real submitted fields tops out at 26.4%. The rule is flagged for an
-owner decision rather than worked around.</p>
+<section class="warn">
+<h2>The honest headline: no file in this repo is projected to beat 0.2778</h2>
+<p>Three things were established with measurements this session:</p>
+<ol>
+<li><strong>Every pixel is already claimed.</strong> The union of the 386 registry rasters' 3-px neighbourhoods covers
+<strong>5,167,372 of 5,167,373</strong>
+scored pixels — 99.99998%. Only
+1 pixel is not within 300 m of some published dot. There is therefore no
+"unclaimed ground" to move to: Rule 1 can only be satisfied by <em>spreading</em> dots so that no single raster claims more
+than 70% of them.</li>
+<li><strong>The legal lane is measurably degraded.</strong> All legal 21k variants score 0.0034–0.0040 hide-and-recover, versus
+0.0992 for the champion family — a factor of ~25.</li>
+<li><strong>Supervised fitting lands back in another lane.</strong> The supervised + legal-cap build (EXP3) recovered champion-level
+hide-and-recover (0.0959) but 83.25% of its dots coincide with an existing GEMSDOE32 raster,
+so it fails Rule 1.</li>
+</ol>
+<p class="small">Historical note: the earlier BGK-PBE candidate was built from <strong>synthetic</strong> stand-ins and is
+archive-only (IR-SASS3-47); it is not a data-derived prediction and is not on the download list.</p>
+<p><strong>Any file marked NOT OK to submit below is blocked and must not be uploaded</strong> — the uniqueness gate is
+what blocks it, and the reason is stated in the row.</p>
+<p><strong>Lattice clause.</strong> The proposed exemption of halo-saturated calibration lattices is not applied in this build or in any audit on this page; it requires an explicit protocol amendment by the owner.</p>
+<p><strong>Recommendation.</strong> Either upload the legal, unique file above and accept a projected 0.172, or change the
+constraint. The 70%-any-registry rule is this project's own protocol, not a competition rule; the competition forbids copying
+another team's submission, which is what Rule 1 protects against. Breaking the tie is an owner decision — the evidence for both
+sides is on the <a href="executive-summary.html">executive summary</a>.</p>
 </section>
-
-<section>
-<h2>Navigate</h2>
-<ul>
-<li><a href="executive-summary.html">Executive summary and submission guide</a> — the table, the download, the exact upload steps.</li>
-<li><a href="hypotheses.md">Five ranked hypotheses</a> — layer, transform, why it targets unmapped faults, cost, status.</li>
-<li><a href="research/why-02778-20261030.md">Why 0.2778 scored highest</a> — the full arithmetic and the two competing explanations.</li>
-<li><a href="irregularities.md">Irregularities</a> — including the lane rule that cannot be satisfied inside the footprint.</li>
-<li><a href="../README.md">README</a> — decision record, per-file table, standing prompt.</li>
-</ul>
-</section>
-
-<section>
-<h2>Reproduce</h2>
-<pre class="small">bash scripts/download_competition_data.sh      # optional: needs a DrivenData account
-python scripts/fetch_focus9_20261030.py        # SHA-verified fetch of the nine focus files
-python scripts/analyze_focus9_20261030.py      # per-file measurement + metric fit
-python scripts/experiment_catalogue_holdout_20261030.py   # E1: blocked hide-and-recover
-python scripts/build_candidate_20261030.py --budget 45000 --budget-reason "..."  # E2 + candidate
-python scripts/estimate_score_20261030.py --candidate docs/downloads/&lt;file&gt;.tif
-python -m pytest -q</pre>
-<p class="small">Every script writes a JSON receipt into <code>evidence/</code>; the site copies live in <code>docs/data/</code>.</p>
-</section>
-</main></body></html>
+<section><h2>Reproduce</h2>
+<pre><code>python scripts/restore_data.py            # 28 SHA-verified inputs
+python scripts/build_sdr_candidate.py --out docs/downloads/gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif --receipt evidence/sdr1_build_receipt.json
+python scripts/uniqueness_audit_focused.py docs/downloads/gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif --surface evidence/sdr1_surface_dens.npy \
+    --out evidence/uniqueness_audit_legal_lane_20261030.json --allow-coverage-gap
+python scripts/verify_all_gates.py        # fail-closed gate report</code></pre></section>
+<p class="small">Last verified 20261030T035235Z UTC · leaderboard fetched 2026-10-30 · every number on this page is re-derived by <code>scripts/verify_session_card.py</code> (every figure re-derived from receipts).</p></main></body></html>

@@ -1,0 +1,9 @@
+{
+  "rasters_used": 386,
+  "footprint_px": 5167373,
+  "footprint_covered_by_union_3px": 5167372,
+  "footprint_not_covered": 1,
+  "footprint_not_covered_not_labels": 1,
+  "frac_footprint_covered": 0.9999998064780692,
+  "frac_available_excl_labels": 1.9352193077604424e-07
+}
