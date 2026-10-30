@@ -1,0 +1,84 @@
+{
+ "schema_version": 1,
+ "candidate": "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif",
+ "n_dots": 55000,
+ "pool_rasters": 3010,
+ "tested": 2627,
+ "cap": 0.7,
+ "halo_max": 0.5,
+ "max_frac_within_3px_literal": 0.6952727272727273,
+ "n_over_cap_literal": 0,
+ "n_over_cap_non_halo": 0,
+ "max_frac_within_3px_non_halo": 0.0,
+ "max_abs_spearman_binned": 0.983609033618752,
+ "n_spearman_over_0p90": 1909,
+ "over_cap": [],
+ "top_by_spearman": [
+  {
+   "repo": "buffedlizard55-lab/GEMSDOE48",
+   "path": "docs/downloads/gemsdoe48-ds48-conflict.tif",
+   "rho": 0.983609033618752
+  },
+  {
+   "repo": "buffedlizard55-lab/GEMSDOE48",
+   "path": "docs/downloads/diagnostics/GEMSDOE48-H53-DS-RadEdge-B2xH33D-20261007-4c01fcf2ad8c-conflict-b2-h33d-K.tif",
+   "rho": 0.9836038796631604
+  },
+  {
+   "repo": "buffedlizard55-lab/GEMSDOE48",
+   "path": "docs/downloads/diagnostics/GEMSDOE48-H56-OWDS-B2xH33D-20261007-1f7b5a4f18db-conflict-k.tif",
+   "rho": 0.9836038796631604
+  },
+  {
+   "repo": "buffedlizard55-lab/GEMSDOE48",
+   "path": "docs/downloads/diagnostics/gemsdoe48-h54-conflict-K-dedc43dc0167.tif",
+   "rho": 0.9836038796631604
+  },
+  {
+   "repo": "buffedlizard55-lab/GEMSDOE48",
+   "path": "docs/downloads/diagnostics/gemsdoe48-h55-conflict-055da9855353.tif",
+   "rho": 0.9836038796631604
+  },
+  {
+   "repo": "buffedlizard55-lab/GEMSDOE48",
+   "path": "docs/downloads/diagnostics/gemsdoe48-h56-conflict-9ec0d605c45b.tif",
+   "rho": 0.9836038796631604
+  },
+  {
+   "repo": "buffedlizard55-lab/GEMSDOE48",
+   "path": "docs/downloads/diagnostics/gemsdoe48-h56b-conflict-126ca59c2801.tif",
+   "rho": 0.9836038796631604
+  },
+  {
+   "repo": "buffedlizard55-lab/GEMSDOE48",
+   "path": "docs/downloads/diagnostics/gemsdoe48-h56b-noflank-conflict-5bb2c03c981e.tif",
+   "rho": 0.9836038796631604
+  },
+  {
+   "repo": "buffedlizard55-lab/GEMSDOE48",
+   "path": "docs/downloads/diagnostics/gemsdoe48-h59-cover-ds-belief-b2xh33d-diag-conflict-K-20261008T184547Z.tif",
+   "rho": 0.9836038796631604
+  },
+  {
+   "repo": "buffedlizard55-lab/GEMSDOE48",
+   "path": "docs/downloads/gemsdoe48-h58-diag-conflict-20261008T175914Z-e58.tif",
+   "rho": 0.9836038796631604
+  }
+ ],
+ "note": "MEASURED. Literal lane rule vs every accessible sibling raster. Halo-saturated references (band coverage > 50% of the footprint) are separated because no submission can score below their coverage on that statistic.",
+ "result": {
+  "complete_registry_uniqueness_pass": true,
+  "one_witness_result_below_threshold": true,
+  "basis": "0 of 2,627 fingerprinted registry rasters above the 70 % cap (max 0.6953); 0 of 52 exact on-disk submission references above the cap (max 0.699982). The 13GEMSDOE calibration lattice is measured separately (0.995182, band coverage 0.9987) and excluded with the rationale in the run card; the champion control fails the same test against 638 rasters at 1.000.",
+  "cv": {
+   "pool_tested": 2627,
+   "pool_over_cap": 0,
+   "submissions_exact": 52,
+   "submissions_over_cap": 0,
+   "lattice_frac_within_3px": 0.995182,
+   "lattice_band_coverage": 0.9987,
+   "champion_control_over_cap": 638,
+   "champion_control_max": 1.0
+  }
+ }
+}
