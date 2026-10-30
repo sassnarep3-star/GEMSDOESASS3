@@ -118,6 +118,6 @@ def test_estimate_beats_the_champion_point_estimate():
 def test_site_pages_promote_this_exact_file():
     for page in ("index.html", "executive-summary.html"):
         txt = (ROOT / "docs" / page).read_text()
-        assert f"{NAME}.tif" in txt, f"{page} does not link the promoted candidate"
-        assert "0.394" in txt
-        assert "64.0%" in txt or "0.6402" in txt
+        assert f"{NAME}.tif" in txt, f"{page} dropped the superseded candidate entirely"
+        assert "superseded" in txt.lower(), page
+        assert "gemsdoesass3-lbinv-84262" in txt, f"{page} does not name the replacement"

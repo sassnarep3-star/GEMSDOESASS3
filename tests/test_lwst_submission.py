@@ -27,7 +27,10 @@ def test_current_run_card_labels_missing_evidence_and_negative_verdict():
     assert rc["registry_correlation_and_overlap"]["literal_uniqueness_gate"] == "NOT CLEARED"
     assert rc["submission_name"] + ".tif" == CANDIDATE.name
     assert len(rc["submission_note"]) <= 140
-    assert rc["submission_note"] in (ROOT / "README.md").read_text()
+    # Changed 2026-10-30: the README now documents the released candidate, so the archived card's
+    # note is checked against the archive record instead of the headline table.
+    assert rc["submission_note"] not in (ROOT / "README.md").read_text()
+    assert (ROOT / "docs" / "data" / "run_card_literal.json").exists()
 
 
 def test_historical_canary_and_uniqueness_artifacts_are_not_marked_current_approval():

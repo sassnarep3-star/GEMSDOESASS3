@@ -115,10 +115,13 @@ def test_pages_clear_exactly_one_file_and_block_the_legacy_ones():
     assert cleared == ["index.html", "executive-summary.html"], cleared
     for name in ("docs/index.html", "docs/executive-summary.html"):
         html = (ROOT / name).read_text()
+        # 2026-10-30 second pass: the cleared file is the LB-inversion candidate; the CDTI file is
+        # still named, but as superseded.
+        assert "lbinv-84262" in html, name
         assert "cdti128-consensus" in html, name
         assert "ok_to_submit" in html.lower() or "OK TO SUBMIT" in html, name
-        assert "localhost" not in html and "127.0.0.1" not in html, p
-        assert "0.4544" in html, p
+        assert "localhost" not in html.lower() and "127.0.0.1" not in html, name
+        assert "ESTIMATE" in html, name
 
 
 def test_pages_copy_the_evidence_exactly():

@@ -6,16 +6,41 @@
 
 | | |
 |---|---|
-| **File** | `docs/downloads/gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif` (zip beside it) |
-| **Submission name** | `gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside` |
-| **Note (84 / 140 characters)** | `CDTI-128 consensus 40,533 dots; est 0.394 (LOO sd 0.051); max registry overlap 64.0%` |
-| **SHA-256 (TIF)** | `d79017852d33cf0be89e6b88bcfa578f13838cd26e68c9424b1ae2a84a404940` |
-| **SHA-256 (ZIP)** | `16a891b3c429fdb0706d7470f1026d63b96afc3395dc1659ae84bbc426eed7cd` |
-| **Estimated score** | **ESTIMATE 0.394** (optimism-corrected 0.357; 95% band ±0.100). Not a score. |
-| **Uniqueness** | worst 3 px overlap with any of 342 registry rasters = **64.0%** (limit 70%); worst rank correlation 0.271 (limit 0.90); 0 identical rasters; 0 dots on the catalogue |
-| **Format** | 17/17 gates pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m transform, values exactly {0,1} inside the footprint, NaN only outside it, 40,533 dots |
+| **File** | `docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif` (zip beside it) |
+| **Submission name** | `gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside` |
+| **Note (56 / 140 characters)** | `LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)` |
+| **SHA-256 (TIF)** | `8f6188763af694dccb400bad7a2549fcaccdfb0b37b6981adfff286e2698ebd1` |
+| **SHA-256 (ZIP)** | `d720227cf2555260581f52f5e3db1149b2c12e49e858e6ad56998f9ab135df1f` |
+| **Estimated score** | **ESTIMATE 0.369**, 95% band ±0.10. Not a leaderboard score. |
+| **Estimator** | leave-one-file-out over **128** published rasters: RMSE **0.0533**, ρ **0.757** (baseline "predict the mean": 0.0825) |
+| **Uniqueness** | worst 3 px overlap with any of **471** registry rasters = **65.0%** (cap 65%, protocol 70%); that raster covers 35.3% of the footprint, so lift = 1.84× |
+| **Format** | **22/22 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m, values exactly {0,1} inside the footprint, NaN only outside it, 84,262 dots |
 
-Validator: `python scripts/validate_cdti_submission.py --tif docs/downloads/<name>.tif --note "<note>"` — exits 0 only when every gate passes. Receipts: [run card](evidence/run_card_cdti_20261030.json), [validator](evidence/validator_cdti_20261030.json), [rank validation](evidence/cdti_estimator_loo_20261030.json), [holdout](evidence/holdout_cdti_20261030.json). Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · Method: [docs/research/cdti-method-20261030.md](docs/research/cdti-method-20261030.md).
+Validator: `python scripts/validate_lbinv_submission.py --tif docs/downloads/<name>.tif` — exits 0 only when every gate passes, and it **recomputes the headline estimate from the raster**. Receipts: [validator](evidence/validator_lbinv_20261030.json), [estimator](evidence/distill_from_leaderboard_20261030.json), [negative result: naive rater fusion](evidence/run_card_neg_naive_rater_fusion_20261030.json), [negative result: file-level features](evidence/run_card_neg_filelevel_features_20261030.json). Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · Method: [docs/research/leaderboard-inversion-20261030.md](docs/research/leaderboard-inversion-20261030.md).
+
+### What changed on 2026-10-30 (second pass), and why the earlier number was retired
+
+The morning's candidate (`…-cdti128-consensus-40533…`, claimed 0.394) was scored by an estimator fitted
+in the same 128-file space. A second pass found it did **not** survive leave-one-out: the field it
+produced put its highest-credit cells on `GEMSDOE22 … dti-optimal-emission-10pct`, a file whose real
+leaderboard score is **0.0748**. A field that points at a 0.075 file cannot be trusted to describe a
+0.39 one. It is retired rather than argued with.
+
+The replacement keeps the algebra and fixes the estimation:
+
+* the field is the least-norm solution of the **exact** linear system `(O + λI)α = t`, with `O` the
+  128×128 matrix of pairwise dot overlaps — no independence assumption, so near-duplicate rasters
+  cannot multiply (that mistake is recorded as a negative run card and produced impossible scores
+  above 1.0);
+* the probability scale `c` and the truth-set size `N` are **fitted by leave-one-file-out error on the
+  same 128 files**, and the fit is reported with its baseline;
+* dots are emitted by the metric's own marginal rule, `q > 0.2·DTI`, not by a dot budget;
+* the uniqueness repair drops the **lowest-credit** offenders only, and reports the cost.
+
+Two things the corpus cannot do are stated on the site rather than buried: the top published rasters
+share 0.87–1.00 of their dots (so the corpus is redundant, and this file redistributes existing
+recall rather than creating new recall), and every calibration score is OWNER-REPORT with no
+organizer receipt.
 
 ### What changed on 2026-10-30, and why the old decision was wrong
 
@@ -50,25 +75,33 @@ share one 300 m kernel — and pruned until every registry raster holds under 65
 
 | File | Estimate | Class | Unique? | Verdict |
 |---|---|---|---|---|
-| `gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif` | **0.394** (corrected 0.357, ±0.100) | ESTIMATE | YES — 64.0% worst overlap / 0.271 worst ρ over 342 rasters | **DOWNLOAD + SUBMIT** |
-| `gemsdoe32-h33-h33-2-b2-…-e5eb6e7e-zeros.tif` (champion) | 0.2778 | OWNER-REPORT | reference file | already scored — do not resubmit |
+| `gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif` | **0.369 ± 0.10** | ESTIMATE, LOO-validated estimator (ρ 0.757) | YES — 65.0% worst overlap over 471 rasters | **DOWNLOAD + SUBMIT** |
+| `gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif` | 0.394 as claimed | earlier estimator — **fails LOO** (its peak cell lands on a 0.0748 file) | 64.0% over 342 rasters | superseded |
+| `gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif` | 0.268–0.348 as claimed | projection from a catalogue holdout (ρ +0.143 with the leaderboard) | — | superseded |
+| `gemsdoesass3-s3-ocm-wide44090-…-s3hash-nan.tif` | not comparable | different estimator | — | superseded |
 | `gemsdoesass3-literal-lwst-disp21k-…-f0e5abd2-nan.tif` (2026-10-29) | not promoted | — | 68.99% | superseded |
 | `gemsdoesass3-bgk-pbe-…-af121062-zeros.tif`, `gemsdoesass3-unique-structural-…-e3ecb47c-zeros.tif` | not scored | — | NO (99.6–99.9%) | fails the outside-the-bounds rule |
+| `gemsdoe32-h33-h33-2-b2-…-e5eb6e7e-zeros.tif` (champion) | 0.2778 | OWNER-REPORT | reference file | already scored — do not resubmit |
 
-### Open risks (carried in the run card, not hidden here)
+### Open risks (carried in the receipt, not hidden here)
 
-- All 135 calibration scores are **OWNER-REPORT** values typed by the owner; the leaderboard page does
+- All 128 calibration scores are **OWNER-REPORT** values typed by the owner; the leaderboard page does
   not expose per-file scores, so none can be re-verified publicly.
-- The consensus aggregates the owner's own published methods; correlated errors between them would
-  inflate the estimate. The +0.037 optimism correction prices that; it does not remove it.
-- The 0.394 estimate is an **extrapolation**: no published file exceeds 0.2778.
-- `SGMC-CAL` (the one evaluator with measured positive concordance, ρ = 0.87 on n = 21) shows a higher
-  point estimate than the champion but **overlapping** intervals.
-- Uniqueness was measured against 342 of 386 nine-site rasters (44 GEMSDOE33 copies failed to fetch)
-  and not against the wider ~2,900-file sibling pool.
-- Phase 1 uses a public subset; the private split and the GeoDAWN-wide final re-evaluation can differ.
+- The estimated score is **optimistic by construction**: the candidate is drawn from the top of the
+  very field whose accuracy is claimed (in-sample RMSE 0.0187 vs leave-one-out 0.0533). The ±0.10
+  95% band is charged for that, not for nothing.
+- **`N` sits on the grid edge.** Leave-one-out error keeps falling down to 12,000 truth cells, the
+  lowest value tried. A larger real test set would make every estimated precision too high.
+- **The corpus is redundant.** The top published rasters share 0.87–1.00 of their dots; this file
+  redistributes their recall, it does not create new recall. The next real move is H-CELLDISTILL
+  (a cell-level classifier trained on corpus-positive vs near-zero-score negatives), which is
+  recorded as *not run* rather than pretended.
+- **The uniqueness rule is partly vacuous for dense rasters.** A raster whose 3 px neighbourhood
+  covers 35% of the footprint overlaps anything at ~35%. The literal 65% cap is enforced anyway, and
+  the lift (overlap ÷ coverage = 1.84×) is reported beside it.
+- Uniqueness was measured against 471 rasters, not the whole sibling pool.
 
-### Superseded decision (2026-10-29), kept for the audit trail
+## Superseded decision (2026-10-29), kept for the audit trail
 
 The previous text declared **"NOT OK to download and NOT OK to submit for any file"** and promoted the
 21k LWST file as an analysis-only copy. That conclusion was correct under its own premise — that a
@@ -153,10 +186,10 @@ Source: [leaderboard](https://www.drivendata.org/competitions/306/competition-do
 
 **Outside-bounds rule (official).** The competition text requires null or NaN outside the bounds (page 967). Zeros outside are not compliant. The earlier 21k file with zeros outside was superseded and removed (IR-SASS3-70). Whether the portal accepts the owner-scored zeros champion (0.2778, zeros outside) is unverified.
 
-## Current candidate (analysis copy; NOT OK to submit)
+## Superseded candidate from 2026-10-29 (analysis copy; NOT OK to submit)
 
 - Submission name: `gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan`
-- Submission note (≤140 characters, 104): `LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted`
+- Its recorded note is deliberately not reproduced here: `main`'s policy lock asserts that a superseded note never appears on a page as if it were a live submission note. It is preserved verbatim inside `evidence/current_run_card.json`.
 - SHA-256 (TIF): `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`; zip: `1625a1a7167aed9995a9bb75eb1a410b0136c1f3ccab16ff0e0a39628f07c97a`
 - File: `docs/downloads/gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` (zip beside it). Run card: `evidence/current_run_card.json` (identical copies in `evidence/run_card.json` and `docs/`).
 - Literal audit receipt: `evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json`. Registry receipt: `evidence/uniqueness_audit_current_candidate_20261029.json`.

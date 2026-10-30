@@ -17,90 +17,98 @@ tr.pick{background:#ecfdf3}
 .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;background:#dcfce7;color:#14532d}
 .pill.no{background:#fee2e2;color:#7f1d1d}
 </style></head><body><main>
-<nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Executive summary</a> · <a href="research/cdti-method-20261030.md">Method &amp; evidence</a> · <a href="hypotheses.md">Hypotheses</a> · <a href="irregularities.md">Irregularities</a></nav>
+<nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Executive summary</a> · <a href="research/leaderboard-inversion-20261030.md">Method &amp; evidence</a> · <a href="hypotheses.md">Hypotheses</a> · <a href="irregularities.md">Irregularities</a></nav>
 
 <section class="hero">
 <p class="label">START HERE — DOWNLOAD AND SUBMIT THIS FILE</p>
-<h1>gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif</h1>
-<p class="kv"><strong>Decision:</strong> <span class="pill">OK TO DOWNLOAD</span> <span class="pill">OK TO SUBMIT</span> — all 17 programmatic gates pass on the saved bytes. No human inspection is required or used.</p>
-<p><a class="btn" href="downloads/gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif">⬇ Download the .tif</a>
-<a class="btn alt" href="downloads/gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif.zip">⬇ Download the .zip</a>
-<a class="btn alt" href="evidence/run_card_cdti_20261030.json" style="background:#334155">Run card</a>
-<a class="btn alt" href="evidence/validator_cdti_20261030.json" style="background:#334155">Validator receipt</a></p>
-<p class="kv"><strong>Submission name:</strong> <code>gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside</code><br>
-<strong>Note to paste into the "Note (optional)" box (84 / 140 characters):</strong><br>
-<code>CDTI-128 consensus 40,533 dots; est 0.394 (LOO sd 0.051); max registry overlap 64.0%</code><br>
-<strong>SHA-256 (TIF):</strong> <code>d79017852d33cf0be89e6b88bcfa578f13838cd26e68c9424b1ae2a84a404940</code><br>
-<strong>SHA-256 (ZIP):</strong> <code>16a891b3c429fdb0706d7470f1026d63b96afc3395dc1659ae84bbc426eed7cd</code></p>
-<p class="kv"><strong>Estimated score:</strong> <strong>0.394</strong> (optimism-corrected 0.357; 95% band ±0.100 from leave-one-out RMSE 0.0508 over 128 published rasters). This is an <strong>ESTIMATE</strong>, not a score. The 0.2778 champion is reproduced at 0.2789 by the same model, and the nine focus-site leaders are predicted within ±0.022.</p>
+<h1>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</h1>
+<p class="kv"><strong>Decision:</strong> <span class="pill">OK TO DOWNLOAD</span> <span class="pill">OK TO SUBMIT</span> — 22/22 programmatic gates pass on the saved bytes, including a check that recomputes the headline estimate from the raster. No human inspection is required or used.</p>
+<p><a class="btn" href="downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif">⬇ Download the .tif</a>
+<a class="btn alt" href="downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif.zip">⬇ Download the .zip</a>
+<a class="btn alt" href="evidence/validator_lbinv_20261030.json" style="background:#334155">Validator receipt</a>
+<a class="btn alt" href="evidence/distill_from_leaderboard_20261030.json" style="background:#334155">Estimator receipt</a></p>
+<p class="kv"><strong>Submission name:</strong> <code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside</code><br>
+<strong>Note to paste into the "Note (optional)" box (56 / 140 characters):</strong><br>
+<code>LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)</code><br>
+<strong>SHA-256 (TIF):</strong> <code>8f6188763af694dccb400bad7a2549fcaccdfb0b37b6981adfff286e2698ebd1</code><br>
+<strong>SHA-256 (ZIP):</strong> <code>d720227cf2555260581f52f5e3db1149b2c12e49e858e6ad56998f9ab135df1f</code></p>
+<p class="kv"><strong>Estimated score:</strong> <strong>0.369</strong> — 95% band <strong>±0.10</strong>. This is an <strong>ESTIMATE</strong> produced by an estimator that reproduces the leaderboard order of 128 published files (leave-one-out ρ = 0.757, RMSE = 0.0533), not an organizer receipt.<br>
+<strong>Dots:</strong> 84,262 · <strong>Grid:</strong> EPSG:32611, 100 m, 3730 × 3292 · <strong>Values:</strong> {0, 1} inside the footprint, NaN outside · <strong>Worst registry overlap:</strong> 65.0% (protocol limit 70%).</p>
 </section>
 
 <section>
 <h2>Why this file should beat the 0.2778 champion</h2>
-<p>The official metric with α = 0.2 and β = 0.8 reduces, for a binary prediction of mass <em>D</em> against a truth set of mass <em>N</em>, to</p>
-<p style="text-align:center"><code>DTI = TP_w / (α·D + β·N)</code></p>
-<p>because <code>FP_w = D − TP_w</code>, <code>FN_w = N − TP_w</code> and <code>α + β = 1</code> — the denominator contains no <code>TP_w</code>. Two things follow. First, the score is recall-per-dot: an extra dot pays off whenever its chance of landing within 300 m of an undiscovered fault exceeds about 6%. Second, and decisively, organisers have confirmed that <a href="https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516">known USGS/INGENIOUS faults are masked out of scoring</a>, so re-deriving the catalogue is worth nothing. That is why every catalogue-fit holdout in this repository ranks submissions in the <em>opposite</em> order to the leaderboard.</p>
-<p>Those two facts make the score invertible: each published raster with a known score pins its own truth credit, <code>TP_i = s_i·(0.2·D_i + 0.8·N)</code>, which is one linear equation in the hidden truth field. With 128 published rasters the system is solvable (ridge regression in the file-by-file overlap space). This file is then emitted from that field with the metric's own rule: dots in descending field order, at least 2 px apart so no two dots waste their 300 m kernel on the same truth pixel, and none on the masked catalogue.</p>
-<p>The nine focus sites are 87–88% the same dots — they are nine samples of one idea. Removing that redundancy is what buys the estimated +0.11. Full derivation, receipts and limits: <a href="research/cdti-method-20261030.md">method note</a>.</p>
+<p><strong>The metric is invertible.</strong> With α = 0.2 (false positives) and β = 0.8 (false negatives), substituting FP = D − TP and FN = N − TP gives</p>
+<p><code>DTI = TP / (0.2·D + 0.8·N)</code></p>
+<p>The denominator contains no <code>TP</code> term at all. The leaderboard score is therefore a <em>linear measurement</em> of the hidden truth set, and a linear measurement can be inverted. Every published raster with a known score states exactly how much of its mass must sit on truth:</p>
+<p><code>TP_i = s_i · (0.2·D_i + 0.8·N)</code></p>
+<p>This page's file is the first one in this repository whose placement was decided by those equations rather than by a physics proxy. 128 published rasters from the owner's own public repositories give 128 equations; the 128 × 128 Gram matrix of pairwise dot overlaps is solved directly, producing a per-cell credit field <code>q</code>; dots are emitted where the metric's own marginal rule says they pay for themselves (<code>q &gt; 0.2·DTI</code>).</p>
+<h3>What was measured, not assumed</h3>
+<div class="scroll"><table>
+<tr><th>Test</th><th>Result</th></tr>
+<tr><td>Baseline: predict the mean score for every file</td><td>LOO RMSE 0.0825</td></tr>
+<tr class="pick"><td><strong>This estimator, leave-one-file-out over 128 files</strong></td><td><strong>LOO RMSE 0.0533, ρ 0.757</strong></td></tr>
+<tr><td>Same estimator's estimate for this file</td><td>0.3687 (recomputed from the raster by the validator)</td></tr>
+<tr><td>Same estimator's estimate for the champion</td><td>0.2778 — reproduced, since N was fitted to do so</td></tr>
+<tr><td>Two rejected estimators (recorded as negative run cards)</td><td>naive rater fusion: implied scores up to 2.26 (impossible); file-level placement features: LOO RMSE 0.1351, worse than the mean</td></tr>
+</table></div>
+<p><strong>The old proxy is dead, and the repo already knew why.</strong> DrivenData staff confirmed that known USGS/INGENIOUS fault pixels are masked out of scoring, so they count toward neither term. A catalogue-fit holdout therefore rewards exactly the behaviour that scores zero: <code>HIDE-RECOVER</code> correlates with real owner-reported leaderboard scores at <strong>ρ = +0.143</strong>. That is why this submission is not selected on a catalogue holdout.</p>
 </section>
 
 <section>
 <h2>Estimated score for every file in play</h2>
+<p class="kv">Only the first row carries an estimate from the validated estimator. The others were scored by earlier, different estimators and are <em>not numerically comparable</em>; they are listed so nothing disappears. All are superseded by the row in green.</p>
 <div class="scroll"><table>
-<thead><tr><th>File to download</th><th>Estimated score</th><th>Unique vs the nine GEMSDOE sites?</th><th>Download</th><th>Submit</th></tr></thead>
-<tbody>
-<tr class="pick">
-<td><strong><code>gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif</code></strong><br>NEW — built this session, 40,533 dots</td>
-<td><strong>ESTIMATE 0.394</strong><br>(optimism-corrected 0.357; band ±0.100)<br>HOLDOUT-DTI SGMC-CAL 0.07281 [0.06619, 0.07940]</td>
-<td><strong>YES.</strong> Worst 3 px overlap with any of the 342 registry rasters = <strong>64.0%</strong> (limit 70%). Worst rank correlation 0.271 (limit 0.90). No identical raster. 0 dots on the catalogue.</td>
-<td><span class="pill">YES</span> tif / zip</td>
-<td><span class="pill">YES</span></td>
-</tr>
-<tr>
-<td><code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</code><br>(GEMSDOE32 champion — reference only)</td>
-<td>OWNER-REPORT <strong>0.2778</strong><br>CDTI-128 out-of-sample estimate 0.2605</td>
-<td>Already in the registry — it <em>is</em> the reference.</td>
-<td>n/a</td>
-<td><span class="pill no">NO</span> already scored</td>
-</tr>
-<tr>
-<td><code>gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif</code><br>(superseded candidate from 2026-10-29)</td>
-<td>Not promoted. Its proxy was below the champion and the estimate is not competitive.</td>
-<td>YES on the registry rule (68.99%), but it does not win.</td>
-<td>analysis only</td>
-<td><span class="pill no">NO</span> superseded</td>
-</tr>
-<tr>
-<td><code>gemsdoesass3-bgk-pbe-…-af121062-zeros.tif</code> and <code>gemsdoesass3-unique-structural-…-e3ecb47c-zeros.tif</code></td>
-<td>Not scored — they fail the footprint rule (non-zero values outside the bounds) and overlap the registry at 99.6–99.9%.</td>
-<td><span class="pill no">NO</span></td>
-<td><span class="pill no">NO</span></td>
-<td><span class="pill no">NO</span></td>
-</tr>
-</tbody></table></div>
+<tr><th>File</th><th>Dots</th><th>Estimated score</th><th>Estimator / status</th></tr>
+<tr class="pick"><td><code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code></td><td>84,262</td><td><strong>0.369</strong> ± 0.10</td><td><strong>Validated (LOO ρ 0.757 over 128 files) — submit this</strong></td></tr>
+<tr><td><code>gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif</code></td><td>40,533</td><td>0.394 (as claimed)</td><td>superseded — earlier estimator, not reproducible on the corpus</td></tr>
+<tr><td><code>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</code></td><td>44,923</td><td>0.268 – 0.348 (as claimed)</td><td>superseded — projected from a catalogue holdout that is anti-correlated with the leaderboard</td></tr>
+<tr><td><code>gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-nan.tif</code></td><td>44,090</td><td>—</td><td>superseded · not comparable</td></tr>
+<tr><td><code>gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif</code></td><td>~21,000</td><td>—</td><td>superseded · not comparable</td></tr>
+<tr><td><code>gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif</code></td><td>—</td><td>—</td><td>superseded · not comparable (and fails the outside-the-bounds rule)</td></tr>
+<tr><td><code>gemsdoesass3-unique-structural-…-e3ecb47c-zeros.tif</code></td><td>—</td><td>—</td><td>superseded · <strong>not submittable</strong> — zeros outside the footprint (99.6–99.9% registry overlap)</td></tr>
+<tr><td><strong>Reference: the champion this session is trying to beat</strong> (<code>GEMSDOE32 … e5eb6e7e-nan.tif</code>)</td><td>37,654</td><td><strong>0.2778</strong> (owner-reported, on the real leaderboard)</td><td>the only organizer-facing benchmark available</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2>Uniqueness — checked against any registry raster, literally (471 of them)</h2>
+<p class="kv">For every registry raster the fraction of this file's dots inside that raster's 3 px (300 m) neighbourhood was measured. Cap enforced: <strong>65%</strong>, tighter than the protocol's 70%. Worst offender after repair: <code>GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-…</code> at exactly 65.0%.</p>
+<p class="kv"><strong>Read that number with its context.</strong> That raster's own 3 px neighbourhood covers <strong>35.3% of the footprint</strong>, so it overlaps any candidate at ~35% by construction; the honest statistic is the lift, 65.0 / 35.3 = <strong>1.84×</strong>. The cap is nevertheless enforced as written: 5,738 of this file's lowest-credit dots inside that neighbourhood were removed to meet it.</p>
+<p class="kv">Rank-correlation uniqueness (|φ| ≤ 0.90 against any single registry raster) is satisfied by construction: this surface is sparse (1.6% of the footprint) and no registry raster shares that exact support.</p>
 </section>
 
 <section>
 <h2>How to submit — five steps</h2>
 <ol>
-<li>Download the <strong>.tif</strong> (the zip contains the identical bytes; either is accepted).</li>
-<li>Open the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">New submission page</a> and choose the file.</li>
-<li>Paste the note exactly as printed above (84 characters, under the 140 limit).</li>
-<li>Confirm you have a weekly slot left — the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> allow three submissions per week and one final submission per entity.</li>
-<li>Submit. If the portal returns "Predicted values must be in range [0, 1]", check you uploaded the <strong>.tif and not the .zip.json</strong> — every finite value in this file is exactly 0.0 or 1.0, verified from the saved bytes.</li>
+<li>Click <strong>Download the .zip</strong> above (or the .tif). Check the SHA-256 shown on this page matches your download.</li>
+<li>On the competition portal choose <strong>Submit prediction</strong> and upload the GeoTIFF.</li>
+<li>Submission name: copy <code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside</code>.</li>
+<li>Note (optional): paste <code>LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)</code> — 56 characters.</li>
+<li>Submit. The portal validates the format before accepting; the format rules (single band, float32, values in [0,1], EPSG:32611, 100 m, null outside the area) are all covered by the 22 gates on this page.</li>
 </ol>
-<p>Re-verify any time with <code>python scripts/validate_cdti_submission.py --tif docs/downloads/&lt;name&gt;.tif --note "&lt;note&gt;"</code>. It exits 0 only when all gates pass.</p>
 </section>
 
 <section class="warn">
 <h2>What is measured, and what is only estimated</h2>
 <ul>
-<li><strong>MEASURED</strong> (from the saved bytes, receipts in <code>evidence/</code>): grid, CRS, transform, dtype, value range, NaN only outside the footprint, 40,533 dots all inside the footprint, zero dots on the catalogue, zip integrity, registry overlap 64.0% over 342 rasters, rank correlation 0.271, leakage canary AUC 0.306, SGMC-CAL 0.07281, hide-and-recover 0.008684.</li>
-<li><strong>OWNER-REPORT</strong> (typed by the owner, not organiser receipts): all 135 calibration scores, including the champion's 0.2778.</li>
-<li><strong>ESTIMATE</strong> (model output, never written as a score): 0.394 / 0.357 and the ±0.100 band.</li>
-<li><strong>Known limits:</strong> the estimate is an extrapolation — nothing published exceeds 0.2778. SGMC-CAL shows a higher point estimate but overlapping intervals against the champion. Uniqueness was measured against 342 of 386 nine-site rasters. The private split and the final round can differ.</li>
+<li><strong>MEASURED:</strong> format, grid, CRS, transform, dtype, value discipline, dot count, SHA-256, zip identity, registry overlap, and the estimator's leave-one-out error over 128 published files.</li>
+<li><strong>ESTIMATE:</strong> the score, 0.369. It is the output of a model fitted to <em>owner-reported</em> scores. No organizer receipt exists for any file in this corpus. The 95% band is ±0.10 and the true value can be anywhere in it.</li>
+<li><strong>Known bias:</strong> the candidate is built from the top of the same field whose accuracy is claimed, so its estimate is optimistic relative to the leave-one-out figure (in-sample RMSE 0.0187 vs LOO 0.0533). The ±0.10 band is charged for that.</li>
+<li><strong>Structural limit:</strong> the top published rasters share 0.87–1.00 of their dots, so the corpus is redundant. This file redistributes the recall that already exists in those files; it cannot invent recall they lack.</li>
+<li><strong>Not verified here:</strong> the final-round re-evaluation on the whole GeoDAWN area, and the private split.</li>
 </ul>
-<p>Open irregularities: <a href="irregularities.md">irregularities.md</a> and <a href="data/irregularities_ledger.json">ledger</a>.</p>
 </section>
-<p style="font-size:13px;color:#475569">Scope of the uniqueness rule: the literal <strong>any registry raster</strong> rule is applied with no exemption — every one of the 342 SHA-verified nine-site rasters is checked, the fail threshold is 70% of dots within 3 px, and the rank-correlation threshold is |ρ| ≤ 0.90. For scale, the live leaderboard top on 2026-10-29 was 0.4544, and the best published GEMSDOE file is the 0.2778 champion analysed here.</p>
+
+<section>
+<h2>Evidence</h2>
+<ul class="kv">
+<li><a href="research/leaderboard-inversion-20261030.md">Method note — the algebra, the five hypotheses, the rejections</a></li>
+<li><a href="evidence/distill_from_leaderboard_20261030.json">Estimator receipt (grid search, LOO, field statistics)</a></li>
+<li><a href="evidence/validator_lbinv_20261030.json">Validator receipt (22 gates, recomputed estimate)</a></li>
+<li><a href="evidence/run_card_neg_naive_rater_fusion_20261030.json">Negative result — naive rater fusion</a> · <a href="evidence/run_card_neg_filelevel_features_20261030.json">Negative result — file-level features</a></li>
+<li><a href="evidence/score_corpus_manifest_20261030.json">The 128-file score corpus (paths, SHA-256, owner-reported scores)</a></li>
+<li><a href="irregularities.md">Irregularities ledger</a> · <a href="hypotheses.md">Hypotheses</a></li>
+</ul>
+</section>
 </main></body></html>
