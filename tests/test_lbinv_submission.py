@@ -27,9 +27,16 @@ RECEIPT = ROOT / "evidence" / "validator_lbinv_20261030.json"
 ESTIMATOR = ROOT / "evidence" / "distill_from_leaderboard_20261030.json"
 ALPHA, BETA = 0.2, 0.8
 
+# The raster and its receipts are committed; the estimator field and the reference grid live in
+# .cache (a rebuildable derivative), so the subset of tests that re-derive numbers from the field
+# is skipped on a bare checkout such as CI.
+HAS_CACHE = (ROOT / ".cache" / "distill_q.npz").exists() and (
+    ROOT / ".cache" / "gems_data" / "sample_submission.tif").exists()
 pytestmark = pytest.mark.skipif(not TIF.exists(), reason="candidate raster not present")
+needs_cache = pytest.mark.skipif(not HAS_CACHE, reason="estimator field not built in .cache")
 
 
+@needs_cache
 @pytest.fixture(scope="module")
 def artifact():
     build = json.loads(BUILD.read_text())
