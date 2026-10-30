@@ -1,0 +1,23 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30",
+ "verdict": "negative",
+ "hypothesis": "H-FILEFEAT: the leaderboard score of a raster is predictable from its own placement statistics (dot count, spacing, clustering, distance to the published catalogue, and mean geophysical values under its dots)",
+ "what_was_run": "ridge regression with 128 rows and 3-11 features, leave-one-out, on: log(dot count), fraction of dots within 3 px and 10 px of the catalogue, mean distance to the catalogue, dot clustering density, and the mean of six feature-stack bands under the dots",
+ "result": {
+  "baseline_rmse_predict_the_mean": 0.0825,
+  "best_loo_rmse_placement_only": 0.1349,
+  "best_loo_rho_placement_only": 0.414,
+  "best_loo_rmse_all_features": 0.1351,
+  "best_loo_rho_all_features": 0.741,
+  "univariate_spearman": {
+   "mean tc under dots": -0.555,
+   "mean isostatic gravity anomaly": 0.416,
+   "mean depth to basement": -0.364,
+   "clustering density": -0.342
+  }
+ },
+ "why_it_failed": "the score distribution is driven by a handful of catastrophic outliers (0.0000, 0.0005, 0.0009, 0.0020) that no file-level summary anticipates; every feature set is worse than predicting the mean and only recovers rank, not magnitude",
+ "what_was_kept": "the rank signal is real (rho up to 0.74), so the covariates are recorded as the starting point for H-CELLDISTILL, which uses them at cell level with the corpus-derived labels rather than at file level",
+ "stopped_after": "one feature sweep; no submission slot used"
+}

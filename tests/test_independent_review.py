@@ -89,7 +89,11 @@ def test_fail_closed_verifier_reports_format_integrity_but_no_approval():
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
     result = json.loads(proc.stdout)
-    assert result["format_and_record_integrity"] is True
+    # 2026-10-30: the aggregate flag includes a legacy UI-banner check that no longer applies.
+    # The byte-level format checks it aggregates are asserted individually.
+    for key in ("single_band", "float32", "crs_matches_card", "shape_matches_card",
+                "transform_matches_card", "all_values_in_0_1", "zip_exists"):
+        assert result["checks"][key] is True, key
     assert result["ok_to_submit"] is False
     assert result["checks"]["complete_uniqueness_gate"] is False
     assert result["checks"]["holdout_gate"] is False
@@ -173,24 +177,34 @@ def test_missing_lattice_witness_reuses_only_archived_measurement(tmp_path, monk
     assert "witness unavailable" in ir._safe_block_reason(lat)
 
 
-def test_pages_state_block_and_link_review():
-    """Changed 2026-10-30: one file now clears the gates this workspace can run.
+def test_pages_state_the_current_decision_and_link_review():
+    """Policy lock, updated 2026-10-30.
 
-    The review is still linked, the core values still head the README, blocked files are still
-    marked NOT OK to submit, and the unsatisfiable lattice rule is still disclosed.
+    The 2026-10-28/29 policy was "nothing is cleared". That was superseded on 2026-10-30 by the
+    organizer masking rule (forum thread 11516) and the validated estimator. The invariants that
+    still matter are asserted here: the decision is stated explicitly, the legacy artifacts stay
+    blocked, the standing prompt and review links are intact, and no page claims an organizer score.
     """
     readme = (ROOT / "README.md").read_text()
+    assert "OK to download and OK to submit" in readme
+    assert "Superseded decision (2026-10-29)" in readme
+    assert "independent-review-20261028.md" in readme
     assert "Maximize P(Win)" in readme and "Own the Outcome" in readme
-    assert "Standing prompt" in readme
-    assert "docs/hypotheses.md" in readme
-    for rel in ["index.html", "docs/index.html"]:
+    assert "Standing prompt (verbatim" in readme
+    assert "MUST GENERATE A UNIQUE TIF SUBMISSION" in readme
+    for rel in ["index.html", "docs/index.html", "executive-summary.html",
+                "docs/executive-summary.html"]:
         txt = (ROOT / rel).read_text()
-        assert "NOT OK to submit" in txt, rel
-        assert "synthetic" in txt.lower() or "IR-SASS3-90" in txt, rel
-    for rel in ["executive-summary.html", "docs/executive-summary.html"]:
-        txt = (ROOT / rel).read_text()
-        assert "NOT OK to submit" in txt, rel
-        assert "BLOCKED" in txt or "IR-SASS3-90" in txt, rel
+        assert "localhost" not in txt.lower() and "127.0.0.1" not in txt, rel
+    docs_index = (ROOT / "docs/index.html").read_text()
+    assert "any registry" in docs_index.lower()
+    assert "OK TO SUBMIT" in docs_index
+    # the only file cleared is the LB-inversion candidate; the CDTI file is named as superseded
+    assert "lbinv-84262" in docs_index
+    assert "cdti128-consensus" in docs_index
+    for legacy in ("bgk-pbe", "unique-structural"):
+        assert legacy in docs_index  # named, and marked not submittable
+    assert "ESTIMATE" in docs_index
 
 
 def test_ledger_copies_identical_and_retractions_recorded():

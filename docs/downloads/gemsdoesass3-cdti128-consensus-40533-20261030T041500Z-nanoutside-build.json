@@ -1,0 +1,63 @@
+{
+ "schema_version": 1,
+ "name": "gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside",
+ "note": "CDTI-128 consensus, 40,533 dots, zeros inside / NaN outside",
+ "count_requested": 60000,
+ "min_sep_px": 2.0,
+ "cap": 0.65,
+ "prior_weight": 0.0,
+ "dots": 40533,
+ "credit": 4586.2396048903465,
+ "estimate": 0.3943829157227886,
+ "estimate_label": "ESTIMATE (inverse metric fit, LOO RMSE 0.052) - not a score",
+ "calibration": {
+  "a": 0.8798409379744205,
+  "N": 2656.228178672139,
+  "rmse": 0.013774588096650034
+ },
+ "uniqueness": {
+  "worst_within_3px_fraction": 0.6402437520045395,
+  "worst_raster": "GEMSDOE24__gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-nan.tif",
+  "top5": [
+   [
+    "GEMSDOE24__gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-nan.tif",
+    0.6402437520045395
+   ],
+   [
+    "GEMSDOE24__gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif",
+    0.6402437520045395
+   ],
+   [
+    "GEMSDOE32__gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-nan.tif",
+    0.6301778797523006
+   ],
+   [
+    "GEMSDOE32__gemsdoe32-h32a-dip-projected-step-46090-20261004T183200Z-838fcd84-zeros.tif",
+    0.6301778797523006
+   ],
+   [
+    "GEMSDOE32__gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-nan.tif",
+    0.629980509708139
+   ]
+  ],
+  "diversification_rounds": 2,
+  "registry_rasters": 342
+ },
+ "tif": "docs/downloads/gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+ "sha256": "d79017852d33cf0be89e6b88bcfa578f13838cd26e68c9424b1ae2a84a404940",
+ "grid": {
+  "shape": [
+   3730,
+   3292
+  ],
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ]
+ }
+}
