@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-30",
+ "generated_utc": "2026-10-30T05:05:00Z",
  "repository": "sassnarep3-star/GEMSDOESASS3",
  "irregularities": [
   {
@@ -641,6 +641,14 @@
    "title": "Prompt-quoted leaderboard highs conflict with the live page",
    "finding": "The task prompt quotes 0.4413 and 0.3195 as the top score; the repo recorded 0.4544 (#1 xiaofanhu). Re-fetched 2026-10-30: #1 is 0.4544 with 34 submissions, #2 0.3916, #10 0.3405, and 0.3195 does not appear in the visible top 23.",
    "resolution": "All three figures are reported as renders of a moving public leaderboard, with the fetch date; the repo's pages cite 0.4544 as current and keep 0.4413/0.3195 as stale-quote evidence rather than silently replacing them."
+  },
+  {
+   "id": "IR-SASS3-93",
+   "severity": "HIGH (FIXED)",
+   "title": "Lane-70 audit mislabelled a halo-excluded overlap as literal",
+   "finding": "scripts/audit_unique_candidate.py excluded references whose own 300 m band covers more than 50 % of the footprint from the number it reported as max_frac_within_3px_literal. For the 2026-10-30 55,000-dot consensus build that excluded the 13GEMSDOE lattice (true overlap 99.54 %) and gemsdoe67-ovtr-ml-cover-tau3p0 (76.31 %, a real submission), so the published '0 of 2,627 above the cap' was true only of the halo-excluded class.",
+   "resolution": "Recomputed from the rasters, rewrote the report to carry literal / submission-only / lattice numbers separately, rebuilt with the cap enforced against every submission (0 of 52 above 70 %, max 0.699982), and recorded the strict-literal ceiling (22,163-dot bound, 6,136 dots built, estimate 0.0257) in docs/research/lane70-alternative-20261030.md. The superseded 55k file was deleted.",
+   "status": "closed"
   }
  ]
 }

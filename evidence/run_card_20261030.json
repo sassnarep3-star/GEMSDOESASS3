@@ -1,156 +1,105 @@
 {
- "schema_version": 2,
- "lane_id": "GEMSDOESASS3-H-LANE70-CONSENSUS",
- "branch": "arena/49ebc0d2-gemsdoesass3",
- "submission_name": "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe",
- "download_path": "docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif",
- "submission_note": "Unique lane-70 consensus, 55k dots: no registry submission above 70%, est DTI 0.19 (LOO 0.065)",
- "note_chars": 94,
- "hypothesis": "The scored truth is a private set of expert-mapped faults absent from the public USGS catalogue. Dots earn credit where independent, previously scored submissions converge; the submission is the argmax of the score-weighted consensus field h = sum_f s_f k_f / sum_f k_f under the official DTI marginal rule, with the lane rule (<=70 % of dots within 3 px of any single registry submission) enforced during emission.",
- "mechanism": "h(x) = B(x)/A(x), A = sum_f k_f(x), B = sum_f s_f k_f(x), k = 300 m triangular kernel, s_f = owner-reported leaderboard score, over the 50 distinct scored submissions; emission is a greedy descending-h pass with 2 px minimum spacing and a per-reference 70 % band cap. Credit rate is kappa*h with kappa = 0.6309 calibrated to reproduce the 50 scores.",
- "named_non_fault_mimic": "A regional structural grain shared by drainage, lithologic contacts and the Laramide/Neogene fabric reproduces a multi-submission consensus without any Quaternary fault; because the belief field is built from other teams' submissions, agreement is not independent geological evidence. Controls: catalogue-anchored hide-and-recover (HOLDOUT-DTI) and the SGMC off-catalogue evaluator are both reported for the candidate and for the champion.",
+ "schema_version": 1,
+ "session": "2026-10-30",
+ "lane": "single method lane (H-S30-2 proposed; not executed; see docs/research/session-20261030-review.md)",
+ "experiments_used": 0,
+ "budget": "3 experiments or 2 hours; 0 used (no new holdout run was possible without labels)",
+ "hypothesis": "No new geological hypothesis was tested this session. Pass 1-3 verified the official metric, the rules and the candidate's pixels, and fixed the shared validator.",
+ "mechanism": "Not applicable (no new experiment).",
+ "named_non_fault_mimic": "Not applicable for this session. For the proposed H-S30-2 (gravity-magnetic edge offset): lithologic contacts with different dip or remanence, and terrain-correction residuals.",
  "holdout_dti": {
-  "status": "PASS",
-  "score_label": "HOLDOUT-DTI",
-  "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
-  "n_withheld_positives": 22232,
-  "pooled_dti": 0.07893860428429801,
+  "label": "HOLDOUT-DTI",
+  "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+  "withheld_positives": 62703,
+  "value": 0.042850569478494145,
   "ci95": [
-   0.06869196481136113,
-   0.08918496004671007
+   0.03887126392548183,
+   0.04615745300007199
   ],
-  "controls": {
-   "champion_h33_2_b2": 0.00452,
-   "h19_5_multiline": 0.06879,
-   "previous_consensus_55000": 0.08144
+  "note": "Candidate's own receipt (2026-10-29). Not re-run this session: labels absent (IR-SASS3-73)."
+ },
+ "controls_same_evaluator": {
+  "champion_0.2778_file": {
+   "value": 0.0641209376417646,
+   "ci95": [
+    0.056730181217206584,
+    0.0716486609703412
+   ]
   },
-  "gate_basis": "candidate exceeds the champion control by more than an order of magnitude with disjoint CIs"
- },
- "sgmc_off_catalogue": {
-  "raw_pooled_dti": 0.09024569691840509,
-  "raw_ci95": [
-   0.08222057049380034,
-   0.09811829113603412
-  ],
-  "prevalence_calibrated": 0.05379336488672106,
-  "calibrated_ci95": [
-   0.04820876472408744,
-   0.05927298128672394
-  ],
-  "n_withheld_positives": 62703
- },
- "leakage_canary": {
-  "status": "PASS",
-  "test": "single derived channel: candidate 300 m proximity field vs public catalogue labels",
-  "auc": 0.55241,
-  "threshold": 0.9,
-  "registry_level_report": "evidence/leakage_canary_report.json (51 channels, worst symmetric AUC 0.90)"
- },
- "registry_correlation_and_overlap": {
-  "literal_uniqueness_gate": "CLEARED (submission references)",
-  "pool_rasters": 3010,
-  "pool_tested_with_fingerprints": 2627,
-  "max_frac_within_3px_pool": 0.6952727272727273,
-  "n_pool_over_70pct": 0,
-  "submission_references_exact": 52,
-  "max_frac_within_3px_submissions": 0.699982,
-  "n_submissions_over_70pct": 0,
-  "worst_submission_reference": "gemsdoe67-ovtr-ml-cover-tau3p0-20261012-nan.tif (band coverage 0.5481)",
-  "calibration_lattice": {
-   "file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
-   "frac_within_3px": 0.995182,
-   "band_coverage": 0.9987,
-   "dots": 206895,
-   "exclusion_rationale": "A 206,895-dot regular lattice whose 300 m band covers 99.87 % of the footprint; the 70 % test against it is a coverage measurement, not a duplicate test. Every dense submission fails it: the 0.2778 champion is 100 % inside 638 registry bands. Excluded from the cap, quantified here, and not used as a submission."
+  "lwst_37654_blocked_file": {
+   "value": 0.06570231430849702,
+   "ci95": [
+    0.05899206995492947,
+    0.07124034012798368
+   ]
   },
-  "surface_rule_16x16_binned_spearman": {
-   "status": "NOT DISCRIMINATING",
-   "n_over_0p90": 1909,
-   "champion_control_n_over_0p90": 1757,
-   "note": "failed by the champion too; protocol defect, not a pass"
+  "same_count_random_no_lattice_constraint": {
+   "value": 0.05131727241482219,
+   "ci95": [
+    0.046172927196295704,
+    0.05583616105847035
+   ]
   },
-  "pre_placement_rank_correlation": null,
-  "receipt": "evidence/uniqueness_audit_candidate_20261030.json",
-  "submission_only_receipt": "evidence/literal_vs_submission_overlap_20261030.json"
+  "literal_random": {
+   "value": 0.03808678347987576,
+   "ci95": [
+    0.03435031186585344,
+    0.041507504475150225
+   ]
+  },
+  "literal_dense": {
+   "value": 0.030218240646449877,
+   "ci95": [
+    0.02551881508941008,
+    0.034936689276231336
+   ]
+  }
  },
- "leaderboard_estimate": {
-  "label": "LEADERBOARD-CALIBRATED ESTIMATE",
-  "value": 0.19180365917445563,
-  "calibration_n": 50,
-  "loo_rmse": 0.0653,
-  "loo_spearman": 0.695,
-  "champion_estimate": 0.2384,
-  "champion_observed": 0.2778,
-  "caveat": "estimate, not a score; LOO error 0.065 and a -0.04 low bias on the champion"
+ "owner_reported_champion": {
+  "label": "OWNER-REPORT",
+  "score": 0.2778,
+  "note": "typed in request; not an organizer receipt"
  },
- "raster_sha256": "e2e4380991586b99c9b9da1abc3272782d3562134515891469fa882ba02c7f8d",
- "zip_sha256": "46ee4a1cdcdb58aed16c29740b7c9af3e60478be6589dac821f1e646d28f07ab",
- "zip_bytes": 304475,
+ "leaderboard_live_2026_10_30": {
+  "label": "ORGANIZER-PUBLIC (public board, fetched page)",
+  "top": 0.4544,
+  "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
+ },
+ "correlation_overlap_vs_registry": {
+  "registry_rasters_compared": 386,
+  "worst_within_3px_fraction": 0.6899866742813631,
+  "worst_within_3px_raster": "HISTORICAL_SCORED:scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "worst_abs_spearman": 0.1504139046570531,
+  "limit_within_3px": 0.7,
+  "limit_abs_spearman": 0.9,
+  "lattice_overlap_recomputed_here": 0.6899866742813631,
+  "source": "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json"
+ },
+ "raster_sha256": "7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a",
  "validator_output": {
-  "script": "scripts/validate_submission_tif.py",
+  "file": "evidence/validator_candidate_20261030.json",
   "all_hard_checks_pass": true,
-  "checks_passed": "all",
-  "crs": "EPSG:32611",
-  "shape": [
-   3730,
-   3292
-  ],
-  "transform": [
-   100.0,
-   0.0,
-   243350.0,
-   0.0,
-   -100.0,
-   4508550.0
-  ],
-  "nodata": "nan",
-  "positive_cells": 55000,
-  "dtype": "float32",
-  "bands": 1,
-  "values": "{0,1}",
-  "nan_outside_footprint": 7111787,
-  "nonzero_outside_footprint": 0,
-  "official_text": "data outside the bounds is null or nan (page 967); the official sample submission is NaN outside",
-  "file": "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif",
-  "bytes": 439377,
-  "portal_range_test_all_cells": true,
-  "non_finite_cells_stored": 0,
-  "encoding": "portal-safe: the in-footprint payload is bit-identical to the source emission; 0.0 is stored outside the footprint and the null-ness is carried by an internal GDAL per-dataset mask (nodata), satisfying both the official sentence and the portal's element-wise [0,1] test (IR-SASS3-81)",
-  "mask_flags": [
-   "2:per_dataset"
-  ],
-  "masked_fraction": 0.579175,
-  "dot_set_symmetric_difference_vs_source": 0,
-  "source_file": "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif",
-  "source_sha256": "f7d56a9e316ae6a8fc162bdb30b7ddf3a3796dcaf232399b8fa95a8cc88f7452"
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "shape_3730x3292": true,
+   "transform_matches_training_grid": true,
+   "no_inf_anywhere": true,
+   "values_in_0_1": true,
+   "nan_outside_and_finite_inside_footprint": true
+  },
+  "notes": [
+   "nodata declared = nan; official text asks outside-bounds cells to be null or nan",
+   "footprint check: 0 finite cells outside the footprint; 0 NaN cells inside it"
+  ]
  },
- "verdict": "promote",
- "ok_to_submit": true,
- "ok_to_download": true,
- "budget": {
-  "experiments_used": 3,
-  "slots_spent": 0,
-  "weekly_cap": 3,
-  "slot_decision": "owner"
- },
- "decision_frame": {
-  "core_value": "Maximize P(Win)",
-  "own_the_outcome": true,
-  "summary": "A duplicate scores ~0.28 publicly but earns nothing in the Final Round that re-scores the same submission against expert-reviewed labels; a unique file at an estimated 0.19 is the only defensible entry here."
- },
- "known_limitations": [
-  "The estimate is a model estimate from public-leaderboard feedback (50 submissions); the private label set differs and the model is biased low by 0.04 on its own anchor.",
-  "The file reuses consensus structure from prior submissions: 70 % of its dots lie within 300 m of gemsdoe67's band by construction of the cap; it is unique by measurement, not independent by construction.",
-  "The 16x16 binned rank-correlation criterion cannot discriminate any submission (1,909 here vs 1,757 for the champion); it needs an owner decision on granularity.",
-  "The calibration lattice reference is excluded from the cap with the rationale above; under a strict all-reference reading no dense submission can pass (measured ceiling: 6,136 dots, estimate 0.026).",
-  "Competition-download authorization remains NO (owner decision IR-SASS3-71); this file is generated in-repository and does not require it."
- ],
- "artifacts": {
-  "uniqueness_audit": "evidence/uniqueness_audit_candidate_20261030.json",
-  "holdout": "evidence/holdout_lane70_20261030.json",
-  "canary": "evidence/canary_lane70_20261030.json",
-  "overlap": "evidence/literal_vs_submission_overlap_20261030.json",
-  "builder": "scripts/build_unique_candidate.py",
-  "portal_safe_render": "evidence/portal_safe_render_gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.json"
- }
+ "submission_name": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+ "submission_note": "LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted",
+ "note_length": 104,
+ "ok_to_download_for_analysis": true,
+ "ok_to_download": false,
+ "ok_to_submit": false,
+ "verdict": "negative",
+ "verdict_detail": "Not promoted. Holdout gate and leakage canary not run (labels absent). Uniqueness receipt not re-run this session. Owner decision required before any download authorization (IR-SASS3-71)."
 }

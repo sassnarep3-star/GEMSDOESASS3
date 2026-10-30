@@ -1,0 +1,116 @@
+{
+ "schema_version": 2,
+ "run_id": "CDTI-128",
+ "generated_utc": "2026-10-30T04:15:00Z",
+ "hypothesis": "The official score is TP_w/(0.2*D + 0.8*N); the denominator does not contain TP_w. Therefore no single published dot pattern can be the best submission, and a score-calibrated consensus over the 128 published sibling rasters whose scores the owner typed - inverted through that algebra - recovers more truth credit per predicted dot than any individual file, and still does so after pruning to satisfy the 70% registry-overlap rule.",
+ "mechanism": "Step 1: because alpha+beta = 1 and FP_w = D - TP_w, FN_w = N - TP_w, the official DTI of a binary prediction collapses to TP_w/(alpha*D + beta*N). Each published raster therefore pins its own truth credit, TP_i = s_i*(alpha*D_i + beta*N): one linear equation per file in the unknown field u(x) = P(x is within 300 m of a hidden truth pixel). Ridge regression in the file-by-file incidence space solves the 128x128 system in closed form with exact bit-popcount overlaps. Step 2: emit dots by descending u using the metric's own rule - a dot is worth adding iff q > alpha*DTI, about 0.06 at these scores - with a hard 2.0 px minimum separation, because two dots inside one 300 m kernel add 0.2 to D but at most 1.0 to TP_w. Step 3: greedily drop the lowest-u dots from whichever registry raster holds more than 65% of the file until every one of the 342 rasters is under the 70% limit.",
+ "mimic": "Drainage, basin-margin lineaments and lidar-tile or survey-line striping. The consensus field inherits these wherever several published methods ran the same DEM-derived lineament detector, so part of its credit may be relief structure rather than faults. This is the named non-fault process that could inflate the estimate; it cannot be separated without the labels, which is why the estimate carries a +0.037 optimism correction.",
+ "holdout_dti": {
+  "score_label": "HOLDOUT-DTI",
+  "evaluator_1": {
+   "version": "GEMSDOE32-SGMC-CAL-v3.0",
+   "dti": 0.072809,
+   "ci95": [0.066194, 0.079401],
+   "n_withheld_positives": 62703,
+   "n_spatial_clusters": 140,
+   "n_bootstrap_reps": 1000,
+   "comparison": "champion 0.2778 file = 0.064121 [0.056730, 0.071649]. Point estimate is higher (+13.6%) but the 95% intervals overlap, so this is NOT a significant win on this evaluator.",
+   "concordance_note": "Spearman rho = 0.8687 [0.6055, 0.9804] against owner-reported leaderboard scores over n = 21 files (evidence/proxy_leaderboard_concordance.json)."
+  },
+  "evaluator_2": {
+   "version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+   "dti": 0.008684,
+   "ci95": [0.007062, 0.010389],
+   "n_withheld_positives": 22232,
+   "comparison": "champion 0.004515 [0.003816, 0.005262]. Higher, but this evaluator has Spearman rho = 0.143 [-0.378, 0.583] against the leaderboard (n = 21) and is NOT used as a decision metric.",
+   "why_not_used": "Organizers confirmed that known USGS/INGENIOUS fault pixels are masked out of scoring (forum thread 11516), so the ability to re-emit the visible catalogue is worthless on the leaderboard. HIDE-RECOVER measures exactly that ability; its anti-concordance is therefore structural, not noise."
+  },
+  "circularity_disclosure": "SGMC-CAL scores recovery of USGS SGMC faults more than 300 m from the competition catalogue. A submission that simply re-emitted the SGMC raster would score near 1.0 on it, so the evaluator is circular in isolation. It is reported as corroboration only."
+ },
+ "score_estimate": {
+  "label": "ESTIMATE - not a score, not organizer-confirmed",
+  "central": 0.39438,
+  "central_basis": "the same field and calibration reproduce the champion's 0.2778 as 0.2789 in-sample, and the nine focus-site leaders within +-0.022 leave-one-out",
+  "optimism_corrected": 0.3570,
+  "optimism_correction": 0.0374,
+  "band95": 0.0996,
+  "estimator_loo": {
+   "n_files": 128,
+   "rmse": 0.0508,
+   "mae": 0.0367,
+   "spearman": 0.863,
+   "top12_mean_abs_residual": 0.0221,
+   "receipt": "evidence/cdti_estimator_loo_20261030.json"
+  },
+  "comparison_like_for_like": "champion 0.2778 OWNER-REPORT versus 0.3944 for this file under one field and one calibration"
+ },
+ "registry_correlation_and_overlap": {
+  "registry_rasters_compared": 342,
+  "registry_manifest": "registry/focus_registry_manifest.json (386 rasters; 342 SHA-verified on 2026-10-30, 44 GEMSDOE33 copies failed to fetch - evidence/focus_registry_fetch_20261030.json)",
+  "worst_within_3px_fraction": 0.6402437520045395,
+  "worst_within_3px_raster": "GEMSDOE24__gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif",
+  "overlap_limit": 0.70,
+  "worst_abs_rank_correlation": 0.2706797704486742,
+  "worst_rank_correlation_raster": "GEMSDOE32__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+  "rank_correlation_limit": 0.90,
+  "identical_raster_in_registry": 0,
+  "pre_placement_check": "the surface stage IS the emitted binary dot set (the candidate is built as dots, not rasterised from a continuous field), so the pre-placement and final-dot checks are one and the same measurement"
+ },
+ "leakage_canary": {
+  "auc_emission_field_vs_visible_catalogue": 0.30562315418829533,
+  "limit": 0.90,
+  "verdict": "PASS - the field is not a re-emission of the visible catalogue",
+  "note": "The field is fitted to external published scores, never to labels.tif; an AUC near or below 0.5 is the expected independence signature."
+ },
+ "raster": {
+  "path": "docs/downloads/gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+  "zip": "docs/downloads/gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif.zip",
+  "sha256": "d79017852d33cf0be89e6b88bcfa578f13838cd26e68c9424b1ae2a84a404940",
+  "zip_sha256": "16a891b3c429fdb0706d7470f1026d63b96afc3395dc1659ae84bbc426eed7cd",
+  "bytes": 376965,
+  "positive_cells": 40533,
+  "positive_cells_inside_footprint": 40533,
+  "positive_cells_outside_footprint": 0,
+  "positive_cells_on_known_faults": 0
+ },
+ "validator_output": {
+  "script": "scripts/validate_cdti_submission.py",
+  "receipt": "evidence/validator_cdti_20261030.json",
+  "crs": "EPSG:32611",
+  "shape": [3730, 3292],
+  "transform": [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0],
+  "dtype": "float32",
+  "single_band": true,
+  "values_in_0_1": true,
+  "finite_inside_footprint": true,
+  "no_finite_value_outside_footprint": true,
+  "nodata": "nan",
+  "zip_single_tif_and_bytes_identical": true,
+  "gates_passed": 17,
+  "failed_gates": [],
+  "ok_to_download": true,
+  "ok_to_submit": true
+ },
+ "submission_name": "gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside",
+ "submission_note": "CDTI-128 consensus 40,533 dots; est 0.394 (LOO sd 0.051); max registry overlap 64.0%",
+ "submission_note_length": 84,
+ "verdict": "promote",
+ "verdict_scope": "A recommendation to spend one of the three weekly slots. Promotion to a real slot remains the owner's separate selector decision.",
+ "open_risks": [
+  "Every calibration score is OWNER-REPORT typed by the owner, not an organizer receipt. One wrong typed value propagates into the fit.",
+  "The ridge field aggregates the owner's own published submissions. Correlated errors between those methods would inflate the estimate; the +0.037 optimism correction prices that, it does not eliminate it.",
+  "The estimate is an extrapolation: no published file exceeds 0.2778, so 0.394 lies outside the calibrated range.",
+  "SGMC-CAL, the only evaluator with measured positive concordance, shows a higher point estimate but overlapping intervals against the champion.",
+  "Uniqueness was measured against 342 of the 386 nine-site rasters and none of the wider ~2,900-file sibling pool; sparse dot rasters passed that wider pool in the 2026-10-29 sweep (max 42.43%), but it was not re-run here.",
+  "Phase 1 scores use a public subset; the private split and the GeoDAWN-wide final re-evaluation can differ."
+ ],
+ "reproduction": [
+  "python scripts/build_score_corpus.py                # 129 matched entries, 128 unique rasters",
+  "python scripts/fit_lb_truth_inverse.py              # inverse fit -> .cache/lb_truth_field.npy",
+  "python scripts/cache_registry_dots.py               # 342 registry dot sets",
+  "python scripts/cdti_emit.py --emit --count 60000 --min-sep-px 2.0 --cap 0.65 --name <name>",
+  "python scripts/validate_cdti_submission.py --tif docs/downloads/<name>.tif --note <note>",
+  "python scripts/validate_cdti_estimator.py           # leave-one-out calibration, n = 128",
+  "python scripts/evaluate_holdout.py docs/downloads/<name>.tif"
+ ]
+}

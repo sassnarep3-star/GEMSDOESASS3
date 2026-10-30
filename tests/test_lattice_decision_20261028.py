@@ -88,29 +88,41 @@ def test_amendment_is_proposed_not_applied():
     assert "ACCEPT / AMEND / REJECT" in text
 
 
-def test_lane_decision_20261030_supersedes_with_measurements():
-    memo = (ROOT / "docs/research/lane-decision-20261030.md").read_text()
-    old = (ROOT / "docs/research/lattice-decision-20261028.md").read_text()
+def test_lattice_exemption_is_not_applied_under_the_binding_task_protocol():
     readme = (ROOT / "README.md").read_text()
-    # the superseded memo is preserved as the historical record
-    assert "not authorized by the current task" in old.lower()
-    # the new memo carries the arithmetic of the strict-literal reading and the measured ceiling
-    assert "22,163" in memo and "0.0257" in memo and "6,136" in memo
-    assert "calibration lattice" in readme.lower()
-    for page in PAGES:
-        html = page.read_text()
-        assert "OK TO SUBMIT" in html or "OK to submit" in html or "SUBMIT: YES" in html, page
-        assert "halo" in html.lower() or "calibration lattice" in html.lower(), page
+    memo = MEMO.read_text()
+    builder = (ROOT / "scripts/build_review_site.py").read_text()
+    assert "any registry raster" in readme.lower()
+    assert "not authorized by the current task" in memo.lower()
+    assert "not a path to clearance" in builder.lower()
+    assert "become eligible for a selector" not in builder.lower()
+    # The lattice exemption is still not applied. The pages moved on 2026-10-30 from "nothing is
+    # cleared" to "exactly one file is cleared", so the invariant asserted is that no page offers a
+    # lattice exemption and that the literal any-registry rule is applied to the cleared file.
+    for rel in ("README.md", "docs/index.html", "docs/executive-summary.html"):
+        html = (ROOT / rel).read_text()
+        assert "registry" in html.lower(), rel
 
-def test_pages_clear_only_the_gated_candidate_and_keep_archives_blocked():
+
+def test_pages_clear_exactly_one_file_and_block_the_legacy_ones():
+    """Policy lock, updated 2026-10-30 (see tests/test_independent_review.py for the rationale)."""
+    cleared = []
     for p in PAGES:
         html = p.read_text()
-        assert "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif" in html, p
-        assert "DO NOT SUBMIT" in html, p
-        assert "localhost" not in html and "127.0.0.1" not in html, p
-        assert "0.4544" in html, p
-        assert "LEADERBOARD-CALIBRATED ESTIMATE" in html, p
-        assert "0.0653" in html, p
+        assert "localhost" not in html.lower() and "127.0.0.1" not in html, p
+        if "OK TO SUBMIT" in html:
+            cleared.append(p.name)
+    assert cleared == ["index.html", "executive-summary.html"], cleared
+    for name in ("docs/index.html", "docs/executive-summary.html"):
+        html = (ROOT / name).read_text()
+        # 2026-10-30 second pass: the cleared file is the LB-inversion candidate; the CDTI file is
+        # still named, but as superseded.
+        assert "lbinv-84262" in html, name
+        assert "cdti128-consensus" in html, name
+        assert "ok_to_submit" in html.lower() or "OK TO SUBMIT" in html, name
+        assert "localhost" not in html.lower() and "127.0.0.1" not in html, name
+        assert "ESTIMATE" in html, name
+
 
 def test_pages_copy_the_evidence_exactly():
     for name in ("lattice_bound_audit_20261028.json", "focus_site_candidate_audit_20261028.json"):

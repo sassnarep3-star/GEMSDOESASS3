@@ -74,9 +74,6 @@ def main() -> int:
     dst = src.with_name(f"{stem}{args.suffix}.tif")
     prof.update(count=1, dtype="float32", driver="GTiff", tiled=True, compress="deflate", predictor=2)
     prof.pop("nodata", None)                    # do NOT declare 0 as nodata: legal zeros would vanish
-    # strip-based layout: a tiled layout with a non-multiple-of-16 block size breaks the mask writer
-    for k in ("tiled", "blockxsize", "blockysize", "blocksize"):
-        prof.pop(k, None)
     with rasterio.open(dst, "w", **prof) as ds:
         ds.crs = src_crs
         ds.transform = src_transform

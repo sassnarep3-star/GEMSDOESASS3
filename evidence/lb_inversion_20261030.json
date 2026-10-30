@@ -1,0 +1,85 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30",
+ "label": "ESTIMATE",
+ "not_organizer_confirmed": true,
+ "method": "invert DTI = TP/(alpha*D + beta*N) over the published score corpus",
+ "n_rasters": 128,
+ "n_footprint_cells": 5167373,
+ "gamma": 1.0,
+ "k": 0.07336412721945132,
+ "N_estimate": 60000.000000203676,
+ "in_sample": {
+  "rmse": 0.0775288723138495,
+  "rho": 0.6834084874565098
+ },
+ "leave_one_out": {
+  "folds": 4,
+  "rmse": 0.08213720939736048,
+  "rho": 0.6327881798205457
+ },
+ "worst_residuals": [
+  {
+   "name": "GEMSDOE70__gems70-p5-dual-submod300-oof38k-20261020.tif",
+   "observed": 0.2478,
+   "predicted": 0.03646235440312307,
+   "residual": -0.21133764559687693
+  },
+  {
+   "name": "GEMSDOE49__gems49-gate_ortho_w0.25-40k-20261006T213721Z-nan.tif",
+   "observed": 0.2376,
+   "predicted": 0.027609782289396242,
+   "residual": -0.20999021771060378
+  },
+  {
+   "name": "GEMSDOE76__gems76-ptcf-tiltworm-submod39k-20261021T034000Z-6316481d-zeros.tif",
+   "observed": 0.2343,
+   "predicted": 0.039946391409315565,
+   "residual": -0.19435360859068446
+  },
+  {
+   "name": "GEMSDOE48__gemsdoe48-h59-cover-ds-belief-b2xh33d-20261008T184547Z-b79c4c61d8d8.tif",
+   "observed": 0.2296,
+   "predicted": 0.0414389427535087,
+   "residual": -0.1881610572464913
+  },
+  {
+   "name": "GEMSDOE27__gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-nan.tif",
+   "observed": 0.225,
+   "predicted": 0.03972019173291208,
+   "residual": -0.18527980826708793
+  },
+  {
+   "name": "GEMSDOE27__gems27-h29-hydrothermal-piedmont-celf-20261025-511898747886-nan.tif",
+   "observed": 0.219,
+   "predicted": 0.04171342881440305,
+   "residual": -0.17728657118559696
+  },
+  {
+   "name": "GEMSDOEkarage3__gemsdoekarage3-h-k3c-csst-bghf-24cell-d31-b37654-20261028T175133Z-3586582f-zeros.tif",
+   "observed": 0.1978,
+   "predicted": 0.02802423656834004,
+   "residual": -0.16977576343165995
+  },
+  {
+   "name": "GEMSDOE73__gems73-h73-mcsc-seamfree-blakely-37654dots-20261021T073716Z-b27ac445-nan.tif",
+   "observed": 0.1917,
+   "predicted": 0.035359156625505934,
+   "residual": -0.15634084337449408
+  },
+  {
+   "name": "GEMSDOE82__gemsdoe82-h82-submodular-punoisyor-20261021T235456Z-fe137199-zeros.tif",
+   "observed": 0.1886,
+   "predicted": 0.03525115672855262,
+   "residual": -0.15334884327144738
+  },
+  {
+   "name": "GEMSDOESASS2__gemsdoesass2-hvfd-exp3-hydrocollinear-37654-20261027T120000Z-fc98343e-zeros.tif",
+   "observed": 0.1881,
+   "predicted": 0.03724488833631935,
+   "residual": -0.15085511166368065
+  }
+ ],
+ "uses_public_sibling_repositories": true,
+ "provenance": "scores are OWNER-REPORT values typed beside public file names; no organizer receipt exists"
+}

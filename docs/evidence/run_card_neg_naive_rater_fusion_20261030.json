@@ -1,0 +1,31 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30",
+ "verdict": "negative",
+ "hypothesis": "H-LBDISTILL-NAIVE: treat every published raster as an independent rater and fuse them with Dawid-Skene log-odds",
+ "what_was_run": "scripts/leaderboard_distill.py over 128 published rasters; per-rater sensitivity p_i from inverting the metric; posterior odds accumulated in log space; N and the prior truth rate fitted by leave-one-file-out",
+ "result": {
+  "loo_rmse": 0.2125,
+  "loo_rho": 0.589,
+  "baseline_rmse": 0.0825,
+  "chosen": {
+   "N": 130000,
+   "pi": 0.06
+  },
+  "field_implied_est_scores": [
+   0.939,
+   1.664,
+   1.736,
+   1.966,
+   2.082,
+   2.164,
+   2.214,
+   2.257,
+   2.259
+  ],
+  "note": "estimated scores above 1.0 are impossible; the grid optimum sits on the boundary (N=130k, pi=0.06)"
+ },
+ "why_it_failed": "the top published rasters share 0.87-1.00 of their dots, so conditional independence is grossly violated; 15 near-duplicate raters multiply to near-certainty",
+ "what_was_kept": "the per-rater sensitivity p_i = s_i(0.2 D_i + 0.8 N)/D_i, which is exact given the algebra and is reused by every later script",
+ "stopped_after": "one configuration sweep; no submission slot used"
+}
