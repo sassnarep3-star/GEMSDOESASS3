@@ -132,3 +132,15 @@ def test_placement_helpers_are_deterministic():
     assert CARD["provenance"]["seed"] == 20261101
     assert CARD["provenance"]["no_registry_dots_used_to_build"] is True
     assert CARD["provenance"]["no_competition_labels_used"] is True
+
+
+def test_density_sweep_shows_mass_cannot_substitute_for_skill():
+    d = json.loads((ROOT / "evidence" / "density_sweep_20261030.json").read_text())
+    assert d["label"].startswith("HOLDOUT-DTI")
+    budgets = [r["budget"] for r in d["rows"]]
+    assert min(budgets) == 45_000 and max(budgets) == 250_000
+    best = max(d["rows"], key=lambda r: r["holdout_dti"])
+    assert best["budget"] == 45_000, "the release budget is the measured optimum of this mechanism"
+    eps = {(r["step_px"], r["budget"]): r["enrichment_eps"] for r in d["rows"]}
+    assert eps[(4.0, 45_000)] > eps[(4.0, 180_000)] > 1.0
+    assert all(r["enrichment_eps"] < 2.0 for r in d["rows"]), "no blind mechanism is 2x enriched"
