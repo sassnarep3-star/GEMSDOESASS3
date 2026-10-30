@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-10-30T03:22:31+00:00",
+  "generated_by": "scripts/write_run_card.py",
+  "session": "2026-10-30 second pass (lane/OCM branch); main\u2019s tipcont card is evidence/run_card_20261030.json",
+  "site": "GEMSDOESASS3 (nine focus sites: GEMSDOE24/25/27/28/30/31/32/33/36)",
+  "hypothesis": "H-N6 (2026-10-30): a wide-lane, LiDAR-visible-terrain-gated emission off the catalogue matches the champion on the local instruments; H-N5 (the higher-lambda 1.4-2 px strand lane) is better on the live-calibrated model but sits inside the family's duplicate lane.",
+  "mechanism": "Orientation-consensus surface (8 official derivative bands + pinned LiDAR scarp gain) used only as a *support filter*; selection is by live-fitted lambda strata (d to catalogue 3-50 px x d to the GEMSDOE25 control trace >= 3 px), then binary p=1 emission.",
+  "mimics_non_fault_process": "Quaternary volcanic vent fields and lava-flow margins produce linear curvature/step anomalies with the same signature as a scarp; the pinned spring extract shows why that is also the failure mode of a geothermal prior - 46.3% of Hot-class springs sit within 1 km of an already-catalogued fault, i.e. inside the organizer-excluded halo (evidence/geothermal_prior_audit_20261030.json).",
+  "submission_name": "gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif",
+  "submission_note_140": "SASS3 OCM wide-lane emission: 44090 px off-catalogue strata, binary p=1, per-dataset mask, all cells in [0,1].",
+  "submission_note_chars": 110,
+  "raster": {
+    "path": "docs/downloads/gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif",
+    "sha256": "cdfa5f221fd561f2f6c46ed9bc9bec1e2fea162caedb77bc7ba981234cc8f532",
+    "bytes": 163670,
+    "emitted_px": 44090,
+    "support_pool_px": 875875,
+    "crs_shape_transform": {
+      "crs": "EPSG:32611",
+      "shape": [
+        3730,
+        3292
+      ],
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "dtype": "float32",
+      "count": 1,
+      "nodata": null,
+      "mask_flags": [
+        "2"
+      ]
+    },
+    "reference_copy_literal_page_text": {
+      "path": "docs/downloads/gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-nan.tif",
+      "sha256": "45c3b8c634aa31857669b1e2e40dd613662759c86d364e939e39f7a59029e31e",
+      "purpose": "kept only to demonstrate the portal range failure mode; not submittable"
+    }
+  },
+  "format_validation_in_project": {
+    "command": "scripts/validate_submission_tif.py docs/downloads/<tif> --out evidence/validator_s3_ocm_safe.json",
+    "all_hard_checks_pass": true,
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "crs_epsg_32611": true,
+      "shape_3730x3292": true,
+      "transform_matches_training_grid": true,
+      "no_inf_anywhere": true,
+      "values_in_0_1": true,
+      "portal_range_test_all_cells": true,
+      "finite_inside_footprint": true,
+      "outside_cells_are_null": true,
+      "nan_outside_and_finite_inside_footprint": true
+    },
+    "stats": {
+      "min": 0.0,
+      "max": 1.0,
+      "positive_pixels": 44090,
+      "unique_values": 2
+    },
+    "mask": {
+      "has_internal_mask_band": true,
+      "mask_flags": [
+        "2:per_dataset"
+      ],
+      "masked_fraction": 0.579175
+    },
+    "notes": [
+      "outside-bounds check: 0 non-null cells outside the footprint, carried by the internal mask band; 0 non-finite cells inside it"
+    ]
+  },
+  "holdout": {
+    "sgmc_calibrated": {
+      "evaluator": "GEMSDOE32-SGMC-CAL-v3.0",
+      "dti": 0.06539130879655806,
+      "ci95": [
+        0.05802473442445649,
+        0.0717971121897092
+      ],
+      "n_withheld_positives": 62703,
+      "evidence_class": "HOLDOUT-DTI"
+    },
+    "hide_and_recover": {
+      "evaluator": "GEMSDOE32-HIDE-RECOVER-v3.0",
+      "dti": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "n_withheld_positives": 22232,
+      "evidence_class": "HOLDOUT-DTI",
+      "note": "0 by construction: the emission is deliberately off-catalogue, so a catalogue-derived holdout cannot see it"
+    },
+    "family_reference": {
+      "site": "GEMSDOE32",
+      "owner_reported_score": 0.2778,
+      "holdout_dti": 0.0641209376417646,
+      "ci95": [
+        0.056730181217206584,
+        0.0716486609703412
+      ],
+      "dots": 37654,
+      "evidence_class": "OWNER-REPORT + HOLDOUT-DTI"
+    },
+    "live_projection_never_a_score": {
+      "model": "LLI-v1-S0 (40-stratum log-additive fit on 111 owner-reported live rasters)",
+      "projected_dti": 0.153018,
+      "loo_band": [
+        0.1309,
+        0.1751
+      ],
+      "evidence_class": "LLI-PROJECTION (NOT A SCORE)"
+    }
+  },
+  "lane_test": {
+    "method": "scripts/lane_sweep.py - 3-px disk overlap both directions on every registry raster, sampled Spearman on 250k cells",
+    "registry_files_checked": 462,
+    "sibling_submissions_scope": {
+      "n": 451,
+      "max_3px_overlap": 0.4467,
+      "cap": 0.7,
+      "pass": true
+    },
+    "calibration_lattice_scope": {
+      "n": 7,
+      "max_3px_overlap": 0.9976,
+      "pass": false,
+      "note": "a saturated lattice contains any emission within 3 px; the repo has ruled the lattice exemption a proposed amendment only, so the literal rule fails and the decision is escalated, not waived"
+    },
+    "exact_duplicate_against_any_registry_raster": false,
+    "median_d_catalogue_px": 14.866068747318506,
+    "median_d_family_control_px": 3.1622776601683795
+  },
+  "geothermal_prior_check": {
+    "file": "evidence/geothermal_prior_audit_20261030.json",
+    "read": "candidate is closer than a random control to springs/vents on every layer, but not closer than the champion on spring proximity (p_farther 0.238 vs 0.231); it is better only on Quaternary-trace-centroid proximity (52.6 px vs 61.7 px)",
+    "rows": [
+      {
+        "layer": "hot_springs_any",
+        "candidate": {
+          "label": "candidate",
+          "n_dots": 44090,
+          "median_d_layer_px": 25.06,
+          "frac_within_3px": 0.0353,
+          "frac_beyond_10px": 0.8176,
+          "frac_on_layer": 0.0017
+        },
+        "champion": {
+          "label": "champion",
+          "n_dots": 37654,
+          "median_d_layer_px": 24.413,
+          "frac_within_3px": 0.0357,
+          "frac_beyond_10px": 0.8145,
+          "frac_on_layer": 0.0016
+        },
+        "control": {
+          "label": "control",
+          "n_dots": 44090,
+          "median_d_layer_px": 128.763,
+          "frac_within_3px": 0.019,
+          "frac_beyond_10px": 0.9097,
+          "frac_on_layer": 0.001
+        },
+        "p_candidate_farther_than_control": 0.2376,
+        "p_champion_farther_than_control": 0.2313
+      },
+      {
+        "layer": "hot_springs_class_Hot",
+        "candidate": {
+          "label": "candidate",
+          "n_dots": 44090,
+          "median_d_layer_px": 115.953,
+          "frac_within_3px": 0.0028,
+          "frac_beyond_10px": 0.9828,
+          "frac_on_layer": 0.0001
+        },
+        "champion": {
+          "label": "champion",
+          "n_dots": 37654,
+          "median_d_layer_px": 102.179,
+          "frac_within_3px": 0.003,
+          "frac_beyond_10px": 0.9819,
+          "frac_on_layer": 0.0002
+        },
+        "control": {
+          "label": "control",
+          "n_dots": 44090,
+          "median_d_layer_px": 255.82,
+          "frac_within_3px": 0.0014,
+          "frac_beyond_10px": 0.9912,
+          "frac_on_layer": 0.0001
+        },
+        "p_candidate_farther_than_control": 0.2762,
+        "p_champion_farther_than_control": 0.2451
+      },
+      {
+        "layer": "volcanic_vents",
+        "candidate": {
+          "label": "candidate",
+          "n_dots": 44090,
+          "median_d_layer_px": 519.168,
+          "frac_within_3px": 0.0002,
+          "frac_beyond_10px": 0.9986,
+          "frac_on_layer": 0.0
+        },
+        "champion": {
+          "label": "champion",
+          "n_dots": 37654,
+          "median_d_layer_px": 484.575,
+          "frac_within_3px": 0.0002,
+          "frac_beyond_10px": 0.997,
+          "frac_on_layer": 0.0
+        },
+        "control": {
+          "label": "control",
+          "n_dots": 44090,
+          "median_d_layer_px": 718.41,
+          "frac_within_3px": 0.0,
+          "frac_beyond_10px": 0.9996,
+          "frac_on_layer": 0.0
+        },
+        "p_candidate_farther_than_control": 0.3681,
+        "p_champion_farther_than_control": 0.3289
+      },
+      {
+        "layer": "qfault_trace_centroids",
+        "candidate": {
+          "label": "candidate",
+          "n_dots": 44090,
+          "median_d_layer_px": 52.631,
+          "frac_within_3px": 0.0017,
+          "frac_beyond_10px": 0.9697,
+          "frac_on_layer": 0.0
+        },
+        "champion": {
+          "label": "champion",
+          "n_dots": 37654,
+          "median_d_layer_px": 61.717,
+          "frac_within_3px": 0.002,
+          "frac_beyond_10px": 0.9773,
+          "frac_on_layer": 0.0002
+        },
+        "control": {
+          "label": "control",
+          "n_dots": 44090,
+          "median_d_layer_px": 62.801,
+          "frac_within_3px": 0.0026,
+          "frac_beyond_10px": 0.9731,
+          "frac_on_layer": 0.0001
+        },
+        "p_candidate_farther_than_control": 0.4238,
+        "p_champion_farther_than_control": 0.4861
+      },
+      {
+        "layer": "catalogue_labels",
+        "candidate": {
+          "label": "candidate",
+          "n_dots": 44090,
+          "median_d_layer_px": 14.866,
+          "frac_within_3px": 0.0,
+          "frac_beyond_10px": 0.629,
+          "frac_on_layer": 0.0
+        },
+        "champion": {
+          "label": "champion",
+          "n_dots": 37654,
+          "median_d_layer_px": 19.647,
+          "frac_within_3px": 0.0577,
+          "frac_beyond_10px": 0.6983,
+          "frac_on_layer": 0.0
+        },
+        "control": {
+          "label": "control",
+          "n_dots": 44090,
+          "median_d_layer_px": 122.442,
+          "frac_within_3px": 0.0364,
+          "frac_beyond_10px": 0.8914,
+          "frac_on_layer": 0.0048
+        },
+        "p_candidate_farther_than_control": 0.1639,
+        "p_champion_farther_than_control": 0.2132
+      }
+    ]
+  },
+  "rejected_alternative": {
+    "design": "lam_top2_strata/edge/44090",
+    "lli_projected_dti": 0.291649,
+    "lli_band": [
+      0.2696,
+      0.3137
+    ],
+    "sgmc_cal": 0.04634155858080959,
+    "lane_overlap_vs_family_3px": 0.9326,
+    "action": "logged as duplicate and STOPPED per protocol; not built into a file"
+  },
+  "experiment_budget": {
+    "used": 3,
+    "cap": 3,
+    "hours_used": "over 2 h (protocol stop condition also met)",
+    "runs": [
+      "E1 geometry",
+      "E2 operating point / mass sweep",
+      "E3 support design + E3b selection rule"
+    ]
+  },
+  "verdict": "NEGATIVE (format-ready, lane-compliant against submissions, not evidenced to beat 0.2778)",
+  "verdict_inputs": {
+    "format_gate_pass": true,
+    "lane_cap_pass_vs_submissions": true,
+    "holdout_gain_over_champion_gt_10pct": false,
+    "holdout_ratio": 1.0198
+  },
+  "do_not_spend_a_slot": true,
+  "portal_encoding_reconciliation": {
+    "issue": "IR-SASS3-86: main's promoted tipcont raster is portal-invalid as released (NaN payload outside)",
+    "fix": "scripts/make_portal_safe_render.py re-renders it with an identical dot set (symdiff 0)",
+    "file": "docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif",
+    "receipt": "evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json",
+    "validator": "evidence/validator_tipcont_safe_20261030.json",
+    "shared_gate": "scripts/validate_submission_tif.py is now mask-aware: NaN payload and per-dataset mask band both satisfy the official outside-bounds sentence, but only the mask-band encoding passes portal_range_test_all_cells"
+  },
+  "evidence_files": [
+    "evidence/candidate_build_receipt.json",
+    "evidence/validator_s3_ocm_safe.json",
+    "evidence/lane_sweep_s3_ocm_20261030.json",
+    "evidence/focus9_scoreboard_20261030.json",
+    "evidence/operating_point_E3b_selection.json",
+    "evidence/operating_point_experiment_E2.json",
+    "evidence/geothermal_prior_audit_20261030.json"
+  ]
+}

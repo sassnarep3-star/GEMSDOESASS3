@@ -15,23 +15,26 @@ th,td{padding:9px;border-bottom:1px solid #dae3eb;text-align:left;vertical-align
 .kpi b{display:block;font-size:20px}</style></head><body><main><nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Executive summary</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Leaderboard</a></nav>
 <section class="hero">
 <h1>Download the unique, format-compliant TIF</h1>
-<p><strong>File:</strong> <code>gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif</code><br>
-<strong>SHA-256:</strong> <code>cd536eff185adf3ebd70a71beedf6e016d7986449a62ec2feaef54bd49455a18</code><br>
-<strong>Dots:</strong> 21,012 · <strong>Note to paste (≤140 chars):</strong>
-<code>LWST spaced-density 21k dots; Rule-1 unique (62.5%); canary pass; holdout below champion</code></p>
-<p><a class="btn" href="downloads/gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif">Download TIF</a>
-<a class="btn alt" href="downloads/gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif.zip">Download ZIP</a>
-<a href="downloads/sdr1_audit.json">Format audit (JSON)</a> ·
+<p><strong>File:</strong> <code>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</code><br>
+<strong>SHA-256:</strong> <code>cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277</code><br>
+<strong>Dots:</strong> 44,923 · <strong>Note to paste (≤140 chars):</strong>
+<code>tip-continuation of the public USGS/INGENIOUS fault catalogue; 44923 dots at 4px spacing, NaN outside footprint</code></p>
+<p><a class="btn" href="downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif">Download TIF</a>
+<a class="btn alt" href="downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif.zip">Download ZIP</a>
 <a href="data/session_card_20261030.json">Session card (JSON)</a></p>
+<p class="small"><strong>Status: ok_to_submit = format PASS, Rule 1 PASS (54.22% worst overlap over all 386 registry rasters),
+holdout measured on both evaluators, score projected 0.178.</strong> Anomaly disclosed, not applied: IR-SASS3-90
+(the saturated calibration lattice makes the literal lane rule unsatisfiable inside the footprint; excluding it would require an
+owner amendment and is not applied here).</p>
 <div class="kpi">
 <div><span class="tag ok">FORMAT: PASS</span><b>13/13</b><span class="small">float32, EPSG:32611, 3730×3292, NaN outside, values in [0,1]</span></div>
-<div><span class="tag ok">UNIQUENESS: PASS</span><b>62.46%</b><span class="small">worst 3-px dot overlap over all 386 registry rasters (limit 70%)</span></div>
-<div><span class="tag ok">SURFACE STAGE: PASS</span><b>0.114</b><span class="small">max |ρ| of the pre-placement surface (limit 0.90)</span></div>
-<div><span class="tag bad">SCORE: BELOW 0.2778</span><b>0.172</b><span class="small">PROJECTION (calibrated in §5); champion 0.2778, leaderboard top 0.4544</span></div>
+<div><span class="tag ok">UNIQUENESS: PASS</span><b>54.22%</b><span class="small">worst 3-px dot overlap over all 386 registry rasters (limit 70%; |rho| 0.027)</span></div>
+<div><span class="tag ok">CROSS-CHECK: PASS</span><b>0.140</b><span class="small">hide-and-recover, higher than the champion's 0.099</span></div>
+<div><span class="tag bad">SCORE: BELOW 0.2778</span><b>0.178</b><span class="small">PROJECTION (calibrated in §5); champion 0.2778, leaderboard top 0.4544</span></div>
 </div>
 <p><strong>Is it OK to download?</strong> Yes — it is a submission-format GeoTIFF, generated in this repo, with verified bytes.
 <strong>Is it OK to submit?</strong> It is <em>format- and uniqueness-valid</em>, but its holdout proxy is far below the
-0.2778 champion family, so submitting it uses a weekly slot for a projected score of 0.172. That is an owner decision,
+0.2778 champion family, so submitting it uses a weekly slot for a projected score of 0.178. That is an owner decision,
 stated plainly below.</p>
 </section>
 
@@ -40,7 +43,12 @@ stated plainly below.</p>
 <div class="scroll"><table>
 <thead><tr><th>File</th><th>HOLDOUT-DTI hide-and-recover (95% CI)</th><th>HOLDOUT-DTI SGMC-CAL (95% CI)</th><th>Projected leaderboard</th><th>Unique vs all 386 registry rasters?</th><th>OK to submit?</th></tr></thead>
 <tbody>
-<tr class="pick"><td><strong>gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif</strong><br><a href="downloads/gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif">download</a></td>
+<tr class="pick"><td><strong>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</strong><br><a href="downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif">download</a></td>
+<td>0.139956 [0.125172, 0.153910]</td><td>0.041176 [0.036303, 0.046352]</td>
+<td><strong>0.178</strong> <span class="small">PROJECTION</span></td>
+<td><strong>YES.</strong> 54.22% worst dot overlap; |rho| 0.027 (full 386-raster audit)</td>
+<td><span class="tag amb">LEGAL — projected 0.178</span><br><span class="small">Best measured catalogue recovery of any file here.</span></td></tr>
+<tr><td><strong>gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif</strong><br><a href="downloads/gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif">download</a><br><span class="small">generated this session</span></td>
 <td>0.003412 [0.002637, 0.004259]</td><td>0.039601 [0.034706, 0.044320]</td>
 <td><strong>0.172</strong> <span class="small">PROJECTION</span></td>
 <td><strong>YES.</strong> 62.46% worst dot overlap; |ρ| 0.132; surface |ρ| 0.114</td>
@@ -83,6 +91,8 @@ than 70% of them.</li>
 hide-and-recover (0.0959) but 83.25% of its dots coincide with an existing GEMSDOE32 raster,
 so it fails Rule 1.</li>
 </ol>
+<p class="small">Historical note: the earlier BGK-PBE candidate was built from <strong>synthetic</strong> stand-ins and is
+archive-only (IR-SASS3-47); it is not a data-derived prediction and is not on the download list.</p>
 <p><strong>Any file marked NOT OK to submit below is blocked and must not be uploaded</strong> — the uniqueness gate is
 what blocks it, and the reason is stated in the row.</p>
 <p><strong>Lattice clause.</strong> The proposed exemption of halo-saturated calibration lattices is not applied in this build or in any audit on this page; it requires an explicit protocol amendment by the owner.</p>
@@ -97,4 +107,4 @@ python scripts/build_sdr_candidate.py --out docs/downloads/gemsdoesass3-sdr1-spa
 python scripts/uniqueness_audit_focused.py docs/downloads/gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif --surface evidence/sdr1_surface_dens.npy \
     --out evidence/uniqueness_audit_legal_lane_20261030.json --allow-coverage-gap
 python scripts/verify_all_gates.py        # fail-closed gate report</code></pre></section>
-<p class="small">Last verified 20261030T033012Z UTC · leaderboard fetched 2026-10-30 · every number on this page is re-derived by <code>scripts/verify_session_card.py</code> (every figure re-derived from receipts).</p></main></body></html>
+<p class="small">Last verified 20261030T035235Z UTC · leaderboard fetched 2026-10-30 · every number on this page is re-derived by <code>scripts/verify_session_card.py</code> (every figure re-derived from receipts).</p></main></body></html>

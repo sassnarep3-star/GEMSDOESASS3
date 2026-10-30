@@ -1,0 +1,105 @@
+{
+ "schema_version": 1,
+ "session": "2026-10-30",
+ "lane": "single method lane (H-S30-2 proposed; not executed; see docs/research/session-20261030-review.md)",
+ "experiments_used": 0,
+ "budget": "3 experiments or 2 hours; 0 used (no new holdout run was possible without labels)",
+ "hypothesis": "No new geological hypothesis was tested this session. Pass 1-3 verified the official metric, the rules and the candidate's pixels, and fixed the shared validator.",
+ "mechanism": "Not applicable (no new experiment).",
+ "named_non_fault_mimic": "Not applicable for this session. For the proposed H-S30-2 (gravity-magnetic edge offset): lithologic contacts with different dip or remanence, and terrain-correction residuals.",
+ "holdout_dti": {
+  "label": "HOLDOUT-DTI",
+  "evaluator_version": "GEMSDOE32-SGMC-CAL-v3.0",
+  "withheld_positives": 62703,
+  "value": 0.042850569478494145,
+  "ci95": [
+   0.03887126392548183,
+   0.04615745300007199
+  ],
+  "note": "Candidate's own receipt (2026-10-29). Not re-run this session: labels absent (IR-SASS3-73)."
+ },
+ "controls_same_evaluator": {
+  "champion_0.2778_file": {
+   "value": 0.0641209376417646,
+   "ci95": [
+    0.056730181217206584,
+    0.0716486609703412
+   ]
+  },
+  "lwst_37654_blocked_file": {
+   "value": 0.06570231430849702,
+   "ci95": [
+    0.05899206995492947,
+    0.07124034012798368
+   ]
+  },
+  "same_count_random_no_lattice_constraint": {
+   "value": 0.05131727241482219,
+   "ci95": [
+    0.046172927196295704,
+    0.05583616105847035
+   ]
+  },
+  "literal_random": {
+   "value": 0.03808678347987576,
+   "ci95": [
+    0.03435031186585344,
+    0.041507504475150225
+   ]
+  },
+  "literal_dense": {
+   "value": 0.030218240646449877,
+   "ci95": [
+    0.02551881508941008,
+    0.034936689276231336
+   ]
+  }
+ },
+ "owner_reported_champion": {
+  "label": "OWNER-REPORT",
+  "score": 0.2778,
+  "note": "typed in request; not an organizer receipt"
+ },
+ "leaderboard_live_2026_10_30": {
+  "label": "ORGANIZER-PUBLIC (public board, fetched page)",
+  "top": 0.4544,
+  "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
+ },
+ "correlation_overlap_vs_registry": {
+  "registry_rasters_compared": 386,
+  "worst_within_3px_fraction": 0.6899866742813631,
+  "worst_within_3px_raster": "HISTORICAL_SCORED:scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+  "worst_abs_spearman": 0.1504139046570531,
+  "limit_within_3px": 0.7,
+  "limit_abs_spearman": 0.9,
+  "lattice_overlap_recomputed_here": 0.6899866742813631,
+  "source": "evidence/literal_audit_gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.json"
+ },
+ "raster_sha256": "7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a",
+ "validator_output": {
+  "file": "evidence/validator_candidate_20261030.json",
+  "all_hard_checks_pass": true,
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "shape_3730x3292": true,
+   "transform_matches_training_grid": true,
+   "no_inf_anywhere": true,
+   "values_in_0_1": true,
+   "nan_outside_and_finite_inside_footprint": true
+  },
+  "notes": [
+   "nodata declared = nan; official text asks outside-bounds cells to be null or nan",
+   "footprint check: 0 finite cells outside the footprint; 0 NaN cells inside it"
+  ]
+ },
+ "submission_name": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+ "submission_note": "LWST dispersed 21k dots: literal-unique (max lattice overlap 68.99%); proxy below champion; not promoted",
+ "note_length": 104,
+ "ok_to_download_for_analysis": true,
+ "ok_to_download": false,
+ "ok_to_submit": false,
+ "verdict": "negative",
+ "verdict_detail": "Not promoted. Holdout gate and leakage canary not run (labels absent). Uniqueness receipt not re-run this session. Owner decision required before any download authorization (IR-SASS3-71)."
+}

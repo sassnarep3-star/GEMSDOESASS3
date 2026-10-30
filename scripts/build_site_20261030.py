@@ -59,6 +59,7 @@ dec = card["decision"]
 est = card["estimates"]
 uq = card["uniqueness"]
 sdr_name = Path(card["artifacts"]["sdr1"]["file"]).name
+tip_uq = card["uniqueness"]["tipcont"]
 exp3_name = Path(card["artifacts"]["exp3"]["file"]).name
 sdr_uq = uq["sdr1"]
 inc_uq = uq["disp21k_incumbent"]
@@ -67,23 +68,26 @@ inc_uq = uq["disp21k_incumbent"]
 hero = f"""
 <section class="hero">
 <h1>Download the unique, format-compliant TIF</h1>
-<p><strong>File:</strong> <code>{e(sdr_name)}</code><br>
-<strong>SHA-256:</strong> <code>{e(card['artifacts']['sdr1']['tif_sha256'])}</code><br>
-<strong>Dots:</strong> {card['artifacts']['sdr1']['dots']:,} · <strong>Note to paste (≤140 chars):</strong>
-<code>LWST spaced-density 21k dots; Rule-1 unique (62.5%); canary pass; holdout below champion</code></p>
-<p><a class="btn" href="downloads/{e(sdr_name)}">Download TIF</a>
-<a class="btn alt" href="downloads/{e(sdr_name)}.zip">Download ZIP</a>
-<a href="downloads/sdr1_audit.json">Format audit (JSON)</a> ·
+<p><strong>File:</strong> <code>{e(dec['file_to_download'])}</code><br>
+<strong>SHA-256:</strong> <code>{e(dec['tif_sha256'])}</code><br>
+<strong>Dots:</strong> {dec['dots']:,} · <strong>Note to paste (≤140 chars):</strong>
+<code>{e(dec['submission_note'])}</code></p>
+<p><a class="btn" href="downloads/{e(dec['file_to_download'])}">Download TIF</a>
+<a class="btn alt" href="downloads/{e(dec['file_to_download'])}.zip">Download ZIP</a>
 <a href="data/session_card_20261030.json">Session card (JSON)</a></p>
+<p class="small"><strong>Status: ok_to_submit = format PASS, Rule 1 PASS (54.22% worst overlap over all 386 registry rasters),
+holdout measured on both evaluators, score projected 0.178.</strong> Anomaly disclosed, not applied: IR-SASS3-90
+(the saturated calibration lattice makes the literal lane rule unsatisfiable inside the footprint; excluding it would require an
+owner amendment and is not applied here).</p>
 <div class="kpi">
 <div>{badge('ok', 'FORMAT: PASS')}<b>13/13</b><span class="small">float32, EPSG:32611, 3730×3292, NaN outside, values in [0,1]</span></div>
-<div>{badge('ok', 'UNIQUENESS: PASS')}<b>{sdr_uq['max_within3']['frac']*100:.2f}%</b><span class="small">worst 3-px dot overlap over all 386 registry rasters (limit 70%)</span></div>
-<div>{badge('ok', 'SURFACE STAGE: PASS')}<b>{sdr_uq['surface_stage']['max_abs_surface_spearman']['rho']:.3f}</b><span class="small">max |ρ| of the pre-placement surface (limit 0.90)</span></div>
-<div>{badge('bad', 'SCORE: BELOW 0.2778')}<b>{card['projections']['files']['sdr1']['projected_lb']:.3f}</b><span class="small">PROJECTION (calibrated in §5); champion 0.2778, leaderboard top {card['leaderboard']['rank1']['score']:.4f}</span></div>
+<div>{badge('ok', 'UNIQUENESS: PASS')}<b>{tip_uq['max_within3']['frac']*100:.2f}%</b><span class="small">worst 3-px dot overlap over all 386 registry rasters (limit 70%; |rho| {tip_uq['max_abs_spearman']['rho']:.3f})</span></div>
+<div>{badge('ok', 'CROSS-CHECK: PASS')}<b>{card['estimates_tipcont']['hide_and_recover']['point']:.3f}</b><span class="small">hide-and-recover, higher than the champion's {est['champion_reference']['hide_and_recover']['point']:.3f}</span></div>
+<div>{badge('bad', 'SCORE: BELOW 0.2778')}<b>{card['projections']['files']['tipcont']['projected_lb']:.3f}</b><span class="small">PROJECTION (calibrated in §5); champion 0.2778, leaderboard top {card['leaderboard']['rank1']['score']:.4f}</span></div>
 </div>
 <p><strong>Is it OK to download?</strong> Yes — it is a submission-format GeoTIFF, generated in this repo, with verified bytes.
 <strong>Is it OK to submit?</strong> It is <em>format- and uniqueness-valid</em>, but its holdout proxy is far below the
-0.2778 champion family, so submitting it uses a weekly slot for a projected score of {card['projections']['files']['sdr1']['projected_lb']:.3f}. That is an owner decision,
+0.2778 champion family, so submitting it uses a weekly slot for a projected score of {card['projections']['files']['tipcont']['projected_lb']:.3f}. That is an owner decision,
 stated plainly below.</p>
 </section>
 """
@@ -103,7 +107,12 @@ est_table = f"""
 <div class="scroll"><table>
 <thead><tr><th>File</th><th>HOLDOUT-DTI hide-and-recover (95% CI)</th><th>HOLDOUT-DTI SGMC-CAL (95% CI)</th><th>Projected leaderboard</th><th>Unique vs all 386 registry rasters?</th><th>OK to submit?</th></tr></thead>
 <tbody>
-<tr class="pick"><td><strong>{e(sdr_name)}</strong><br><a href="downloads/{e(sdr_name)}">download</a></td>
+<tr class="pick"><td><strong>{e(dec['file_to_download'])}</strong><br><a href="downloads/{e(dec['file_to_download'])}">download</a></td>
+<td>{fmt_ci(card['estimates_tipcont']['hide_and_recover'])}</td><td>{fmt_ci(card['estimates_tipcont']['sgmc_cal'])}</td>
+<td><strong>{card['projections']['files']['tipcont']['projected_lb']:.3f}</strong> <span class="small">PROJECTION</span></td>
+<td><strong>YES.</strong> {tip_uq['max_within3']['frac']*100:.2f}% worst dot overlap; |rho| {tip_uq['max_abs_spearman']['rho']:.3f} (full 386-raster audit)</td>
+<td>{badge('amb', 'LEGAL — projected ' + format(card['projections']['files']['tipcont']['projected_lb'], '.3f'))}<br><span class="small">Best measured catalogue recovery of any file here.</span></td></tr>
+<tr><td><strong>{e(sdr_name)}</strong><br><a href="downloads/{e(sdr_name)}">download</a><br><span class="small">generated this session</span></td>
 <td>{fmt_ci(est['sdr1']['hide_and_recover'])}</td><td>{fmt_ci(est['sdr1']['sgmc_cal'])}</td>
 <td><strong>{card['projections']['files']['sdr1']['projected_lb']:.3f}</strong> <span class="small">PROJECTION</span></td>
 <td><strong>YES.</strong> {sdr_uq['max_within3']['frac']*100:.2f}% worst dot overlap; |ρ| {sdr_uq['max_abs_spearman']['rho']:.3f}; surface |ρ| {sdr_uq['surface_stage']['max_abs_surface_spearman']['rho']:.3f}</td>
@@ -148,6 +157,8 @@ than 70% of them.</li>
 hide-and-recover ({est['exp3']['hide_and_recover']['point']:.4f}) but 83.25% of its dots coincide with an existing GEMSDOE32 raster,
 so it fails Rule 1.</li>
 </ol>
+<p class="small">Historical note: the earlier BGK-PBE candidate was built from <strong>synthetic</strong> stand-ins and is
+archive-only (IR-SASS3-47); it is not a data-derived prediction and is not on the download list.</p>
 <p><strong>Any file marked NOT OK to submit below is blocked and must not be uploaded</strong> — the uniqueness gate is
 what blocks it, and the reason is stated in the row.</p>
 <p><strong>Lattice clause.</strong> The proposed exemption of halo-saturated calibration lattices is not applied in this build or in any audit on this page; it requires an explicit protocol amendment by the owner.</p>
@@ -307,8 +318,11 @@ real model produces) is excluded from the overlap test — the proposed Option A
 SGMC + hide-and-recover jointly. This is the only route to 0.30+, and the only route that respects all gates.</td><td>unknown</td>
 <td>Next session; needs new data (see §7).</td></tr>
 </tbody></table>
-<p><strong>Lattice clause.</strong> Excluding the calibration lattice requires an explicit protocol amendment by the owner; it is
-<strong>not applied</strong> here, and every Rule 1 figure on this page was computed with the lattice included.</p>
+<p><strong>Lattice clause (IR-SASS3-90).</strong> The 206,895-dot calibration lattice saturates the footprint, which is why the
+literal lane rule is unsatisfiable for any dense, structure-following field. Excluding it requires an explicit protocol amendment
+by the owner; it is <strong>not applied</strong> here, and every Rule 1 figure on this page was computed with the lattice included.
+Per-file status: <code>ok_to_submit</code> is recorded for each file in the table above, and no blocked file is presented as
+submittable.</p>
 <p>Recommendation, following <em>Maximize P(Win)</em>: do <strong>A′</strong> if the owner will amend the lattice clause (it is a
 protocol choice, fully documented), otherwise <strong>A</strong> now and <strong>B</strong> next. Do not submit EXP3: it would
 reproduce 83% of another team's published raster.</p></section>

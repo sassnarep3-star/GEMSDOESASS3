@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_utc": "20261030T033012Z",
+  "generated_utc": "20261030T035235Z",
   "assembler": "scripts/assemble_session_card.py",
   "verifier": "scripts/verify_session_card.py",
   "labels": {
@@ -23,18 +23,24 @@
     }
   },
   "decision": {
-    "file_to_download": "gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif",
-    "zip": "gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif.zip",
-    "tif_sha256": "cd536eff185adf3ebd70a71beedf6e016d7986449a62ec2feaef54bd49455a18",
-    "zip_sha256": "3e6f2a4e83d550dc8497dbaedafd12ad8e462d832d602438bb8cfcd73704ffa6",
-    "dots": 21012,
-    "inside_share": 0.69,
-    "status": "LEGAL + UNIQUE + FORMAT-VALID; projected 0.172 (below the 0.2778 champion)",
-    "submission_note": "LWST spaced-density 21k dots; Rule-1 unique (62.5%); canary pass; projected 0.17",
-    "alternative": {
-      "file": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
-      "note": "previous session; equally legal and unique; projected 0.186 (within projection error of the file above)"
-    },
+    "file_to_download": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif",
+    "zip": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif.zip",
+    "tif_sha256": "cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277",
+    "zip_sha256": "06edd5cef7f19f2a631f534e2ac4d1469b115f8b026172785ea3daf5d972f8c8",
+    "dots": 44923,
+    "inside_share": null,
+    "status": "LEGAL + UNIQUE + FORMAT-VALID; projected 0.178 (below the 0.2778 champion)",
+    "submission_note": "tip-continuation of the public USGS/INGENIOUS fault catalogue; 44923 dots at 4px spacing, NaN outside footprint",
+    "alternatives": [
+      {
+        "file": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+        "note": "legal + unique (55.22%); the highest single proxy projection (0.186) but near-random catalogue recovery"
+      },
+      {
+        "file": "gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif",
+        "note": "generated this session; legal + unique (62.46%, surface |rho| 0.114); projected 0.172"
+      }
+    ],
     "blocked": {
       "file": "gemsdoesass3-exp3-sarpu-legal21k-20261030T030010Z-nan.tif",
       "reason": "fails Rule 1: 83.25% of dots within 3 px of GEMSDOE32/h46"
@@ -168,6 +174,21 @@
         "passes_le_0p90": true
       }
     },
+    "tipcont": {
+      "candidate_sha256": "cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277",
+      "dots": 44923,
+      "n_gated_rasters": 378,
+      "max_within3": {
+        "frac": 0.542172,
+        "worst_raster": "GEMSDOE30/gemsdoe30-edge-hybrid-80k-02845bd4-20261003T234340Z-allfinite.tif"
+      },
+      "max_abs_spearman": {
+        "rho": 0.027033,
+        "worst_raster": "GEMSDOE24/24gems-gapfill-near-fault-20261026T203338Z-1b2b4ccc37b0-zeros.tif"
+      },
+      "passes_rule_1": true,
+      "surface_stage": null
+    },
     "sdr1": {
       "candidate_sha256": "cd536eff185adf3ebd70a71beedf6e016d7986449a62ec2feaef54bd49455a18",
       "dots": 21012,
@@ -225,6 +246,10 @@
         "sgmc": 0.042850569478494145,
         "projected_lb": 0.186
       },
+      "tipcont": {
+        "sgmc": 0.04117603270444733,
+        "projected_lb": 0.178
+      },
       "exp3": {
         "sgmc": 0.029683387654084136,
         "projected_lb": 0.129
@@ -257,6 +282,26 @@
     "n_channels": 51,
     "result": true,
     "evaluator": "Protocol Rule 4, 51 channels, recomputed 2026-10-30"
+  },
+  "estimates_tipcont": {
+    "hide_and_recover": {
+      "point": 0.1399563330695096,
+      "ci95": [
+        0.12517197087871024,
+        0.1539098594286335
+      ],
+      "evaluator": "GEMSDOE32-HIDE-RECOVER-v3.0",
+      "n_withheld": 22232
+    },
+    "sgmc_cal": {
+      "point": 0.04117603270444733,
+      "ci95": [
+        0.036302773701496954,
+        0.04635211870596418
+      ],
+      "evaluator": "GEMSDOE32-SGMC-CAL-v3.0",
+      "n_withheld": 62703
+    }
   },
   "artifacts": {
     "sdr1": {

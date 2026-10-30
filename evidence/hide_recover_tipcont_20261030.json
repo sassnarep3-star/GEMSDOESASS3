@@ -1,0 +1,13 @@
+{
+  "file": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif",
+  "dots": 44923,
+  "score_label": "HOLDOUT-DTI",
+  "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+  "b_visible_px": 2.0,
+  "n_withheld_positives": 22232,
+  "pooled_dti": 0.1399563330695096,
+  "ci95": [
+    0.12517197087871024,
+    0.1539098594286335
+  ]
+}

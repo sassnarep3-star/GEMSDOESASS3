@@ -133,8 +133,11 @@ real model produces) is excluded from the overlap test — the proposed Option A
 SGMC + hide-and-recover jointly. This is the only route to 0.30+, and the only route that respects all gates.</td><td>unknown</td>
 <td>Next session; needs new data (see §7).</td></tr>
 </tbody></table>
-<p><strong>Lattice clause.</strong> Excluding the calibration lattice requires an explicit protocol amendment by the owner; it is
-<strong>not applied</strong> here, and every Rule 1 figure on this page was computed with the lattice included.</p>
+<p><strong>Lattice clause (IR-SASS3-90).</strong> The 206,895-dot calibration lattice saturates the footprint, which is why the
+literal lane rule is unsatisfiable for any dense, structure-following field. Excluding it requires an explicit protocol amendment
+by the owner; it is <strong>not applied</strong> here, and every Rule 1 figure on this page was computed with the lattice included.
+Per-file status: <code>ok_to_submit</code> is recorded for each file in the table above, and no blocked file is presented as
+submittable.</p>
 <p>Recommendation, following <em>Maximize P(Win)</em>: do <strong>A′</strong> if the owner will amend the lattice clause (it is a
 protocol choice, fully documented), otherwise <strong>A</strong> now and <strong>B</strong> next. Do not submit EXP3: it would
 reproduce 83% of another team's published raster.</p></section>
@@ -197,7 +200,7 @@ and stop if the worst single-raster overlap exceeds 70%.</li>
 <em>File to submit</em> = the <code>.tif</code> (or the <code>.zip</code>). The portal accepts a single-band GeoTIFF that matches the
 submission format's CRS, shape and geotransform — this file does (EPSG:32611, 3730×3292, 100 m, values in [0,1], NaN outside).</li>
 <li><strong>Paste the note</strong> (≤140 characters):
-<code>LWST spaced-density 21k dots; Rule-1 unique (62.5%); canary pass; projected 0.17</code></li>
+<code>tip-continuation of the public USGS/INGENIOUS fault catalogue; 44923 dots at 4px spacing, NaN outside footprint</code></li>
 <li><strong>Check your weekly allowance first.</strong> The <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a>
 allow three submissions per week and one final submission per entity; generative-AI use must be disclosed in the narrative.</li>
 <li><strong>Expect 0.172</strong> (PROJECTION), not 0.2778. If that is not acceptable,
@@ -217,4 +220,4 @@ and every finite value is inside [0,1]; the 13-point audit in <a href="downloads
 <li>Receipts: <a href="data/session_card_20261030.json">session card</a>, <a href="data/irregularities_ledger.json">irregularities</a>,
 <a href="research/decision-20261030.md">decision memo</a>.</li>
 </ul></section>
-<p class="small">Last verified 20261030T033012Z UTC · leaderboard fetched 2026-10-30 · every number on this page is re-derived by <code>scripts/verify_session_card.py</code> (every figure re-derived from receipts).</p></main></body></html>
+<p class="small">Last verified 20261030T035235Z UTC · leaderboard fetched 2026-10-30 · every number on this page is re-derived by <code>scripts/verify_session_card.py</code> (every figure re-derived from receipts).</p></main></body></html>

@@ -46,11 +46,26 @@ def main() -> int:
     def chk(name: str, ok: bool, detail: str = "") -> None:
         checks.append((name, bool(ok), detail))
 
-    # decision block
+    # decision block (2026-10-30 merge: the promoted file is the tipcontinuation raster, audited this session)
     d = card["decision"]
-    chk("decision.file==sdr1", d["file_to_download"] == sdr_name, d["file_to_download"])
-    chk("decision.sha==sdr receipt", d["tif_sha256"] == sdr["output"]["tif_sha256"])
-    chk("decision.dots==sdr receipt", d["dots"] == sdr["counts"]["total_dots"])
+    tip = load("hide_recover_tipcont_20261030.json")
+    chk("decision.file==tipcont", d["file_to_download"] == tip["file"], d["file_to_download"])
+    chk("decision.dots==tipcont receipt", d["dots"] == tip["dots"])
+    import hashlib
+    tp = ROOT / "docs" / "downloads" / d["file_to_download"]
+    chk("decision file exists", tp.exists(), str(tp))
+    if tp.exists():
+        h = hashlib.sha256()
+        with tp.open("rb") as fh:
+            for chunk in iter(lambda: fh.read(1 << 20), b""):
+                h.update(chunk)
+        chk("decision sha matches bytes", h.hexdigest() == d["tif_sha256"], h.hexdigest())
+    z = ROOT / "docs" / "downloads" / d["zip"]
+    chk("decision zip exists", z.exists(), str(z))
+    if z.exists():
+        hz = hashlib.sha256(z.read_bytes()).hexdigest()
+        chk("decision zip sha matches bytes", hz == d["zip_sha256"], hz)
+    chk("sdr1 is a listed alternative", any(a["file"] == sdr_name for a in d["alternatives"]))
     chk("blocked file==exp3", d["blocked"]["file"] == exp3_name)
 
     # estimates
@@ -93,6 +108,12 @@ def main() -> int:
                                      round(focus9_part["results"]["disp21k_current"]["calibrated"] * conc["transfer_factor"], 3), 1e-3))
     chk("exp3 projection", close(p["files"]["exp3"]["projected_lb"],
                                   round(exp3["sgmc"]["calibrated"] * conc["transfer_factor"], 3), 1e-3))
+    tip_sg = load("sgmc_cal_tipcont_20261030.json")["results"]["tipcont_44923"]
+    chk("tipcont projection", close(p["files"]["tipcont"]["projected_lb"],
+                                     round(tip_sg["calibrated"] * conc["transfer_factor"], 3), 1e-3))
+    tip_uq = load("uniqueness_audit_tipcont_20261030.json")
+    chk("tipcont Rule 1", tip_uq["summary"][tip["file"]]["passes_rule_1"] is True)
+    chk("tipcont HR", close(card["estimates_tipcont"]["hide_and_recover"]["point"], tip["pooled_dti"]))
 
     # nine-site rows all carry a proxy measurement
     chk("nine focus rows", len(card["focus9"]) == 9 and all(r["sgmc_cal_holdout_dti"] for r in card["focus9"]))

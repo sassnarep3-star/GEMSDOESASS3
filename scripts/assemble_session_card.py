@@ -37,6 +37,9 @@ def main() -> int:
     focus9_rest = load(EV / "sgmc_cal_focus9_rest_20261030.json")
     focus9_part = load(EV / "sgmc_cal_focus9_partial_20261030.json")
     champ_lat = load(EV / "champion_lattice_overlap_20261030.json")
+    tip = load(EV / "hide_recover_tipcont_20261030.json")
+    tip_sg = load(EV / "sgmc_cal_tipcont_20261030.json")["results"]["tipcont_44923"]
+    tip_uq = load(EV / "uniqueness_audit_tipcont_20261030.json")
 
     exp3_name = Path(exp3["output"]["tif"]).name
     sdr_name = Path(sdr["output"]["tif"]).name
@@ -91,16 +94,19 @@ def main() -> int:
             "rank2": {"team": "cfld__", "score": 0.3916},
         },
         "decision": {
-            "file_to_download": sdr_name,
-            "zip": sdr_name + ".zip",
-            "tif_sha256": sdr["output"]["tif_sha256"],
-            "zip_sha256": sdr["output"]["zip_sha256"],
-            "dots": sdr["counts"]["total_dots"],
-            "inside_share": round(1.0 - sdr["counts"]["gap_dots"] / sdr["counts"]["total_dots"], 4),
-            "status": "LEGAL + UNIQUE + FORMAT-VALID; projected 0.172 (below the 0.2778 champion)",
-            "submission_note": "LWST spaced-density 21k dots; Rule-1 unique (62.5%); canary pass; projected 0.17",
-            "alternative": {"file": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
-                              "note": "previous session; equally legal and unique; projected 0.186 (within projection error of the file above)"},
+            "file_to_download": tip["file"],
+            "zip": tip["file"] + ".zip",
+            "tif_sha256": "cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277",
+            "zip_sha256": "06edd5cef7f19f2a631f534e2ac4d1469b115f8b026172785ea3daf5d972f8c8",
+            "dots": tip["dots"],
+            "inside_share": None,
+            "status": "LEGAL + UNIQUE + FORMAT-VALID; projected 0.178 (below the 0.2778 champion)",
+            "submission_note": load(EV / "run_card_tipcont_20261030.json")["submission_note"],
+            "alternatives": [
+                {"file": "gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif",
+                 "note": "legal + unique (55.22%); the highest single proxy projection (0.186) but near-random catalogue recovery"},
+                {"file": sdr_name, "note": "generated this session; legal + unique (62.46%, surface |rho| 0.114); projected 0.172"},
+            ],
             "blocked": {"file": exp3_name, "reason": "fails Rule 1: 83.25% of dots within 3 px of GEMSDOE32/h46"},
         },
         "estimates": {
@@ -158,6 +164,7 @@ def main() -> int:
                 "fetch_counts": fetch["status_counts"],
             },
             "exp3_binary_surface": uq_exp3["summary"][exp3_name],
+            "tipcont": tip_uq["summary"][tip["file"]],
             "sdr1": uq["summary"][sdr_name],
             "disp21k_incumbent": uq["summary"]["gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif"],
         },
@@ -176,6 +183,8 @@ def main() -> int:
                           "projected_lb": round(sg["results"]["sdr1_spaced_dense"]["calibrated"] * conc["transfer_factor"], 3)},
                 "disp21k": {"sgmc": focus9_part["results"]["disp21k_current"]["calibrated"],
                              "projected_lb": round(focus9_part["results"]["disp21k_current"]["calibrated"] * conc["transfer_factor"], 3)},
+                "tipcont": {"sgmc": tip_sg["calibrated"],
+                             "projected_lb": round(tip_sg["calibrated"] * conc["transfer_factor"], 3)},
                 "exp3": {"sgmc": exp3_sg["calibrated"],
                           "projected_lb": round(exp3_sg["calibrated"] * conc["transfer_factor"], 3)},
                 "champion": {"sgmc": led["baseline_champion_02778"]["sgmc_off_catalogue"]["sgmc_prevalence_calibrated_dti"],
@@ -188,6 +197,10 @@ def main() -> int:
                    "worst_symmetric_auc": exp3["leakage_canary"]["worst_symmetric_auc"],
                    "n_channels": exp3["leakage_canary"]["n_channels"], "result": exp3["leakage_canary"]["all_passed"],
                    "evaluator": "Protocol Rule 4, 51 channels, recomputed 2026-10-30"},
+        "estimates_tipcont": {"hide_and_recover": {"point": tip["pooled_dti"], "ci95": tip["ci95"],
+                                                    "evaluator": tip["evaluator_version"], "n_withheld": tip["n_withheld_positives"]},
+                               "sgmc_cal": {"point": tip_sg["calibrated"], "ci95": tip_sg["calibrated_ci95"],
+                                             "evaluator": tip_sg["evaluator_version"], "n_withheld": tip_sg["n_withheld_positives"]}},
         "artifacts": {
             "sdr1": {"file": sdr["output"]["tif"], "tif_sha256": sdr["output"]["tif_sha256"], "dots": sdr["counts"]["total_dots"]},
             "exp3": {"file": exp3["output"]["tif"], "tif_sha256": exp3["output"]["tif_sha256"], "dots": exp3["budget_policy"]["total"]},

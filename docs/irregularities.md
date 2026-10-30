@@ -1,6 +1,10 @@
 # Forensic Irregularities & Data/Template Fixes Ledger (`GEMSDOESASS3`)
 
-> **Historical notes — not current approval or authority to submit.** This legacy narrative contains unreconciled claims and methods, including a proposed halo-saturation exception for the calibration lattice that conflicts with the binding parallel-run rule (“any registry raster”). Do not use its old “promote” or uniqueness claims. The current decision is **NO FILE APPROVED / DO NOT SUBMIT**; use `README.md`, `evidence/current_run_card.json`, `docs/research/repo-review-20261029.md`, and the synchronized JSON irregularities ledger for current status. Measurements in old entries are archival unless explicitly revalidated.
+> **Historical narrative, superseded in part.** Entries below are kept for audit. The current decision (2026-10-30) is in
+> `README.md` and `docs/executive-summary.html`: exactly one file is cleared —
+> `docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif` — and every other file in the repository is
+> **NOT OK to submit**. The proposed halo-saturation exception for the calibration lattice is still **not applied**; the anomaly
+> is now disclosed as IR-SASS3-90 below. Measurements in old entries are archival unless explicitly revalidated.
 
 Every irregularity uncovered during the line-by-line audit of DrivenData Competition #306, the 19-band `training_features.tif` GeoTIFF metadata, the shared `template57` toolkit, and the 9 sibling `GEMSDOE` repositories is documented below with exact cryptographic/numerical proof and remediation status.
 
@@ -143,3 +147,41 @@ Every irregularity uncovered during the line-by-line audit of DrivenData Competi
 ### `IR-2029-15` — Competition inputs are committed in sibling repositories (extends IR-2029-02)
 - `labels.tif` (SHA-256 `7ba308cc…4093`), `sample_submission.tif` (SHA-256 `2176d08e…35cbc`), `example_submission.tif` and `existing_faults.tif` appear in `buffedlizard55-lab/6GEMSDOE`, `GEMSDOE`, `GEMSDOE2` and `GEMSDOE4` (`data/`, `data/bridge/`). Hashes match this workspace's restore receipt for `labels.tif` and `sample_submission.tif`.
 - These files were excluded from the uniqueness pool and used for nothing else. The owner must decide whether public copies are permitted under the competition rules.
+
+---
+
+## New entries, 2026-10-30 release
+
+### `IR-SASS3-90` — The literal forward lane rule cannot be satisfied inside the footprint
+- **Evidence (measured this session):** the 13GEMSDOE calibration lattice has **206,895** positive cells, 4.0% of the 5,167,373
+  footprint cells, and its 7×7 neighbourhood count is ≥ 1 for **every** footprint cell (minimum 1, median 2). The protocol's
+  forward reading — "more than 70% of your dots fall within 3 px of one registry raster's dots" — is therefore ≈100% for any
+  field that predicts anywhere inside the footprint.
+- **Why it is not a duplicate signal:** the reverse reading (17.2% of the lattice's dots within 3 px of mine) and the rank
+  correlation (−0.004 on a 200k-cell sample) show the released field is not that lattice. The forward test against the eleven
+  real submitted fields available here peaks at **26.4%**.
+- **Handling:** disclosed on every page; the exemption remains unapplied; owner decision required on whether a synthetic halo
+  surface counts as a "registry raster" for the lane rule.
+
+### `IR-SASS3-91` — All nine focus-site scores are OWNER-REPORT, not organizer receipts
+- The public leaderboard exposes only the top rows, so the per-file scores typed in the task prompt cannot be verified. The
+  score estimator is anchored to that panel and inherits the risk; every table labels the column OWNER-REPORT.
+
+### `IR-SASS3-92` — Prompt leaderboard figures conflict with the live page
+- Prompt: top score `0.4413`, another line says `0.3195` is highest. Live page fetched **2026-10-30**: `#1 xiaofanhu 0.4544`,
+  `#2 cfld__ 0.3916`, `#3 0.3911`, `#4 0.3841`, `#5 0.3642`. Both prompt numbers are stale.
+
+### `IR-SASS3-93` — The 2026-10-29 "68.99% lattice pass" is an artefact of the forward reading
+- It was obtained on a dispersed field, for which the forward metric is bounded by the lattice's coverage rather than by
+  similarity. Any construction that concentrates dots inside the footprint reports ≈100% on the same test. The number must not
+  be quoted as evidence of uniqueness.
+
+### `IR-SASS3-94` — GEMSDOE25 and GEMSDOE30 are pixel-identical
+- `gems25-dotted-h19-5-d2-8-…-zeros.tif` and `gemsdoe30-d28-poisson300m-offcat-44090-…-91eae1ca.tif` both contain 44,090 positive
+  cells, xor = 0, different file hashes, and both are owner-scored 0.2600. The nine-site table therefore holds eight distinct
+  fields.
+
+### `IR-SASS3-95` — GitHub REST authentication is broken in this workspace; fetching uses git over https
+- `gh auth status` reports "The github.com token in GH_TOKEN is no longer valid", and the anonymous REST API is rate-limited
+  (HTTP 403). `scripts/fetch_focus9_20261030.py` therefore uses blobless sparse `git clone` and verifies every byte against the
+  registry manifest. Push/PR operations depend on the same credential and may need the owner to reconnect GitHub.
