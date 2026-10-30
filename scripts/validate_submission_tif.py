@@ -8,12 +8,12 @@ Checks the requirements stated in the official problem description
     (grid spec recorded in data/prepared_manifest.json and docs/data/*.json)
   * single layer, dtype float32
   * values in [0, 1] (the source of the "Predicted values must be in range [0, 1]" error)
-  * no NaN / Inf anywhere in the raster
-  * nodata handling is reported explicitly (official text: data outside bounds is null or nan)
+  * no Inf anywhere; NaN is REQUIRED outside the footprint and FORBIDDEN inside it (official: outside bounds is null or nan)
+  * nodata handling is reported explicitly
 
 Exit code 0 only when every hard check passes. Writes a JSON receipt when --out is given.
-Runs the outside-bounds check against sample_submission.tif when it is present; without it the check is PENDING and the
-validator fails closed.
+Footprint source: sample_submission.tif when present, otherwise evidence/organizer_footprint_mask.npz (checked against
+the recorded sample SHA-256). If neither is usable the footprint check is PENDING and the validator fails closed.
 """
 from __future__ import annotations
 
@@ -31,8 +31,17 @@ EXPECTED_SHAPE = (3730, 3292)
 EXPECTED_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
 
 
+FOOTPRINT_NPZ = Path(__file__).resolve().parents[1] / "evidence" / "organizer_footprint_mask.npz"
+SAMPLE_SHA256 = "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"  # sample_submission.tif (data/restore_receipt.json)
+
+
 def _footprint(shape):
-    """Boolean mask of finite cells of sample_submission.tif, or None if absent or of the wrong shape."""
+    """Boolean mask of the organizer footprint (finite cells of sample_submission.tif), or None.
+
+    Source order: (1) sample_submission.tif when it is present locally; (2) the committed
+    evidence/organizer_footprint_mask.npz exported from that sample (bit-packed; its recorded
+    sample_sha256 must equal SAMPLE_SHA256). Returns None (fail closed) if neither is usable.
+    """
     for cand in (Path(".cache/gems_data/sample_submission.tif"), Path("/tmp/gems_data/sample_submission.tif")):
         if cand.exists():
             with rasterio.open(cand) as src:
@@ -40,6 +49,17 @@ def _footprint(shape):
             if a.shape != tuple(shape):
                 return None
             return np.isfinite(a)
+    if FOOTPRINT_NPZ.exists():
+        with np.load(FOOTPRINT_NPZ) as z:
+            if str(z["sample_sha256"]) != SAMPLE_SHA256:
+                return None
+            h, w = (int(v) for v in z["shape"])
+            if (h, w) != tuple(shape):
+                return None
+            bits = np.unpackbits(z["packed"])[: h * w].reshape(h, w).astype(bool)
+            if int(bits.sum()) != int(z["footprint_pixels"]):
+                return None
+            return bits
     return None
 
 
@@ -57,25 +77,25 @@ def validate(path: Path) -> dict:
         arr = ds.read(1).astype(np.float64)
         nodata = ds.nodata
     finite = np.isfinite(arr)
-    checks["no_nan_or_inf"] = bool(finite.all())
+    checks["no_inf_anywhere"] = bool(not np.isinf(arr).any())
     vals = arr[finite]
     checks["values_in_0_1"] = bool(vals.size > 0 and vals.min() >= 0.0 and vals.max() <= 1.0)
-    if not checks["no_nan_or_inf"]:
-        notes.append(f"{int((~finite).sum())} non-finite cells")
     if nodata is not None:
-        notes.append(f"nodata declared = {nodata}; official text asks outside-bounds cells to be null or NaN")
-    # Competition text (page 967): "data outside the bounds is null or nan". Non-zero finite cells outside the
-    # organizer footprint fail the rule. Zeros outside are the convention of the owner-scored files (see IR-SASS3-27).
-    # Fail closed: without the footprint this check is PENDING and the validator does not pass.
+        notes.append(f"nodata declared = {nodata}; official text asks outside-bounds cells to be null or nan")
+    # Competition text (page 967): "Your submission has the same bounds as the training data, and data outside
+    # the bounds is null or nan." Every cell outside the footprint must therefore be NaN (not zero, not finite).
+    # Every cell inside the footprint must be finite (no NaN holes). Fail closed without the footprint.
     footprint = _footprint(arr.shape)
     if footprint is None:
-        checks["outside_bounds_null_or_zero"] = False
-        notes.append("PENDING_DATA: outside-bounds check NOT run; sample_submission.tif footprint is not in this workspace (login-walled). Fails closed.")
+        checks["nan_outside_and_finite_inside_footprint"] = False
+        notes.append("PENDING_DATA: footprint unavailable (no sample_submission.tif and no valid committed mask). Fails closed.")
     else:
-        outside = arr[~footprint]
-        n_nonzero_out = int(np.count_nonzero(np.isfinite(outside) & (outside != 0)))
-        checks["outside_bounds_null_or_zero"] = n_nonzero_out == 0
-        notes.append(f"outside-bounds check: {n_nonzero_out} non-zero finite cells outside the footprint")
+        n_finite_out = int(np.count_nonzero(finite & ~footprint))
+        n_nan_in = int(np.count_nonzero(~finite & footprint))
+        checks["nan_outside_and_finite_inside_footprint"] = (n_finite_out == 0) and (n_nan_in == 0)
+        notes.append(f"footprint check: {n_finite_out} finite cells outside the footprint; {n_nan_in} NaN cells inside it")
+    if not checks["no_inf_anywhere"]:
+        notes.append(f"{int(np.isinf(arr).sum())} infinite cells")
     ok = all(checks.values())
     return {
         "file": path.name,
