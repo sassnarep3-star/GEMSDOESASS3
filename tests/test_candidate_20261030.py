@@ -72,14 +72,18 @@ def test_released_raster_matches_card_and_is_format_clean():
         assert ds.count == 1 and ds.dtypes[0] == "float32"
         assert (ds.height, ds.width) == (3730, 3292)
         assert ds.crs.to_string() == "EPSG:32611"
-        assert ds.nodata is None
-    assert np.isfinite(arr).all()
-    assert arr.min() >= 0.0 and arr.max() <= 1.0
-    assert int((arr > 0).sum()) == CARD["validator"]["stats"]["positive_cells"] == 44_923
+        assert ds.nodata is None or (isinstance(ds.nodata, float) and np.isnan(ds.nodata))
     fp = np.load(ROOT / "evidence" / "organizer_footprint_mask.npz")
     n = int(fp["shape"][0]) * int(fp["shape"][1])
     footprint = np.unpackbits(fp["packed"])[:n].reshape(tuple(fp["shape"])).astype(bool)
-    assert int((arr[~footprint] != 0).sum()) == 0
+    # IR-SASS3-78: outside the footprint the file must be null (NaN), never a finite zero.
+    assert int(np.isfinite(arr[~footprint]).sum()) == 0
+    assert np.isnan(arr[~footprint]).all()
+    inside = arr[footprint]
+    assert np.isfinite(inside).all()
+    assert inside.min() >= 0.0 and inside.max() <= 1.0
+    assert int((arr > 0).sum()) == CARD["validator"]["stats"]["positive_cells"] == 44_923
+    assert int((arr > 0).sum()) == int(((arr > 0) & footprint).sum())
 
 
 def test_estimator_inversion_identity():

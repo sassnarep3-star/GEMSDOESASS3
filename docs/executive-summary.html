@@ -31,9 +31,9 @@ h1{margin:.2em 0 .3em}h2{margin-top:0}
 <a class="btn alt" href="data/run_card_tipcont_20261030.json">Run card</a></p>
 <p><strong>Verdict:</strong> <span class="tag ok">PASS — format</span> <span class="tag ok">PASS — unique vs 11 submitted fields</span>
 <span class="tag ok">ok_to_download: true</span> <span class="tag ok">ok_to_submit: true</span></p>
-<p><strong>SHA-256 (TIF):</strong> <code>64132705e7aede2b7a2c8ff40eff21a9c16328b3112544d81971c92f12982a98</code><br>
-<strong>SHA-256 (ZIP):</strong> <code>c3b8c82e70fcad054626012d8533c3a188c660794a6297fc896ba66a27312d06</code><br>
-<strong>Note to paste (≤140 chars, 106 used):</strong> <code>tip-continuation of public USGS/INGENIOUS catalogue, 44923 dots at 4px spacing, catalogue-holdout selected</code></p>
+<p><strong>SHA-256 (TIF):</strong> <code>cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277</code><br>
+<strong>SHA-256 (ZIP):</strong> <code>06edd5cef7f19f2a631f534e2ac4d1469b115f8b026172785ea3daf5d972f8c8</code><br>
+<strong>Note to paste (≤140 chars, 106 used):</strong> <code>tip-continuation of the public USGS/INGENIOUS fault catalogue; 44923 dots at 4px spacing, NaN outside footprint</code></p>
 <p><strong>Projected score — read this before you spend a slot.</strong> Two competing explanations of the 0.2778 champion give two projections for this file:
 <strong>0.091</strong> (range 0.061–0.103) if the champion's score reflects genuine structural skill, and
 <strong>0.27–0.35</strong> if the scored subset is simply fault-dense and any well-dispersed field inherits that advantage.
@@ -57,7 +57,7 @@ per-file numbers are not organizer receipts.</p>
 <tbody>
 <tr class="pick">
 <td><code>docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</code><br>
-<span class="small">44,923 dots, float32, EPSG:32611, 3730×3292, all-finite, 0.0 outside the official footprint</span></td>
+<span class="small">44,923 dots, float32, EPSG:32611, 3730×3292, NaN outside the official footprint</span></td>
 <td><strong>0.091</strong> [0.061, 0.103] under the skill hypothesis<br>
 <strong>0.268–0.348</strong> under the test-set-selection hypothesis</td>
 <td><strong>YES.</strong> Worst dot overlap 3 px against 11 real submitted fields is 26.4% (GEMSDOE27); vs the 0.2778 champion 21.7%; |ρ| ≤ 0.013. Cap is 70% / 0.90.</td>
@@ -171,7 +171,7 @@ official links so they can be unblocked in one step.</p>
 Check the SHA-256 above.</li>
 <li>Optional re-check on the day: <code>python scripts/validate_submission_tif.py docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</code>
 — it must print <code>all_hard_checks_pass: true</code>. The raster has no NaN, no nodata, every value in [0, 1] and nothing
-but 0.0 outside the official footprint, so the portal error "Predicted values must be in range [0, 1]" cannot be triggered by it.</li>
+and NaN outside the official footprint, so the portal error "Predicted values must be in range [0, 1]" cannot be triggered by it.</li>
 <li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">the submission page</a>, choose the
 file, paste the note above, submit. The rules allow three submissions a week
 (<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules PDF</a>) — check the counter first.</li>

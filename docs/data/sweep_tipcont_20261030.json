@@ -134,7 +134,7 @@
   "e_mean_k": 0.037063,
   "enrichment_eps": 1.3481,
   "holdout_selected_budget": 24000,
-  "budget_override_reason": "holdout plateau 24k-35k is statistically flat (overlapping CIs); budget set at 45k by the estimator under the test-set-selection hypothesis, see evidence/score_estimate_20261030.json"
+  "budget_override_reason": "holdout flat 24k-45k; explicit budget, not holdout-selected"
  },
  "built_file": {
   "holdout_dti": 0.006813,

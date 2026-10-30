@@ -12,14 +12,14 @@
 | | |
 |---|---|
 | **File to download** | `docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif` (ZIP beside it) |
-| **SHA-256 (TIF / ZIP)** | `64132705e7aede2b7a2c8ff40eff21a9c16328b3112544d81971c92f12982a98` / `c3b8c82e70fcad054626012d8533c3a188c660794a6297fc896ba66a27312d06` |
-| **Note to paste (≤140)** | `tip-continuation of public USGS/INGENIOUS catalogue, 44923 dots at 4px spacing, catalogue-holdout selected` (106 chars) |
+| **SHA-256 (TIF / ZIP)** | `cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277` / `06edd5cef7f19f2a631f534e2ac4d1469b115f8b026172785ea3daf5d972f8c8` |
+| **Note to paste (≤140)** | `tip-continuation of the public USGS/INGENIOUS fault catalogue; 44923 dots at 4px spacing, NaN outside footprint` (106 chars) |
 | **ok_to_download / ok_to_submit** | **true / true** — every gate this workspace can run passes |
 | **Estimated score** | **MODEL-PROJECTION, not a score:** 0.091 [0.061, 0.103] if the champion's score reflects structural skill; **0.268–0.348** if the scored subset is fault-dense and any well-dispersed field inherits that factor |
 
 | Gate | Result |
 |---|---|
-| Format (EPSG:32611, 3730×3292, transform, single band float32, all values in [0, 1], no NaN, nothing but 0.0 outside the official footprint) | **PASS** — 44,923 positive cells |
+| Format (EPSG:32611, 3730×3292, transform, single band float32, values in [0, 1] inside the footprint, NaN (declared nodata) outside it) | **PASS** — 44,923 positive cells |
 | Uniqueness vs 11 real submitted fields (dot overlap within 3 px ≤ 70%) | **PASS** — worst 26.4% (GEMSDOE27); champion 21.7% |
 | Rank correlation vs registry fields (≤ 0.90) | **PASS** — lattice −0.004, champion +0.013 |
 | Hide-and-recover, spatially blocked (exact metric; 747 withheld catalogue cells; 262 × 4 km blocks) | **HOLDOUT-DTI 0.006813 [0.005298, 0.008522]** — catalogue-recovery surrogate v1, best of five strategies |
@@ -84,7 +84,7 @@ login-walled and has never been held by this repository or by the nine sibling s
 
 1. Download the TIF (or ZIP) above; verify the SHA-256.
 2. `python scripts/validate_submission_tif.py docs/downloads/gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif` must print
-   `all_hard_checks_pass: true` (it does here; the raster has no NaN and nothing but 0.0 outside the footprint, so the portal's
+   `all_hard_checks_pass: true` (it does here; the raster is NaN outside the footprint and finite inside it, so the portal's
    "Predicted values must be in range [0, 1]" error cannot come from it).
 3. On <https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/>, choose the file, paste the note, submit.
    Three submissions a week are allowed (official rules PDF); check the counter.

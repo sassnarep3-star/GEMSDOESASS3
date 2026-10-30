@@ -93,13 +93,15 @@ def fill_with_lattice(base: np.ndarray, footprint: np.ndarray, n: int, rng) -> n
 
 
 def write_tif(dots: np.ndarray, footprint: np.ndarray, path: Path) -> dict:
-    a = np.zeros(SHAPE, dtype=np.float32)
+    # Official text: "data outside the bounds is null or nan". Zeros outside are not null and the
+    # shared validator on main fails them closed (IR-SASS3-78), so outside is NaN here.
+    a = np.full(SHAPE, np.nan, dtype=np.float32)
     ok = footprint[dots[:, 0], dots[:, 1]]
     dots = dots[ok]
+    a[footprint] = 0.0
     a[dots[:, 0], dots[:, 1]] = 1.0
-    # everything outside the official footprint stays 0.0 (all-finite, in [0, 1], no NaN)
     profile = dict(driver="GTiff", height=SHAPE[0], width=SHAPE[1], count=1, dtype="float32",
-                   crs=CRS, transform=TRANSFORM, nodata=None, compress="deflate", predictor=2,
+                   crs=CRS, transform=TRANSFORM, nodata=float("nan"), compress="deflate", predictor=2,
                    tiled=True, blockxsize=256, blockysize=256)
     with rasterio.open(path, "w", **profile) as ds:
         ds.write(a, 1)
@@ -118,15 +120,17 @@ def validate_tif(path: Path, footprint: np.ndarray) -> dict:
                                      zip(tuple(ds.transform)[:6], tuple(TRANSFORM)[:6])),
         }
     finite = np.isfinite(a)
-    checks["no_nan_or_inf"] = bool(finite.all())
     v = a[finite]
+    checks["no_inf_anywhere"] = bool(not np.isinf(a).any())
+    checks["nan_outside_and_finite_inside_footprint"] = bool(
+        int((finite & ~footprint).sum()) == 0 and int((~finite & footprint).sum()) == 0)
     checks["values_in_0_1"] = bool(v.size and v.min() >= 0.0 and v.max() <= 1.0)
-    checks["outside_footprint_all_zero"] = bool((a[~footprint] == 0).sum() == int((~footprint).sum()))
     checks["positive_only_inside_footprint"] = bool(int((a > 0).sum()) == int(((a > 0) & footprint).sum()))
     return {"file": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             "checks": checks, "all_pass": all(checks.values()),
             "stats": {"positive_cells": int((v > 0).sum()), "min": float(v.min()), "max": float(v.max()),
-                      "nan_cells": int((~finite).sum())}}
+                      "nan_cells": int((~finite).sum()), "finite_cells_outside_footprint":
+                      int((finite & ~footprint).sum())}}
 
 
 def overlap_analysis(dots: np.ndarray, others: dict[str, np.ndarray]) -> dict:
@@ -264,8 +268,8 @@ def main() -> int:
         "schema_version": 1,
         "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "submission_name": name,
-        "submission_note": (f"tip-continuation of public USGS/INGENIOUS catalogue, {len(dots)} dots at "
-                            f"{best['step_px']:.0f}px spacing, catalogue-holdout selected")[:140],
+        "submission_note": (f"tip-continuation of the public USGS/INGENIOUS fault catalogue; {len(dots)} "
+                            f"dots at {int(round(best['step_px']))}px spacing, NaN outside footprint")[:140],
         "hypothesis": "H-SASS3-J: unmapped faults continue mapped structures past tips and across step-overs",
         "mechanism": ("extrapolate each mapped catalogue cell along the local strike (PCA of its 8 nearest "
                       "catalogue cells) for up to 8 steps, reject cells within 200 m of mapped ground, then "
@@ -314,6 +318,12 @@ def main() -> int:
         "zip_sha256": hashlib.sha256(zpath.read_bytes()).hexdigest(),
         "crs": CRS, "shape": list(SHAPE), "transform": list(tuple(TRANSFORM)),
         "profile": {k: (str(v) if isinstance(v, Affine) else v) for k, v in profile.items()},
+        "supersedes": {
+            "raster_sha256": "64132705e7aede2b7a2c8ff40eff21a9c16328b3112544d81971c92f12982a98",
+            "reason": ("IR-SASS3-78: that build filled the outside of the footprint with 0.0; the official "
+                       "text says outside is null or nan and the shared validator fails finite-outside files "
+                       "closed. The dot set is identical (same seed and budget); only the outside convention "
+                       "changed.")},
         "verdict": None,
         "ok_to_download": None,
         "ok_to_submit": None,

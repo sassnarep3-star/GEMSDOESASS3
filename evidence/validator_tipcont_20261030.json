@@ -1,15 +1,15 @@
 {
  "file": "gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif",
- "sha256": "64132705e7aede2b7a2c8ff40eff21a9c16328b3112544d81971c92f12982a98",
+ "sha256": "cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277",
  "checks": {
   "single_band": true,
   "dtype_float32": true,
   "crs_epsg_32611": true,
   "shape_3730x3292": true,
   "transform_matches": true,
-  "no_nan_or_inf": true,
+  "no_inf_anywhere": true,
+  "nan_outside_and_finite_inside_footprint": true,
   "values_in_0_1": true,
-  "outside_footprint_all_zero": true,
   "positive_only_inside_footprint": true
  },
  "all_pass": true,
@@ -17,6 +17,7 @@
   "positive_cells": 44923,
   "min": 0.0,
   "max": 1.0,
-  "nan_cells": 0
+  "nan_cells": 7111787,
+  "finite_cells_outside_footprint": 0
  }
 }
