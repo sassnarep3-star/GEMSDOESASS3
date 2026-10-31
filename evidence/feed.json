@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
-  "generated_utc": "2026-10-31T05:00:09+00:00",
+  "generated_utc": "2026-10-31T05:47:50+00:00",
   "decision": "NO-GO",
-  "current_branch": "arena/a4b6bc6f-gemsdoesass3",
-  "head": "9adc0b5",
+  "current_branch": "arena/c1edbd31-gemsdoesass3",
+  "head": "241424f",
   "checks": [
     {
       "id": "uniqueness",
@@ -17,17 +17,6 @@
         "preplacement_surface_check": null
       },
       "next_action": "Fail candidate; do not exclude the lattice or claim a pass."
-    },
-    {
-      "id": "inputs",
-      "evidence_class": "LOCAL-CHECK",
-      "status": "MISSING",
-      "detail": {
-        "verified_manifest_files_present": 0,
-        "manifest_files": 28,
-        "cache_root": ".cache/gems_data"
-      },
-      "next_action": "Restore the authorized official feature/label cache."
     },
     {
       "id": "format",
@@ -121,6 +110,17 @@
       "next_action": "Refresh manually from official public leaderboard before making a current leaderboard claim."
     },
     {
+      "id": "inputs",
+      "evidence_class": "LOCAL-CHECK",
+      "status": "OK",
+      "detail": {
+        "verified_manifest_files_present": 28,
+        "manifest_files": 28,
+        "cache_root": ".cache/gems_data"
+      },
+      "next_action": ""
+    },
+    {
       "id": "runtime",
       "evidence_class": "LOCAL-CHECK",
       "status": "OK",
@@ -130,6 +130,23 @@
         "scipy": true,
         "sklearn": true,
         "pytest": true
+      },
+      "next_action": ""
+    },
+    {
+      "id": "lane-build",
+      "evidence_class": "LOCAL-CHECK (bytes re-hashed by this script)",
+      "status": "OK",
+      "detail": {
+        "file": "gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif",
+        "bytes_match_receipt": true,
+        "encoding_is_portal_safe_zeros": true,
+        "n_dots": 52000,
+        "note_length": 90,
+        "worst_registry_overlap": 0.4703,
+        "uniqueness_limit": 0.65,
+        "est_score_label": "rank-only; never a score",
+        "generated_utc": "2026-10-31T05:31:14+00:00"
       },
       "next_action": ""
     },
@@ -147,9 +164,9 @@
   ],
   "counts": {
     "FAIL": 1,
-    "MISSING": 2,
+    "MISSING": 1,
     "NEGATIVE": 1,
-    "OK": 2,
+    "OK": 4,
     "RECORDED-NOT-RERUN": 1,
     "SNAPSHOT": 1
   },

@@ -14,6 +14,51 @@
 
 The lane-70 candidate's 69.5273% overlap result was produced after excluding the calibration lattice. The user protocol says **any** registry raster; the exclusion is not an approved exception. The pre-placement correlation field in that candidate's run card is null. See the receipts linked in the review.
 
+## Same-day modelling lane · 2026-10-31 UTC — H-CELLDISTILL run, verdict negative, blockers explained
+
+The review above ran without the feature cache and generated nothing. A second lane the same day restored the data
+(`scripts/download_competition_data.sh` → 28 SHA-verified official files), executed the one hypothesis
+[`docs/research/leaderboard-inversion-20261030.md`](docs/research/leaderboard-inversion-20261030.md) recorded as
+**“not run — highest-value next step”** (so the lane is documented, not invented), and produced a unique, gated raster.
+Its verdict is **negative for submission**, so it is published as evidence, not as an offer. The assigned lane and the
+three-experiment/two-hour cap came from the operator's own message in that session, recorded verbatim in the standing brief.
+
+| Item | Value |
+|---|---|
+| Download (inspection only) | `docs/downloads/gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif` (+ `.zip`) |
+| Submission name / note | `gemsdoesass3-cdist-52000-20261031T1200Z-zeros` · `cell-credit distillation, 52000 dots, unique 47% overlap; screening-only, slot NOT cleared` (90 / 140 chars) |
+| Format gates | **all pass**, recomputed from the saved bytes: values ∈ {0,1} in the footprint, **no NaN anywhere**, EPSG:32611, 3730×3292 @ 100 m, 52,000 dots |
+| Uniqueness | worst 3 px overlap **47.0 %** over 511 registry rasters (repo cap 65 %, protocol 70 %); **lift 1.33×** over the binding raster's own 35.3 % footprint coverage; 1.07 M positive cells no published raster touches |
+| Holdout floor (HOLDOUT-DTI) | **0.0461** [0.0394, 0.0533] (GEMSDOE32-HIDE-RECOVER-v3.0, 22,232 withheld positives) · **0.0804** [0.0707, 0.0894] (GEMSDOE32-SGMC-CAL-v3.0, 62,703) — below the published family, hence no slot |
+| Score | **not priced.** No estimator in this repo can certify a value above 0.2778; any number here would be invented |
+| Run card | [`evidence/run_card_cellcredit_20261031.json`](evidence/run_card_cellcredit_20261031.json) · method [`docs/research/cellcredit-20261031.md`](docs/research/cellcredit-20261031.md) |
+
+**The portal-range blocker in the table above is now explained, and it is ours, not the competition's.** Page 967 allows
+“null or nan” outside the bounds, but the upload form range-tests *every stored cell*, so any `…-nanoutside.tif` fails with
+“Predicted values must be in range [0, 1]” — reproduced on our files, 7,111,787 violations. The **zeros** variant carries the
+identical in-footprint assertion with `0.0` outside, passes the gate, and is provably accepted by the organizer's scorer (the
+GEMSDOE32 champion at 0.2778 is itself a `-zeros` file). Every candidate now ships both encodings, **zeros is the default
+download**, and `scripts/validate_submission_tif.py` reports `portal_range_test_all_cells` separately from the repo's NaN
+convention so the two can never be conflated again. (`IR-31-02`.)
+
+**The 0.3687 estimate in that same table is retired outright, not merely caveated.** `scripts/compare_estimators_20261031.py`
+scores every estimator on the only fair unit — withholding *whole families* of near-duplicate rasters (132 files → 110 clusters).
+Bag-mean channel model **RMSE 0.0586**, ρ **0.746**; predict-the-mean baseline 0.0818; the corpus inversion behind 0.3687 **0.1364** —
+i.e. it loses to a constant. Its earlier leave-one-*file*-out 0.0533 leaked through the 20-file family. A bag model can rank files
+but cannot price an emission: field-sum pricing of our own top-of-field scored 0.0806 (ρ 0.30) and an unbounded version implied a
+score of **493**, caught before publication. What ships instead is a **screen**: rank candidate rasters with the validated bag
+estimator *before* any slot is considered. (`IR-31-01`.)
+
+**Why the champion wins, and what it would take to beat it.** Under α = 0.2, β = 0.8 with binary rasters the index is
+`TP/(TP + 0.2 FP + 0.8 FN)` and the corpus work inverts the surrogate `TP/(0.2 D + 0.8 N)`, so a score is *recall per unit emitted
+mass*; 37,654 off-catalogue dots (0.73 % of the footprint) is the best such set published, and `-zeros` is a fill convention, not
+an empty submission. The live board is #1 **0.4544** / #5 **0.3642** (ORGANIZER-PUBLISHED page, 2026-10-31), so the gap to the
+published family is a **localisation** gap. Five ranked next hypotheses — headed by 1 m DEM scarp steps restricted to the 1.07 M
+off-corpus cells this session's field nominates, and relay-bridge scoring between catalogue tips — are in
+[`docs/research/cellcredit-20261031.md`](docs/research/cellcredit-20261031.md) §5. Focus-site table:
+[`evidence/focus9_verdict_table_20261031.json`](evidence/focus9_verdict_table_20261031.json).
+
+
 ## Read the project brief every session
 
 Before research or implementation, read [`docs/research/standing-prompt-as-recorded-20261027.md`](docs/research/standing-prompt-as-recorded-20261027.md) and the latest [`docs/research/repo-review-20261031.md`](docs/research/repo-review-20261031.md). The standing brief requires: focus on the nine listed GEMSDOE sites; evidence labels for every score; the shared buffered holdout and feature-alone leakage canaries; the exact surface-and-final-dot uniqueness gates; no more than three experiments or two hours; and a separate selector decision before any real submission slot. The exact method/lane paragraph referenced by the protocol has not been found in the recorded prompt, so do not invent a lane.

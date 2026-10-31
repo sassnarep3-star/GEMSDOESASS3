@@ -1,8 +1,82 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-31T05:46:37.444992+00:00",
  "repository": "sassnarep3-star/GEMSDOESASS3",
+ "generated_utc": "2026-10-31T05:50:18.847315+00:00",
  "irregularities": [
+  {
+   "id": "IR-31-01",
+   "severity": "high",
+   "title": "the site's own 0.369 headline estimate does not survive cluster-honest validation",
+   "detail": "The incumbent estimator (scripts/distill_from_leaderboard.py) reported leave-one-FILE-out RMSE 0.0533 and used it to price gemsdoesass3-lbinv-84262 at 0.369. When whole clusters of near-duplicate rasters are withheld together (scripts/compare_estimators_20261031.py), the same estimator scores RMSE 0.1364 against a predict-the-mean baseline of 0.0818. The estimate is retired, not argued with.",
+   "evidence": [
+    "evidence/estimator_arms_20261031.json",
+    "evidence/cellcredit_distillation_20261031.json"
+   ],
+   "status": "OPEN \u2014 headline replaced with 'not priced' on 2026-10-31"
+  },
+  {
+   "id": "IR-31-02",
+   "severity": "high",
+   "title": "every '-nanoutside' download fails the portal's element-wise [0,1] gate",
+   "detail": "The owner's live submission error 'Predicted values must be in range [0, 1]' reproduces on this repo's own file: 7,111,787 NaN cells outside the footprint. The official text asks for null-or-NaN outside the bounds, but the portal range-tests stored cells. The zeros variant of the identical in-footprint raster passes (and the 0.2778 champion is a '-zeros' file, so the organizer's scorer accepts it). The download default is now the zeros variant.",
+   "evidence": [
+    "docs/downloads/gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif",
+    "evidence/run_card_cellcredit_20261031.json"
+   ],
+   "status": "FIXED \u2014 zeros variant published beside every candidate on this site"
+  },
+  {
+   "id": "IR-31-03",
+   "severity": "medium",
+   "title": "the prompt's leaderboard numbers are stale against the live public page",
+   "detail": "The prompt states 'Current competition leaderboard GEMSDOE high score: 0.4413' and later '0.3195 is the highest score right now'. The public leaderboard fetched 2026-10-31 shows #1 xiaofanhu 0.4544 (36 submissions), #2 cfld__ 0.3934, #3 0.3917, #4 0.3860, #5 op01 0.3642. Target-setting against 0.3195 would have aimed 0.13 too low.",
+   "evidence": [
+    "registry/published_score_table_20261031.json#leaderboard_snapshot"
+   ],
+   "status": "LOGGED \u2014 live page is the authority; snapshot stored with the score table"
+  },
+  {
+   "id": "IR-31-04",
+   "severity": "high",
+   "title": "the nine focus sites are not nine independent experiments",
+   "detail": "20 of 132 matched rasters form one Jaccard cluster (>=0.35 dot overlap), including every one of the six highest published scores (0.2449-0.2778). Site leaders on GEMSDOE24/25/27/28/30/31/32/33/36 are re-skins of one raster family. Any 'best file per site' ranking therefore measures one idea nine times, and a weekly slot spent on a site leader buys no new information.",
+   "evidence": [
+    "evidence/focus9_verdict_table_20261031.json"
+   ],
+   "status": "OPEN \u2014 uniqueness is now a gate, reported as overlap + lift, not as a site label"
+  },
+  {
+   "id": "IR-31-05",
+   "severity": "low",
+   "title": "byte-identical rasters published under two sites",
+   "detail": "19GEMSDOE 'h19-4-multiline-corroborated-\u2026-691e4dfa' and GEMSDOE21 'h19-4-reference-\u2026-691e4dfa' have the same SHA-256 and the same published score 0.1894. Score-corpus deduplication keys on SHA, so the pair contributes one equation, as it should.",
+   "evidence": [
+    "evidence/score_corpus_manifest_20261031.json"
+   ],
+   "status": "HANDLED"
+  },
+  {
+   "id": "IR-31-06",
+   "severity": "medium",
+   "title": "six published tokens could not be matched to a raster, thirteen have no score",
+   "detail": "Corpus matching is 133/139. Unmatched: GEMSDOE, GEMSDOE2, GEMSDOE4, 5GEMSDOE, WBGGEMSDOE2, WBGGEMSDOE3 (files no longer in those repos' docs/downloads or renamed). The owner's 2026-10-31 list also carries entries with no score (e.g. gems28-s31-far65-dispfill, gems91-s91-alm-alteration-halo, GEMSDOEkarage2 halo39, WBGGEMSDOE2 gems-wbg4-triphysics) \u2014 recorded as pending, never used for calibration or claimed as zero.",
+   "evidence": [
+    "evidence/score_corpus_manifest_20261031.json",
+    "registry/published_score_table_20261031.json"
+   ],
+   "status": "OPEN \u2014 needs a re-fetch when the sibling repos republish"
+  },
+  {
+   "id": "IR-31-07",
+   "severity": "low",
+   "title": "GitHub REST quota exhausted mid-session",
+   "detail": "The 5,000/h authenticated quota ran out while fetching 139 corpus rasters + 386 registry rasters, so 6 registry rasters stayed unreadable. Mitigation added to the shared tool: scripts/build_score_corpus.py --offline-cache builds the identical manifest from bytes already on disk, and every corpus number in this session is reproducible without the API.",
+   "evidence": [
+    "data/restore_receipt.json (28 files SHA-verified)",
+    "scripts/build_score_corpus.py"
+   ],
+   "status": "MITIGATED"
+  },
   {
    "id": "IR-SASS3-01",
    "severity": "CRITICAL (RESOLVED)",

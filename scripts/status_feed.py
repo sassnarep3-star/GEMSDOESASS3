@@ -12,6 +12,7 @@ Run: python scripts/status_feed.py [--md PATH] [--json-out PATH]
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import subprocess
@@ -21,6 +22,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CARD_PATH = ROOT / "evidence/run_card_20261031_review.json"
 LEADERBOARD_PATH = ROOT / "evidence/leaderboard_snapshot_20261031.json"
+
+
+def sha256(path) -> str:
+    """Streaming sha256 of a workspace file; used to re-verify bytes rather than trust receipts."""
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def load_json(path: Path) -> dict:
@@ -66,6 +76,35 @@ def main() -> int:
     raster = card.get("raster", {})
     candidate = card.get("new_submission", {})
 
+    # newest lane build: re-hash the bytes the site actually offers, do not trust the receipt
+    lane_status, lane_detail, lane_next = "MISSING", {"newest_build_receipt": None}, "Run a lane builder that writes docs/downloads/*-build.json."
+    # prefer the portal-safe (zeros) build, then recency: this is the file the site actually offers
+    _builds = sorted((ROOT / "docs" / "downloads").glob("*-build.json"),
+                     key=lambda q: (q.name.endswith("-zeros-build.json"), q.stat().st_mtime), reverse=True)
+    if _builds:
+        _b = load_json(_builds[0]) or {}
+        _rel = _b.get("path") or ""
+        _tif = (ROOT / "docs" / "downloads" / Path(_rel).name) if _rel else None
+        _want = _b.get("raster_sha256") or _b.get("sha256") or ""
+        _got = sha256(_tif) if (_tif and _tif.exists()) else ""
+        _zeros = _tif and _tif.name.endswith("-zeros.tif")
+        lane_detail = {
+            "file": _tif.name if _tif else None,
+            "bytes_match_receipt": bool(_got) and _got == _want,
+            "encoding_is_portal_safe_zeros": bool(_zeros),
+            "n_dots": _b.get("n_dots"),
+            "note_length": _b.get("note_length"),
+            "worst_registry_overlap": _b.get("worst_registry_overlap"),
+            "uniqueness_limit": _b.get("uniqueness_limit"),
+            "est_score_label": "rank-only; never a score" if _b.get("est_score") is not None else None,
+            "generated_utc": _b.get("generated_utc"),
+        }
+        ok = lane_detail["bytes_match_receipt"] and bool(_zeros) and (_b.get("worst_registry_overlap") or 1) <= (_b.get("uniqueness_limit") or 0)
+        lane_status = "OK" if ok else "FAIL"
+        lane_next = ("" if ok else "Rebuild the newest lane candidate and confirm the zeros encoding "
+                     "(NaN outside the footprint trips the portal's element-wise [0,1] test).")
+        _lane_status, _lane_detail, _lane_next = lane_status, lane_detail, lane_next
+
     checks = [
         {
             "id": "decision",
@@ -94,6 +133,13 @@ def main() -> int:
             "detail": modules,
             "next_action": "Install project dependencies in a reproducible environment before geospatial revalidation."
             if not all(modules.values()) else ""
+        },
+        {
+            "id": "lane-build",
+            "evidence_class": "LOCAL-CHECK (bytes re-hashed by this script)",
+            "status": _lane_status,
+            "detail": _lane_detail,
+            "next_action": _lane_next,
         },
         {
             "id": "uniqueness",

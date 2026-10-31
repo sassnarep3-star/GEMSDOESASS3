@@ -1,0 +1,64 @@
+{
+ "schema_version": 1,
+ "label": "ESTIMATE",
+ "score_inputs": "OWNER-REPORT",
+ "estimator": "field sum of the H-CELLDISTILL credit field, single scalar k, leave-cluster-out",
+ "n_files": 132,
+ "n_clusters": 110,
+ "grid": [
+  {
+   "N": 1500,
+   "k": 1.0063,
+   "gloo_rmse": 0.0806,
+   "gloo_rho": 0.3018,
+   "in_sample_rmse": 0.07424
+  },
+  {
+   "N": 3000,
+   "k": 1.1128,
+   "gloo_rmse": 0.08088,
+   "gloo_rho": 0.271,
+   "in_sample_rmse": 0.07546
+  },
+  {
+   "N": 6000,
+   "k": 1.2999,
+   "gloo_rmse": 0.0824,
+   "gloo_rho": 0.2248,
+   "in_sample_rmse": 0.08056
+  },
+  {
+   "N": 12000,
+   "k": 1.6092,
+   "gloo_rmse": 0.08633,
+   "gloo_rho": 0.1981,
+   "in_sample_rmse": 0.09055
+  },
+  {
+   "N": 24000,
+   "k": 2.0912,
+   "gloo_rmse": 0.09325,
+   "gloo_rho": 0.1885,
+   "in_sample_rmse": 0.10307
+  },
+  {
+   "N": 44000,
+   "k": 2.7173,
+   "gloo_rmse": 0.10091,
+   "gloo_rho": 0.1787,
+   "in_sample_rmse": 0.11329
+  }
+ ],
+ "best": {
+  "N": 1500,
+  "k": 1.0063,
+  "gloo_rmse": 0.0806,
+  "gloo_rho": 0.3018,
+  "in_sample_rmse": 0.07424
+ },
+ "baseline_predict_mean_rmse": 0.08176,
+ "caveats": [
+  "k is fitted on the same corpus, so even the leave-cluster-out number is conditional on the published scores being transcribed correctly",
+  "the field is a bag-mean fit: within-bag ranking is only weakly identified, which is why the raw field sum (A, in-sample column) over-prices everyone"
+ ]
+}
