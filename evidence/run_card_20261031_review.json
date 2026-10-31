@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "review_date_utc": "2026-10-31",
+  "review_scope": "Audit of repository artifacts and the nine requested historical submissions; no new experiment and no new raster generated.",
+  "hypothesis": "Prior consensus candidates could be better than the GEMSDOE32 owner-reported 0.2778 baseline, but only if they meet the complete protocol: clean leakage checks, buffered holdout, and both surface and final-dot uniqueness gates against every registry raster.",
+  "mechanism": "Audited existing score-weighted consensus candidate gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif. Its recorded construction combines previously published raster votes, greedily places 55,000 dots, then serializes a portal-safe finite 0/1 payload with a GDAL mask. This review did not rebuild or endorse that method.",
+  "named_non_fault_process_that_could_mimic_it": "Shared DEM-derived drainage, lithologic contacts, regional tectonic grain, and correlated methods across submitters can create consensus without indicating a previously unmapped fault.",
+  "holdout_dti": {
+    "label": "HOLDOUT-DTI",
+    "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+    "n_withheld_positives": 22232,
+    "score": 0.07893860428429801,
+    "ci95": [0.06869196481136113, 0.08918496004671007],
+    "provenance": "Copied from evidence/run_card_20261030_lane70.json and evidence/portal_safe_render_gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.json; not re-run in this review.",
+    "decision_use": "Not interpreted as leaderboard performance; target is not equivalent to the competition's expert-mapped off-catalogue test labels."
+  },
+  "correlation_overlap_vs_registry": {
+    "label": "REGISTRY-MEASUREMENT",
+    "surface_max_abs_binned_spearman": 0.983609033618752,
+    "surface_registry_count_over_0p90": 1909,
+    "surface_preplacement_check": null,
+    "final_dot_max_overlap_within_3px_all_references": 0.995182,
+    "final_dot_overlap_reference": "13GEMSDOE calibration lattice",
+    "final_dot_overlap_excluding_lattice": 0.6952727272727273,
+    "protocol_limits": {
+      "absolute_rank_correlation_max": 0.9,
+      "fraction_within_3px_max": 0.7
+    },
+    "verdict": "FAIL: rank correlation exceeds 0.90; strict all-registry overlap also exceeds 0.70. Lattice exclusion is not authorized by the prompt."
+  },
+  "raster": {
+    "status": "pre-existing artifact; unchanged",
+    "path": "docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif",
+    "sha256": "e2e4380991586b99c9b9da1abc3272782d3562134515891469fa882ba02c7f8d",
+    "submission_name_archival_only": "gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe",
+    "submission_note_archival_only": "Unique lane-70 consensus, 55k dots: no registry submission above 70%, est DTI 0.19 (LOO 0.065)",
+    "submission_note_length": 94
+  },
+  "validator_output": {
+    "provenance": "evidence/portal_safe_render_gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.json; receipt not independently regenerated because this checkout lacks rasterio and its input cache.",
+    "stored_non_finite_values": 0,
+    "no_nan_inside_footprint": true,
+    "stored_values_in_range_0_1": true,
+    "crs": "EPSG:32611",
+    "shape": [3730, 3292],
+    "transform": [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0],
+    "format_receipt_claims_pass": true,
+    "organizer_portal_acceptance_receipt": false
+  },
+  "new_submission": {
+    "generated": false,
+    "submission_name": null,
+    "submission_note": null,
+    "reason": "No assigned method paragraph, feature cache, dependencies, or official raster inputs are present in this checkout; existing candidate fails uniqueness gates."
+  },
+  "verdict": "negative",
+  "ok_to_download_as_submission": false,
+  "ok_to_submit": false,
+  "experiments_used_this_review": 0,
+  "submission_slots_spent": 0
+}
