@@ -241,7 +241,7 @@ def main() -> int:
         "lambda": lam_hat,
         "fit": {**best, "in_sample": in_sample},
         "grid_scan": scan[:15],
-        "field_file": str(args.field.relative_to(ROOT)),
+        "field_file": str(args.field if args.field.is_absolute() else (ROOT / args.field)),
         "field_summary": {
             "max": float(u.max()),
             "mean_scored": float(u.mean()),

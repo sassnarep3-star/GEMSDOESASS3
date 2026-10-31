@@ -1,0 +1,19 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-30",
+ "label": "ESTIMATE",
+ "hypothesis": "H-LBINV: the organizer metric inverts, so 128 published scores locate the hidden faults",
+ "submission_name": "gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside",
+ "raster_sha256": "6c13d50eeb9e3ca70ed7d4542e97fa0df06f053a2579affa96e76939fb6d337e",
+ "zip_sha256": "642a04e4d92e85b9ca8f4b3b3276863329f14e263fa858ae7376bfb26b373b07",
+ "n_dots": 59542,
+ "expected_tp": 7983.7,
+ "est_score": 0.3712,
+ "N_estimate": 12000,
+ "scale_c": 0.9150672565982481,
+ "loo_rmse": 0.05332314599467134,
+ "loo_rho": 0.7566437007874016,
+ "worst_registry_overlap": 0.65,
+ "worst_registry_raster": "GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+ "submission_note": "LB-inversion field: 59542 dots; est 0.371 (LOO sd 0.053)"
+}

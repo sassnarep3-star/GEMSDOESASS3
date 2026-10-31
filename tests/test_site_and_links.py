@@ -78,9 +78,9 @@ def test_readme_contains_standing_prompt_and_synchronized_runcard():
     Changed 2026-10-30: the synced card is now the released candidate's run card
     (evidence/run_card_tipcont_20261030.json). The previous card stays on disk as an archive.
     """
-    # 2026-10-30 second pass: the synced receipt is the live candidate's build receipt.
+    # 2026-10-31: the synced receipt is the live candidate's build receipt.
     rc = json.loads((ROOT / "docs" / "downloads"
-                     / "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside-build.json").read_text())
+                     / "gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside-build.json").read_text())
     readme = (ROOT / "README.md").read_text()
     assert rc["submission_name"] in readme
     assert rc["submission_note"] in readme

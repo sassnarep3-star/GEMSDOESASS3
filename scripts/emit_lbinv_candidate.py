@@ -109,6 +109,8 @@ def main() -> int:
     ap.add_argument("--overlap-limit", type=float, default=0.65)
     ap.add_argument("--out-dir", type=Path, default=ROOT / "docs" / "downloads")
     ap.add_argument("--emit", type=str, default="")
+    ap.add_argument("--name-suffix", type=str, default="20261030T0900Z",
+                    help="timestamp token in the submission filename (default 20261030T0900Z)")
     args = ap.parse_args()
 
     ev = json.loads(args.evidence.read_text())
@@ -222,7 +224,7 @@ def main() -> int:
     arr = np.where(foot, 0.0, np.nan).astype(np.float32)
     arr[cand] = 1.0
     assert int((arr == 1.0).sum()) == int(cand.sum()), "dot count mismatch"
-    name = f"gemsdoesass3-lbinv-{row['n_dots']}-20261030T0900Z-nanoutside"
+    name = f"gemsdoesass3-lbinv-{row['n_dots']}-{args.name_suffix}-nanoutside"
     args.out_dir.mkdir(parents=True, exist_ok=True)
     tif = args.out_dir / f"{name}.tif"
     with rasterio.open(tif, "w", driver="GTiff", height=shape[0], width=shape[1], count=1,

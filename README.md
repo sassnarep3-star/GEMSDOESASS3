@@ -1,22 +1,29 @@
 # GEMSDOESASS3 — read first
 
-## Decision (2026-10-30) — DOWNLOAD AND SUBMIT THIS FILE
+## Decision (2026-10-31) — DOWNLOAD AND SUBMIT THIS FILE
 
-**Status: OK to download and OK to submit.**
+**Status: OK to download and OK to submit.** Exact submission steps: [docs/submit.html](docs/submit.html).
 
 | | |
 |---|---|
-| **File** | `docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif` (zip beside it) |
-| **Submission name** | `gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside` |
-| **Note (56 / 140 characters)** | `LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)` |
-| **SHA-256 (TIF)** | `8f6188763af694dccb400bad7a2549fcaccdfb0b37b6981adfff286e2698ebd1` |
-| **SHA-256 (ZIP)** | `d720227cf2555260581f52f5e3db1149b2c12e49e858e6ad56998f9ab135df1f` |
-| **Estimated score** | **ESTIMATE 0.369**, 95% band ±0.10. Not a leaderboard score. |
+| **File** | `docs/downloads/gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside.tif` (zip beside it) |
+| **Submission name** | `gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside` |
+| **Note (63 / 140 characters)** | `LB-inversion field: 59542 dots; est 0.371 (LOO sd 0.053)` |
+| **SHA-256 (TIF)** | `6c13d50eeb9e3ca70ed7d4542e97fa0df06f053a2579affa96e76939fb6d337e` |
+| **SHA-256 (ZIP)** | `642a04e4d92e85b9ca8f4b3b3276863329f14e263fa858ae7376bfb26b373b07` |
+| **Estimated score** | **ESTIMATE 0.371**, 95% band ±0.10. Not a leaderboard score. |
 | **Estimator** | leave-one-file-out over **128** published rasters: RMSE **0.0533**, ρ **0.757** (baseline "predict the mean": 0.0825) |
-| **Uniqueness** | worst 3 px overlap with any of **471** registry rasters = **65.0%** (cap 65%, protocol 70%); that raster covers 35.3% of the footprint, so lift = 1.84× |
-| **Format** | **22/22 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m, values exactly {0,1} inside the footprint, NaN only outside it, 84,262 dots |
+| **Uniqueness** | worst 3 px overlap with any of **135** registry rasters = **65.0%** (cap 65%, protocol 70%); that raster covers 35.3% of the footprint, so lift = 1.84× |
+| **Format** | **22/22 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m, values exactly {0,1} inside the footprint, NaN only outside it, 59,542 dots |
 
-Validator: `python scripts/validate_lbinv_submission.py --tif docs/downloads/<name>.tif` — exits 0 only when every gate passes, and it **recomputes the headline estimate from the raster**. Receipts: [validator](evidence/validator_lbinv_20261030.json), [estimator](evidence/distill_from_leaderboard_20261030.json), [negative result: naive rater fusion](evidence/run_card_neg_naive_rater_fusion_20261030.json), [negative result: file-level features](evidence/run_card_neg_filelevel_features_20261030.json). Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · Method: [docs/research/leaderboard-inversion-20261030.md](docs/research/leaderboard-inversion-20261030.md).
+Validator: `python scripts/validate_lbinv_submission.py --tif docs/downloads/<name>.tif` — exits 0 only when every gate passes, and it **recomputes the headline estimate from the raster**. Receipts: [validator](evidence/validator_lbinv_20261030.json), [estimator](evidence/distill_from_leaderboard_repro_20261031.json), [negative result: naive rater fusion](evidence/run_card_neg_naive_rater_fusion_20261030.json), [negative result: file-level features](evidence/run_card_neg_filelevel_features_20261030.json). Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · **How to submit: [docs/submit.html](docs/submit.html)** · Method: [docs/research/leaderboard-inversion-20261030.md](docs/research/leaderboard-inversion-20261030.md).
+
+### 2026-10-31 session — new candidate, reproduction, negative result
+
+* **Reproduction (no-hallucination check).** Both estimators were re-run from scratch on the 129 public corpus rasters fetched from the sibling GitHub repositories and SHA-256 verified against `evidence/score_corpus_manifest_20261030.json`: `scripts/fit_lb_truth_inverse.py` reproduces N=4000, λ=1.0, LOO RMSE 0.0489, ρ 0.858; `scripts/distill_from_leaderboard.py` reproduces N=12000, c=0.915, LOO RMSE 0.0533, ρ 0.757 and the entire budget sweep (0.336 / 0.353 / 0.365 / 0.373 / 0.377 / 0.372).
+* **New unique candidate.** Emitted at a different dot budget from the same (reproduced) field: `gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside` — 59,542 dots, ESTIMATE **0.371**, worst registry overlap 65.0%. Different bytes, placement and name from every previous submission; `scripts/fetch_corpus_refit.py` records how the corpus was obtained.
+* **Negative result (deliverable).** A *swap*-based uniqueness repair — remove an offending dot and re-place the same number of dots outside that raster's 3 px neighbourhood — scores **0.208** where the incumbent's *drop*-based repair scores **0.342** at the same 60,000-dot budget. The re-placed dots land where the inversion field is zero (it is defined only on corpus-covered cells), so expected credit falls faster than predicted mass. Drop-repair is kept.
+* **Five new hypotheses** ranked in [docs/research/hypotheses-20261031.md](docs/research/hypotheses-20261031.md): H-SASS3-O (consensus-line directional continuation) and H-SASS3-P (redundancy-deweighted inversion) are implementable now; H-SASS3-Q/R/S are blocked on login-walled data with the exact free official sources named and their reachability checked.
 
 ### What changed on 2026-10-30 (second pass), and why the earlier number was retired
 

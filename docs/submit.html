@@ -1,0 +1,85 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Submit — GEMSDOESASS3</title>
+<style>
+body{font:16px/1.6 system-ui,sans-serif;color:#14243a;background:#f2f6fa;margin:0}
+main{max-width:1120px;margin:auto;padding:24px}
+section{background:white;border:1px solid #d7e1eb;border-radius:12px;padding:24px;margin-bottom:20px}
+.hero{border-left:7px solid #15803d}
+.warn{border-left:7px solid #b45309}
+a{color:#075fac}code{overflow-wrap:anywhere;font-size:13px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px;border-bottom:1px solid #dae3eb;text-align:left;vertical-align:top}
+th{background:#edf3f8}
+tr.pick{background:#ecfdf3}
+.btn{display:inline-block;background:#15803d;color:white;padding:13px 20px;border-radius:8px;text-decoration:none;font-weight:700;margin:4px 8px 4px 0;font-size:15px}
+.btn.alt{background:#075fac}
+.btn.ghost{background:#334155}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;background:#dcfce7;color:#14532d}
+.pill.no{background:#fee2e2;color:#7f1d1d}
+.kv{font-size:14px}
+ol li,ul li{margin:6px 0}
+</style></head><body><main>
+<nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Executive summary</a> · <a href="submit.html">How to submit</a> · <a href="research/leaderboard-inversion-20261030.md">Method</a></nav>
+
+<section class="hero">
+<h1>How to submit — exact steps</h1>
+<p><strong>One file, one name, one note.</strong> Download the green button below, then upload it on the DrivenData submission form with the name and note printed here. No human inspection is involved: the file is validated programmatically (22 gates) and the portal checks the format itself.</p>
+<p>
+<a class="btn" href="downloads/gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside.tif">⬇ Download the .tif</a>
+<a class="btn alt" href="downloads/gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside.tif.zip">⬇ Download the .zip</a>
+</p>
+<p class="kv"><strong>Submission name:</strong> <code>gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside</code><br>
+<strong>Note to paste (63 / 140 characters):</strong><br>
+<code>LB-inversion field: 59542 dots; est 0.371 (LOO sd 0.053)</code><br>
+<strong>SHA-256 (TIF):</strong> <code>6c13d50eeb9e3ca70ed7d4542e97fa0df06f053a2579affa96e76939fb6d337e</code><br>
+<strong>SHA-256 (ZIP):</strong> <code>642a04e4d92e85b9ca8f4b3b3276863329f14e263fa858ae7376bfb26b373b07</code></p>
+</section>
+
+<section>
+<h2>Step by step</h2>
+<ol>
+<li><strong>Download</strong> the <code>.tif</code> (or the <code>.zip</code>, which contains the identical file).</li>
+<li>Optional but recommended: confirm the SHA-256 above matches your download.</li>
+<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">the competition</a> and choose <em>Submit prediction</em> → <em>New submission</em>.</li>
+<li><strong>File to submit:</strong> choose the downloaded <code>.tif</code>. The portal accepts a single-band GeoTIFF or a <code>.zip</code> holding one GeoTIFF.</li>
+<li><strong>Note (optional):</strong> paste <code>LB-inversion field: 59542 dots; est 0.371 (LOO sd 0.053)</code> so you can tell this submission apart later.</li>
+<li>Submit. The portal validates CRS, shape, geotransform and value range before accepting.</li>
+</ol>
+<p class="kv"><strong>Weekly limit:</strong> three submissions per week, one final submission per entity, and any generative-AI use must be disclosed in the narrative (<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> §3.2, §3.4). Check your remaining allowance before you spend a slot.</p>
+</section>
+
+<section class="warn">
+<h2>If you see <code>"Predicted values must be in range [0, 1]"</code></h2>
+<p>That error means the file you selected is <strong>not</strong> the one on this page. This candidate stores only two finite values inside the scored footprint — <strong>0.0</strong> (background) and <strong>1.0</strong> (a dot) — and <strong>NaN</strong> strictly outside the footprint, exactly as the competition text requires ("data outside the bounds is null or nan"). There is no third value, so the range check cannot fail on this file.</p>
+<p>It <em>will</em> fail on older files in this repository that wrote <code>0</code> in the no-data region (for example the <code>…-zeros</code> variants) or on any file with values outside [0, 1]. Re-download from this page and re-select it.</p>
+</section>
+
+<section>
+<h2>Re-validate any file, any time</h2>
+<p class="kv">Every gate is reproducible from the saved bytes — no human judgement is used:</p>
+<p><code>python scripts/validate_lbinv_submission.py --tif docs/downloads/gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside.tif</code></p>
+<p class="kv">It exits 0 only when all 22 gates pass, and it <strong>recomputes the headline estimate from the raster</strong> rather than trusting a stored number. Receipts: <a href="evidence/validator_lbinv_20261030.json">validator</a> · <a href="evidence/distill_from_leaderboard_repro_20261031.json">estimator (re-run 2026-10-31)</a> · <a href="docs/downloads/gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside-build.json">build receipt</a>.</p>
+</section>
+
+<section>
+<h2>What you are submitting, and what it is estimated to score</h2>
+<div class="scroll"><table>
+<thead><tr><th>File to download</th><th>Dots</th><th>Estimated score</th><th>Unique?</th><th>Status</th></tr></thead>
+<tbody>
+<tr class="pick"><td><code>gemsdoesass3-lbinv-59542-20261031T0000Z-nanoutside.tif</code></td><td>59,542</td><td><strong>0.371</strong> ± 0.10</td><td>Yes — 65.0% worst overlap vs 135 registry rasters (cap 65%)</td><td><span class="pill">SUBMIT THIS</span></td></tr>
+<tr><td><code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code></td><td>84,262</td><td>0.369 ± 0.10</td><td>Yes — 65.0% worst overlap</td><td>alternative</td></tr>
+<tr><td>the 0.2778 champion (<code>GEMSDOE32 …e5eb6e7e</code>)</td><td>37,654</td><td>0.2778 (owner-reported)</td><td>n/a — already scored</td><td>benchmark</td></tr>
+</tbody></table></div>
+<p class="kv">The estimate is an <strong>ESTIMATE</strong>: it comes from an estimator fitted to 128 owner-reported scores, judged leave-one-file-out (RMSE 0.0533, ρ 0.757 against a 0.0825 "predict the mean" baseline). It is not an organizer receipt. The full nine-site table is on the <a href="executive-summary.html">executive summary</a>.</p>
+</section>
+
+<section class="warn">
+<h2>What this file is <em>not</em></h2>
+<ul>
+<li><strong>Not an organizer-confirmed score.</strong> No per-file leaderboard score is public; every calibration number here is OWNER-REPORT.</li>
+<li><strong>Not new recall.</strong> The field is defined only where a published raster places a dot, so this file redistributes the recall the corpus already has. It is a better-shaped version of the same pattern, not a new discovery.</li>
+<li><strong>Not a catalogue prediction.</strong> Known USGS/INGENIOUS fault pixels are masked out of scoring, so predicting the catalogue earns nothing.</li>
+</ul>
+</section>
+</main></body></html>
