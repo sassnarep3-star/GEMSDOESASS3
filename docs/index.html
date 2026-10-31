@@ -36,13 +36,13 @@
     </section>
 
     <section class="section-card">
-      <h2>Why the previous “OK TO SUBMIT” banner was withdrawn</h2>
+      <h2>Why the previous positive upload banner was withdrawn</h2>
       <p class="section-lead">The current status is fail-closed. Old positive banners and projections are not current approvals.</p>
       <div class="table-wrap"><table>
         <thead><tr><th>Artifact</th><th>Known issue</th><th>Decision</th></tr></thead>
         <tbody>
-          <tr><td><code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code></td><td>NaN outside footprint; the receipt does not prove the competition portal accepts it under its [0,1] validation. Its 0.3687 is a model estimate, not a score or receipt.</td><td><span class="badge badge-no">NOT CLEARED</span></td></tr>
-          <tr><td><code>gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif</code></td><td>Recorded binned |ρ| reaches 0.983609 (>0.90); 1,909 references exceed 0.90; 3-px overlap is 99.5182% against the calibration lattice. Excluding that raster does not satisfy the literal “any registry” rule.</td><td><span class="badge badge-no">NEGATIVE</span></td></tr>
+          <tr><td><code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code></td><td>Fresh exact-byte validator fails the portal's global [0,1] test on 7,111,787 outside-footprint NaNs. Its 0.3687 is a model estimate, not a score or receipt.</td><td><span class="badge badge-no">NOT CLEARED</span></td></tr>
+          <tr><td><code>gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif</code></td><td>Fresh byte validator passes local format only; recorded binned |ρ| reaches 0.983609 (>0.90), 1,909 references exceed 0.90, and 3-px overlap is 99.5182% against the calibration lattice. Excluding that raster does not satisfy the literal “any registry” rule.</td><td><span class="badge badge-no">NEGATIVE</span></td></tr>
         </tbody>
       </table></div>
       <p>See the <a href="../evidence/run_card_20261031_review.json">review run card</a> and the full <a href="research/repo-review-20261031.md">reproducibility report</a>.</p>

@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
-  "generated_utc": "2026-10-31T04:54:45+00:00",
+  "generated_utc": "2026-10-31T05:00:09+00:00",
   "decision": "NO-GO",
   "current_branch": "arena/a4b6bc6f-gemsdoesass3",
-  "head": "db0ce4f",
+  "head": "9adc0b5",
   "checks": [
     {
       "id": "uniqueness",
@@ -30,34 +30,9 @@
       "next_action": "Restore the authorized official feature/label cache."
     },
     {
-      "id": "runtime",
-      "evidence_class": "LOCAL-CHECK",
-      "status": "MISSING",
-      "detail": {
-        "numpy": false,
-        "rasterio": false,
-        "scipy": false,
-        "sklearn": false,
-        "pytest": false
-      },
-      "next_action": "Install project dependencies in a reproducible environment before geospatial revalidation."
-    },
-    {
-      "id": "decision",
-      "evidence_class": "REPOSITORY-REVIEW",
-      "status": "NEGATIVE",
-      "detail": {
-        "verdict": "negative",
-        "ok_to_submit": false,
-        "new_tif_generated": false,
-        "slots_spent": 0
-      },
-      "next_action": "Do not upload; satisfy the documented blockers before proposing a candidate."
-    },
-    {
       "id": "format",
       "evidence_class": "FORMAT-RECEIPT (recorded; not re-run by this script)",
-      "status": "RECEIPT-CLAIMS-PASS-NOT-PORTAL-CONFIRMED",
+      "status": "MISSING",
       "detail": {
         "crs": "EPSG:32611",
         "shape": [
@@ -78,6 +53,18 @@
         "artifact_sha256": "e2e4380991586b99c9b9da1abc3272782d3562134515891469fa882ba02c7f8d"
       },
       "next_action": "Re-run exact-byte checks and capture the portal's acceptance receipt before any submit claim."
+    },
+    {
+      "id": "decision",
+      "evidence_class": "REPOSITORY-REVIEW",
+      "status": "NEGATIVE",
+      "detail": {
+        "verdict": "negative",
+        "ok_to_submit": false,
+        "new_tif_generated": false,
+        "slots_spent": 0
+      },
+      "next_action": "Do not upload; satisfy the documented blockers before proposing a candidate."
     },
     {
       "id": "holdout",
@@ -134,6 +121,19 @@
       "next_action": "Refresh manually from official public leaderboard before making a current leaderboard claim."
     },
     {
+      "id": "runtime",
+      "evidence_class": "LOCAL-CHECK",
+      "status": "OK",
+      "detail": {
+        "numpy": true,
+        "rasterio": true,
+        "scipy": true,
+        "sklearn": true,
+        "pytest": true
+      },
+      "next_action": ""
+    },
+    {
       "id": "scope",
       "evidence_class": "BUDGET-RECORD",
       "status": "OK",
@@ -149,8 +149,7 @@
     "FAIL": 1,
     "MISSING": 2,
     "NEGATIVE": 1,
-    "OK": 1,
-    "RECEIPT-CLAIMS-PASS-NOT-PORTAL-CONFIRMED": 1,
+    "OK": 2,
     "RECORDED-NOT-RERUN": 1,
     "SNAPSHOT": 1
   },

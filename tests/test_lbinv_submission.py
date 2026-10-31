@@ -92,12 +92,14 @@ def test_headline_estimate_is_recomputable(artifact):
     assert abs(qsum - build["expected_tp"]) <= max(5.0, 0.001 * build["expected_tp"])
 
 
-def test_note_is_portal_legal_and_published():
+def test_archival_note_is_legal_but_not_presented_as_current():
     build = json.loads(BUILD.read_text())
     note = build["submission_note"]
     assert 1 <= len(note) <= 140 and "\n" not in note
-    assert note in (ROOT / "docs" / "index.html").read_text()
-    assert build["submission_name"] in (ROOT / "docs" / "index.html").read_text()
+    html = (ROOT / "docs" / "index.html").read_text()
+    assert build["submission_name"] in html
+    assert "NO-GO" in html and "DO NOT SUBMIT" in html
+    assert note not in html, "an archival submission note must not appear as a live upload instruction"
 
 
 def test_estimator_beats_the_mean_baseline():
@@ -108,12 +110,16 @@ def test_estimator_beats_the_mean_baseline():
     assert ev["n_rasters"] >= 128
 
 
-def test_validator_receipt_passes_every_gate():
-    rec = json.loads(RECEIPT.read_text())
-    assert rec["ok"] is True
-    assert rec["n_passed"] == rec["n_gates"] >= 20
-    assert rec["checks"]["est_score_reproduced"] is True
-    assert rec["checks"]["nan_only_outside_footprint"] is True
+def test_fresh_validator_catches_portal_range_failure():
+    historical = json.loads(RECEIPT.read_text())
+    fresh = json.loads((ROOT / "evidence/validator_review_lbinv_20261031.json").read_text())
+    assert historical["ok"] is True  # historical receipt omitted the portal-wide range gate
+    assert historical["n_passed"] == historical["n_gates"] >= 20
+    assert historical["checks"]["nan_only_outside_footprint"] is True
+    assert fresh["checks"]["portal_range_test_all_cells"] is False
+    assert fresh["checks"]["finite_inside_footprint"] is True
+    assert fresh["all_hard_checks_pass"] is False
+    assert "7111787 stored cells" in " ".join(fresh["notes"])
 
 
 def test_uniqueness_gate_is_under_the_protocol_limit():
@@ -122,9 +128,11 @@ def test_uniqueness_gate_is_under_the_protocol_limit():
     assert "GEMSDOE22" in build["worst_registry_raster"]
 
 
-def test_pages_send_the_reader_to_this_file_first():
+def test_pages_make_the_current_no_go_decision_obvious():
     for page in ("docs/index.html", "docs/executive-summary.html"):
         html = (ROOT / page).read_text()
-        assert html.index(NAME) < html.index("cdti128-consensus") if "cdti128" in html else True
-        assert "OK TO SUBMIT" in html
+        assert "NO-GO" in html or "NO APPROVED TIFF" in html
+        assert "DO NOT SUBMIT" in html
+        assert "OK TO SUBMIT" not in html
+        assert "run_card_20261031_review.json" in html
         assert "localhost" not in html.lower() and "127.0.0.1" not in html

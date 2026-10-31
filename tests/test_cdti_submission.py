@@ -115,9 +115,10 @@ def test_estimate_beats_the_champion_point_estimate():
     assert card["score_estimate"]["optimism_corrected"] > champ
 
 
-def test_site_pages_promote_this_exact_file():
+def test_site_pages_do_not_promote_the_superseded_file():
     for page in ("index.html", "executive-summary.html"):
         txt = (ROOT / "docs" / page).read_text()
-        assert f"{NAME}.tif" in txt, f"{page} dropped the superseded candidate entirely"
-        assert "superseded" in txt.lower(), page
-        assert "gemsdoesass3-lbinv-84262" in txt, f"{page} does not name the replacement"
+        assert "NO-GO" in txt or "NO APPROVED TIFF" in txt
+        assert "DO NOT SUBMIT" in txt
+        assert "run_card_20261031_review.json" in txt or "repo-review-20261031.md" in txt
+        assert "OK TO SUBMIT" not in txt

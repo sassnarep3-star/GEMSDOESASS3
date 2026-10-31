@@ -4,11 +4,11 @@
 
 # NO CURRENT TIFF IS APPROVED FOR SUBMISSION
 
-**Do not upload any file from this repository as the result of this review.** No submission slot was used. No new TIFF was generated. The latest existing candidate checked here fails the prompt's uniqueness gate, and the file previously labeled “OK TO SUBMIT” has no organizer acceptance receipt and contains NaN outside its footprint. See the full [repo review and nine-site executive summary](docs/research/repo-review-20261031.md), [machine-readable negative run card](evidence/run_card_20261031_review.json), and [current local status feed](docs/research/FEED.md).
+**Do not upload any file from this repository as the result of this review.** No submission slot was used. No new TIFF was generated. The latest existing candidate checked here fails the prompt's uniqueness gate, and the file previously labeled as upload-approved has no organizer acceptance receipt and contains NaN outside its footprint. See the full [repo review and nine-site executive summary](docs/research/repo-review-20261031.md), [machine-readable negative run card](evidence/run_card_20261031_review.json), and [current local status feed](docs/research/FEED.md).
 
 | Current artifact | Evidence | Decision |
 |---|---|---|
-| `docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif` | Existing local receipt says 22 checks passed, but its NaN-outside encoding is not proven to pass the portal's global `[0,1]` test. Score 0.3687 is a model estimate, not an organizer score. | **NOT CLEARED** |
+| `docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif` | A fresh exact-byte validation fails the portal's global `[0,1]` test: 7,111,787 outside-footprint NaNs. Score 0.3687 is a model estimate, not an organizer score. | **NOT CLEARED** |
 | `docs/downloads/gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif` | Existing receipt: HOLDOUT-DTI `GEMSDOE32-HIDE-RECOVER-v3.0`, 22,232 withheld positives, 0.078939 [0.068692, 0.089185]. Surface binned |ρ| max 0.983609; 1,909 registry rasters exceed 0.90. Literal overlap with the calibration lattice is 99.5182%. | **NEGATIVE — protocol stop** |
 
 The lane-70 candidate's 69.5273% overlap result was produced after excluding the calibration lattice. The user protocol says **any** registry raster; the exclusion is not an approved exception. The pre-placement correlation field in that candidate's run card is null. See the receipts linked in the review.
@@ -19,7 +19,7 @@ Before research or implementation, read [`docs/research/standing-prompt-as-recor
 
 ### Standing brief (read before every project session)
 
-Review this repository before changing it. Build an auditable, practical system for the DOE GEMS fault-discovery competition; focus the comparative review on GEMSDOE24, GEMSDOE25, GEMSDOE27, GEMSDOE28, GEMSDOE30, GEMSDOE31, GEMSDOE32, GEMSDOE33, and GEMSDOE36. Identify the strongest historical file on each site, but never copy or resubmit one as a new result. Every numeric claim must be labelled as OWNER-REPORT, HOLDOUT-DTI (evaluator version, withheld-positive count and 95% CI), ORGANIZER-CONFIRMED (receipt), or ESTIMATE; an estimate is never a score. Keep a table showing file, evidence-classed score/estimate, uniqueness, and explicit download/submission verdict. No automated result may rely on human inspection.
+Review this repository before changing it. **MUST GENERATE A UNIQUE TIFF SUBMISSION** only when it is independently built and clears every gate; never copy or resubmit a historical file as a new result. Build an auditable, practical system for the DOE GEMS fault-discovery competition; focus the comparative review on GEMSDOE24, GEMSDOE25, GEMSDOE27, GEMSDOE28, GEMSDOE30, GEMSDOE31, GEMSDOE32, GEMSDOE33, and GEMSDOE36. Identify the strongest historical file on each site, but never copy or resubmit one as a new result. Every numeric claim must be labelled as OWNER-REPORT, HOLDOUT-DTI (evaluator version, withheld-positive count and 95% CI), ORGANIZER-CONFIRMED (receipt), or ESTIMATE; an estimate is never a score. Keep a table showing file, evidence-classed score/estimate, uniqueness, and explicit download/submission verdict. No automated result may rely on human inspection.
 
 Before implementing a geology idea, propose 3–5 distinct hypotheses naming the layers, target physical signature, rationale for an unmapped fault, difference from existing code, likely non-fault mimic, expected improvement rank and cost. Check official-source availability for any external data. Validate an authorized candidate with the shared spatial holdout and feature-alone leakage canaries before considering any submission. Use the project template/cache, evaluator and writer—not a private fork. Enforce the assigned lane: stop if absolute rank correlation exceeds 0.90 or more than 70% of candidate dots are within 3 px of any registry raster; check the continuous surface before placement and final dots. Stop after three experiments or two hours. A real weekly slot is a separate selector decision; do not spend one here.
 
@@ -66,9 +66,11 @@ These are qualitative research priorities, not score projections. Layer details,
 ## What blocks a valid downloadable TIF
 
 - `data/` holds JSON manifests only; `.cache/gems_data/` and the competition feature/label rasters are absent in this checkout. The old restore receipt documents another environment/state, not the present one.
-- Base Python has no NumPy, Rasterio, SciPy, scikit-learn, or pytest, so this review cannot freshly recompute the stored GeoTIFF/holdout receipts.
+- A local `.venv` was created for this review, but it is ignored/untracked; a fresh checkout must install dependencies before testing. The competition feature/label cache is still absent, so cache-dependent holdout and full-registry checks cannot be reproduced here.
 - The user-reported portal error says predicted values must be in `[0,1]`. Existing NaN-outside candidates are not proven to pass a portal-wide range test; a finite masked payload needs acceptance verified by the actual portal before any go-live claim.
 - The protocol's referenced method paragraph and a complete live registry are not available as reproducible inputs here.
+
+To reproduce the available tests in a clean checkout: `python -m venv .venv && .venv/bin/pip install numpy scipy scikit-learn rasterio pytest && .venv/bin/python -m pytest -q`. Cache-dependent tests remain skipped until authorized data is restored.
 
 ## Submission procedure — only after a later explicit GO decision
 

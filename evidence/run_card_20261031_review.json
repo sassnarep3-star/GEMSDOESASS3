@@ -37,14 +37,14 @@
     "submission_note_length": 94
   },
   "validator_output": {
-    "provenance": "evidence/portal_safe_render_gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.json; receipt not independently regenerated because this checkout lacks rasterio and its input cache.",
+    "provenance": "Freshly regenerated from the saved bytes with scripts/validate_submission_tif.py; receipt evidence/validator_review_lane70_20261031.json.",
     "stored_non_finite_values": 0,
     "no_nan_inside_footprint": true,
     "stored_values_in_range_0_1": true,
     "crs": "EPSG:32611",
     "shape": [3730, 3292],
     "transform": [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0],
-    "format_receipt_claims_pass": true,
+    "all_local_format_checks_pass": true,
     "organizer_portal_acceptance_receipt": false
   },
   "new_submission": {
