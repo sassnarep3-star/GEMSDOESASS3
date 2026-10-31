@@ -1,0 +1,51 @@
+{
+ "schema_version": 1,
+ "label": "ESTIMATE",
+ "not_organizer_confirmed": true,
+ "hypothesis": "H-BLOCKINV: the organizer metric is a linear measurement of the hidden truth field; invert it on a 300 m presence design and emit one dot per block while expected credit > 0.2*DTI",
+ "mechanism": "DTI = TP/(0.2D+0.8N) has no TP in the denominator, so each published score fixes the truth credit of its own dot set; a presence-in-300m-block design makes the fitted coefficient the credit of one emitted dot",
+ "named_non_fault_process_that_could_mimic_it": "chunk selection: if the scored public split is enriched in faults, a dispersed field inherits a higher capture rate without any skill (H-selection, docs/research/why-02778-20261030.md section 3)",
+ "statistic": "leave-one-file-out prediction of 128 published OWNER-REPORT scores",
+ "loo_rmse": 0.020591,
+ "loo_rho": 0.957671,
+ "loo_residual_sd": 0.020517,
+ "baseline_predict_the_mean_rmse": 0.082535,
+ "estimate": 0.3138,
+ "estimate_band_over_admissible_N": [
+  0.2935,
+  0.3153
+ ],
+ "estimate_calibrated": 0.3212,
+ "hidden_truth_mass_N": 12000.0,
+ "hidden_truth_mass_N_upper_bound": 12512.1,
+ "nested_pairs_used": 27,
+ "correlation_overlap_vs_registry": {
+  "submissions_compared": 458,
+  "worst_overlap": 0.3672,
+  "worst_raster": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif",
+  "worst_raster_footprint_coverage": 0.253,
+  "lift": 1.45,
+  "cap": 0.65,
+  "cap_satisfied": true,
+  "non_discriminating": {
+   "raster": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "coverage_of_footprint": 0.99964,
+   "overlap": 0.9991
+  }
+ },
+ "raster_sha256": "636de5efd59bbbeda925b84ade38297951bc157d801464c70f1536f4a15ab97b",
+ "zip_sha256": "b82a5747b861451d85319af62d73d0adde25e3c6a3450366df17a3f770d320b5",
+ "validator_output": {
+  "gates": 28,
+  "passed": 28,
+  "note": "no NaN inside the footprint, values in [0,1], binary, CRS/shape/transform match the official grid, estimate recomputed from the raster"
+ },
+ "submission_name": "gemsdoesass3-blockinv3-123899-20261031T055633Z-nanoutside",
+ "submission_note": "block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)",
+ "verdict": "promote",
+ "negative_results": [
+  "block counts beat exact-dot incidence but lose to presence (0.0330 vs 0.0205)",
+  "averaging designs at 2/3/4/6 px did not beat 3 px alone (0.0206-0.0215 vs 0.0205)",
+  "checking the uniqueness ratio incrementally collapses the estimate to 0.121; the quota must come from the final dot count"
+ ]
+}

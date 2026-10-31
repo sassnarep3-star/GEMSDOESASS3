@@ -199,9 +199,12 @@ def test_pages_state_the_current_decision_and_link_review():
     docs_index = (ROOT / "docs/index.html").read_text()
     assert "any registry" in docs_index.lower()
     assert "OK TO SUBMIT" in docs_index
-    # the only file cleared is the LB-inversion candidate; the CDTI file is named as superseded
-    assert "lbinv-84262" in docs_index
-    assert "cdti128-consensus" in docs_index
+    # the only file cleared is the one the current receipt clears; every retired file stays named
+    import json as _json
+    cleared = _json.loads((ROOT / "evidence" / "blockinversion_model_20261031.json").read_text())
+    assert cleared["submission"]["submission_name"] in docs_index
+    for retired in ("lbinv-84262", "cdti128-consensus"):
+        assert retired in docs_index
     for legacy in ("bgk-pbe", "unique-structural"):
         assert legacy in docs_index  # named, and marked not submittable
     assert "ESTIMATE" in docs_index

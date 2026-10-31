@@ -93,11 +93,20 @@ def test_headline_estimate_is_recomputable(artifact):
 
 
 def test_note_is_portal_legal_and_published():
+    """The live note on the pages must be the receipt's note -- and the old one must not look live."""
+    # 2026-10-31: this file is superseded, so its note must NOT be presented as the live note; the
+    # live note on the pages is the one in the current receipt.
     build = json.loads(BUILD.read_text())
     note = build["submission_note"]
     assert 1 <= len(note) <= 140 and "\n" not in note
-    assert note in (ROOT / "docs" / "index.html").read_text()
-    assert build["submission_name"] in (ROOT / "docs" / "index.html").read_text()
+    index = (ROOT / "docs" / "index.html").read_text()
+    current = json.loads((ROOT / "evidence" / "blockinversion_model_20261031.json").read_text())
+    live = current["submission"]["submission_note"]
+    assert 1 <= len(live) <= 140 and "\n" not in live
+    assert live in index
+    assert current["submission"]["submission_name"] in index
+    assert "NOT OK to submit" in index
+    assert build["submission_name"] in index            # named, but as superseded
 
 
 def test_estimator_beats_the_mean_baseline():
