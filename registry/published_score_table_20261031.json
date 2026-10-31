@@ -1,0 +1,742 @@
+{
+ "schema_version": 2,
+ "generated_utc": "2026-10-31",
+ "label": "OWNER-REPORT",
+ "not_organizer_confirmed": true,
+ "provenance": "Transcribed verbatim from the owner's task prompt (2026-10-30 message, 'Here are the results from submissions into the competition, separated by ....'). These are scores the owner typed next to file names on the public GEMSDOE GitHub Pages sites. They are NOT submission-page receipts. The DrivenData leaderboard page only exposes top rows, so these per-file values cannot be re-verified on the public leaderboard. | 2026-10-31: 5 rows transcribed from the 2026-10-31 owner prompt (GEMSDOESASS3 lwst 0.1339, GEMSDOESASS1 swgb-hrv2 0.0558, GEMSDOESASS2 sparse-blind-conduit 0.0056, WBGGEMSDOE1 wbg6-qmh 0.0576, WBGGEMSDOE3 skarpline 0.0443); all OWNER-REPORT",
+ "matching_rule": "Each token is matched case-insensitively as a substring of a file name inside the named sibling GitHub repository. Trailing status suffixes (-nan, -zeros, -allfinite, -hard, -zeros-zeros, -nanoutside, -zero) are stripped from BOTH the token and the file name before matching, because the same raster is published under several suffixes. A token that matches zero or more than one distinct SHA-256 is recorded as unmatched/ambiguous and is never used in a fit.",
+ "leaderboard_snapshot": {
+  "source_url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+  "as_fetched": "2026-10-29",
+  "note": "The prompt's stated tops (0.4413, 0.3195) are OWNER-REPORT of the page at different times. The last value measured from the live page by this project is #1 = 0.4544 (evidence in README). No leaderboard value in this repo is organizer-confirmed beyond the public page itself.",
+  "top_rows_seen": [
+   {
+    "rank": 1,
+    "user": "xiaofanhu",
+    "score": 0.4544
+   },
+   {
+    "rank": 2,
+    "user": "-",
+    "score": 0.3916
+   },
+   {
+    "rank": 3,
+    "user": "-",
+    "score": 0.3911
+   },
+   {
+    "rank": 4,
+    "user": "-",
+    "score": 0.3724
+   },
+   {
+    "rank": 5,
+    "user": "op01",
+    "score": 0.3635
+   }
+  ]
+ },
+ "entries": [
+  {
+   "site": "GEMSDOE32",
+   "token": "h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros",
+   "owner_reported_score": 0.2778
+  },
+  {
+   "site": "GEMSDOE",
+   "token": "gems-submission-20260925T001403Z-7f00890a",
+   "owner_reported_score": 0.1563
+  },
+  {
+   "site": "6GEMSDOE",
+   "token": "gems6_hgb88-topk03_33cec71ff0",
+   "owner_reported_score": 0.0286
+  },
+  {
+   "site": "GEMSDOE3",
+   "token": "pindrop-v4-nodes-20260925T152420Z-f347b70daa",
+   "owner_reported_score": 0.1193
+  },
+  {
+   "site": "GEMSDOE3",
+   "token": "pindrop-v4-discovery-20260925T152423Z-37f9d5b855",
+   "owner_reported_score": 0.083
+  },
+  {
+   "site": "GEMSDOE3",
+   "token": "pindrop-v4-ridge-20260925T152422Z-4e03fc9705",
+   "owner_reported_score": 0.1152
+  },
+  {
+   "site": "GEMSDOE2",
+   "token": "gemsdoe2-dual-family-union-20260925T160406Z-f68e590f",
+   "owner_reported_score": 0.156
+  },
+  {
+   "site": "GEMSDOE4",
+   "token": "gems-submission-20260926T163915Z-237f0063",
+   "owner_reported_score": 0.0343
+  },
+  {
+   "site": "5GEMSDOE",
+   "token": "gems-submission-20260926T175114Z-7f00890a",
+   "owner_reported_score": 0.1563
+  },
+  {
+   "site": "7GEMSDOE",
+   "token": "lidarscarp-ridge-top2pct-36c3a3f341c8",
+   "owner_reported_score": 0.1461
+  },
+  {
+   "site": "8GEMSDOE",
+   "token": "Hedge-v2_submission",
+   "owner_reported_score": 0.1563
+  },
+  {
+   "site": "GEMSDOE9",
+   "token": "2314b599",
+   "owner_reported_score": 0.0107
+  },
+  {
+   "site": "11GEMSDOE",
+   "token": "gems-structural-area06-v1",
+   "owner_reported_score": 0.0202
+  },
+  {
+   "site": "12GEMSDOE",
+   "token": "r7-nms3-dem10-scarp_0c9199f14e62",
+   "owner_reported_score": 0.1294
+  },
+  {
+   "site": "15GEMSDOE",
+   "token": "gems-tso1-20260929T005627Z-conj_alteration_mag",
+   "owner_reported_score": 0.0782
+  },
+  {
+   "site": "14GEMSDOE",
+   "token": "GEMS_r5-geom-horse-ensemble_20260929T154852Z_ccbe1de0_site_e96e942f",
+   "owner_reported_score": 0.002
+  },
+  {
+   "site": "17GEMSDOE",
+   "token": "17GEMSDOE_F-ensemble-2pct_20260930T050626Z",
+   "owner_reported_score": 0.0187
+  },
+  {
+   "site": "18GEMSDOE",
+   "token": "H19-C_20260930T212401Z_c11e495e",
+   "owner_reported_score": 0.0297
+  },
+  {
+   "site": "19GEMSDOE",
+   "token": "h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa",
+   "owner_reported_score": 0.1894
+  },
+  {
+   "site": "19GEMSDOE",
+   "token": "h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf",
+   "owner_reported_score": 0.1922
+  },
+  {
+   "site": "GEMSDOE10",
+   "token": "h16-continuation-20260927T065521077735Z-3431b83c7c",
+   "owner_reported_score": 0.0461
+  },
+  {
+   "site": "GEMSDOE10",
+   "token": "h20-dem10-scarp-thin-20260927T155223039488Z-ffc91a1686",
+   "owner_reported_score": 0.0921
+  },
+  {
+   "site": "GEMSDOE10",
+   "token": "H25-ctx-ridge-20260927T232947704150Z-6452ae1d00",
+   "owner_reported_score": 0.128
+  },
+  {
+   "site": "GEMSDOE10",
+   "token": "h28-dotted-ridge-20260928T020256236880Z-6452ae1d00",
+   "owner_reported_score": 0.1839
+  },
+  {
+   "site": "13GEMSDOE",
+   "token": "20261001_r13-lattice-s5_v2_nan-outside",
+   "owner_reported_score": 0.0904
+  },
+  {
+   "site": "16GEMSDOE",
+   "token": "h16-1-topo-geophys-baseline-ridges-20260930-df20f65e",
+   "owner_reported_score": 0.1855
+  },
+  {
+   "site": "16GEMSDOE",
+   "token": "h18-3a-topo-geophys-x-complexity-prior-20260930-c502dfab",
+   "owner_reported_score": 0.0976
+  },
+  {
+   "site": "16GEMSDOE",
+   "token": "h18-4-usgs-geologic-map-faults-gap-20260930-aef8f42c",
+   "owner_reported_score": 0.036
+  },
+  {
+   "site": "GEMSDOE21",
+   "token": "h19-4-reference-20260930-691e4dfa",
+   "owner_reported_score": 0.1894
+  },
+  {
+   "site": "20GEMSDOE",
+   "token": "h20-1-sarnnpu-powerlaw-pi0363-tilt-wingcrack-20260930-be0e8f6b",
+   "owner_reported_score": 0.189
+  },
+  {
+   "site": "20GEMSDOE",
+   "token": "h20-5-continuous-pu-proxy-unverified-20260930-824ce73a",
+   "owner_reported_score": 0.1859
+  },
+  {
+   "site": "GEMSDOE22",
+   "token": "h23-a-dti-optimal-emission-6pct-20261002-e2ec4b49",
+   "owner_reported_score": 0.1002
+  },
+  {
+   "site": "GEMSDOE22",
+   "token": "h23-b-dti-optimal-emission-10pct-20261002-86176698",
+   "owner_reported_score": 0.0748
+  },
+  {
+   "site": "GEMSDOE23",
+   "token": "h30-arrangement-matched-habitat-20261002-0d4e02e8",
+   "owner_reported_score": 0.1352
+  },
+  {
+   "site": "GEMSDOE26",
+   "token": "dilcond-oof-v1-20261003-47629f496133",
+   "owner_reported_score": 0.1223
+  },
+  {
+   "site": "GEMSDOE34",
+   "token": "h34-scatter-q50-arr-matched-20261004T223317Z",
+   "owner_reported_score": 0.0778
+  },
+  {
+   "site": "GEMSDOE35",
+   "token": "h35-06-aaa86efb25-20261004T225420098147Z-candidate",
+   "owner_reported_score": 0.0418
+  },
+  {
+   "site": "GEMSDOE37",
+   "token": "h6-physics-dotted-80k-20261005T055000Z-0bef9211631c",
+   "owner_reported_score": 0.1193
+  },
+  {
+   "site": "GEMSDOE38",
+   "token": "D-step-3p0-07pct-tipProt-20261005-ecfbf59e2b48",
+   "owner_reported_score": 0.0763
+  },
+  {
+   "site": "GEMSDOE42",
+   "token": "xscale-worm-persistence-20261006T000541Z",
+   "owner_reported_score": 0.0581
+  },
+  {
+   "site": "GEMSDOE43",
+   "token": "sup01-hgb21-sep40-n40000-20261006-bc2e4e9a8d6f",
+   "owner_reported_score": 0.0424
+  },
+  {
+   "site": "GEMSDOE45",
+   "token": "h51-km-faultzone-20261006-zeros",
+   "owner_reported_score": 0.0106
+  },
+  {
+   "site": "GEMSDOE49",
+   "token": "gate_ortho_w0.25-40k-20261006T213721Z",
+   "owner_reported_score": 0.2376
+  },
+  {
+   "site": "GEMSDOE29",
+   "token": "efd28-repro-20261003-1cc7dc534d51",
+   "owner_reported_score": 0.26
+  },
+  {
+   "site": "GEMSDOE29",
+   "token": "repo-c0-habitat-emission-20261003-a4d439b07426",
+   "owner_reported_score": 0.0041
+  },
+  {
+   "site": "GEMSDOE29",
+   "token": "sgmc-off-catalogue-44k-20261003-c8dcd780e3fd",
+   "owner_reported_score": 0.0512
+  },
+  {
+   "site": "GEMSDOE29",
+   "token": "wormrank-d28-20261003-59dcaf6dd11d-zeros",
+   "owner_reported_score": 0.256
+  },
+  {
+   "site": "GEMSDOE29",
+   "token": "wormsurv-filter-20261003-921f10960d6e-zeros",
+   "owner_reported_score": 0.0532
+  },
+  {
+   "site": "GEMSDOE29",
+   "token": "xfit-c0-habitat-20261003-ca879db0089a-zeros",
+   "owner_reported_score": 0.0439
+  },
+  {
+   "site": "GEMSDOE29",
+   "token": "xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros",
+   "owner_reported_score": 0.0356
+  },
+  {
+   "site": "GEMSDOE46",
+   "token": "r11f-scarp-radiometric-fusion-00e049b51218-zeros",
+   "owner_reported_score": 0.1589
+  },
+  {
+   "site": "GEMSDOE46",
+   "token": "r12-scarp-rad-concordance-23e807e2de9f-zeros",
+   "owner_reported_score": 0.0843
+  },
+  {
+   "site": "GEMSDOE39",
+   "token": "h40-e-disc-h40e-30k-zeros",
+   "owner_reported_score": 0.0339
+  },
+  {
+   "site": "GEMSDOE40",
+   "token": "h8-euler-lineament-depthcluster-20261006-785c4f5d5ce1",
+   "owner_reported_score": 0.0355
+  },
+  {
+   "site": "GEMSDOE40",
+   "token": "h45-eulerdepthreadcluster-20261006-f28e5cff6826-zeros",
+   "owner_reported_score": 0.0984
+  },
+  {
+   "site": "GEMSDOE41",
+   "token": "h42-submission-primary",
+   "owner_reported_score": 0.0245
+  },
+  {
+   "site": "GEMSDOE44",
+   "token": "h46-twostageAB_20261006T160000Z_b0cfe956-zeros",
+   "owner_reported_score": 0.0715
+  },
+  {
+   "site": "GEMSDOE47",
+   "token": "h60-lidarscarp-s2p0-20261007-nanoutside",
+   "owner_reported_score": 0.043
+  },
+  {
+   "site": "GEMSDOE48",
+   "token": "h59-cover-ds-belief-b2xh33d-20261008T184547Z-b79c4c61d8d8",
+   "owner_reported_score": 0.2296
+  },
+  {
+   "site": "GEMSDOE50",
+   "token": "h59-sharpened-scarp-scatter-90k-20261007T171954Z-allfinite",
+   "owner_reported_score": 0.0764
+  },
+  {
+   "site": "GEMSDOE51",
+   "token": "h53-twostage-20261008T040951Z-9a0b32c871",
+   "owner_reported_score": 0.1047
+  },
+  {
+   "site": "GEMSDOE52",
+   "token": "h97b-candidate",
+   "owner_reported_score": 0.0856
+  },
+  {
+   "site": "GEMSDOE53",
+   "token": "h8-tiprelay-ridgeconcord-pr2-n80000-20261009-49bec522-zeros",
+   "owner_reported_score": 0.0159
+  },
+  {
+   "site": "GEMSDOE54",
+   "token": "h54c-manifest-edge-20261009T025732Z-73454bc5",
+   "owner_reported_score": 0.0449
+  },
+  {
+   "site": "55GEMSDOE",
+   "token": "tensor_full-n16000-sep3-20261009T211747Z",
+   "owner_reported_score": 0.029
+  },
+  {
+   "site": "56GEMSDOE",
+   "token": "h56-final-dotted-ridge-d2p8-20261009T190421Z",
+   "owner_reported_score": 0.0658
+  },
+  {
+   "site": "57GEMSDOE",
+   "token": "h57r-joint-strata-38000-20261010T214547Z-00cf5b2066f1-zeros",
+   "owner_reported_score": 0.0254
+  },
+  {
+   "site": "58GEMSDOE",
+   "token": "ml-binary-ridge-20261012T000000Z",
+   "owner_reported_score": 0.018
+  },
+  {
+   "site": "59GEMSDOE",
+   "token": "h59j-coherence-consensus-dotted-20261011T043000Z",
+   "owner_reported_score": 0.0499
+  },
+  {
+   "site": "60GEMSDOE",
+   "token": "h73-chi-coherent-corridor-12000-20261011T195818Z-zeros",
+   "owner_reported_score": 0.0351
+  },
+  {
+   "site": "61GEMSDOE",
+   "token": "h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros",
+   "owner_reported_score": 0.0009
+  },
+  {
+   "site": "61GEMSDOE",
+   "token": "h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros",
+   "owner_reported_score": 0.0751
+  },
+  {
+   "site": "62GEMSDOE",
+   "token": "datum-lahontan-strain-gauge-defensible-440dots-zeros",
+   "owner_reported_score": 0.0
+  },
+  {
+   "site": "GEMSDOE63",
+   "token": "cvarlw-thin-s3p17-54864-20261011T220606Z-c58f60c4-zeros",
+   "owner_reported_score": 0.2303
+  },
+  {
+   "site": "GEMSDOE64",
+   "token": "h64-lidar-scarp-cv-20261011T220000Z",
+   "owner_reported_score": 0.0383
+  },
+  {
+   "site": "GEMSDOE65",
+   "token": "sar-em-propensity-half-20261011T223500Z-5e4660cd-zeros",
+   "owner_reported_score": 0.0431
+  },
+  {
+   "site": "GEMSDOE66",
+   "token": "gems66-lidar03-cvretrain-reliefdecile-37654dots-20261020T190152Z-zeros",
+   "owner_reported_score": 0.1152
+  },
+  {
+   "site": "GEMSDOE67",
+   "token": "h67a-orientip-lane-29447dots-20261012T021226Z-allfinite",
+   "owner_reported_score": 0.0356
+  },
+  {
+   "site": "GEMSDOE67",
+   "token": "ovtr-ml-cover-tau3p0-20261012",
+   "owner_reported_score": 0.1426
+  },
+  {
+   "site": "GEMSDOE68",
+   "token": "gems68-autoctx-s3-strands-35000dots-20261020T210000Z-849a0f04",
+   "owner_reported_score": 0.0437
+  },
+  {
+   "site": "GEMSDOE69",
+   "token": "h69-joint-relayramp-pullapart-38669-20261020T201504Z-f29b6df5",
+   "owner_reported_score": 0.0053
+  },
+  {
+   "site": "GEMSDOE70",
+   "token": "gems70-p5-dual-submod300-oof38k-20261020",
+   "owner_reported_score": 0.2478
+  },
+  {
+   "site": "GEMSDOE71",
+   "token": "gems71-hydro-conduit-38800-20261020T120000Z-zeros",
+   "owner_reported_score": 0.0558
+  },
+  {
+   "site": "GEMSDOE72",
+   "token": "gemsdoe72-h72-1-sgmc-offcatalogue-20261020T195456Z-6e6525e5-zeros",
+   "owner_reported_score": 0.0492
+  },
+  {
+   "site": "GEMSDOE73",
+   "token": "gems73-h73-mcsc-seamfree-blakely-37654dots-20261021T073716Z-b27ac445-zeros",
+   "owner_reported_score": 0.1917
+  },
+  {
+   "site": "GEMSDOE74",
+   "token": "gemsdoe74-triregime-radon-piedmont-37654-20261021T051000Z-zeros",
+   "owner_reported_score": 0.0669
+  },
+  {
+   "site": "GEMSDOE75",
+   "token": "gems75-trlt-radon-loco-ridge-20261021-zeros",
+   "owner_reported_score": 0.1627
+  },
+  {
+   "site": "GEMSDOE76",
+   "token": "gems76_h76_3_geotherm_tilt_axial_submod_20261021_zeros",
+   "owner_reported_score": 0.1555
+  },
+  {
+   "site": "GEMSDOE76",
+   "token": "gems76-ptcf-tiltworm-submod39k-20261021T034000Z-6316481d-zeros",
+   "owner_reported_score": 0.2343
+  },
+  {
+   "site": "GEMSDOE77",
+   "token": "gems85-h85-edti-collar35-skel-r33-20261021-d97b248e-zeros",
+   "owner_reported_score": 0.0964
+  },
+  {
+   "site": "GEMSDOE78",
+   "token": "gems78-h78sigx-fuse-b5-44090dots-20261022T021932Z-zeros",
+   "owner_reported_score": 0.1564
+  },
+  {
+   "site": "GEMSDOE79",
+   "token": "gems79-tilt-ring-100000dots-20261022T212135Z-50a5d7498c71-zeros",
+   "owner_reported_score": 0.0005
+  },
+  {
+   "site": "GEMSDOE80",
+   "token": "gemsdoe80-h80g-choquet-tworegime-20261022T000000Z-zeros",
+   "owner_reported_score": 0.0943
+  },
+  {
+   "site": "GEMSDOE81",
+   "token": "gems81-cont-poisson44090-buf2-20261021T233115Z-42223e10-zeros",
+   "owner_reported_score": 0.0041
+  },
+  {
+   "site": "GEMSDOE82",
+   "token": "gemsdoe82-h82-submodular-punoisyor-20261021T235456Z-fe137199-zeros",
+   "owner_reported_score": 0.1886
+  },
+  {
+   "site": "GEMSDOE83",
+   "token": "gems83-h83-gvcd-dink300-37654dots-20261021-1a373694-zeros",
+   "owner_reported_score": 0.0573
+  },
+  {
+   "site": "GEMSDOE84",
+   "token": "gems84-h84-kthm-tworegime-58000px-20261022T235900Z-zeros",
+   "owner_reported_score": 0.0132
+  },
+  {
+   "site": "GEMSDOE85",
+   "token": "gemsdoe85-hjcd-ventbridge-submod-zeros",
+   "owner_reported_score": 0.111
+  },
+  {
+   "site": "GEMSDOE87",
+   "token": "h87-h87-cmgep-20261022T060000Z-8f394f43",
+   "owner_reported_score": 0.05
+  },
+  {
+   "site": "GEMSDOE89",
+   "token": "gemsdoe89-bh-rtp-habc-20261024-d7e1507c-zeros",
+   "owner_reported_score": 0.0301
+  },
+  {
+   "site": "GEMSDOE90",
+   "token": "gems90-cnc-35000dots-20261024T084324Z",
+   "owner_reported_score": 0.0749
+  },
+  {
+   "site": "GEMSDOE91",
+   "token": "gems91-s17-cwpc-e3-37654dots-20261025T150000Z-4d124f1d-zeros",
+   "owner_reported_score": 0.1367
+  },
+  {
+   "site": "GEMSDOE91",
+   "token": "gems91-s17-lftg-20261025T160014Z-7b6bf90844-zeros",
+   "owner_reported_score": 0.1823
+  },
+  {
+   "site": "GEMSDOE91",
+   "token": "gems91-S18-UNIQUE-curvtilt-20000dots-20261025T182858Z-29db2405",
+   "owner_reported_score": 0.0435
+  },
+  {
+   "site": "GEMSDOE91",
+   "token": "gems91-s22-omtj-e1-20261026-a99b8923f0-zeros",
+   "owner_reported_score": 0.0298
+  },
+  {
+   "site": "GEMSDOE92",
+   "token": "gemsdoe92-listricdip-updip50-37654-20261025T190000Z-zeros",
+   "owner_reported_score": 0.0255
+  },
+  {
+   "site": "KANLERGEMSDOE2",
+   "token": "kanlergems2-htcads-exp-2-37654dots-20261026T235227Z-11a2f251-zeros",
+   "owner_reported_score": 0.1218
+  },
+  {
+   "site": "WBGGEMSDOE3",
+   "token": "wbg3-h3pack-34k-20261027T174337Z-zeros",
+   "owner_reported_score": 0.0443
+  },
+  {
+   "site": "WBGGEMSDOE3",
+   "token": "wbggems3-invdesign-anchor-20k-zeros",
+   "owner_reported_score": 0.1362
+  },
+  {
+   "site": "WBGGEMSDOE2",
+   "token": "wbg2-offcatalogue-density-36k-20261027",
+   "owner_reported_score": 0.0262
+  },
+  {
+   "site": "GEMSDOEkarage3",
+   "token": "gemsdoekarage3-h-k3c-csst-bghf-24cell-d31-b37654-20261028T175133Z-3586582f-zeros",
+   "owner_reported_score": 0.1978
+  },
+  {
+   "site": "GEMSDOEkarage2",
+   "token": "gemsdoekarage2-hk3-edgecentrality-apron3-20261028",
+   "owner_reported_score": 0.1591
+  },
+  {
+   "site": "ApartGEMSDOE3",
+   "token": "apartgemsdoe3-h2-cshd-dual97-axial362-37654-20261028T063000Z-37b32d5b-zeros",
+   "owner_reported_score": 0.1633
+  },
+  {
+   "site": "ApartGEMSDOE1",
+   "token": "udth-submod-e3-20261027-50e7b334",
+   "owner_reported_score": 0.0525
+  },
+  {
+   "site": "GEMSDOESASS2",
+   "token": "gemsdoesass2-hvfd-exp3-hydrocollinear-37654-20261027T120000Z-fc98343e-zeros",
+   "owner_reported_score": 0.1881
+  },
+  {
+   "site": "GEMSDOE24",
+   "token": "h25-1-dotted-h19-5-d1-5-20261002-989f59505db1",
+   "owner_reported_score": 0.2477
+  },
+  {
+   "site": "GEMSDOE24",
+   "token": "gems24-gvc1-negative-geothermal-lineament-submod-20261025-abe8e51c719d",
+   "owner_reported_score": 0.0859
+  },
+  {
+   "site": "GEMSDOE25",
+   "token": "dotted-h19-5-d2-8-20261002-e56ea318af89",
+   "owner_reported_score": 0.26
+  },
+  {
+   "site": "GEMSDOE25",
+   "token": "gems25-h66-mgd-flank-sapd3-0-k3p5-20261025-da617550a0e9",
+   "owner_reported_score": 0.0742
+  },
+  {
+   "site": "GEMSDOE27",
+   "token": "topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1",
+   "owner_reported_score": 0.2449
+  },
+  {
+   "site": "GEMSDOE27",
+   "token": "gems27-h29-hydrothermal-piedmont-celf-20261025-511898747886",
+   "owner_reported_score": 0.219
+  },
+  {
+   "site": "GEMSDOE27",
+   "token": "gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244",
+   "owner_reported_score": 0.225
+  },
+  {
+   "site": "GEMSDOE28",
+   "token": "h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc",
+   "owner_reported_score": 0.2708
+  },
+  {
+   "site": "GEMSDOE28",
+   "token": "h32-1-prethin-tip-euler-d2-8-20261003-31e35eee884e",
+   "owner_reported_score": 0.2649
+  },
+  {
+   "site": "GEMSDOE28",
+   "token": "h36-1-rung30-blind-r1-20261003-b531dae0a36f",
+   "owner_reported_score": 0.271
+  },
+  {
+   "site": "GEMSDOE28",
+   "token": "h38-1-hf-euler-r30-r1-20261003-56a9f473edc7",
+   "owner_reported_score": 0.2707
+  },
+  {
+   "site": "GEMSDOE28",
+   "token": "gems28-s18-mxtp-20261025-3e95505c011a",
+   "owner_reported_score": 0.0217
+  },
+  {
+   "site": "GEMSDOE28",
+   "token": "gems28-s21-puhgb-20261026-16bbf281ba9b",
+   "owner_reported_score": 0.0206
+  },
+  {
+   "site": "GEMSDOE30",
+   "token": "d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca",
+   "owner_reported_score": 0.26
+  },
+  {
+   "site": "GEMSDOE30",
+   "token": "gems30-MSDB1-edge44090-20261025-e7856ec3f14a",
+   "owner_reported_score": 0.1462
+  },
+  {
+   "site": "GEMSDOE31",
+   "token": "h27-4-solo-d28-20261004-8acb75e1",
+   "owner_reported_score": 0.2708
+  },
+  {
+   "site": "GEMSDOE33",
+   "token": "h33d-analog-tip-stepover-r30-20261004-cb490425926e",
+   "owner_reported_score": 0.2632
+  },
+  {
+   "site": "GEMSDOE33",
+   "token": "gemsdoe33-s33-seisdil-strain-seismicity-37654-20261026-3463540a7e02",
+   "owner_reported_score": 0.0963
+  },
+  {
+   "site": "GEMSDOE36",
+   "token": "anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6",
+   "owner_reported_score": 0.275
+  },
+  {
+   "site": "GEMSDOE36",
+   "token": "gemsdoe36-kpl36-exp3-20261026-fc869911e88c",
+   "owner_reported_score": 0.1647
+  },
+  {
+   "site": "GEMSDOESASS3",
+   "token": "lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386",
+   "owner_reported_score": 0.1339
+  },
+  {
+   "site": "GEMSDOESASS1",
+   "token": "swgb-hrv2-44090dots-20261027T122104Z-f9b3f764",
+   "owner_reported_score": 0.0558
+  },
+  {
+   "site": "GEMSDOESASS2",
+   "token": "gemsdoesass2-sparse-blind-conduit-22163-20261029T000534Z-cc522684-zeros",
+   "owner_reported_score": 0.0056
+  },
+  {
+   "site": "WBGGEMSDOE1",
+   "token": "wbg6-qmh-kdisjoint-30000-20261028",
+   "owner_reported_score": 0.0576
+  },
+  {
+   "site": "WBGGEMSDOE3",
+   "token": "wbggemsdoe3-skarpline-union-20261027-610acf58-zeros",
+   "owner_reported_score": 0.0443
+  }
+ ]
+}

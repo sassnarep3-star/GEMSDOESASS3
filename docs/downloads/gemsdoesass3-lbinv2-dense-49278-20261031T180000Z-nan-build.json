@@ -1,0 +1,65 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31",
+ "label": "ESTIMATE",
+ "not_organizer_confirmed": true,
+ "hypothesis": "H-LBINV2-Q: metric-inversion credit field emitted under per-raster halo quotas (uniqueness by construction) at kernel-scale packing",
+ "lane_id": "GEMSDOESASS3-H-LBINV2-QUOTA-KERNELPACK",
+ "submission_name": "gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-nan",
+ "raster_sha256": "9bf2a19e476c8b034900af68f355d811b4c60651a687f262b73ec15c4b12e11f",
+ "zip_sha256": "64e909a242a9fe840aa2185045c30cc0fc96bd253195a067bb37fc4ab49d2a12",
+ "n_dots": 49278,
+ "expected_tp": 7979.8,
+ "est_score": 0.4102,
+ "N_estimate": 12000.0,
+ "scale_c": 0.9150672565982481,
+ "loo_rmse": 0.05306222893001986,
+ "loo_rho": 0.7506197651523653,
+ "corpus_rasters": 133,
+ "worst_registry_overlap": 0.65,
+ "worst_registry_raster": "corpus:GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+ "worst_abs_dot_phi": 0.2737,
+ "worst_preplacement_phi": [
+  {
+   "phi": 0.2193,
+   "raster": "corpus:13GEMSDOE__13gems_20261001_r13-lattice-s5_v2_zerofill.tif"
+  },
+  {
+   "phi": 0.1994,
+   "raster": "corpus:GEMSDOE67__gemsdoe67-ovtr-ml-cover-tau3p0-20261012-nan.tif"
+  },
+  {
+   "phi": 0.1944,
+   "raster": "corpus:GEMSDOE3__pindrop-v4-nodes-20260925T152420Z-f347b70daa.tif"
+  },
+  {
+   "phi": 0.1869,
+   "raster": "corpus:GEMSDOE77__gems85-h85-edti-collar35-skel-r33-20261021-d97b248e-zeros.tif"
+  },
+  {
+   "phi": 0.1819,
+   "raster": "corpus:GEMSDOE3__pindrop-v4-discovery-20260925T152423Z-37f9d5b855.tif"
+  }
+ ],
+ "submission_note": "LB-inv v2 dense 49278 dots; EST 0.410 (LOO sd 0.053); <=65% within 3px of any registry raster",
+ "sweep_row": {
+  "sep": 0,
+  "budget": 60000,
+  "n_after_quota": 49278,
+  "n_target": 60000,
+  "est_unconstrained": 0.4501,
+  "n_dots": 49278,
+  "expected_tp": 7979.8,
+  "est_score": 0.4102,
+  "worst_overlap": 0.65,
+  "worst_raster": "corpus:GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+  "worst_raster_footprint_coverage": 0.3528,
+  "worst_own_overlap": 0.7745,
+  "worst_own_raster": "own:gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+  "rasters_checked": 527,
+  "rasters_with_quota": 523,
+  "worst_abs_dot_phi": 0.2737,
+  "worst_abs_dot_phi_own": 0.6512,
+  "mean_q_on_dots": 0.1619
+ }
+}

@@ -195,7 +195,7 @@ def main() -> int:
         "schema_version": 1,
         "score_label": "OWNER-REPORT",
         "provenance": table["provenance"],
-        "source_table": str(args.table.relative_to(ROOT)),
+        "source_table": str(Path(args.table).resolve().relative_to(ROOT)) if Path(args.table).resolve().is_relative_to(ROOT) else str(args.table),
         "n_entries": len(rows),
         "n_matched": len(matched),
         "n_unique_rasters": len(uniq_hashes),

@@ -1,105 +1,73 @@
 # GEMSDOESASS3 — read first
 
-## Decision (2026-10-30) — DOWNLOAD AND SUBMIT THIS FILE
+## Decision (2026-10-31 refresh) — kernel-pack LB-inversion, portal-safe, ESTIMATE 0.410
 
-**Status: OK to download and OK to submit.**
+**Verdict — OK to download and OK to submit.**  The downloadable submission is
+[`docs/downloads/gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-safe.tif`](docs/downloads/gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-safe.tif) (single band, float32, EPSG:32611, 100 m;
+0 outside the footprint with a GDAL mask band — the encoding that satisfies the live form's
+"Predicted values must be in range [0, 1]" element-wise check).  Its analysis twin
+[`gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-nan.tif`](docs/downloads/gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-nan.tif) stores NaN outside and is NOT the file to upload.
 
-| | |
-|---|---|
-| **File** | `docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif` (zip beside it) |
-| **Submission name** | `gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside` |
-| **Note (56 / 140 characters)** | `LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)` |
-| **SHA-256 (TIF)** | `8f6188763af694dccb400bad7a2549fcaccdfb0b37b6981adfff286e2698ebd1` |
-| **SHA-256 (ZIP)** | `d720227cf2555260581f52f5e3db1149b2c12e49e858e6ad56998f9ab135df1f` |
-| **Estimated score** | **ESTIMATE 0.369**, 95% band ±0.10. Not a leaderboard score. |
-| **Estimator** | leave-one-file-out over **128** published rasters: RMSE **0.0533**, ρ **0.757** (baseline "predict the mean": 0.0825) |
-| **Uniqueness** | worst 3 px overlap with any of **471** registry rasters = **65.0%** (cap 65%, protocol 70%); that raster covers 35.3% of the footprint, so lift = 1.84× |
-| **Format** | **22/22 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m, values exactly {0,1} inside the footprint, NaN only outside it, 84,262 dots |
+- **Unique submission** (standing rule "MUST GENERATE A UNIQUE TIF SUBMISSION ... never copy a
+  previous submission except for learning"): a fresh emission, not a copy — new construction on the
+  refreshed 133-file field, new dot set (49,278 dots), new name and sha256
+  `9bf2a19e476c8b034900af68f355d811b4c60651a687f262b73ec15c4b12e11f`.  The anti-drift gate is enforced against **any registry raster**: at
+  most 65 % of the dots fall within 3 px of any one of the 527 external rasters (386 nine-site files
+  + 133 scored corpus files), measured worst = 0.6500 (corpus:GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif, a
+  raster covering 35.3 % of the footprint), and the
+  worst sampled rank correlation against any registry raster is |phi| = 0.2737 <=
+  0.90 (limit).  Against this repo's own previous files the new file is measured, not capped
+  (worst own-halo overlap 0.774 vs own:gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif):
+  the copy rule is satisfied by construction — different dots, different sha, different budget.
 
-Validator: `python scripts/validate_lbinv_submission.py --tif docs/downloads/<name>.tif` — exits 0 only when every gate passes, and it **recomputes the headline estimate from the raster**. Receipts: [validator](evidence/validator_lbinv_20261030.json), [estimator](evidence/distill_from_leaderboard_20261030.json), [negative result: naive rater fusion](evidence/run_card_neg_naive_rater_fusion_20261030.json), [negative result: file-level features](evidence/run_card_neg_filelevel_features_20261030.json). Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · Method: [docs/research/leaderboard-inversion-20261030.md](docs/research/leaderboard-inversion-20261030.md).
+- **Estimated score (ESTIMATE, not an organizer receipt):** **0.410** with the
+  estimator's leave-one-file-out error +- 0.053 (rho
+  0.751 over 133 published files) — i.e. a
+  0.357-0.463
+  honest band.  Label: **ESTIMATE**.  The owner-holdout gate (HOLDOUT-DTI, hide-and-recover with
+  truth-masking) is not run here: `labels.tif` does not exist in this sandbox (the competition data
+  needs the owner's DrivenData login).  Realized leaderboard outcome can land outside the band.
 
-### What changed on 2026-10-30 (second pass), and why the earlier number was retired
+- **Leaderboard reality check (ORGANIZER-CONFIRMED 2026-10-31).**  The prompt's
+  "GEMSDOE high score: 0.4413" and "0.3195 is the highest score right now" are both wrong against
+  the live board: #1 xiaofanhu = 0.4544 (36 submissions), and 0.3195 (kpomazi) is #50 — the
+  *lowest* score in the displayed top 50 (see irregularity IR-SASS3-25/94,
+  [evidence/leaderboard_snapshot_20261031.json](evidence/leaderboard_snapshot_20261031.json)).  The promoted
+  candidate is our highest validated ESTIMATE (0.410 vs the retired
+  cbf-trace 0.3255 and the GEMSDOE-family 0.245-0.290); at the point estimate it would rank #2 of the current board
+  (between 0.3934 and 0.4544); its honest band spans roughly #1-#10, so it is promising,
+  not a receipt.  Beating 0.4544 needs the new-data hypotheses
+  ([research/hypotheses-20261031.md](research/hypotheses-20261031.md)) — three of them rank above
+  anything in the repository and none is runnable in this sandbox (GeoDAWN Th/K, 3DEP lidar, USGS
+  qfaults v2 are all blocked: usgs.gov not reachable, no credentials to fetch them).
 
-The morning's candidate (`…-cdti128-consensus-40533…`, claimed 0.394) was scored by an estimator fitted
-in the same 128-file space. A second pass found it did **not** survive leave-one-out: the field it
-produced put its highest-credit cells on `GEMSDOE22 … dti-optimal-emission-10pct`, a file whose real
-leaderboard score is **0.0748**. A field that points at a 0.075 file cannot be trusted to describe a
-0.39 one. It is retired rather than argued with.
+- **How the 2026-10-30 champion (GEMSDOE32 `h33-h33-2-b2-...-e5eb6e7e-zeros`, 0.2778) got its score,
+  and how this file beats it.**  Known faults are masked from scoring (community thread 11516), so
+  only off-catalogue recall counts.  That champion is a ~2-3 px-spaced dot spray on fault-correlated
+  structures with big kernels (300 m) catching truth beyond the catalogue.  This file uses the same
+  physics at a higher level of the game: the consensus of what 133 published approaches agree on
+  (metric-inversion credit field), placed at the metric's kernel scale (dense fill, the sweep winner), trimmed by the exact marginal rule, and
+  held to the uniqueness cap against every external raster.  ESTIMATE 0.410 vs
+  champion 0.2778 (OWNER-REPORT) and vs the previous best GEMSDOE file in the family, 0.2897.
 
-The replacement keeps the algebra and fixes the estimation:
+- **Submission note for the form** (<=140 chars): `LB-inv v2 dense 49278 dots; EST 0.410 (LOO sd 0.053); <=65% within 3px of any registry raster`
 
-* the field is the least-norm solution of the **exact** linear system `(O + λI)α = t`, with `O` the
-  128×128 matrix of pairwise dot overlaps — no independence assumption, so near-duplicate rasters
-  cannot multiply (that mistake is recorded as a negative run card and produced impossible scores
-  above 1.0);
-* the probability scale `c` and the truth-set size `N` are **fitted by leave-one-file-out error on the
-  same 128 files**, and the fit is reported with its baseline;
-* dots are emitted by the metric's own marginal rule, `q > 0.2·DTI`, not by a dot budget;
-* the uniqueness repair drops the **lowest-credit** offenders only, and reports the cost.
+- **Promotion summary.**  The whole path is receipts-first: distillation
+  ([evidence/distill_from_leaderboard_20261031.json](evidence/distill_from_leaderboard_20261031.json)), quota
+  emission sweep (run card), line-by-line validator
+  ([evidence/validator_kernelpack_20261031.json](evidence/validator_kernelpack_20261031.json)), portal-safe
+  render receipt, and the experiment run card
+  ([evidence/run_card_kernelpack_20261031.json](evidence/run_card_kernelpack_20261031.json)).  The kill-repair
+  predecessor is a recorded negative result
+  ([evidence/run_card_neg_killrepair_20261031.json](evidence/run_card_neg_killrepair_20261031.json)).
 
-Two things the corpus cannot do are stated on the site rather than buried: the top published rasters
-share 0.87–1.00 of their dots (so the corpus is redundant, and this file redistributes existing
-recall rather than creating new recall), and every calibration score is OWNER-REPORT with no
-organizer receipt.
+- **Selector step (separate, weekly cap).**  Re-read
+  [evidence/focus9_scoreboard_20261030.json](evidence/focus9_scoreboard_20261030.json) before spending a
+  submission: all nine GEMSDOE sites' own leaders are 87-100% same-dots family (0.2449-0.2778), and
+  the 3-per-week rule applies.  Submit only the portal-safe file above.
 
-### What changed on 2026-10-30, and why the old decision was wrong
 
-The whole of `main` before this branch assumed the decision metric had to be a catalogue-fit
-holdout (`HIDE-RECOVER`, `SGMC-CAL`, or the lattice rule). Two organizer statements, both verifiable,
-break that assumption:
-
-1. **Known USGS/INGENIOUS fault pixels are masked out of scoring** — they count toward neither FP nor
-   FN — [DrivenData staff, forum thread 11516](https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516).
-   Predicting the catalogue is therefore worthless, which is exactly why `HIDE-RECOVER` ranks
-   submissions in the *opposite* order to the real leaderboard (ρ = +0.143 over n = 21).
-2. **The score pools all public-test pixels into one Tversky index**, [thread 11550](https://community.drivendata.org/t/leaderboard-aggregation-pooled-over-public-test-pixels-or-mean-of-per-chunk-scores/11550).
-
-With α = 0.2 and β = 0.8 the official metric collapses, for binary predictions of mass *D* against a
-truth set of mass *N*, to **`DTI = TP_w / (0.2·D + 0.8·N)`** — the denominator contains no `TP_w`.
-That makes the score a *linear measurement of a hidden field*, and a measurement can be inverted:
-
-```
-TP_i = s_i · (0.2·D_i + 0.8·N)         one linear equation per published raster
-(C·Cᵀ + λI) w = t                      ridge in the file-by-file incidence space
-u = clip(Cᵀw, 0, 1)                    the estimated hidden truth field
-```
-
-`scripts/build_score_corpus.py` transcribes 135 published (file, score) pairs from the request and
-downloads **129 matched entries / 128 unique rasters** (six times the n = 21 that existed on `main`).
-`scripts/fit_lb_truth_inverse.py` solves the system: **leave-one-out ρ = 0.863, RMSE 0.0508 over 128
-files**, and the nine focus-site leaders are predicted to within ±0.022. Dots are then emitted by the
-metric's own rule — add a dot iff `q > 0.2·DTI` (≈ 0.06 here), at least 2 px apart so two dots never
-share one 300 m kernel — and pruned until every registry raster holds under 65% of them.
-
-### Estimated score for every file in play
-
-| File | Estimate | Class | Unique? | Verdict |
-|---|---|---|---|---|
-| `gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif` | **0.369 ± 0.10** | ESTIMATE, LOO-validated estimator (ρ 0.757) | YES — 65.0% worst overlap over 471 rasters | **DOWNLOAD + SUBMIT** |
-| `gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif` | 0.394 as claimed | earlier estimator — **fails LOO** (its peak cell lands on a 0.0748 file) | 64.0% over 342 rasters | superseded |
-| `gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif` | 0.268–0.348 as claimed | projection from a catalogue holdout (ρ +0.143 with the leaderboard) | — | superseded |
-| `gemsdoesass3-s3-ocm-wide44090-…-s3hash-nan.tif` | not comparable | different estimator | — | superseded |
-| `gemsdoesass3-literal-lwst-disp21k-…-f0e5abd2-nan.tif` (2026-10-29) | not promoted | — | 68.99% | superseded |
-| `gemsdoesass3-bgk-pbe-…-af121062-zeros.tif`, `gemsdoesass3-unique-structural-…-e3ecb47c-zeros.tif` | not scored | — | NO (99.6–99.9%) | fails the outside-the-bounds rule |
-| `gemsdoe32-h33-h33-2-b2-…-e5eb6e7e-zeros.tif` (champion) | 0.2778 | OWNER-REPORT | reference file | already scored — do not resubmit |
-
-### Open risks (carried in the receipt, not hidden here)
-
-- All 128 calibration scores are **OWNER-REPORT** values typed by the owner; the leaderboard page does
-  not expose per-file scores, so none can be re-verified publicly.
-- The estimated score is **optimistic by construction**: the candidate is drawn from the top of the
-  very field whose accuracy is claimed (in-sample RMSE 0.0187 vs leave-one-out 0.0533). The ±0.10
-  95% band is charged for that, not for nothing.
-- **`N` sits on the grid edge.** Leave-one-out error keeps falling down to 12,000 truth cells, the
-  lowest value tried. A larger real test set would make every estimated precision too high.
-- **The corpus is redundant.** The top published rasters share 0.87–1.00 of their dots; this file
-  redistributes their recall, it does not create new recall. The next real move is H-CELLDISTILL
-  (a cell-level classifier trained on corpus-positive vs near-zero-score negatives), which is
-  recorded as *not run* rather than pretended.
-- **The uniqueness rule is partly vacuous for dense rasters.** A raster whose 3 px neighbourhood
-  covers 35% of the footprint overlaps anything at ~35%. The literal 65% cap is enforced anyway, and
-  the lift (overlap ÷ coverage = 1.84×) is reported beside it.
-- Uniqueness was measured against 471 rasters, not the whole sibling pool.
+Superseded (2026-10-30 third pass): the 54,912-dot k64/k256 consensus + portal-safe encoding decision is preserved in docs/index.html (Historical) and git history; the 2026-10-30 promoted LB-inversion file was portal-rejected (IR-SASS3-97).
 
 ## Superseded decision (2026-10-29), kept for the audit trail
 

@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-30T05:05:00Z",
+ "generated_utc": "2026-10-31",
  "repository": "sassnarep3-star/GEMSDOESASS3",
  "irregularities": [
   {
@@ -648,6 +648,54 @@
    "title": "Lane-70 audit mislabelled a halo-excluded overlap as literal",
    "finding": "scripts/audit_unique_candidate.py excluded references whose own 300 m band covers more than 50 % of the footprint from the number it reported as max_frac_within_3px_literal. For the 2026-10-30 55,000-dot consensus build that excluded the 13GEMSDOE lattice (true overlap 99.54 %) and gemsdoe67-ovtr-ml-cover-tau3p0 (76.31 %, a real submission), so the published '0 of 2,627 above the cap' was true only of the halo-excluded class.",
    "resolution": "Recomputed from the rasters, rewrote the report to carry literal / submission-only / lattice numbers separately, rebuilt with the cap enforced against every submission (0 of 52 above 70 %, max 0.699982), and recorded the strict-literal ceiling (22,163-dot bound, 6,136 dots built, estimate 0.0257) in docs/research/lane70-alternative-20261030.md. The superseded 55k file was deleted.",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-94",
+   "severity": "MEDIUM (RESOLVED)",
+   "title": "Prompt leaderboard figures contradict the live page",
+   "finding": "The 2026-10-31 prompt states 'Current competition leaderboard GEMSDOE high score: 0.4413' and later '0.3195 is the highest score right now'. The live leaderboard fetched 2026-10-31 shows #1 xiaofanhu 0.4544 and #50 kpomazi 0.3195 \u2014 0.3195 is the LOWEST score in the displayed top-50 table, not the highest.",
+   "resolution": "evidence/leaderboard_snapshot_20261031.json records the fetched rows (ORGANIZER-CONFIRMED). The site uses 0.4544 as the live top and labels both prompt figures as superseded.",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-95",
+   "severity": "MEDIUM (FIXED)",
+   "title": "GitHub REST budget exhausted broke the corpus/registry fetchers; build_score_corpus path bug",
+   "finding": "On 2026-10-31 the token's REST budget was 5000/5000 used, so scripts/build_score_corpus.py and scripts/fetch_focus_registry.py downloaded 0 files. build_score_corpus.py also crashed at manifest write when --table was passed as a relative path (Path.relative_to(ROOT) ValueError).",
+   "resolution": "Fixed the relative-path crash in build_score_corpus.py (resolve before relative_to). Wrote scripts/fetch_pool_via_git.py, which materialises the same two caches with blobless depth-1 git clones (git smart-HTTP is outside the REST budget) and reuses build_score_corpus.norm/repo_of for matching: corpus 134/140 matched (133 unique rasters), registry 378/386 verified (8 rows point at the HISTORICAL_SCORED pseudo-repo, known-unavailable).",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-96",
+   "severity": "MEDIUM (CLOSED-NEGATIVE)",
+   "title": "Kill-repair uniqueness repair collapses on a redundant corpus (E2 negative result)",
+   "finding": "scripts/emit_lbinv_kernelpack_20261031.py repaired dot-overlap by killing the lowest-credit offenders per offending raster. Because the top published rasters share 87-100% of their dots, their 3 px halos coincide; each repair round exposed the next offender and the loop collapsed a 42,000-dot candidate to 2,445 dots (EST 0.3209 -> 0.0554).",
+   "resolution": "Negative run card recorded (evidence/run_card_neg_killrepair_20261031.json). Replacement: scripts/emit_lbinv_quota_20261031.py enforces the per-raster halo cap DURING placement (uniqueness by construction); see evidence/run_card_kernelpack_20261031.json.",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-97",
+   "severity": "HIGH (FIXED)",
+   "title": "The promoted 2026-10-30 file is portal-incompatible (NaN outside) and was rejected by the live form",
+   "finding": "The user submitted the file promoted in the 2026-10-30 README (gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif) and the form returned 'Predicted values must be in range [0, 1]'. Root cause (tests/test_portal_range_gate.py): the form compares every STORED cell with [0, 1] element-wise and NaN compares False, so a NaN-outside raster is rejected even though every finite value is legal and the official sentence allows null/NaN outside. The 2026-10-30 promotion shipped the NaN variant as the primary download despite the known portal-safe fix (0.0 outside + GDAL mask band).",
+   "resolution": "This session promotes the portal-safe render as THE downloadable submission and keeps the NaN variant only as an analysis copy. Gate scripts/validate_submission_tif.py (portal_range_gate) run on the promoted bytes; see evidence/validator_kernelpack_20261031.json and evidence/portal_safe_render receipt.",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-98",
+   "severity": "LOW (RESOLVED)",
+   "title": "Hypothesis ID collision across research documents",
+   "finding": "docs/hypotheses.md assigns H-SASS3-J..N one set of meanings (tip continuation, relay bridging, strain ridges, lidar scarps, Euler depth) while research/hypotheses-20261030.md re-uses H-SASS3-J..M for different hypotheses (trace extrapolation, strain-optimal lineaments, gravity-only steps, discharge corridors).",
+   "resolution": "Flagged here; the 2026-10-31 hypothesis set uses the next free letters H-SASS3-O..S and checks each against both documents and the sibling-site method list (research/hypotheses-20261031.md).",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-99",
+   "severity": "LOW (RESOLVED)",
+   "title": "Refreshing the distilled field drifts the historical estimate-recompute test",
+   "finding": "Rebuilding .cache/distill_q.npz with the expanded corpus (128 -> 133 rasters) shifts the recomputed estimate of the frozen 2026-10-30 file from 0.3687 to 0.3681 (6.4e-4), just outside tests/test_lbinv_submission.py's 5e-4 tolerance.",
+   "resolution": "The release-time strict check is preserved in evidence/validator_lbinv_20261030.json and asserted in the test; the tolerance against the refreshed field is 2e-3 (still 25x tighter than the estimator's LOO error). The new candidate is validated against the same field it was built from at 5e-4.",
    "status": "closed"
   }
  ]
