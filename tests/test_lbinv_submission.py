@@ -7,9 +7,12 @@ These tests exist to stop the two failure modes that matter:
 2. the headline number becoming un-recomputable -- so the estimate is recomputed here from the
    raster and the field, and must match the receipt to 5e-4.
 
-The submittable artefact is the portal-safe render (finite {0,1} inside the footprint, 0.0 outside,
-internal GDAL mask band). The NaN-payload copy is retained only as the analysis source; its dot set is
-bit-identical (symmetric difference 0), so every estimate and uniqueness receipt applies unchanged.
+Status (2026-10-31): the portal-safe render fixes the format blocker (11/11 byte gates, including
+the live portal range test that rejected the NaN-payload file) but FAILS the binding lane rule --
+99.9% of its dots fall within 3 px of the calibration lattice, which is a registry raster. It is
+therefore documented as FORMAT-OK / NOT CLEARED, never as "OK TO SUBMIT". The lattice was missing
+from the earlier 521-raster uniqueness sweep because that sweep only globbed the registry/corpus
+directories and not the HISTORICAL_SCORED lattice.
 """
 from __future__ import annotations
 
@@ -21,6 +24,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 import rasterio
+from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME = "gemsdoesass3-lbinv-84262-20261030T0900Z-safe"
@@ -137,9 +141,41 @@ def test_uniqueness_gate_is_under_the_protocol_limit():
     assert "GEMSDOE22" in build["worst_registry_raster"]
 
 
-def test_pages_send_the_reader_to_this_file_first():
+def test_lattice_rule_fails_so_candidate_is_not_cleared():
+    # Regression for the 2026-10-31 finding: the 521-raster uniqueness sweep only globbed the
+    # registry/corpus directories and missed the calibration lattice (a registry raster under
+    # HISTORICAL_SCORED). Recompute the literal lane rule against the lattice on the saved bytes.
+    lat = None
+    lat_tif = ROOT / ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
+    if lat_tif.is_file():
+        with rasterio.open(lat_tif) as ds:
+            lat = np.nan_to_num(ds.read(1), nan=0.0) > 0.0
+    if lat is None:
+        packed = ROOT / "evidence/calibration_lattice_mask.npz"
+        if packed.is_file():
+            z = np.load(packed)
+            shape = tuple(int(x) for x in z["shape"])
+            lat = np.unpackbits(z["packed"])[: shape[0] * shape[1]].reshape(shape).astype(bool)
+    if lat is None:
+        pytest.skip("calibration lattice not available")
+    with rasterio.open(TIF) as ds:
+        cand = ds.read(1) > 0.0
+    # "within 3 px" == the organizer's 300 m kernel radius == Chebyshev distance <= 3, i.e. three
+    # dilation iterations with the (3,3) structuring element. A single iteration is only radius 1.
+    struct = np.ones((3, 3), dtype=bool)
+    dil = ndi.binary_dilation(lat, structure=struct, iterations=3)
+    frac = float((cand & dil).sum()) / float(cand.sum())
+    assert frac > 0.70, f"expected the lane rule to fail, got {frac:.4f}"
+    assert frac > 0.95, f"expected near-lattice duplication, got {frac:.4f}"
+
+
+def test_pages_document_the_safe_candidate_as_not_cleared():
+    # 2026-10-31: the portal-safe render fixes the format blocker but FAILS the binding lane
+    # rule (99.9% of its dots within 3 px of the calibration lattice, a registry raster).
+    # The pages must therefore document it as NOT CLEARED, never as "OK TO SUBMIT".
     for page in ("docs/index.html", "docs/executive-summary.html"):
         html = (ROOT / page).read_text()
-        assert html.index(NAME) < html.index("cdti128-consensus") if "cdti128" in html else True
-        assert "OK TO SUBMIT" in html
+        assert NAME in html, page
+        assert "OK TO SUBMIT" not in html, page
+        assert "DO NOT SUBMIT" in html or "NOT CLEARED" in html or "NO-GO" in html, page
         assert "localhost" not in html.lower() and "127.0.0.1" not in html

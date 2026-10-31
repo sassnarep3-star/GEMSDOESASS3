@@ -75,5 +75,11 @@
    "coverage_of_footprint": 0.0995,
    "lift": 3.46
   }
- ]
+ ],
+ "correction_20261031": {
+  "issue": "The sweep used binary_dilation(m, STRUCT) with one iteration. STRUCT is a (3,3) square, so one iteration is radius 1 px, not the organizer's 300 m (3 px) kernel radius.",
+  "missed_reference": "The calibration lattice scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif (registry HISTORICAL_SCORED) was not globbed; it lives under .cache/gems_data/scored/.",
+  "corrected_lattice_overlap_3px": 0.9989,
+  "consequence": "The reported worst 65.0% is a radius-1 figure over a raster set that excluded the lattice. At the correct 3 px the candidate fails the lane rule."
+ }
 }

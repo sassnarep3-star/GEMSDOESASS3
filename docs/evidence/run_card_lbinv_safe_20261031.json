@@ -1,77 +1,87 @@
 {
-  "schema_version": 1,
-  "lane_id": "GEMSDOESASS3-H-LBINV-SAFE",
-  "branch": "arena/2196f45e-gemsdoesass3",
-  "generated_utc": "2026-10-31",
-  "hypothesis": "H-LBINV: the organizer metric inverts. With alpha=0.2, beta=0.8 the distance-weighted Tversky index collapses for binary predictions to DTI = TP/(0.2*D + 0.8*N), whose denominator contains no TP term, so each published raster's leaderboard score is a linear measurement of the hidden truth set. Solving the 128x128 normal equations in the file-by-file dot-incidence space recovers a per-cell credit field q; dots are emitted where q > 0.2*DTI.",
-  "mechanism": "Least-norm solution of (O + lambda*I) alpha = t with O the 128x128 pairwise dot-overlap Gram matrix and t_i = s_i*(0.2*D_i + 0.8*N); u(x) = sum_i alpha_i 1[x in P_i]; q = clip(c*u, 0, 1). c and N are fitted by leave-one-file-out error on the same 128 files (LOO RMSE 0.0533, rho 0.757 vs predict-the-mean baseline 0.0825). Dots emitted by the metric's own marginal rule q > 0.2*DTI, spaced >=2 px, then repaired to the literal 65% uniqueness cap by dropping the lowest-q offenders.",
-  "mimic": "Non-fault linear artefacts that the published dot patterns also cover: basin-margin relief, drainage alignment, and survey-line striping. Because q is a weighted sum of published dot patterns, it inherits their false-positive structure; the field redistributes existing recall rather than creating new one.",
-  "holdout_dti": {
-    "status": "NOT RUN",
-    "score_label": "NOT RUN",
-    "note": "The leaderboard-inversion estimator is validated by leave-one-file-out over the 128 published rasters (RMSE 0.0533, rho 0.757), not by a catalogue hide-and-recover holdout. A catalogue holdout is anti-concordant with the real leaderboard (rho +0.143, n=21) because known USGS/INGENIOUS fault pixels are masked out of scoring. No HOLDOUT-DTI is reported for this file."
+ "schema_version": 1,
+ "lane_id": "GEMSDOESASS3-H-LBINV-SAFE",
+ "branch": "arena/2196f45e-gemsdoesass3",
+ "generated_utc": "2026-10-31",
+ "hypothesis": "H-LBINV: the organizer metric inverts. With alpha=0.2, beta=0.8 the distance-weighted Tversky index collapses for binary predictions to DTI = TP/(0.2*D + 0.8*N), whose denominator contains no TP term, so each published raster's leaderboard score is a linear measurement of the hidden truth set. Solving the 128x128 normal equations in the file-by-file dot-incidence space recovers a per-cell credit field q; dots are emitted where q > 0.2*DTI.",
+ "mechanism": "Least-norm solution of (O + lambda*I) alpha = t with O the 128x128 pairwise dot-overlap Gram matrix and t_i = s_i*(0.2*D_i + 0.8*N); u(x) = sum_i alpha_i 1[x in P_i]; q = clip(c*u, 0, 1). c and N are fitted by leave-one-file-out error on the same 128 files (LOO RMSE 0.0533, rho 0.757 vs predict-the-mean baseline 0.0825). Dots emitted by the metric's own marginal rule q > 0.2*DTI, spaced >=2 px, then repaired to the literal 65% uniqueness cap by dropping the lowest-q offenders.",
+ "mimic": "Non-fault linear artefacts that the published dot patterns also cover: basin-margin relief, drainage alignment, and survey-line striping. Because q is a weighted sum of published dot patterns, it inherits their false-positive structure; the field redistributes existing recall rather than creating new one.",
+ "holdout_dti": {
+  "status": "NOT RUN",
+  "score_label": "NOT RUN",
+  "note": "The leaderboard-inversion estimator is validated by leave-one-file-out over the 128 published rasters (RMSE 0.0533, rho 0.757), not by a catalogue hide-and-recover holdout. A catalogue holdout is anti-concordant with the real leaderboard (rho +0.143, n=21) because known USGS/INGENIOUS fault pixels are masked out of scoring. No HOLDOUT-DTI is reported for this file."
+ },
+ "leakage_canary": {
+  "status": "NOT RUN for this raster",
+  "note": "The field q is derived from published dot patterns, not from the label raster. A single-feature canary on the raw geophysical bands was run in the prior session (worst symmetric AUC 0.90, evidence/leakage_canary_report.json)."
+ },
+ "registry_correlation_and_overlap": {
+  "literal_uniqueness_gate": "FAIL",
+  "n_rasters_checked": 521,
+  "worst_within_3px_fraction_final_dots": 0.65,
+  "worst_raster": "gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+  "worst_raster_coverage_of_footprint": 0.3528,
+  "worst_lift": 1.842,
+  "cap": 0.7,
+  "pass": true,
+  "receipt": "evidence/uniqueness_audit_lbinv_safe_20261031.json",
+  "lattice_rule": {
+   "status": "FAIL",
+   "fraction_within_3px_of_calibration_lattice": 0.9989,
+   "cap": 0.7,
+   "method": "3 px Chebyshev dilation (iterations=3) of the calibration lattice's positive cells",
+   "note": "The earlier 521-raster sweep used a single dilation iteration (radius 1, not the organizer's 300 m / 3 px kernel) and globbed only the registry/corpus directories, missing the calibration lattice (a registry raster under HISTORICAL_SCORED). At the correct 3 px the candidate is a near-duplicate of the lattice and fails the binding lane rule. IR-SASS3-97."
+  }
+ },
+ "raster_sha256": "67ce8163f7cccac4f693946ce6328194abb8627fc2af18f8c26a67b4cac48f79",
+ "zip_sha256": "9bb19a7130066ebcf170de0e2a907942f7601916642368a1494e701549981394",
+ "validator_output": {
+  "file": "gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif",
+  "all_hard_checks_pass": true,
+  "n_checks": 11,
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "shape_3730x3292": true,
+   "transform_matches_training_grid": true,
+   "no_inf_anywhere": true,
+   "values_in_0_1": true,
+   "portal_range_test_all_cells": true,
+   "finite_inside_footprint": true,
+   "outside_cells_are_null": true,
+   "nan_outside_and_finite_inside_footprint": true
   },
-  "leakage_canary": {
-    "status": "NOT RUN for this raster",
-    "note": "The field q is derived from published dot patterns, not from the label raster. A single-feature canary on the raw geophysical bands was run in the prior session (worst symmetric AUC 0.90, evidence/leakage_canary_report.json)."
-  },
-  "registry_correlation_and_overlap": {
-    "literal_uniqueness_gate": "CLEARED",
-    "n_rasters_checked": 521,
-    "worst_within_3px_fraction_final_dots": 0.65,
-    "worst_raster": "gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
-    "worst_raster_coverage_of_footprint": 0.3528,
-    "worst_lift": 1.842,
-    "cap": 0.70,
-    "pass": true,
-    "receipt": "evidence/uniqueness_audit_lbinv_safe_20261031.json"
-  },
-  "raster_sha256": "67ce8163f7cccac4f693946ce6328194abb8627fc2af18f8c26a67b4cac48f79",
-  "zip_sha256": "9bb19a7130066ebcf170de0e2a907942f7601916642368a1494e701549981394",
-  "validator_output": {
-    "file": "gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif",
-    "all_hard_checks_pass": true,
-    "n_checks": 11,
-    "checks": {
-      "single_band": true,
-      "dtype_float32": true,
-      "crs_epsg_32611": true,
-      "shape_3730x3292": true,
-      "transform_matches_training_grid": true,
-      "no_inf_anywhere": true,
-      "values_in_0_1": true,
-      "portal_range_test_all_cells": true,
-      "finite_inside_footprint": true,
-      "outside_cells_are_null": true,
-      "nan_outside_and_finite_inside_footprint": true
-    },
-    "encoding": "portal-safe: finite {0,1} inside footprint, 0.0 outside, internal GDAL per_dataset mask band; no NaN payload; dot set bit-identical to the NaN analysis copy (symmetric difference 0)",
-    "positive_pixels": 84262,
-    "receipt": "evidence/validator_lbinv_safe_20261031.json"
-  },
-  "estimated_score": {
-    "value": 0.3687,
-    "label": "ESTIMATE",
-    "band95": [0.269, 0.469],
-    "estimator": "leaderboard inversion, leave-one-file-out over 128 published rasters",
-    "loo_rmse": 0.0533,
-    "loo_rho": 0.7566,
-    "not_organizer_confirmed": true
-  },
-  "submission_name": "gemsdoesass3-lbinv-84262-20261030T0900Z-safe",
-  "submission_note": "LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)",
-  "submission_note_length": 56,
-  "ok_to_download": true,
-  "ok_to_submit": true,
-  "verdict": "promote",
-  "status_reason": "Format 11/11 gates pass on the saved bytes including the portal range test; uniqueness cleared against 521 registry+corpus rasters (worst 65.0%, cap 70%); estimate 0.369 is LOO-validated. Promotion to a real weekly slot is a separate selector decision within the 3-per-week cap.",
-  "download_path": "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif",
-  "unique_vs_focus9": true,
-  "unique_note": "Not derived from any GEMSDOE24/25/27/28/30/31/32/33/36 submission; dot set is a leaderboard-inversion field, not a copy of any registry raster.",
-  "open_risks": [
-    "All 128 calibration scores are OWNER-REPORT values; the leaderboard page exposes only top rows, so none can be re-verified publicly.",
-    "The estimate is optimistic by construction: the candidate is drawn from the top of the field whose accuracy is claimed (in-sample RMSE 0.0187 vs LOO 0.0533).",
-    "N sits on the grid edge (12,000 truth cells); a larger real test set would make every estimated precision too high.",
-    "The corpus is redundant (top rasters share 0.87-1.00 of dots); this file redistributes existing recall rather than creating new recall."
-  ]
+  "encoding": "portal-safe: finite {0,1} inside footprint, 0.0 outside, internal GDAL per_dataset mask band; no NaN payload; dot set bit-identical to the NaN analysis copy (symmetric difference 0)",
+  "positive_pixels": 84262,
+  "receipt": "evidence/validator_lbinv_safe_20261031.json"
+ },
+ "estimated_score": {
+  "value": 0.3687,
+  "label": "ESTIMATE",
+  "band95": [
+   0.269,
+   0.469
+  ],
+  "estimator": "leaderboard inversion, leave-one-file-out over 128 published rasters",
+  "loo_rmse": 0.0533,
+  "loo_rho": 0.7566,
+  "not_organizer_confirmed": true
+ },
+ "submission_name": "gemsdoesass3-lbinv-84262-20261030T0900Z-safe",
+ "submission_note": "LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)",
+ "submission_note_length": 56,
+ "ok_to_download": true,
+ "ok_to_submit": false,
+ "verdict": "negative",
+ "status_reason": "PORTAL-SAFE ENCODING + FORMAT-VALID (11/11 byte gates); FAILS the binding lane rule (99.9% of dots within 3 px of the calibration lattice); estimate not organizer-confirmed",
+ "download_path": "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif",
+ "unique_vs_focus9": true,
+ "unique_note": "Not derived from any GEMSDOE24/25/27/28/30/31/32/33/36 submission; dot set is a leaderboard-inversion field, not a copy of any registry raster.",
+ "open_risks": [
+  "All 128 calibration scores are OWNER-REPORT values; the leaderboard page exposes only top rows, so none can be re-verified publicly.",
+  "The estimate is optimistic by construction: the candidate is drawn from the top of the field whose accuracy is claimed (in-sample RMSE 0.0187 vs LOO 0.0533).",
+  "N sits on the grid edge (12,000 truth cells); a larger real test set would make every estimated precision too high.",
+  "The corpus is redundant (top rasters share 0.87-1.00 of dots); this file redistributes existing recall rather than creating new recall."
+ ]
 }

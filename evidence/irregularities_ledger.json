@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-31T05:22:18.658561+00:00",
+ "generated_utc": "2026-10-31T05:46:37.444992+00:00",
  "repository": "sassnarep3-star/GEMSDOESASS3",
  "irregularities": [
   {
@@ -672,6 +672,22 @@
    "title": "GitHub API rate limit blocked the registry/corpus fetch; codeload tarballs used instead",
    "finding": "The API-based fetchers (fetch_registry_rasters.py, build_score_corpus.py) exhausted the unauthenticated GitHub API rate limit when run with many workers, returning 0 matched entries and overwriting the corpus manifest. raw.githubusercontent.com is not on the sandbox allow-list.",
    "resolution": "Added codeload-based fetchers (fetch_focus_registry_codeload.py, fetch_score_corpus_codeload.py) that download repo tarballs under the separate codeload limit. Restored the overwritten manifest from git. Uniqueness re-verified against 521 rasters (392 registry + 129 corpus), worst overlap 65.0%.",
+   "detected_utc": "2026-10-31"
+  },
+  {
+   "id": "IR-SASS3-97",
+   "severity": "HIGH",
+   "title": "The uniqueness sweep measured radius 1 px, not the organizer's 3 px kernel, and missed the calibration lattice",
+   "finding": "scripts/emit_lbinv_candidate.py dilated each reference with binary_dilation(m, STRUCT) where STRUCT is a (3,3) square and the call used the default one iteration. One iteration of a (3,3) square is radius 1 px, but the STRUCT comment claims '3 px == 300 m == the organizer's kernel radius'. The correct 3 px kernel is three iterations (Chebyshev radius 3) or a Euclidean disk of radius 3. Additionally the sweep globbed only the registry and corpus directories, so the calibration lattice (a registry raster under HISTORICAL_SCORED, stored under .cache/gems_data/scored/) was never checked.",
+   "resolution": "Corrected the lane-rule measurement to three dilation iterations and included the lattice. At the correct 3 px the LB-inversion candidate has 99.9% of its dots within 3 px of the lattice and fails the binding lane rule. Regression test added: tests/test_lbinv_submission.py::test_lattice_rule_fails_so_candidate_is_not_cleared.",
+   "detected_utc": "2026-10-31"
+  },
+  {
+   "id": "IR-SASS3-98",
+   "severity": "HIGH",
+   "title": "The portal-safe LB-inversion candidate is a near-duplicate of the calibration lattice",
+   "finding": "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif fixes the portal range blocker (11/11 byte gates) but 99.9% of its 84,262 dots fall within 3 px of the 13GEMSDOE calibration lattice, a registry raster. The lane rule caps this at 70%. The earlier run card recorded literal_uniqueness_gate=CLEARED on the radius-1, lattice-excluding sweep.",
+   "resolution": "Run card verdict corrected to negative / NOT CLEARED; the file is documented as FORMAT-OK but not submittable on the pages and README. The safe encoding itself (mask band, finite 0.0 outside) is retained as the correct fix for the portal range error.",
    "detected_utc": "2026-10-31"
   }
  ]

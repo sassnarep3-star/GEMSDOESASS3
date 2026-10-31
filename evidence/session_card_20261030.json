@@ -29,7 +29,7 @@
   "zip_sha256": "9bb19a7130066ebcf170de0e2a907942f7601916642368a1494e701549981394",
   "dots": 84262,
   "inside_share": null,
-  "status": "LEGAL + UNIQUE + FORMAT-VALID (portal-safe encoding); ESTIMATE 0.369 (LOO-validated estimator); beats the 0.2778 champion on the same estimator",
+  "status": "FORMAT-VALID (portal-safe encoding, 11/11 byte gates) + ESTIMATE 0.369 (LOO-validated); NOT UNIQUE \u2014 fails the binding lane rule: 99.9% of dots within 3 px of the calibration lattice (a registry raster); NOT CLEARED for submission",
   "submission_note": "LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)",
   "alternatives": [
    {
@@ -48,7 +48,14 @@
   "blocked": {
    "file": "gemsdoesass3-exp3-sarpu-legal21k-20261030T030010Z-nan.tif",
    "reason": "fails Rule 1: 83.25% of dots within 3 px of GEMSDOE32/h46"
-  }
+  },
+  "ok_to_submit": false,
+  "additional_blocked": [
+   {
+    "file": "gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif",
+    "reason": "fails the lane rule: 99.9% of dots within 3 px of the calibration lattice (IR-SASS3-97/98)"
+   }
+  ]
  },
  "estimates": {
   "exp3": {

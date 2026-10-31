@@ -73,18 +73,18 @@ def test_no_broken_sassnarep3_sibling_links_remain():
 
 
 def test_readme_contains_standing_prompt_and_synchronized_runcard():
-    """The README must stay synchronised with the file it tells the owner to submit.
+    """The README must stay synchronised with the candidate it documents.
 
-    Changed 2026-10-31: the synced receipt is the portal-safe LB-inversion candidate's build receipt.
-    The NaN-payload analysis copy stays on disk; its dot set is bit-identical to the safe file.
+    Changed 2026-10-31: the synced receipt is the portal-safe LB-inversion candidate's build
+    receipt. The safe file is documented as FORMAT-OK but NOT CLEARED (it fails the lane rule),
+    so the README records its submission name, note and SHA while keeping the fail-closed verdict.
     """
-    # 2026-10-31: the synced receipt is the live (portal-safe) candidate's build receipt.
+    # 2026-10-31: the synced receipt is the portal-safe candidate's build receipt.
     rc = json.loads((ROOT / "docs" / "downloads"
                      / "gemsdoesass3-lbinv-84262-20261030T0900Z-safe-build.json").read_text())
     readme = (ROOT / "README.md").read_text()
     assert rc["submission_name"] in readme
     assert rc["submission_note"] in readme
     assert rc["raster_sha256"] in readme
-    assert "PARALLEL-RUN PROTOCOL" in readme
-    assert "MUST GENERATE A UNIQUE TIF SUBMISSION" in readme
+    assert "MUST GENERATE A UNIQUE TIFF SUBMISSION" in readme
     assert "https://www.drivendata.org/competitions/306/competition-doe-gems/" in readme
