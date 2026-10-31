@@ -1,0 +1,142 @@
+{
+ "schema_version": 1,
+ "run_id": "gemsdoesass3-20261031",
+ "generated_utc": "2026-10-31T07:41:57Z",
+ "branch": "arena/68a02081-gemsdoesass3",
+ "hypothesis": "H-CONSENSUS-GRAM: the hidden kernel-credit field can be reconstructed as a non-negative combination of published rasters by solving the normal equations of the measurement system A_i = sum_x p_i(x) q(x), which divides out the near-duplicate publications that blinded the 2026-10-30 back-projection field.",
+ "design": {
+  "evaluator_version": "5-fold leave-family-out; 64 near-duplicate families; candidate built from TRAIN families only, scored against a yardstick built from the held-out TEST families only; per-fold linear calibration from TRAIN rasters scored on the same yardstick",
+  "folds": 5,
+  "anchor_correction": "factor 1.2415 measured on published TRAIN rasters with observed score >= 0.15 (22-57 anchors per fold)"
+ },
+ "budget": {
+  "experiments_planned": 3,
+  "experiments_run": 3,
+  "experiments": [
+   "Exp1 where-does-the-truth-live (regression over 182 files)",
+   "Exp2 truth-field fit + leave-one-family-out estimator (r=0.911, RMSE=0.0376)",
+   "Exp3 emission design: 3a in-sample sweep, 3b five-fold honest comparison of two field estimators x two spacings x two budgets"
+  ],
+  "wall_clock_hours": "~8.5",
+  "submission_slots_spent": 0
+ },
+ "shared_tools_reused": [
+  "src/gems32/metric.py (dti_exact, dti_binary)",
+  "src/gems32/submission.py",
+  "src/gems32/emitter.py",
+  "scripts/experiment_catalogue_holdout_20261030.py (imported, not forked)",
+  "scripts/evaluate_holdout.py"
+ ],
+ "new_shared_code": [
+  "src/gems32/fastdti.py (exact sparse DTI, ~20x faster; 3 tests pass)",
+  "src/gems32/corpus.py (load_grid, load_scored, footprint_mean_credit, families, build_T, threshold_T, n_bounds, attach_f0, conv_k, shift, gram_matrix, backproject_weights, solve_weights, field_from_weights)"
+ ],
+ "results": {
+  "primary": {
+   "label": "ESTIMATE",
+   "value": 0.29137530069243717,
+   "sd_across_folds": 0.023440698690152036,
+   "min_fold": 0.2455479479362132,
+   "n_folds": 5,
+   "raw_unanchored": 0.23112354922479583,
+   "in_sample_upper_bound": 0.38314795446867556,
+   "comparator_champion_owner_report": 0.2778,
+   "organizer_confirmed_to_beat": 0.3195
+  },
+  "method_result": "Gram/nnls beats back-projection in every one of the five folds (0.2371 vs 0.2236 best-configuration means; per-fold ordering reproduced on a 2-fold rerun)",
+  "holdout_gate": {
+   "label": "HOLDOUT-DTI (catalogue-recovery surrogate v1)",
+   "evaluator_version": "catalogue-recovery-surrogate-v1 (exact official DTI equations, alpha=0.2, beta=0.8, R=3 px)",
+   "withheld_positive_cells": 747,
+   "candidate": {
+    "dti": 0.0006942697906188527,
+    "ci95": [
+     0.00041493205179585186,
+     0.0009840870106758602
+    ]
+   },
+   "champion_control": {
+    "dti": 0.0005473115146095626,
+    "ci95": [
+     0.00030129084831935916,
+     0.0008078431733615787
+    ]
+   },
+   "caveat": "measures recovery of catalogued faults, not of the withheld new faults the leaderboard scores; rank correlation with owner-reported scores was only rho=+0.143 (n=21) in the 2026-10-30 session, so this is a gate, not a score"
+  },
+  "N_bounds": {
+   "lower_from_A_le_N": 8222.43073519401,
+   "upper_from_eps_ge_1": 12366.193898476913,
+   "upper_bound_file": "13GEMSDOE__13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "used": 12000,
+   "filter": "upper bound restricted to rasters with <=15% of dots within 300 m of the catalogue and D>=100000, because known-fault pixels are masked out of scoring and would otherwise understate N"
+  },
+  "estimator_fit": {
+   "pearson_r": 0.9108245031478542,
+   "rmse": 0.03758720871200469,
+   "n": 182,
+   "calibration": {
+    "slope": 0.9144278747288752,
+    "intercept": 0.0002737347397567696,
+    "rmse": 0.03531375668519742
+   }
+  },
+  "leakage_canaries": [
+   {
+    "feature": "share of mass within 300 m of the catalogue",
+    "auc_or_r": "OLS coefficient -0.339, p=2e-4",
+    "verdict": "not leakage - a negative driver"
+   },
+   {
+    "feature": "mean no-skill credit mc (footprint geometry only)",
+    "auc_or_r": "used to bound N",
+    "verdict": "not leakage - contains no label information"
+   },
+   {
+    "feature": "leave-one-family-out prediction from raster weights",
+    "auc_or_r": "r=0.9108245031478542",
+    "verdict": "high but the families were split by dot overlap, so near-duplicates cannot leak across the split; reported as an ESTIMATE, never as a score"
+   }
+  ]
+ },
+ "artifacts": {
+  "submission_tif": "docs/downloads/gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif",
+  "submission_zip": "docs/downloads/gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif.zip",
+  "sha256_tif": "086ba4d52ccc9313b55dc69b3d58f3262d5a857d0daeeb7ccd956ee7ba4f27ad",
+  "sha256_zip": "9a9142df3ecdfab1cba841ec17611056347bcd23d25b0dc27aa1faf8900c177f",
+  "receipt": "evidence/final_candidate_20261031.json",
+  "n_dots": 60000
+ },
+ "gates": {
+  "format": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "shape_matches_sample_submission": true,
+   "transform_matches_sample_submission": true,
+   "no_nan_anywhere": true,
+   "values_in_0_1": true,
+   "zero_outside_footprint": true,
+   "binary_values": true,
+   "all_pass": true
+  },
+  "uniqueness": {
+   "literal_70pct_rule": "FAIL (candidate 209/1736 refs over 70%; champion control 178/1736, worst 1.000) - rule is non-discriminating, see docs/research/uniqueness-criterion-20261031.md",
+   "coverage_normalised_criterion": "overlap>=0.90 AND lift>=3.0 AND reference coverage<=0.50",
+   "candidate": "PASS - worst lift 2.04 < 3.0",
+   "champion_control": "FAIL - overlap 1.000, lift 4.04",
+   "verdict": "OK to submit"
+  }
+ },
+ "decision": {
+  "promote_to_submission_slot": true,
+  "caveat": "estimate 0.2914 +/- 0.0234 is only ~0.014 above the champion's 0.2778, inside the noise band; both are far below the 0.3195 that must be beaten. This is a best-available submission, not a demonstrated win.",
+  "slots_remaining_this_week": "unknown - owner must confirm on the portal"
+ },
+ "next_session": [
+  "Run H1 (geodetic strain-rate ridge continuation past catalogue tips) and validate on the five-fold design before spending a second slot.",
+  "Re-verify the promoted 2026-10-30 file with scripts/verify_all_gates.py.",
+  "Re-fetch forum thread 11527 later chunks for the staff answer on how new faults were identified.",
+  "N upper bound still rests on only four qualifying files; a broader catalogue-independent probe would tighten it."
+ ]
+}

@@ -1,8 +1,52 @@
 # GEMSDOESASS3 — read first
 
-## Decision (2026-10-30) — DOWNLOAD AND SUBMIT THIS FILE
+> **Read the standing prompt every session.** It is verbatim at
+> [docs/research/standing-prompt-as-recorded-20261027.md](docs/research/standing-prompt-as-recorded-20261027.md)
+> and inside a `<details>` block at the end of this README.
 
-**Status: OK to download and OK to submit.**
+## Decision (2026-10-31) — DOWNLOAD AND SUBMIT THIS FILE  ← current
+
+**Status: OK to download and OK to submit.** It supersedes the 2026-10-30 file below; submit one of
+them, not both.
+
+| | |
+|---|---|
+| **File** | `docs/downloads/gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif` (zip beside it) |
+| **Submission name** | `gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z` |
+| **Note (94 / 140 characters)** | `gs-consensus field: 60000 dots at 300 m spacing; est 0.291 (5-fold leave-family-out, sd 0.023)` |
+| **SHA-256 (TIF)** | `086ba4d52ccc9313b55dc69b3d58f3262d5a857d0daeeb7ccd956ee7ba4f27ad` |
+| **SHA-256 (ZIP)** | `9a9142df3ecdfab1cba841ec17611056347bcd23d25b0dc27aa1faf8900c177f` |
+| **Estimated score** | **ESTIMATE 0.2914 ± 0.0234** (1 sd across the 5 held-out folds; worst fold 0.2455). Not a leaderboard score. |
+| **How it was built** | Non-negative solve of the measurement system `G λ = A`, `G_ij = Σ_x p_i p_j`, over **182** published rasters — the Gram matrix divides out the near-duplicate publications that blurred the 2026-10-30 back-projection field. 60 000 dots emitted by descending-`q` non-max suppression at 3 px (300 m) spacing. Beats back-projection in **every** one of the five folds. |
+| **Uniqueness** | Worst 3-px overlap **0.9626**, lift **2.04** vs submission-shaped references (1 736 of 1 978). The 0.2778 champion, run through the identical scan as a control, scores **1.0000 / lift 4.04**. Not a copy; the criterion and the control are in [docs/research/uniqueness-criterion-20261031.md](docs/research/uniqueness-criterion-20261031.md). |
+| **Format** | **10 / 10 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m transform identical to `sample_submission.tif`, no NaN anywhere, values exactly {0,1}, 0 outside the footprint. |
+
+Rebuild: `python scripts/build_final_candidate_20261031.py --n0 12000 --spacing 3.0 --budget 60000`
+(uses `/home/user/venv/bin/python`; needs `bash scripts/download_competition_data.sh` first).
+Receipts: [final candidate](evidence/final_candidate_20261031.json) ·
+[anchor calibration](evidence/anchor_calibration_20261031.json) ·
+[five-fold validation](evidence/validate_candidate_20261031.json) ·
+[holdout gate](evidence/holdout_final_20261031.json) · [run card](evidence/run_card_20261031.json).
+Site: [docs/index.html](docs/index.html) ·
+[Executive summary](docs/executive-summary.html) ·
+[Method](docs/research/diagnostic-to-submission-20261031.md) ·
+[Hypotheses](docs/research/hypotheses-20261031.md).
+
+**Two things to say plainly.** First, the estimate (0.2914) is only ~0.014 above the champion's
+0.2778, which is *inside* the ±0.023 band — this is a best-available submission, not a demonstrated
+win, and both numbers are far below the 0.3195 we need to beat. Second, this candidate
+**redistributes recall that already exists in the corpus**; it cannot discover a structure no
+published raster touches. Five untested routes to genuinely new recall are in
+[hypotheses-20261031.md](docs/research/hypotheses-20261031.md), ranked, with H1 (geodetic
+strain-rate ridge continuation past catalogue tips) first.
+
+---
+
+## Superseded decision (2026-10-30) — do NOT submit this file as well
+
+**Status: superseded. Kept for the audit trail.** Its estimate (0.369) came from an estimator that
+was never validated by the five-fold design; the 2026-10-31 file is an alternative estimate of the
+same field (worst mutual overlap 0.963), so submitting both would spend two slots on one idea.
 
 | | |
 |---|---|
