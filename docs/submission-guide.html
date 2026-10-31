@@ -1,0 +1,74 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>How to submit — GEMSDOESASS3</title><style>
+body{font:16px/1.6 system-ui,sans-serif;color:#14243a;background:#f2f6fa;margin:0}
+main{max-width:1000px;margin:auto;padding:24px}
+section{background:white;border:1px solid #d7e1eb;border-radius:12px;padding:24px;margin-bottom:20px}
+.hero{border-left:7px solid #15803d}.warn{border-left:7px solid #b45309}
+a{color:#075fac}code{overflow-wrap:anywhere;font-size:13px}
+.btn{display:inline-block;background:#15803d;color:white;padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:700;margin-right:8px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;background:#dcfce7;color:#14532d}
+ol,ul{padding-left:1.4em}
+li{margin-bottom:8px}
+</style></head><body><main>
+<nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Executive summary</a> · <a href="submission-guide.html">How to submit</a></nav>
+
+<section class="hero">
+<h1>How to submit to the DOE GEMS Prize Challenge</h1>
+<p>This page is the exact, human-checkable walkthrough. There is no manual inspection step in the project: every gate that decides whether a file may be submitted is a program that runs on the saved bytes.</p>
+<p><a class="btn" href="downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif">⬇ Download the .tif</a>
+<a class="btn" href="downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif.zip" style="background:#075fac">⬇ Download the .zip</a></p>
+</section>
+
+<section>
+<h2>Step 1 — Take the file</h2>
+<ol>
+<li>Click <strong>Download the .tif</strong> above. The <code>.zip</code> beside it holds the identical bytes.</li>
+<li>Verify the SHA-256 of the <code>.tif</code> against <code>67ce8163f7cccac4f693946ce6328194abb8627fc2af18f8c26a67b4cac48f79</code> (run <code>sha256sum</code> on Linux/macOS).</li>
+<li>Filename to use: <code>gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif</code>.</li>
+</ol>
+</section>
+
+<section>
+<h2>Step 2 — Open the submission form</h2>
+<ol>
+<li>Go to the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition page</a>.</li>
+<li>Choose <strong>Submit prediction</strong> (the page the owner screenshotted calls it <em>New submission</em>).</li>
+<li>In <strong>File to submit</strong>, choose the <code>.tif</code> (or the <code>.zip</code>).</li>
+</ol>
+</section>
+
+<section>
+<h2>Step 3 — Fill in the two fields</h2>
+<ul>
+<li><strong>Submission name</strong> (the "unique name"): <code>gemsdoesass3-lbinv-84262-20261030T0900Z-safe</code></li>
+<li><strong>Note (optional)</strong> — a short comment to tell submissions apart: <code>LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)</code> (56 characters, under the 140 limit).</li>
+</ul>
+</section>
+
+<section class="warn">
+<h2>Step 4 — Why this file will not hit "Predicted values must be in range [0, 1]"</h2>
+<p>That error is raised by the portal's element-wise range test on the <em>stored</em> cells: NaN compares False against [0, 1], so any file that stores NaN outside the footprint is rejected even when every in-footprint value is legal. This file uses the <strong>portal-safe encoding</strong> instead:</p>
+<ul>
+<li>every stored cell is finite and in [0, 1] — 0.0 background inside the footprint, 1.0 at each of the 84,262 dots, 0.0 outside;</li>
+<li>the null-ness of the outside cells is carried by an internal GDAL <em>per-dataset mask band</em>, so rasterio/GDAL read them as nodata;</li>
+<li>the dot set is bit-identical to the NaN-payload analysis copy (symmetric difference 0), so the estimate and uniqueness receipts apply unchanged.</li>
+</ul>
+<p>Reproduce the check: <code>python scripts/validate_submission_tif.py docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif</code> — it exits 0 only when all 11 hard gates pass, including <code>portal_range_test_all_cells</code>.</p>
+</section>
+
+<section>
+<h2>Step 5 — Check the weekly cap, then submit</h2>
+<ul>
+<li>The official rules allow <strong>three submissions per week</strong> and <strong>one final submission per entity</strong> (<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> §3.2).</li>
+<li>Promotion to a real slot is a separate selector decision. This file is cleared by every programmatic gate this project runs; spending a slot is the owner's call.</li>
+<li>Generative-AI use must be disclosed in the narrative (rules §3.2).</li>
+</ul>
+</section>
+
+<section>
+<h2>Re-verify any time</h2>
+<pre><code>python scripts/validate_submission_tif.py docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif
+python scripts/verify_all_gates.py
+python -m pytest -q</code></pre>
+<p>Receipts: <a href="../evidence/validator_lbinv_safe_20261031.json">format validator</a> · <a href="../evidence/uniqueness_audit_lbinv_safe_20261031.json">uniqueness audit</a> · <a href="../evidence/run_card_lbinv_safe_20261031.json">run card</a>.</p>
+</section>
+</main></body></html>

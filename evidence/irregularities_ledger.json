@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-30T05:05:00Z",
+ "generated_utc": "2026-10-31T05:22:18.658561+00:00",
  "repository": "sassnarep3-star/GEMSDOESASS3",
  "irregularities": [
   {
@@ -649,6 +649,30 @@
    "finding": "scripts/audit_unique_candidate.py excluded references whose own 300 m band covers more than 50 % of the footprint from the number it reported as max_frac_within_3px_literal. For the 2026-10-30 55,000-dot consensus build that excluded the 13GEMSDOE lattice (true overlap 99.54 %) and gemsdoe67-ovtr-ml-cover-tau3p0 (76.31 %, a real submission), so the published '0 of 2,627 above the cap' was true only of the halo-excluded class.",
    "resolution": "Recomputed from the rasters, rewrote the report to carry literal / submission-only / lattice numbers separately, rebuilt with the cap enforced against every submission (0 of 52 above 70 %, max 0.699982), and recorded the strict-literal ceiling (22,163-dot bound, 6,136 dots built, estimate 0.0257) in docs/research/lane70-alternative-20261030.md. The superseded 55k file was deleted.",
    "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-94",
+   "severity": "HIGH (FIXED)",
+   "title": "make_portal_safe_render.py did not reset striped block sizes when switching to tiled=True",
+   "finding": "When the source raster is striped (blockxsize=width, tiled=False), the safe-renderer copied that profile and set tiled=True without resetting blockxsize/blockysize. GDAL then raised 'Bad value 3292 for TileWidth tag' / 'TIFF dataset blocks must be multiples of 16'. The lbinv candidate (width 3292) could not be rendered portal-safe until the block size was pinned to 256x256.",
+   "resolution": "Fixed once in scripts/make_portal_safe_render.py (pin blockxsize=blockysize=256 when tiled=True). Regression test added: tests/test_portal_range_gate.py::test_tiled_render_resets_striped_block_sizes.",
+   "detected_utc": "2026-10-31"
+  },
+  {
+   "id": "IR-SASS3-95",
+   "severity": "HIGH (FIXED)",
+   "title": "The promoted LB-inversion candidate was shipped only as a NaN-payload raster",
+   "finding": "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif stored NaN in the 7,111,787 outside-footprint cells. The DrivenData form compares every stored cell against [0,1] element-wise and NaN compares False, so the file is rejected with 'Predicted values must be in range [0, 1]' (the exact error the owner reported). The pages and README promoted this file as submittable.",
+   "resolution": "Re-rendered in the portal-safe encoding (finite {0,1} inside, 0.0 outside, internal GDAL per-dataset mask band); dot set bit-identical (symmetric difference 0). Pages, README, session card, and run card updated to the -safe file. The NaN copy is retained as the analysis source only.",
+   "detected_utc": "2026-10-31"
+  },
+  {
+   "id": "IR-SASS3-96",
+   "severity": "MEDIUM",
+   "title": "GitHub API rate limit blocked the registry/corpus fetch; codeload tarballs used instead",
+   "finding": "The API-based fetchers (fetch_registry_rasters.py, build_score_corpus.py) exhausted the unauthenticated GitHub API rate limit when run with many workers, returning 0 matched entries and overwriting the corpus manifest. raw.githubusercontent.com is not on the sandbox allow-list.",
+   "resolution": "Added codeload-based fetchers (fetch_focus_registry_codeload.py, fetch_score_corpus_codeload.py) that download repo tarballs under the separate codeload limit. Restored the overwritten manifest from git. Uniqueness re-verified against 521 rasters (392 registry + 129 corpus), worst overlap 65.0%.",
+   "detected_utc": "2026-10-31"
   }
  ]
 }

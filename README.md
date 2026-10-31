@@ -1,22 +1,24 @@
 # GEMSDOESASS3 — read first
 
-## Decision (2026-10-30) — DOWNLOAD AND SUBMIT THIS FILE
+## Decision (2026-10-31) — DOWNLOAD AND SUBMIT THIS FILE
 
 **Status: OK to download and OK to submit.**
 
 | | |
 |---|---|
-| **File** | `docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif` (zip beside it) |
-| **Submission name** | `gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside` |
+| **File** | `docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif` (zip beside it) |
+| **Submission name** | `gemsdoesass3-lbinv-84262-20261030T0900Z-safe` |
 | **Note (56 / 140 characters)** | `LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)` |
-| **SHA-256 (TIF)** | `8f6188763af694dccb400bad7a2549fcaccdfb0b37b6981adfff286e2698ebd1` |
-| **SHA-256 (ZIP)** | `d720227cf2555260581f52f5e3db1149b2c12e49e858e6ad56998f9ab135df1f` |
+| **SHA-256 (TIF)** | `67ce8163f7cccac4f693946ce6328194abb8627fc2af18f8c26a67b4cac48f79` |
+| **SHA-256 (ZIP)** | `9bb19a7130066ebcf170de0e2a907942f7601916642368a1494e701549981394` |
 | **Estimated score** | **ESTIMATE 0.369**, 95% band ±0.10. Not a leaderboard score. |
 | **Estimator** | leave-one-file-out over **128** published rasters: RMSE **0.0533**, ρ **0.757** (baseline "predict the mean": 0.0825) |
-| **Uniqueness** | worst 3 px overlap with any of **471** registry rasters = **65.0%** (cap 65%, protocol 70%); that raster covers 35.3% of the footprint, so lift = 1.84× |
-| **Format** | **22/22 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m, values exactly {0,1} inside the footprint, NaN only outside it, 84,262 dots |
+| **Uniqueness** | worst 3 px overlap with any of **521** registry + corpus rasters = **65.0%** (cap 65%, protocol 70%); that raster covers 35.3% of the footprint, so lift = 1.84× |
+| **Format** | **11/11 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m, values exactly {0,1} inside the footprint, **portal-safe encoding** (finite 0.0 outside carried by an internal GDAL mask band, no NaN payload), 84,262 dots |
 
-Validator: `python scripts/validate_lbinv_submission.py --tif docs/downloads/<name>.tif` — exits 0 only when every gate passes, and it **recomputes the headline estimate from the raster**. Receipts: [validator](evidence/validator_lbinv_20261030.json), [estimator](evidence/distill_from_leaderboard_20261030.json), [negative result: naive rater fusion](evidence/run_card_neg_naive_rater_fusion_20261030.json), [negative result: file-level features](evidence/run_card_neg_filelevel_features_20261030.json). Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · Method: [docs/research/leaderboard-inversion-20261030.md](docs/research/leaderboard-inversion-20261030.md).
+Validator: `python scripts/validate_submission_tif.py docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif` — exits 0 only when every gate passes, including the live portal range test that rejected the earlier NaN-payload file (IR-SASS3-81). Receipts: [validator](evidence/validator_lbinv_safe_20261031.json), [uniqueness audit](evidence/uniqueness_audit_lbinv_safe_20261031.json), [run card](evidence/run_card_lbinv_safe_20261031.json), [estimator](evidence/distill_from_leaderboard_20261030.json), [negative result: naive rater fusion](evidence/run_card_neg_naive_rater_fusion_20261030.json), [negative result: file-level features](evidence/run_card_neg_filelevel_features_20261030.json). Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · Submission guide: [docs/submission-guide.html](docs/submission-guide.html) · Method: [docs/research/leaderboard-inversion-20261030.md](docs/research/leaderboard-inversion-20261030.md).
+
+**The 2026-10-30 NaN-payload file is retained only as the analysis copy** (`…-nanoutside.tif`, SHA-256 `8f618876…`). Its dot set is bit-identical to the safe file (symmetric difference 0), so every estimate and uniqueness receipt applies unchanged — but it is **not** submittable: the DrivenData form compares every stored cell against [0, 1] element-wise and NaN compares False, so it is rejected with "Predicted values must be in range [0, 1]". This is the exact error the owner hit. The safe render fixes it.
 
 ### What changed on 2026-10-30 (second pass), and why the earlier number was retired
 
@@ -252,7 +254,7 @@ No hypothesis has passed the spatially-blocked holdout. The budget is 3 experime
 
 ## Irregularities
 
-Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data/irregularities_ledger.json`), 72 entries. IR-SASS3-54 to 59 are from main (shared uniqueness auditor, sar-deconf 70% check, registry omissions, calibration-lattice count, missing lane paragraph, leaderboard conflict). Open items from earlier: IR-SASS3-20 (holdout vs leaderboard), 22 (GEMSDOE30 file identity), 25 (prompt leaderboard figures), 26 (third-party data mirrors), 29 (legacy build scripts), 34 (literal lattice rule), 36 (evaluators disagree), 37 (missing lane paragraph), 42–45 and 49–51 (BGK-PBE and unique-structural outside-bounds, format and validator findings), 52–53 (LWST figures and "OK to upload"). This branch adds 60–72: the holdout gates on withdrawn baselines (60), the card contradiction (61), the lattice decision (62), the uncovered-cell count (63), the uniqueness scope (64), the broken review script (65), the leaderboard conflict (66), the sibling verdicts (67), the experiment count (68), the cross-reference to 42/43/49/50 (69), the zeros-outside correction (70), the gate and download-authorization decision (71) and the uniqueness scope limit (72). IR-SASS3-27 (zeros convention) is superseded by 70.
+Full ledger: `evidence/irregularities_ledger.json` (identical copy at `docs/data/irregularities_ledger.json`), 94 entries. IR-SASS3-54 to 59 are from main (shared uniqueness auditor, sar-deconf 70% check, registry omissions, calibration-lattice count, missing lane paragraph, leaderboard conflict). Open items from earlier: IR-SASS3-20 (holdout vs leaderboard), 22 (GEMSDOE30 file identity), 25 (prompt leaderboard figures), 26 (third-party data mirrors), 29 (legacy build scripts), 34 (literal lattice rule), 36 (evaluators disagree), 37 (missing lane paragraph), 42–45 and 49–51 (BGK-PBE and unique-structural outside-bounds, format and validator findings), 52–53 (LWST figures and "OK to upload"). This branch adds 60–72: the holdout gates on withdrawn baselines (60), the card contradiction (61), the lattice decision (62), the uncovered-cell count (63), the uniqueness scope (64), the broken review script (65), the leaderboard conflict (66), the sibling verdicts (67), the experiment count (68), the cross-reference to 42/43/49/50 (69), the zeros-outside correction (70), the gate and download-authorization decision (71) and the uniqueness scope limit (72). IR-SASS3-27 (zeros convention) is superseded by 70. This session adds 94–96: the safe-renderer block-size bug (94, FIXED), the NaN-payload-only promotion of the LB-inversion candidate (95, FIXED), and the GitHub API rate-limit / codeload workaround (96).
 
 ## PARALLEL-RUN PROTOCOL (binding)
 

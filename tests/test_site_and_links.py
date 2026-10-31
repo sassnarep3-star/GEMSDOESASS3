@@ -75,12 +75,12 @@ def test_no_broken_sassnarep3_sibling_links_remain():
 def test_readme_contains_standing_prompt_and_synchronized_runcard():
     """The README must stay synchronised with the file it tells the owner to submit.
 
-    Changed 2026-10-30: the synced card is now the released candidate's run card
-    (evidence/run_card_tipcont_20261030.json). The previous card stays on disk as an archive.
+    Changed 2026-10-31: the synced receipt is the portal-safe LB-inversion candidate's build receipt.
+    The NaN-payload analysis copy stays on disk; its dot set is bit-identical to the safe file.
     """
-    # 2026-10-30 second pass: the synced receipt is the live candidate's build receipt.
+    # 2026-10-31: the synced receipt is the live (portal-safe) candidate's build receipt.
     rc = json.loads((ROOT / "docs" / "downloads"
-                     / "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside-build.json").read_text())
+                     / "gemsdoesass3-lbinv-84262-20261030T0900Z-safe-build.json").read_text())
     readme = (ROOT / "README.md").read_text()
     assert rc["submission_name"] in readme
     assert rc["submission_note"] in readme

@@ -1,0 +1,25 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31",
+ "label": "ESTIMATE",
+ "hypothesis": "H-LBINV: the organizer metric inverts, so 128 published scores locate the hidden faults",
+ "submission_name": "gemsdoesass3-lbinv-84262-20261030T0900Z-safe",
+ "raster_sha256": "67ce8163f7cccac4f693946ce6328194abb8627fc2af18f8c26a67b4cac48f79",
+ "zip_sha256": "9bb19a7130066ebcf170de0e2a907942f7601916642368a1494e701549981394",
+ "n_dots": 84262,
+ "expected_tp": 9753.1,
+ "est_score": 0.3687,
+ "N_estimate": 12000,
+ "scale_c": 0.9150672565982481,
+ "loo_rmse": 0.05332314599467134,
+ "loo_rho": 0.7566437007874016,
+ "worst_registry_overlap": 0.65,
+ "worst_registry_raster": "corpus:GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+ "submission_note": "LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)",
+ "encoding": "portal-safe: finite {0,1} inside footprint, 0.0 outside, internal GDAL per_dataset mask band (no NaN payload); dot set bit-identical to the NaN-payload analysis copy",
+ "source_analysis_copy": {
+  "file": "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif",
+  "sha256": "8f6188763af694dccb400bad7a2549fcaccdfb0b37b6981adfff286e2698ebd1"
+ },
+ "dot_set_symmetric_difference": 0
+}

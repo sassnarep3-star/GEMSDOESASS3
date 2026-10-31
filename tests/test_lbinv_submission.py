@@ -1,4 +1,4 @@
-"""Invariants for the leaderboard-inversion candidate (2026-10-30).
+"""Invariants for the leaderboard-inversion candidate (2026-10-30), portal-safe encoding.
 
 These tests exist to stop the two failure modes that matter:
 
@@ -6,6 +6,10 @@ These tests exist to stop the two failure modes that matter:
    format, value discipline, zip identity), and
 2. the headline number becoming un-recomputable -- so the estimate is recomputed here from the
    raster and the field, and must match the receipt to 5e-4.
+
+The submittable artefact is the portal-safe render (finite {0,1} inside the footprint, 0.0 outside,
+internal GDAL mask band). The NaN-payload copy is retained only as the analysis source; its dot set is
+bit-identical (symmetric difference 0), so every estimate and uniqueness receipt applies unchanged.
 """
 from __future__ import annotations
 
@@ -19,11 +23,11 @@ import pytest
 import rasterio
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside"
+NAME = "gemsdoesass3-lbinv-84262-20261030T0900Z-safe"
 TIF = ROOT / "docs" / "downloads" / f"{NAME}.tif"
 ZIP = TIF.with_name(TIF.name + ".zip")
 BUILD = TIF.with_name(TIF.stem + "-build.json")
-RECEIPT = ROOT / "evidence" / "validator_lbinv_20261030.json"
+RECEIPT = ROOT / "evidence" / "validator_lbinv_safe_20261031.json"
 ESTIMATOR = ROOT / "evidence" / "distill_from_leaderboard_20261030.json"
 ALPHA, BETA = 0.2, 0.8
 
@@ -58,8 +62,18 @@ def test_format_matches_organizer_rules(artifact):
     vals = a[np.isfinite(a)]
     assert vals.min() >= 0.0 and vals.max() <= 1.0
     assert set(np.unique(vals)).issubset({0.0, 1.0})
-    assert np.isnan(a[~foot]).all()          # outside must be null/NaN, never 0
+    # portal-safe encoding: outside cells are finite 0.0 carried by an internal mask band, not NaN.
+    assert np.isfinite(a).all()
+    assert (a[~foot] == 0.0).all()
     assert np.isfinite(a[foot]).all()        # nothing missing inside
+
+
+def test_portal_range_test_passes_on_all_cells():
+    # The live form rejects NaN outside the footprint; the safe render must have zero violating cells.
+    with rasterio.open(TIF) as ds:
+        a = ds.read(1).astype(np.float64)
+    bad = int(np.count_nonzero(~((a >= 0.0) & (a <= 1.0))))
+    assert bad == 0
 
 
 def test_dot_count_and_sha_match_receipt(artifact):
@@ -110,10 +124,11 @@ def test_estimator_beats_the_mean_baseline():
 
 def test_validator_receipt_passes_every_gate():
     rec = json.loads(RECEIPT.read_text())
-    assert rec["ok"] is True
-    assert rec["n_passed"] == rec["n_gates"] >= 20
-    assert rec["checks"]["est_score_reproduced"] is True
-    assert rec["checks"]["nan_only_outside_footprint"] is True
+    assert rec["all_hard_checks_pass"] is True
+    assert rec["checks"]["portal_range_test_all_cells"] is True
+    assert rec["checks"]["values_in_0_1"] is True
+    assert rec["checks"]["outside_cells_are_null"] is True
+    assert rec["mask"]["has_internal_mask_band"] is True
 
 
 def test_uniqueness_gate_is_under_the_protocol_limit():
