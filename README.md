@@ -61,14 +61,14 @@ Only the ordering/score claim is known from the owner's list. The exact reason f
 3. **Signed geodetic dilatation zero-crossing networks** — low/moderate potential, low/medium cost; tests signed boundaries rather than existing dilation magnitude features.
 4. **Gravity edge plus basement-depth change point, with magnetic-negative control** — low/moderate potential, medium cost; overlaps existing gravity hypotheses, so least novel.
 
-These are qualitative research priorities, not score projections. Layer details, named non-fault mimics, the official sources and blockers are in the [review](docs/research/repo-review-20261031.md#candidate-hypothesis-slate--proposals-only-not-tested). No experiment was started because the assigned method lane, shared cache, and dependencies are missing.
+These are qualitative research priorities, not score projections. Layer details, named non-fault mimics, the official sources and blockers are in the [review](docs/research/repo-review-20261031.md#candidate-hypothesis-slate--proposals-only-not-tested). No experiment was started because the assigned method lane, official raster/cache inputs, and spatial validation materials are unavailable; no slot was used.
 
 ## What blocks a valid downloadable TIF
 
 - `data/` holds JSON manifests only; `.cache/gems_data/` and the competition feature/label rasters are absent in this checkout. The old restore receipt documents another environment/state, not the present one.
 - A local `.venv` was created for this review, but it is ignored/untracked; a fresh checkout must install dependencies before testing. The competition feature/label cache is still absent, so cache-dependent holdout and full-registry checks cannot be reproduced here.
-- The user-reported portal error says predicted values must be in `[0,1]`. Existing NaN-outside candidates are not proven to pass a portal-wide range test; a finite masked payload needs acceptance verified by the actual portal before any go-live claim.
-- The protocol's referenced method paragraph and a complete live registry are not available as reproducible inputs here.
+- Fresh exact-byte validation confirms the lbinv artifact fails the portal-wide elementwise `[0,1]` test on 7,111,787 stored outside-footprint NaNs. A different finite/masked encoding has not been tested by the actual portal.
+- The protocol's referenced method paragraph, official competition rasters/cache, and a complete live registry are not available as reproducible inputs here.
 
 To reproduce the available tests in a clean checkout: `python -m venv .venv && .venv/bin/pip install -r requirements.txt && .venv/bin/python -m pytest -q`. Cache-dependent tests remain skipped until authorized data is restored.
 
