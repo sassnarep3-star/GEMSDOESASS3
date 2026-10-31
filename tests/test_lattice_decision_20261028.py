@@ -104,22 +104,18 @@ def test_lattice_exemption_is_not_applied_under_the_binding_task_protocol():
         assert "registry" in html.lower(), rel
 
 
-def test_pages_clear_exactly_one_file_and_block_the_legacy_ones():
-    """Policy lock, updated 2026-10-30 (see tests/test_independent_review.py for the rationale)."""
-    cleared = []
+def test_pages_fail_closed_until_all_required_gates_pass():
+    """No download page can elevate format validity into submission approval."""
     for p in PAGES:
         html = p.read_text()
         assert "localhost" not in html.lower() and "127.0.0.1" not in html, p
-        if "OK TO SUBMIT" in html:
-            cleared.append(p.name)
-    assert cleared == ["index.html", "executive-summary.html"], cleared
+        assert "OK TO SUBMIT" not in html, p
     for name in ("docs/index.html", "docs/executive-summary.html"):
         html = (ROOT / name).read_text()
-        # 2026-10-30 second pass: the cleared file is the LB-inversion candidate; the CDTI file is
-        # still named, but as superseded.
         assert "lbinv-84262" in html, name
         assert "cdti128-consensus" in html, name
-        assert "ok_to_submit" in html.lower() or "OK TO SUBMIT" in html, name
+        assert "NOT APPROVED TO SUBMIT" in html, name
+        assert "HOLDOUT-DTI" in html, name
         assert "localhost" not in html.lower() and "127.0.0.1" not in html, name
         assert "ESTIMATE" in html, name
 
