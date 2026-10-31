@@ -1,0 +1,52 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31T08:10:26Z",
+ "why": "two lanes promoted different files on the same day; this re-runs this lane's independent 1 978-raster registry scan on both, plus the champion control",
+ "rows": [
+  {
+   "file": "docs/downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif",
+   "label": "blockinv3 (promoted on main, built by the parallel lane)",
+   "n_dots": 123899,
+   "worst_overlap_submission_shaped": {
+    "file": "GEMSDOESASS3__gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif",
+    "overlap": 0.602708657858417,
+    "coverage": 0.4728898030004801,
+    "lift": 1.2745224236899122
+   },
+   "n_over_70pct": 0,
+   "n_submission_shaped_refs": 1736,
+   "protocol_rule_1_pass": true,
+   "normalised_criterion_pass": true
+  },
+  {
+   "file": "docs/downloads/gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif",
+   "label": "gs-s3.0-b60000 (built by this lane)",
+   "n_dots": 60000,
+   "worst_overlap_submission_shaped": {
+    "file": "GEMSDOESASS3__gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif",
+    "overlap": 0.9625666666666667,
+    "coverage": 0.4728898030004801,
+    "lift": 2.0354988848547646
+   },
+   "n_over_70pct": 209,
+   "n_submission_shaped_refs": 1736,
+   "protocol_rule_1_pass": false,
+   "normalised_criterion_pass": true
+  },
+  {
+   "file": ".cache/sibling_downloads/60GEMSDOE__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+   "label": "champion control (0.2778, OWNER-REPORT)",
+   "n_dots": 37654,
+   "worst_overlap_submission_shaped": {
+    "file": "60GEMSDOE__gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+    "overlap": 1.0,
+    "coverage": 0.2474390759095579,
+    "lift": 4.041398862827602
+   },
+   "n_over_70pct": 178,
+   "n_submission_shaped_refs": 1736,
+   "protocol_rule_1_pass": false,
+   "normalised_criterion_pass": false
+  }
+ ]
+}

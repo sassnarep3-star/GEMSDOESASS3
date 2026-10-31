@@ -1,0 +1,76 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31T07:37:18Z",
+ "label": "HOLDOUT-DTI (catalogue-recovery surrogate v1)",
+ "evaluator_version": "catalogue-recovery-surrogate-v1 (exact official DTI equations, alpha=0.2, beta=0.8, R=3 px)",
+ "withheld_positive_cells": 747,
+ "holdout_blocks": {
+  "block_cells": 40,
+  "block_km": 4.0,
+  "n_blocks": 262,
+  "fraction": 0.2,
+  "seed": 20261030
+ },
+ "caveat": "measures recovery of catalogued faults, not of the withheld new faults the leaderboard scores; rank correlation with owner-reported scores was only rho=+0.143 (n=21) in the 2026-10-30 session, so this is a gate, not a score",
+ "catalogue_npz_sha256": "7cfdebd3ae2d52fee04d39fa1c222422e9fd1659e1bde2004c259f8fb6e1eec8",
+ "rows": [
+  {
+   "strategy": "uniform-random baseline",
+   "file": "uniform",
+   "n_dots": 60000,
+   "holdout_dti": 0.006048768140443095,
+   "ci95": [
+    0.004855304951179133,
+    0.00722882408944484
+   ],
+   "tp_w": 76.19684219773606,
+   "fp_w": 59921.22467550846,
+   "fn_w": 670.8031578022639
+  },
+  {
+   "strategy": "gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif",
+   "sha256": "086ba4d52ccc9313b55dc69b3d58f3262d5a857d0daeeb7ccd956ee7ba4f27ad",
+   "file": "gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif",
+   "n_dots": 60000,
+   "holdout_dti": 0.0006942697906188527,
+   "ci95": [
+    0.00041493205179585186,
+    0.0009840870106758602
+   ],
+   "tp_w": 8.745987333360272,
+   "fp_w": 59990.20412585205,
+   "fn_w": 738.2540126666397,
+   "enrichment_over_uniform": 0.11477870774659828
+  },
+  {
+   "strategy": "60GEMSDOE__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+   "sha256": "baeae3219bba6a19bc8cfe79224e28555c50184b7c1ca65c2a822f54807c77dd",
+   "file": "60GEMSDOE__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+   "n_dots": 37654,
+   "holdout_dti": 0.0005473115146095626,
+   "ci95": [
+    0.00030129084831935916,
+    0.0008078431733615787
+   ],
+   "tp_w": 4.448760655098353,
+   "fp_w": 37649.49404838648,
+   "fn_w": 742.5512393449017,
+   "enrichment_over_uniform": 0.09048313671508493
+  },
+  {
+   "strategy": "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif",
+   "sha256": "8f6188763af694dccb400bad7a2549fcaccdfb0b37b6981adfff286e2698ebd1",
+   "file": "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif",
+   "n_dots": 84262,
+   "holdout_dti": 0.0026866322229663554,
+   "ci95": [
+    0.0021560998164219343,
+    0.003337820304988146
+   ],
+   "tp_w": 46.881670830334215,
+   "fp_w": 84215.00394725284,
+   "fn_w": 700.1183291696658,
+   "enrichment_over_uniform": 0.4441618790118726
+  }
+ ]
+}

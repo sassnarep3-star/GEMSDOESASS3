@@ -1,0 +1,384 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31T05:55:43.700169+00:00",
+ "label": "ESTIMATE \u2014 honest 5-fold out-of-sample; every input score is OWNER-REPORT",
+ "n0": 12000.0,
+ "n_scored_rasters": 182,
+ "n_families": 64,
+ "N_bounds": {
+  "lower_from_A_le_N": 8222.43073519401,
+  "upper_from_eps_ge_1": 2847.7400341498483,
+  "upper_bound_file": "GEMSDOE53__gems53-h8-tiprelay-ridgeconcord-pr2-n80000-20261009-49bec522-nan-outside.tif",
+  "n_files_giving_upper_bound": 31
+ },
+ "design": "TRAIN families -> T\u0302_train -> candidate; TEST families -> T\u0302_test -> independent truth surrogate; TRAIN rasters scored on that surrogate give the observed-vs-predicted calibration applied to the candidate",
+ "fold_sizes": [
+  91,
+  91
+ ],
+ "folds": [
+  {
+   "fold": 0,
+   "n_train": 91,
+   "n_test": 91,
+   "reference": {
+    "champion_name": "60GEMSDOE__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+    "champion_observed": 0.2778,
+    "champion_dti_vs_Ttest": 0.7012662020816359,
+    "champion_estimate": 0.8106824319571455
+   },
+   "calibration": {
+    "slope": 1.174247159796238,
+    "intercept": -0.012777414098310201,
+    "rmse": 0.038795603214095156,
+    "pearson_r": 0.7643489074417144,
+    "mean_observed": 0.08228901098901098,
+    "mean_predicted_raw": 0.08095946776981572
+   },
+   "configs": [
+    {
+     "variant": "bp",
+     "config": 0,
+     "spacing": 3.0,
+     "budget": 60000,
+     "mask_buffer": 0,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.1297330295998487,
+     "tp": 2738.959672055211,
+     "fp": 54822.425909678146,
+     "coverage": 0.22824663933793424,
+     "estimate": 0.1395612274410734
+    },
+    {
+     "variant": "bp",
+     "config": 1,
+     "spacing": 4.0,
+     "budget": 60000,
+     "mask_buffer": 0,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.14097418889867555,
+     "tp": 2984.249377498852,
+     "fp": 54859.57213381926,
+     "coverage": 0.24868744812490434,
+     "estimate": 0.1527611268205379
+    },
+    {
+     "variant": "bp",
+     "config": 2,
+     "spacing": 3.0,
+     "budget": 40000,
+     "mask_buffer": 0,
+     "n_dots": 40000,
+     "dti_vs_Ttest": 0.09786200309929233,
+     "tp": 1681.7407592635186,
+     "fp": 36242.35163629055,
+     "coverage": 0.14014506327195989,
+     "estimate": 0.10213676509300446
+    },
+    {
+     "variant": "bp",
+     "config": 3,
+     "spacing": 4.0,
+     "budget": 60000,
+     "mask_buffer": 2,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.145217283715381,
+     "tp": 3070.6755943816056,
+     "fp": 54656.257034381226,
+     "coverage": 0.2558896328651338,
+     "estimate": 0.15774356885780044
+    },
+    {
+     "variant": "gs",
+     "config": 0,
+     "spacing": 3.0,
+     "budget": 60000,
+     "mask_buffer": 0,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.15504647620189518,
+     "tp": 3272.6906883071315,
+     "fp": 54266.33117393652,
+     "coverage": 0.27272422402559426,
+     "estimate": 0.16928547021818022
+    },
+    {
+     "variant": "gs",
+     "config": 1,
+     "spacing": 4.0,
+     "budget": 60000,
+     "mask_buffer": 0,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.16115034821570456,
+     "tp": 3411.6015486104243,
+     "fp": 54439.908745487526,
+     "coverage": 0.2843001290508687,
+     "estimate": 0.17645292459415562
+    },
+    {
+     "variant": "gs",
+     "config": 2,
+     "spacing": 3.0,
+     "budget": 40000,
+     "mask_buffer": 0,
+     "n_dots": 40000,
+     "dti_vs_Ttest": 0.11615735400279237,
+     "tp": 1995.7579032058732,
+     "fp": 35911.75610395272,
+     "coverage": 0.16631315860048942,
+     "estimate": 0.12362002892891491
+    },
+    {
+     "variant": "gs",
+     "config": 3,
+     "spacing": 4.0,
+     "budget": 60000,
+     "mask_buffer": 2,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.16111964124764885,
+     "tp": 3410.5373742777374,
+     "fp": 54428.122266093895,
+     "coverage": 0.2842114478564781,
+     "estimate": 0.17641686702413026
+    }
+   ]
+  },
+  {
+   "fold": 1,
+   "n_train": 91,
+   "n_test": 91,
+   "reference": {
+    "champion_name": "60GEMSDOE__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+    "champion_observed": 0.2778,
+    "champion_dti_vs_Ttest": 0.261343626953622,
+    "champion_estimate": 0.22924746938464827
+   },
+   "calibration": {
+    "slope": 0.9788719243283919,
+    "intercept": -0.02657446964240508,
+    "rmse": 0.03795852266364831,
+    "pearson_r": 0.9130888749764868,
+    "mean_observed": 0.15086263736263736,
+    "mean_predicted_raw": 0.18126692838471464
+   },
+   "configs": [
+    {
+     "variant": "bp",
+     "config": 0,
+     "spacing": 3.0,
+     "budget": 60000,
+     "mask_buffer": 0,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.2760740546091251,
+     "tp": 5776.495952778155,
+     "fp": 50842.09924546877,
+     "coverage": 0.4813746627315129,
+     "estimate": 0.24366667144997076
+    },
+    {
+     "variant": "bp",
+     "config": 1,
+     "spacing": 4.0,
+     "budget": 60000,
+     "mask_buffer": 0,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.2802786039530189,
+     "tp": 5881.514992067284,
+     "fp": 51041.13891577721,
+     "coverage": 0.49012624933894033,
+     "estimate": 0.24778238675716172
+    },
+    {
+     "variant": "bp",
+     "config": 2,
+     "spacing": 3.0,
+     "budget": 40000,
+     "mask_buffer": 0,
+     "n_dots": 40000,
+     "dti_vs_Ttest": 0.28997284082739744,
+     "tp": 4920.782339862603,
+     "fp": 31928.23879297574,
+     "coverage": 0.41006519498855026,
+     "estimate": 0.25727180306127995
+    },
+    {
+     "variant": "bp",
+     "config": 3,
+     "spacing": 4.0,
+     "budget": 60000,
+     "mask_buffer": 2,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.29565993706813853,
+     "tp": 6209.607861926029,
+     "fp": 50803.06182038784,
+     "coverage": 0.517467321827169,
+     "estimate": 0.26283874190229495
+    },
+    {
+     "variant": "gs",
+     "config": 0,
+     "spacing": 3.0,
+     "budget": 60000,
+     "mask_buffer": 0,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.3264329989779322,
+     "tp": 6671.801688212841,
+     "fp": 47520.71115672588,
+     "coverage": 0.5559834740177367,
+     "estimate": 0.2929616282314114
+    },
+    {
+     "variant": "gs",
+     "config": 1,
+     "spacing": 4.0,
+     "budget": 60000,
+     "mask_buffer": 0,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.31746651545374766,
+     "tp": 6513.037818983078,
+     "fp": 48065.30512332916,
+     "coverage": 0.5427531515819232,
+     "estimate": 0.2841845892496341
+    },
+    {
+     "variant": "gs",
+     "config": 2,
+     "spacing": 3.0,
+     "budget": 40000,
+     "mask_buffer": 0,
+     "n_dots": 40000,
+     "dti_vs_Ttest": 0.33768061190045934,
+     "tp": 5566.085680807968,
+     "fp": 28850.33807361126,
+     "coverage": 0.463840473400664,
+     "estimate": 0.3039716007369864
+    },
+    {
+     "variant": "gs",
+     "config": 3,
+     "spacing": 4.0,
+     "budget": 60000,
+     "mask_buffer": 2,
+     "n_dots": 60000,
+     "dti_vs_Ttest": 0.3172110656081078,
+     "tp": 6507.277858102341,
+     "fp": 48062.88068330288,
+     "coverage": 0.5422731548418618,
+     "estimate": 0.2839345365676632
+    }
+   ]
+  }
+ ],
+ "aggregate": [
+  {
+   "variant": "gs",
+   "config": 0,
+   "spacing": 3.0,
+   "budget": 60000,
+   "mask_buffer": 0,
+   "n_folds": 2,
+   "mean_estimate": 0.23112354922479583,
+   "sd_estimate": 0.0618380790066156,
+   "min_estimate": 0.16928547021818022,
+   "mean_dots": 60000.0,
+   "mean_raw_dti_vs_Ttest": 0.24073973758991368
+  },
+  {
+   "variant": "gs",
+   "config": 1,
+   "spacing": 4.0,
+   "budget": 60000,
+   "mask_buffer": 0,
+   "n_folds": 2,
+   "mean_estimate": 0.23031875692189485,
+   "sd_estimate": 0.05386583232773923,
+   "min_estimate": 0.17645292459415562,
+   "mean_dots": 60000.0,
+   "mean_raw_dti_vs_Ttest": 0.2393084318347261
+  },
+  {
+   "variant": "gs",
+   "config": 3,
+   "spacing": 4.0,
+   "budget": 60000,
+   "mask_buffer": 2,
+   "n_folds": 2,
+   "mean_estimate": 0.23017570179589675,
+   "sd_estimate": 0.053758834771766476,
+   "min_estimate": 0.17641686702413026,
+   "mean_dots": 60000.0,
+   "mean_raw_dti_vs_Ttest": 0.2391653534278783
+  },
+  {
+   "variant": "gs",
+   "config": 2,
+   "spacing": 3.0,
+   "budget": 40000,
+   "mask_buffer": 0,
+   "n_folds": 2,
+   "mean_estimate": 0.21379581483295068,
+   "sd_estimate": 0.09017578590403576,
+   "min_estimate": 0.12362002892891491,
+   "mean_dots": 40000.0,
+   "mean_raw_dti_vs_Ttest": 0.22691898295162585
+  },
+  {
+   "variant": "bp",
+   "config": 3,
+   "spacing": 4.0,
+   "budget": 60000,
+   "mask_buffer": 2,
+   "n_folds": 2,
+   "mean_estimate": 0.2102911553800477,
+   "sd_estimate": 0.05254758652224725,
+   "min_estimate": 0.15774356885780044,
+   "mean_dots": 60000.0,
+   "mean_raw_dti_vs_Ttest": 0.22043861039175977
+  },
+  {
+   "variant": "bp",
+   "config": 1,
+   "spacing": 4.0,
+   "budget": 60000,
+   "mask_buffer": 0,
+   "n_folds": 2,
+   "mean_estimate": 0.20027175678884981,
+   "sd_estimate": 0.0475106299683119,
+   "min_estimate": 0.1527611268205379,
+   "mean_dots": 60000.0,
+   "mean_raw_dti_vs_Ttest": 0.21062639642584724
+  },
+  {
+   "variant": "bp",
+   "config": 0,
+   "spacing": 3.0,
+   "budget": 60000,
+   "mask_buffer": 0,
+   "n_folds": 2,
+   "mean_estimate": 0.19161394944552207,
+   "sd_estimate": 0.05205272200444867,
+   "min_estimate": 0.1395612274410734,
+   "mean_dots": 60000.0,
+   "mean_raw_dti_vs_Ttest": 0.2029035421044869
+  },
+  {
+   "variant": "bp",
+   "config": 2,
+   "spacing": 3.0,
+   "budget": 40000,
+   "mask_buffer": 0,
+   "n_folds": 2,
+   "mean_estimate": 0.1797042840771422,
+   "sd_estimate": 0.07756751898413775,
+   "min_estimate": 0.10213676509300446,
+   "mean_dots": 40000.0,
+   "mean_raw_dti_vs_Ttest": 0.19391742196334488
+  }
+ ],
+ "champion_reference": {
+  "name": "60GEMSDOE__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+  "observed": 0.2778,
+  "mean_estimate": 0.5199649506708969,
+  "sd_estimate": 0.29071748128624864,
+  "note": "the same honest yardstick applied to the champion raster (which is never in TRAIN for the fold that scores it, because its whole family sits in TEST or is excluded from TRAIN) \u2014 the number a new candidate must beat"
+ }
+}

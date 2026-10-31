@@ -50,6 +50,45 @@ Generated from `docs/downloads/`, so a file cannot stay downloadable while leavi
 - `gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` — **NOT OK to submit** — sha256 `ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e`
 
 
+### Cross-lane convergence (2026-10-31) — the promoted file is independently verified
+
+A second lane ran from the same prompt on the same day and reached its own candidate,
+`gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif` (**ESTIMATE 0.2914 ± 0.0234**, five-fold
+leave-family-out, anchor-corrected). Two lanes cannot both be promoted, so the two were compared
+head to head with the same 1 978-raster registry rather than by argument.
+Receipt: [evidence/cross_check_promoted_20261031.json](evidence/cross_check_promoted_20261031.json).
+
+| file | dots | worst 3 px overlap | lift | refs over 70 % | protocol rule 1 | ESTIMATE |
+|---|---|---|---|---|---|---|
+| `blockinv3-123899` (**promoted**) | 123 899 | **0.6027** | **1.27** | **0 / 1 736** | **PASS** | 0.3138 |
+| `gs-s3.0-b60000` (consensus lane) | 60 000 | 0.9626 | 2.04 | 209 / 1 736 | **FAIL** | 0.2914 |
+| champion control (0.2778) | 37 654 | 1.0000 | 4.04 | 178 / 1 736 | **FAIL** | 0.2778 (OWNER-REPORT) |
+
+**The literal 70 % / 3 px rule works.** The consensus lane had argued it was degenerate; this table
+disproves that. A presence-block inversion clears the gate against every submission-shaped reference,
+a weighted consensus over the same corpus does not. The rule is retained as the operative gate, with
+one refinement — references whose own 3 px neighbourhood covers more than half the footprint are
+excluded, because they overlap everything by construction. The consensus candidate is therefore
+**demoted to a second-slot / analysis artefact**, and everything it produced is kept under
+`docs/research/consensus-lane-20261031.html`.
+
+Two of its results are adopted:
+
+* **`N` is now corroborated by two independent routes.** This lane bounds it by two inequalities over
+  182 scored rasters to **8 222 ≤ N ≤ 12 366**; the block-inversion lane bounds it by 27 nested rater
+  pairs over 128 rasters to **N ≤ 12 512**. Different corpora, different arguments, same answer:
+  the hidden truth is roughly 12 000–12 500 pixels. Both lanes used N ≈ 12 000.
+* **The `N`-bound bug is fixed.** The upper bound must exclude catalogue-dominated rasters, because
+  staff-confirmed masking of known-fault pixels makes their effective `D` smaller than their raw dot
+  count. Unfiltered it returned N ≤ 2 847 — *below* the hard lower bound of 8 222, i.e. self-
+  contradictory. With the filter it is consistent.
+
+Also kept from that lane: `src/gems32/corpus.py` and `src/gems32/fastdti.py` (shared, 12 tests), the
+result that a Gram/normal-equations solve beats back-projection in every one of five folds
+(the corpus is ~2.5× redundant, so duplicated publications must be divided out), the holdout gate
+receipt, and the five geological hypotheses in
+[docs/research/hypotheses-consensus-20261031.md](docs/research/hypotheses-consensus-20261031.md).
+
 ### Reconciliation with the same-day review (`docs/research/repo-review-20261031.md`)
 
 That review reached **NO-GO** on the files that existed when it ran. Its two objections are answered by this
