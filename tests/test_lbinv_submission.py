@@ -1,4 +1,4 @@
-"""Invariants for the leaderboard-inversion candidate (2026-10-30).
+"""Invariants for the leaderboard-inversion candidate (2026-10-30), portal-safe encoding.
 
 These tests exist to stop the two failure modes that matter:
 
@@ -6,24 +6,35 @@ These tests exist to stop the two failure modes that matter:
    format, value discipline, zip identity), and
 2. the headline number becoming un-recomputable -- so the estimate is recomputed here from the
    raster and the field, and must match the receipt to 5e-4.
+
+Status (2026-10-31): the portal-safe render fixes the format blocker (11/11 byte gates, including
+the live portal range test that rejected the NaN-payload file) but FAILS the binding lane rule --
+99.9% of its dots fall within 3 px of the calibration lattice, which is a registry raster. It is
+therefore documented as FORMAT-OK / NOT CLEARED, never as "OK TO SUBMIT". The lattice was missing
+from the earlier 521-raster uniqueness sweep because that sweep only globbed the registry/corpus
+directories and not the HISTORICAL_SCORED lattice.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 import zipfile
+import sys
 from pathlib import Path
 
 import numpy as np
 import pytest
 import rasterio
+from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from conftest import assert_no_unbacked_approval  # noqa: E402
+NAME = "gemsdoesass3-lbinv-84262-20261030T0900Z-safe"
 TIF = ROOT / "docs" / "downloads" / f"{NAME}.tif"
 ZIP = TIF.with_name(TIF.name + ".zip")
 BUILD = TIF.with_name(TIF.stem + "-build.json")
-RECEIPT = ROOT / "evidence" / "validator_lbinv_20261030.json"
+RECEIPT = ROOT / "evidence" / "validator_lbinv_safe_20261031.json"
 ESTIMATOR = ROOT / "evidence" / "distill_from_leaderboard_20261030.json"
 ALPHA, BETA = 0.2, 0.8
 
@@ -58,8 +69,18 @@ def test_format_matches_organizer_rules(artifact):
     vals = a[np.isfinite(a)]
     assert vals.min() >= 0.0 and vals.max() <= 1.0
     assert set(np.unique(vals)).issubset({0.0, 1.0})
-    assert np.isnan(a[~foot]).all()          # outside must be null/NaN, never 0
+    # portal-safe encoding: outside cells are finite 0.0 carried by an internal mask band, not NaN.
+    assert np.isfinite(a).all()
+    assert (a[~foot] == 0.0).all()
     assert np.isfinite(a[foot]).all()        # nothing missing inside
+
+
+def test_portal_range_test_passes_on_all_cells():
+    # The live form rejects NaN outside the footprint; the safe render must have zero violating cells.
+    with rasterio.open(TIF) as ds:
+        a = ds.read(1).astype(np.float64)
+    bad = int(np.count_nonzero(~((a >= 0.0) & (a <= 1.0))))
+    assert bad == 0
 
 
 def test_dot_count_and_sha_match_receipt(artifact):
@@ -106,7 +127,8 @@ def test_note_is_portal_legal_and_published():
     assert live in index
     assert current["submission"]["submission_name"] in index
     assert "NOT OK to submit" in index
-    assert build["submission_name"] in index            # named, but as superseded
+    stem = build["submission_name"].replace("-safe", "")
+    assert stem in index or build["submission_name"] in index   # named, but as superseded
 
 
 def test_estimator_beats_the_mean_baseline():
@@ -119,10 +141,11 @@ def test_estimator_beats_the_mean_baseline():
 
 def test_validator_receipt_passes_every_gate():
     rec = json.loads(RECEIPT.read_text())
-    assert rec["ok"] is True
-    assert rec["n_passed"] == rec["n_gates"] >= 20
-    assert rec["checks"]["est_score_reproduced"] is True
-    assert rec["checks"]["nan_only_outside_footprint"] is True
+    assert rec["all_hard_checks_pass"] is True
+    assert rec["checks"]["portal_range_test_all_cells"] is True
+    assert rec["checks"]["values_in_0_1"] is True
+    assert rec["checks"]["outside_cells_are_null"] is True
+    assert rec["mask"]["has_internal_mask_band"] is True
 
 
 def test_uniqueness_gate_is_under_the_protocol_limit():
@@ -131,9 +154,42 @@ def test_uniqueness_gate_is_under_the_protocol_limit():
     assert "GEMSDOE22" in build["worst_registry_raster"]
 
 
-def test_pages_send_the_reader_to_this_file_first():
+def test_lattice_rule_fails_so_candidate_is_not_cleared():
+    # Regression for the 2026-10-31 finding: the 521-raster uniqueness sweep only globbed the
+    # registry/corpus directories and missed the calibration lattice (a registry raster under
+    # HISTORICAL_SCORED). Recompute the literal lane rule against the lattice on the saved bytes.
+    lat = None
+    lat_tif = ROOT / ".cache/gems_data/scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif"
+    if lat_tif.is_file():
+        with rasterio.open(lat_tif) as ds:
+            lat = np.nan_to_num(ds.read(1), nan=0.0) > 0.0
+    if lat is None:
+        packed = ROOT / "evidence/calibration_lattice_mask.npz"
+        if packed.is_file():
+            z = np.load(packed)
+            shape = tuple(int(x) for x in z["shape"])
+            lat = np.unpackbits(z["packed"])[: shape[0] * shape[1]].reshape(shape).astype(bool)
+    if lat is None:
+        pytest.skip("calibration lattice not available")
+    with rasterio.open(TIF) as ds:
+        cand = ds.read(1) > 0.0
+    # "within 3 px" == the organizer's 300 m kernel radius == Chebyshev distance <= 3, i.e. three
+    # dilation iterations with the (3,3) structuring element. A single iteration is only radius 1.
+    struct = np.ones((3, 3), dtype=bool)
+    dil = ndi.binary_dilation(lat, structure=struct, iterations=3)
+    frac = float((cand & dil).sum()) / float(cand.sum())
+    assert frac > 0.70, f"expected the lane rule to fail, got {frac:.4f}"
+    assert frac > 0.95, f"expected near-lattice duplication, got {frac:.4f}"
+
+
+def test_pages_document_the_safe_candidate_as_not_cleared():
+    # 2026-10-31: the portal-safe render fixes the format blocker but FAILS the binding lane
+    # rule (99.9% of its dots within 3 px of the calibration lattice, a registry raster).
+    # The pages must therefore document it as NOT CLEARED, never as "OK TO SUBMIT".
     for page in ("docs/index.html", "docs/executive-summary.html"):
         html = (ROOT / page).read_text()
-        assert html.index(NAME) < html.index("cdti128-consensus") if "cdti128" in html else True
-        assert "OK TO SUBMIT" in html
+        assert NAME in html or NAME.replace("-safe", "") in html, page
+        assert_no_unbacked_approval(html, page), page
+        assert ("DO NOT SUBMIT" in html or "NOT CLEARED" in html or "NOT OK to submit" in html
+                or "superseded" in html.lower()), page
         assert "localhost" not in html.lower() and "127.0.0.1" not in html

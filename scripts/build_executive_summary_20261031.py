@@ -70,6 +70,12 @@ def main() -> int:
     bound = m["n_bound"]
     base = m["baseline_20261030_release"]
     n_gates, n_passed = v["n_gates"], v["n_passed"]
+    # every raster in docs/downloads other than the cleared one is retired, and is named as such
+    retired = sorted(q.stem for q in (ROOT / "docs" / "downloads").glob("*.tif")
+                     if q.stem != name)
+    retired_html = "\n".join(
+        f'<li><code>{e(r)}.tif</code> — <span class="pill no">NOT OK to submit</span></li>'
+        for r in retired)
     portal_nan = int(v.get("detail", {}).get("nan_cells_if_any", 0)) or 7111787
     portal_null = int(v.get("detail", {}).get("null_cells_declared", 0))
     band = est["band_over_admissible_N"]
@@ -175,10 +181,20 @@ cap {100*uni['cap']:.0f}%</td><td><span class="pill">SUBMIT</span></td></tr>
 <tr class="no"><td><em>superseded:</em> <code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code></td>
 <td>{base['est']:.4f} as claimed<br><span class="small">same family, coarser model (LOO σ {base['loo_rmse']:.4f})</span></td>
 <td>65.0% against its own comparison set — at the cap, i.e. no margin</td><td><span class="pill mid">SUPERSEDED</span></td></tr>
+<tr class="no"><td><em>superseded:</em> <code>gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif</code> /
+<code>…-cdist-18000-…-nanoutside.tif</code> (the same-day cell-credit lane)</td>
+<td>no estimate offered by its own run card</td>
+<td>47% by its own measure — but that lane's verdict is "screening-only, slot NOT cleared"
+(<a href="research/repo-review-20261031.md">review</a>)</td><td><span class="pill no">DO NOT SUBMIT</span></td></tr>
 <tr class="no"><td><em>superseded:</em> <code>gemsdoesass3-cdti128-consensus-40533-…-nanoutside.tif</code></td>
 <td>0.394 as claimed<br><span class="small">its estimator does not survive leave-one-out</span></td>
 <td>yes (as measured at the time)</td><td><span class="pill no">DO NOT SUBMIT</span></td></tr>
 </tbody></table></div>
+<p class="small"><strong>Preserved review.</strong> The same-day independent review that reached NO-GO on the files as they
+then existed is kept unedited at <a href="research/repo-review-20261031.md">research/repo-review-20261031.md</a> with its
+machine-readable card <code>docs/data/run_card_20261031_review.json</code>. Its two objections — the NaN payload and the
+saturated-lattice overlap — are answered in <a href="#portal">section 8</a> and in the uniqueness section above; nothing
+in that review is deleted or softened.</p>
 <p class="small"><strong>How to read the estimate.</strong> The model that produced it is fitted on 128 published
 (file, score) pairs and judged <em>leave-one-file-out</em>: each published score is predicted by a fit that never saw
 it. RMSE <strong>{chosen['loo_rmse']:.4f}</strong> and Spearman <strong>{chosen['loo_rho']:.3f}</strong> against a
@@ -454,10 +470,22 @@ reported at {100*uni['non_discriminating_overlaps'][0]['overlap']:.1f}% rather t
 
 <section class="warn">
 <h2>Superseded and blocked — <span class="pill no">NOT OK to submit</span></h2>
-<p>NOT OK to submit: <code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code> (superseded by this file),
-<code>gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif</code> (its estimator fails leave-one-out),
-<code>gemsdoesass3-bgk-pbe-…-zeros.tif</code> and <code>gemsdoesass3-unique-structural-…-zeros.tif</code> (values outside
-the footprint, which the official format forbids).</p>
+<p><strong>Every other raster in <code>docs/downloads</code> is retired.</strong> The list is generated from the
+directory, so a file cannot be dropped from the page while staying downloadable:
+</p><ul class="small">
+{retired_html}
+</ul>
+<p><strong>Every other raster in <code>docs/downloads</code> is retired, and is listed here so that no file can stay
+downloadable while disappearing from the page:</strong></p><ul class="small">
+{retired_html}
+</ul>
+<p>Reasons for the two most recent: <code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code> (superseded, and it stores
+NaN outside the footprint), <code>gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif</code> (its
+estimator fails leave-one-out), <code>gemsdoesass3-cdist-…-20261031T1200Z-…</code> (that lane's own verdict is
+screening-only, slot NOT cleared), <code>gemsdoesass3-bgk-pbe-…-zeros.tif</code> and
+<code>gemsdoesass3-unique-structural-…-zeros.tif</code> (values outside the footprint, which the official format
+forbids). The same-day independent review that reached NO-GO before this release is preserved unedited at
+<a href="research/repo-review-20261031.md">research/repo-review-20261031.md</a>.</p>
 </section>
 
 <section class="warn">
@@ -472,6 +500,36 @@ any method in this repository — this file maximises what the public scores can
 </section>
 </main></body></html>
 """
+    # ---- root redirect pages, generated from the same receipt so they cannot drift ---------------
+    _root_tpl = """<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="0; url={target}">
+<title>GEMSDOESASS3 — {title}</title>
+<style>body{{font:16px/1.6 system-ui,sans-serif;max-width:760px;margin:10vh auto;padding:24px;color:#14243a;background:#f8fafc}}
+main{{background:white;padding:28px;border:2px solid #0f766e;border-radius:14px}}a{{color:#075fac}}
+.status{{color:#0f766e;font-weight:900}}code{{overflow-wrap:anywhere;font-size:13px}}</style></head>
+<body><main>
+<p class="status">OK TO SUBMIT — one file, backed by a receipt</p>
+<h1>{title}</h1>
+<p>{body}</p>
+<p><a href="{target}">Open {target} →</a> · <a href="docs/executive-summary.html">Executive summary</a> ·
+<a href="docs/index.html">Project status</a></p>
+</main></body></html>
+"""
+    (ROOT / "index.html").write_text(_root_tpl.format(
+        target="docs/index.html", title="Submission status",
+        body=(f"Exactly one raster is cleared: <code>{name}.tif</code>. Everything else in "
+              f"<code>docs/downloads</code> is retired and marked <strong>NOT OK to submit</strong>. "
+              f"The same-day review that reached NO-GO is preserved at "
+              f"<a href=\"docs/research/repo-review-20261031.md\">docs/research/repo-review-20261031.md</a>, "
+              f"with both of its objections answered on the executive summary.")))
+    (ROOT / "executive-summary.html").write_text(_root_tpl.format(
+        target="docs/executive-summary.html", title="Executive summary",
+        body=(f"Nine-site table, estimate classes, the portal-range fix and the uniqueness proof. "
+              f"Cleared file: <code>{name}.tif</code>. Every other file in <code>docs/downloads</code> is "
+              f"<strong>NOT OK to submit</strong> (superseded or failed a gate), and the NO-GO review of "
+              f"<a href=\"docs/research/repo-review-20261031.md\">report 2026-10-31</a> is preserved verbatim.")))
     (ROOT / "docs" / "index.html").write_text(index)
     print(f"wrote {ROOT / 'docs' / 'index.html'} ({len(index):,} bytes)")
     return 0

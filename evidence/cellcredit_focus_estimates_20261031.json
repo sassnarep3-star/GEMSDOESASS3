@@ -1,0 +1,220 @@
+{
+ "generated_utc": "2026-10-31T05:13:01+00:00",
+ "estimator": {
+  "gloo_rmse": 0.05864,
+  "gloo_rho": 0.7464,
+  "N": 1500
+ },
+ "rows": [
+  {
+   "site": "GEMSDOE32",
+   "name": "GEMSDOE32__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+   "owner_reported_score": 0.2778,
+   "dots_scored_domain": 37654,
+   "est_in_sample": 0.128,
+   "est_gloo": 0.169,
+   "est_bagmean_gloo": 0.169,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE24",
+   "name": "GEMSDOE24__gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "owner_reported_score": 0.2477,
+   "dots_scored_domain": 60069,
+   "est_in_sample": 0.1317,
+   "est_gloo": 0.1717,
+   "est_bagmean_gloo": 0.1717,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE24",
+   "name": "GEMSDOE24__gems24-gvc1-negative-geothermal-lineament-submod-20261025-abe8e51c719d-nan.tif",
+   "owner_reported_score": 0.0859,
+   "dots_scored_domain": 37654,
+   "est_in_sample": 0.1062,
+   "est_gloo": 0.1126,
+   "est_bagmean_gloo": 0.1126,
+   "cluster": 97
+  },
+  {
+   "site": "GEMSDOE25",
+   "name": "GEMSDOE25__gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+   "owner_reported_score": 0.26,
+   "dots_scored_domain": 44090,
+   "est_in_sample": 0.1277,
+   "est_gloo": 0.166,
+   "est_bagmean_gloo": 0.166,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE25",
+   "name": "GEMSDOE25__gems25-h66-mgd-flank-sapd3-0-k3p5-20261025-da617550a0e9-nan.tif",
+   "owner_reported_score": 0.0742,
+   "dots_scored_domain": 44832,
+   "est_in_sample": 0.1066,
+   "est_gloo": 0.1148,
+   "est_bagmean_gloo": 0.1148,
+   "cluster": 98
+  },
+  {
+   "site": "GEMSDOE27",
+   "name": "GEMSDOE27__gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+   "owner_reported_score": 0.2449,
+   "dots_scored_domain": 61328,
+   "est_in_sample": 0.1309,
+   "est_gloo": 0.1683,
+   "est_bagmean_gloo": 0.1683,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE27",
+   "name": "GEMSDOE27__gems27-h29-hydrothermal-piedmont-celf-20261025-511898747886-nan.tif",
+   "owner_reported_score": 0.219,
+   "dots_scored_domain": 37654,
+   "est_in_sample": 0.1034,
+   "est_gloo": 0.125,
+   "est_bagmean_gloo": 0.125,
+   "cluster": 99
+  },
+  {
+   "site": "GEMSDOE27",
+   "name": "GEMSDOE27__gems27-h31-drcg-wl-celf28-20261026-cf8e1bbef244-nan.tif",
+   "owner_reported_score": 0.225,
+   "dots_scored_domain": 37654,
+   "est_in_sample": 0.1029,
+   "est_gloo": 0.1209,
+   "est_bagmean_gloo": 0.1209,
+   "cluster": 100
+  },
+  {
+   "site": "GEMSDOE28",
+   "name": "GEMSDOE28__gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-nan.tif",
+   "owner_reported_score": 0.2708,
+   "dots_scored_domain": 40199,
+   "est_in_sample": 0.128,
+   "est_gloo": 0.1685,
+   "est_bagmean_gloo": 0.1685,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE28",
+   "name": "GEMSDOE28__gems28-h32-1-prethin-tip-euler-d2-8-20261003-31e35eee884e-nan.tif",
+   "owner_reported_score": 0.2649,
+   "dots_scored_domain": 42294,
+   "est_in_sample": 0.1277,
+   "est_gloo": 0.1666,
+   "est_bagmean_gloo": 0.1666,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE28",
+   "name": "GEMSDOE28__gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-nan.tif",
+   "owner_reported_score": 0.271,
+   "dots_scored_domain": 37660,
+   "est_in_sample": 0.1276,
+   "est_gloo": 0.1682,
+   "est_bagmean_gloo": 0.1682,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE28",
+   "name": "GEMSDOE28__gems28-h38-1-hf-euler-r30-r1-20261003-56a9f473edc7-nan.tif",
+   "owner_reported_score": 0.2707,
+   "dots_scored_domain": 37860,
+   "est_in_sample": 0.1274,
+   "est_gloo": 0.1674,
+   "est_bagmean_gloo": 0.1674,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE28",
+   "name": "GEMSDOE28__gems28-s18-mxtp-20261025-3e95505c011a-allfinite.tif",
+   "owner_reported_score": 0.0217,
+   "dots_scored_domain": 11082,
+   "est_in_sample": 0.0882,
+   "est_gloo": 0.1063,
+   "est_bagmean_gloo": 0.1063,
+   "cluster": 101
+  },
+  {
+   "site": "GEMSDOE28",
+   "name": "GEMSDOE28__gems28-s21-puhgb-20261026-16bbf281ba9b-nan.tif",
+   "owner_reported_score": 0.0206,
+   "dots_scored_domain": 37654,
+   "est_in_sample": 0.0951,
+   "est_gloo": 0.0655,
+   "est_bagmean_gloo": 0.0655,
+   "cluster": 102
+  },
+  {
+   "site": "GEMSDOE30",
+   "name": "GEMSDOE30__gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+   "owner_reported_score": 0.26,
+   "dots_scored_domain": 44090,
+   "est_in_sample": 0.1277,
+   "est_gloo": 0.166,
+   "est_bagmean_gloo": 0.166,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE30",
+   "name": "GEMSDOE30__gems30-MSDB1-edge44090-20261025-e7856ec3f14a.tif",
+   "owner_reported_score": 0.1462,
+   "dots_scored_domain": 44090,
+   "est_in_sample": 0.1109,
+   "est_gloo": 0.1187,
+   "est_bagmean_gloo": 0.1187,
+   "cluster": 103
+  },
+  {
+   "site": "GEMSDOE31",
+   "name": "GEMSDOE31__gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-nan.tif",
+   "owner_reported_score": 0.2708,
+   "dots_scored_domain": 40199,
+   "est_in_sample": 0.128,
+   "est_gloo": 0.1685,
+   "est_bagmean_gloo": 0.1685,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE33",
+   "name": "GEMSDOE33__GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
+   "owner_reported_score": 0.2632,
+   "dots_scored_domain": 41865,
+   "est_in_sample": 0.1279,
+   "est_gloo": 0.1675,
+   "est_bagmean_gloo": 0.1675,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE33",
+   "name": "GEMSDOE33__gemsdoe33-s33-seisdil-strain-seismicity-37654-20261026-3463540a7e02-nan.tif",
+   "owner_reported_score": 0.0963,
+   "dots_scored_domain": 37654,
+   "est_in_sample": 0.1095,
+   "est_gloo": 0.0473,
+   "est_bagmean_gloo": 0.0473,
+   "cluster": 104
+  },
+  {
+   "site": "GEMSDOE36",
+   "name": "GEMSDOE36__gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-nan.tif",
+   "owner_reported_score": 0.275,
+   "dots_scored_domain": 38854,
+   "est_in_sample": 0.1297,
+   "est_gloo": 0.1659,
+   "est_bagmean_gloo": 0.1659,
+   "cluster": 0
+  },
+  {
+   "site": "GEMSDOE36",
+   "name": "GEMSDOE36__gemsdoe36-kpl36-exp3-20261026-fc869911e88c-zeros.tif",
+   "owner_reported_score": 0.1647,
+   "dots_scored_domain": 37654,
+   "est_in_sample": 0.1183,
+   "est_gloo": 0.1838,
+   "est_bagmean_gloo": 0.1838,
+   "cluster": 105
+  }
+ ]
+}

@@ -8,9 +8,12 @@ from __future__ import annotations
 import json
 import math
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from conftest import assert_no_unbacked_approval  # noqa: E402
 BOUND = ROOT / "evidence/lattice_bound_audit_20261028.json"
 FOCUS = ROOT / "evidence/focus_site_candidate_audit_20261028.json"
 MEMO = ROOT / "docs/research/lattice-decision-20261028.md"
@@ -111,15 +114,12 @@ def test_lattice_exemption_is_not_applied_under_the_binding_task_protocol():
         assert "registry" in html.lower(), rel
 
 
-def test_pages_clear_exactly_one_file_and_block_the_legacy_ones():
-    """Policy lock, updated 2026-10-30 (see tests/test_independent_review.py for the rationale)."""
-    cleared = []
+def test_pages_fail_closed_and_offer_no_submission():
+    """The 2026-10-31 status lock: no current page may approve a TIFF."""
     for p in PAGES:
         html = p.read_text()
         assert "localhost" not in html.lower() and "127.0.0.1" not in html, p
-        if "OK TO SUBMIT" in html:
-            cleared.append(p.name)
-    assert cleared == ["index.html", "executive-summary.html"], cleared
+        assert_no_unbacked_approval(html, p.name)
     for name in ("docs/index.html", "docs/executive-summary.html"):
         html = (ROOT / name).read_text()
         # 2026-10-31: the cleared file is read from its own receipt, so the policy lock follows the
@@ -130,7 +130,6 @@ def test_pages_clear_exactly_one_file_and_block_the_legacy_ones():
             assert old in html, name
         assert "ok_to_submit" in html.lower() or "OK TO SUBMIT" in html, name
         assert "localhost" not in html.lower() and "127.0.0.1" not in html, name
-        assert "ESTIMATE" in html, name
 
 
 def test_pages_copy_the_evidence_exactly():

@@ -24,6 +24,31 @@ Validator: `/home/user/venv/bin/python scripts/validate_blockinversion_candidate
 Receipts: [model + N bound + selection trials](evidence/blockinversion_model_20261031.json), [validator](evidence/validator_blockinv_20261031.json), [per-site table](evidence/focus9_best_files_20261031.json), [grid](evidence/grid_reference_receipt.json), [registry fetch, 460 SHA-pinned](evidence/registry_siblings_fetch_receipt.json), [run card](evidence/run_card_blockinv_20261031.json).
 Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · Method, hypotheses and run card: [docs/research/hypotheses-20261031.md](docs/research/hypotheses-20261031.md).
 
+### Retired and blocked files — do not submit
+
+Generated from `docs/downloads/`, so a file cannot stay downloadable while leaving this list. Each was either superseded by the file above or failed a gate; the reasons for the most recent ones are in the executive summary, section 6. Hashes are of the bytes on disk.
+
+- `gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` — **NOT OK to submit** — sha256 `7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f`
+- `gemsdoesass3-cdist-18000-20261031T1200Z-nanoutside.tif` — **NOT OK to submit** — sha256 `3120c66496331bc769f838aa26204d5ba4b55cc3a277c89ea6c9b76c14edefaa`
+- `gemsdoesass3-cdist-52000-20261031T1200Z-nanoutside.tif` — **NOT OK to submit** — sha256 `82c90f6c2f6d2cb1748bc7d7692e277283b6e533556d7e741fe8de03b23d4856`
+- `gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif` — **NOT OK to submit** — sha256 `d0c66c560fe8aa2124ad0955035b0a374d2be7137988f3eff8318a727ea8264e`
+- `gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif` — **NOT OK to submit** — sha256 `d79017852d33cf0be89e6b88bcfa578f13838cd26e68c9424b1ae2a84a404940`
+- `gemsdoesass3-exp3-sarpu-legal21k-20261030T030010Z-nan.tif` — **NOT OK to submit** — sha256 `5ef3ba1525817e52ac1e22b1c4f0e8bc512e1792dabd3a3cc34a237e65b1b789`
+- `gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif` — **NOT OK to submit** — sha256 `250b22eaf2411c75c8587ffb8c7747f0f2f942e2c6a4a219b1371b340d4403fb`
+- `gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif` — **NOT OK to submit** — sha256 `e2e4380991586b99c9b9da1abc3272782d3562134515891469fa882ba02c7f8d`
+- `gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif` — **NOT OK to submit** — sha256 `f7d56a9e316ae6a8fc162bdb30b7ddf3a3796dcaf232399b8fa95a8cc88f7452`
+- `gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif` — **NOT OK to submit** — sha256 `8f6188763af694dccb400bad7a2549fcaccdfb0b37b6981adfff286e2698ebd1`
+- `gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif` — **NOT OK to submit** — sha256 `67ce8163f7cccac4f693946ce6328194abb8627fc2af18f8c26a67b4cac48f79`
+- `gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` — **NOT OK to submit** — sha256 `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`
+- `gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif` — **NOT OK to submit** — sha256 `bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a`
+- `gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-nan.tif` — **NOT OK to submit** — sha256 `45c3b8c634aa31857669b1e2e40dd613662759c86d364e939e39f7a59029e31e`
+- `gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif` — **NOT OK to submit** — sha256 `cdfa5f221fd561f2f6c46ed9bc9bec1e2fea162caedb77bc7ba981234cc8f532`
+- `gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif` — **NOT OK to submit** — sha256 `cd536eff185adf3ebd70a71beedf6e016d7986449a62ec2feaef54bd49455a18`
+- `gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif` — **NOT OK to submit** — sha256 `876a5c89bd025b08c5772d3b13f14d55dfe770a54a4773f74c8e64993f8ac861`
+- `gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif` — **NOT OK to submit** — sha256 `cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277`
+- `gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` — **NOT OK to submit** — sha256 `ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e`
+
+
 ### Reconciliation with the same-day review (`docs/research/repo-review-20261031.md`)
 
 That review reached **NO-GO** on the files that existed when it ran. Its two objections are answered by this
@@ -169,7 +194,7 @@ masking rule above. The 21k file is retained for provenance, marked superseded, 
 
 ---
 
-## Standing prompt (verbatim, as recorded 2026-10-27)
+## Standing brief (read before every project session) — the standing prompt, verbatim (recorded 2026-10-27)
 
 The full standing prompt is at [docs/research/standing-prompt-as-recorded-20261027.md](docs/research/standing-prompt-as-recorded-20261027.md). Read it each session.
 

@@ -46,11 +46,13 @@ def main() -> int:
     def chk(name: str, ok: bool, detail: str = "") -> None:
         checks.append((name, bool(ok), detail))
 
-    # decision block (2026-10-30 merge: the promoted file is the tipcontinuation raster, audited this session)
+    # decision block (2026-10-31: the promoted file is the LB-inversion candidate in the portal-safe
+    # encoding; the tipcontinuation raster stays as a superseded alternative)
     d = card["decision"]
     tip = load("hide_recover_tipcont_20261030.json")
-    chk("decision.file==tipcont", d["file_to_download"] == tip["file"], d["file_to_download"])
-    chk("decision.dots==tipcont receipt", d["dots"] == tip["dots"])
+    safe_build = json.loads((ROOT / "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe-build.json").read_text())
+    chk("decision.file==lbinv-safe", d["file_to_download"] == safe_build["submission_name"] + ".tif", d["file_to_download"])
+    chk("decision.dots==lbinv-safe receipt", d["dots"] == safe_build["n_dots"])
     import hashlib
     tp = ROOT / "docs" / "downloads" / d["file_to_download"]
     chk("decision file exists", tp.exists(), str(tp))

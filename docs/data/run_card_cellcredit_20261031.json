@@ -1,0 +1,108 @@
+{
+ "schema_version": 1,
+ "session_utc": "2026-10-31T05:35:32+00:00",
+ "lane": "H-CELLDISTILL (the step 2026-10-30 recorded as 'not run')",
+ "hypothesis": "The published-score corpus, read through the metric's linear form, identifies which geophysical channels carry credit for UNMAPPED faults; a channel model of that credit can then place dots where no sibling raster has ever drawn one.",
+ "mechanism": "DTI = TP/(0.2D+0.8N) is linear in a latent per-cell credit field (alpha+beta=1, binary prediction), and for a linear model c(x)=b+w.phi(x) the bag sum over a raster's dots equals D times the bag mean, so 132 published scores reduce EXACTLY to a weighted regression on per-file feature means (28 channels: the 19 official bands + 9 structural transforms).",
+ "mimic_non_fault_process": "Aeromagnetic flight-line crossover and gridding artifacts are linear, high-contrast in tmi_vg / rtp edges, and coincide with gravity edges where the survey boundary steps; a scarp-step + gravity-edge coincidence therefore flags sensor geometry as readily as it flags a fault. Secondary mimics: differential compaction lines at lithologic contacts and incised linear drainage, both of which produce white-tophat topographic steps with no displacement.",
+ "holdout": {
+  "evaluator": "GEMSDOESASS3 shared harness (no private fork)",
+  "hide_and_recover": {
+   "version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+   "withheld_positives": 22232,
+   "pooled_dti": 0.0461,
+   "ci95": [
+    0.0394,
+    0.0533
+   ],
+   "n_spatial_clusters": 140,
+   "label": "HOLDOUT-DTI"
+  },
+  "sgmc_cal": {
+   "version": "GEMSDOE32-SGMC-CAL-v3.0",
+   "withheld_positives": 62703,
+   "raw_pooled_dti": 0.1326,
+   "raw_ci95": [
+    0.1168,
+    0.148
+   ],
+   "prevalence_calibrated_dti": 0.0804,
+   "calibrated_ci95": [
+    0.0707,
+    0.0894
+   ],
+   "label": "HOLDOUT-DTI"
+  },
+  "note": "the repo measured that HIDE-RECOVER ranks submissions in the opposite order to the real leaderboard (rho +0.143 over 21 files) because the organizer masks catalogue pixels; the holdout is a floor test, not a score projection."
+ },
+ "score_estimates": {
+  "inputs_label": "OWNER-REPORT",
+  "estimator_selected": {
+   "name": "bag-mean ridge (H-CELLDISTILL)",
+   "validation": "leave-CLUSTER-out",
+   "gloo_rmse": 0.05864,
+   "gloo_rho": 0.7464,
+   "baseline_predict_mean_rmse": 0.08176,
+   "n_files": 132,
+   "n_clusters": 110
+  },
+  "rejected": [
+   {
+    "name": "field-sum price of our own emission",
+    "gloo_rmse": 0.0806,
+    "gloo_rho": 0.3018,
+    "reason": "a bag-mean model does not identify within-bag ranking; pricing the top 1% of the field is winner's-curse extrapolation (mean credit per dot 0.21 vs 0.07 for the corpus' best files)"
+   },
+   {
+    "name": "bag predictor without feature winsorisation",
+    "implied_score": 493.6,
+    "reason": "extrapolation outside the corpus bag range; impossible value, caught before publication"
+   },
+   {
+    "name": "incumbent corpus inversion (site's 2026-10-30 headline, est 0.369)",
+    "gloo_rmse": 0.13641,
+    "reason": "worse than predicting the mean (0.08176) once near-duplicate files are withheld together; its 0.0533 leave-one-FILE-out number leaked through the 20-file cluster-0 family"
+   }
+  ],
+  "candidate_estimate": "NOT PRICED. The validated estimator ranks files; its magnitude is shrunk (champion 0.2778 -> 0.1690). No number in this session certifies an improvement over 0.2778, so none is published."
+ },
+ "registry_correlation": {
+  "n_rasters_checked": 511,
+  "worst_3px_overlap": 0.4703,
+  "protocol_limit": 0.7,
+  "repo_cap": 0.65,
+  "pass": true,
+  "binding_raster": "corpus:GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+  "binding_raster_footprint_coverage": 0.353,
+  "lift": 1.333,
+  "off_corpus_cells": 1065766,
+  "note": "53% of dots are >3px from that raster's dots and 1.07M field cells lie outside every published raster's dots: the emission is not a copy."
+ },
+ "raster": {
+  "nanoutside": {
+   "file": "docs/downloads/gemsdoesass3-cdist-52000-20261031T1200Z-nanoutside.tif",
+   "sha256": "82c90f6c2f6d2cb1748bc7d7692e277283b6e533556d7e741fe8de03b23d4856",
+   "n_dots": 52000
+  },
+  "zeros": {
+   "file": "docs/downloads/gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif",
+   "n_dots": 52000
+  }
+ },
+ "validator": {
+  "tool": "scripts/validate_submission_tif.py",
+  "nanoutside": "portal_range_test_all_cells = FALSE (7,111,787 NaN cells outside the footprint trip the live 'Predicted values must be in range [0, 1]' gate)",
+  "zeros_variant": "values_in_0_1 TRUE, portal_range_test_all_cells TRUE, finite_inside_footprint TRUE, 52,000 positive pixels, 2 unique values {0,1}, CRS EPSG:32611, shape 3730x3292, transform matches"
+ },
+ "submission": {
+  "name": "gemsdoesass3-cdist-52000-20261031T1200Z-zeros",
+  "note": "cell-credit distillation, 52000 dots, unique 47% overlap; screening-only, slot NOT cleared",
+  "note_length": 90
+ },
+ "verdict": "NEGATIVE -- no promotion. Unique raster generated, gated, and downloadable; its score cannot be certified above the 0.2778 champion, it loses the holdout floor (0.0461 vs the family's 0.19-0.26 class), and the site's previous 0.369 claim is retired by the cluster-honest test.",
+ "next_steps": [
+  "use the validated bag estimator as a SCREEN, not a price: rank candidate strategies by it before any slot is spent",
+  "the only route to new recall is localisation the corpus lacks -> 1 m DEM scarp extraction restricted to the 1.07M off-corpus cells the field nominates, plus GBM/InSAR strain-rate lobes; both are free, official, and already registered in registry/data_manifest.json",
+  "fix the site-wide download default to the zeros variant so no user hits the portal range gate again"
+ ]
+}

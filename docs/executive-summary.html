@@ -58,10 +58,20 @@ cap 65%</td><td><span class="pill">SUBMIT</span></td></tr>
 <tr class="no"><td><em>superseded:</em> <code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code></td>
 <td>0.3687 as claimed<br><span class="small">same family, coarser model (LOO σ 0.0519)</span></td>
 <td>65.0% against its own comparison set — at the cap, i.e. no margin</td><td><span class="pill mid">SUPERSEDED</span></td></tr>
+<tr class="no"><td><em>superseded:</em> <code>gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif</code> /
+<code>…-cdist-18000-…-nanoutside.tif</code> (the same-day cell-credit lane)</td>
+<td>no estimate offered by its own run card</td>
+<td>47% by its own measure — but that lane's verdict is "screening-only, slot NOT cleared"
+(<a href="research/repo-review-20261031.md">review</a>)</td><td><span class="pill no">DO NOT SUBMIT</span></td></tr>
 <tr class="no"><td><em>superseded:</em> <code>gemsdoesass3-cdti128-consensus-40533-…-nanoutside.tif</code></td>
 <td>0.394 as claimed<br><span class="small">its estimator does not survive leave-one-out</span></td>
 <td>yes (as measured at the time)</td><td><span class="pill no">DO NOT SUBMIT</span></td></tr>
 </tbody></table></div>
+<p class="small"><strong>Preserved review.</strong> The same-day independent review that reached NO-GO on the files as they
+then existed is kept unedited at <a href="research/repo-review-20261031.md">research/repo-review-20261031.md</a> with its
+machine-readable card <code>docs/data/run_card_20261031_review.json</code>. Its two objections — the NaN payload and the
+saturated-lattice overlap — are answered in <a href="#portal">section 8</a> and in the uniqueness section above; nothing
+in that review is deleted or softened.</p>
 <p class="small"><strong>How to read the estimate.</strong> The model that produced it is fitted on 128 published
 (file, score) pairs and judged <em>leave-one-file-out</em>: each published score is predicted by a fit that never saw
 it. RMSE <strong>0.0206</strong> and Spearman <strong>0.958</strong> against a
