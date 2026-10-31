@@ -2,7 +2,7 @@
  "schema_version": 1,
  "label": "OWNER-REPORT scores; overlaps measured on raster bytes",
  "not_organizer_confirmed": true,
- "candidate": "gemsdoesass3-blockinv3-123899-20261031T055633Z-nanoutside",
+ "candidate": "gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask",
  "candidate_dots": 123899,
  "neighbourhood_px": 3,
  "note": "new_dots_within_this_file is the direction the uniqueness cap constrains; this_files_dots_within_new is large because the candidate is denser than any focus file.",

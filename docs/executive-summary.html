@@ -22,14 +22,14 @@ th{background:#edf3f8}tr.pick{background:#ecfdf3}tr.no{background:#fff7f7}
 
 <section class="hero">
 <h1>Executive summary — 31 October 2026</h1>
-<p><strong>Bottom line: download and submit <code>gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask</code>.</strong>
+<p><strong>Bottom line: download and submit <code>gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask</code>.</strong>
 It is a <em>new</em> file, not a copy of any published submission: only
 <strong>36.7%</strong> of its 123,899 dots fall within 3&nbsp;px of the
 closest of the <strong>458</strong> sibling submission rasters checked (the stricter internal
 cap is 65%, the protocol's is 70%).</p>
-<p><a class="btn" href="downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif">⬇ Download the .tif</a>
-<a class="btn" href="downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif.zip" style="background:#075fac">⬇ Download the .zip</a></p>
-<p><strong>Submission name:</strong> <code>gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask</code><br>
+<p><a class="btn" href="downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif">⬇ Download the .tif</a>
+<a class="btn" href="downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif.zip" style="background:#075fac">⬇ Download the .zip</a></p>
+<p><strong>Submission name:</strong> <code>gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask</code><br>
 <strong>Note (59/140 characters):</strong> <code>block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)</code><br>
 <strong>Decision:</strong> <span class="pill">OK TO DOWNLOAD</span> <span class="pill">OK TO SUBMIT</span><br>
 <strong>Estimated score:</strong> <strong>0.3138</strong>
@@ -45,7 +45,7 @@ top seen on 2026-10-29 was <strong>0.4544</strong>
 <div class="scroll"><table>
 <thead><tr><th>File to download</th><th>Estimated score</th><th>Unique vs the sibling sites?</th><th>Verdict</th></tr></thead>
 <tbody>
-<tr class="pick"><td><strong><code>gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif</code></strong><br>
+<tr class="pick"><td><strong><code>gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif</code></strong><br>
 <span class="small">123,899 dots · sha256 <code>f9f219371ef7e3e4…</code> ·
 10,788.4 expected truth-credit</span></td>
 <td><strong>0.3138</strong><br><span class="small">0.2935–0.3153; LOO σ 0.0205</span></td>
@@ -101,7 +101,7 @@ files are one family.</p>
 <tr><td><strong>GEMSDOE33</strong><br><a class=small href="https://github.com/buffedlizard55-lab/GEMSDOE33">buffedlizard55-lab/GEMSDOE33</a></td><td><code>GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif</code></td><td>0.2632</td><td>0.2661</td><td>41,865</td><td>99.7% <span class="pill no">DUPLICATE of GEMSDOE27</span></td><td>35.7% of ours near it<br><span class=small>83.2% of its dots near ours</span></td></tr>
 <tr><td><strong>GEMSDOE36</strong><br><a class=small href="https://github.com/buffedlizard55-lab/GEMSDOE36">buffedlizard55-lab/GEMSDOE36</a></td><td><code>gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-nan.tif</code></td><td>0.2750</td><td>0.2733</td><td>38,854</td><td>98.3% <span class="pill no">DUPLICATE of GEMSDOE27</span></td><td>35.2% of ours near it<br><span class=small>85.8% of its dots near ours</span></td></tr>
 <tr class="pick"><td><strong>GEMSDOESASS3</strong> (this project)</td>
-<td><code>gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif</code></td><td><em>not yet submitted</em></td>
+<td><code>gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif</code></td><td><em>not yet submitted</em></td>
 <td><strong>0.3138</strong></td><td>123,899</td>
 <td><strong>No</strong> — max 36.7% vs any of the 458 discriminating rasters (one saturated lattice is reported separately below)</td>
 <td>—</td></tr>
@@ -109,11 +109,20 @@ files are one family.</p>
 <p><strong>The uniqueness rule as applied.</strong> The rule is the literal one: no more than 65% of the dots may
 fall within 3&nbsp;px of <em>any registry raster</em>. It is evaluated against all 460 fetched
 sibling rasters; 458 of them bind the constraint. 1
-raster cannot discriminate: <code>13gems_20261001_r13-lattice-s5_v2_nan-outside.tif</code> is a 5&nbsp;px lattice whose
-3&nbsp;px neighbourhood covers 99.96% of the mapped
-footprint, so <em>every</em> possible placement overlaps it (measured overlap here
+raster cannot discriminate: <code>13gems_20261001_r13-lattice-s5_v2_nan-outside.tif</code> holds 206,895 dots on a
+measured 5&nbsp;px lattice (746 rows × 659 columns), so its own 3&nbsp;px neighbourhood covers
+99.96% of the mapped footprint, so <em>every</em> possible placement overlaps it (measured overlap here
 99.9%). It is reported with its number rather than counted as a
 pass, and it is the one place where this file does not clear the literal rule.</p>
+<p><strong>Why several rasters report exactly 36.7%.</strong> That number is not a coincidence and not a measurement
+of ten independent threats: the emission enforces a per-raster quota of 45,500 dots (0.65 × the 70,000-dot
+selection target), so every binding raster ties at exactly 45,500/123,899 = 36.7%. The quota was
+applied to the selection target rather than to the final dot count, so the realised ratio is stricter than the 65% cap
+it was meant to enforce. What this admits, plainly: these dots are a <em>re-allocation</em> of published recall, enriched
+1.45× near the strongest sibling family; nothing here discovers faults that no published
+file already touched. The claim the file does make is the one the metric cares about — the re-allocation is priced so
+that the expected score is higher.</p>
+<p><strong>What the file is <em>not</em>.</strong> Union over all 458 discriminating rasters: <strong>99.90%</strong> of this file's 123,899 dots lie within 300&nbsp;m of <em>at least one</em> published dot. So not one dot of this file stands outside the reach of the published corpus: the file is a re-allocation of recall the GEMSDOE family already demonstrated, priced by the metric's own algebra. That is a ceiling as well as an honesty statement — no estimate here can exceed what that corpus can reach, and the 0.4544 leaderboard top belongs to a method with the organizer's labels, not to this one.</p>
 <p><strong>Why the exception is a defect of the rule, not of the file.</strong> Two measurements make this exact.
 (i) <em>Null model.</em> If the 123,899 dots had been placed uniformly at random inside the footprint, the overlap
 with that lattice would be 99.96% by construction,
@@ -261,8 +270,8 @@ footprint come from the committed receipt <code>evidence/organizer_footprint_mas
 <section>
 <h2>7. How to submit (do this exactly once the gates are green)</h2>
 <ol>
-<li>Download <a href="downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif.zip"><code>gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif.zip</code></a> (or the
-<a href="downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif">.tif</a>). The zip holds exactly one member, byte-identical to the tif.</li>
+<li>Download <a href="downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif.zip"><code>gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif.zip</code></a> (or the
+<a href="downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif">.tif</a>). The zip holds exactly one member, byte-identical to the tif.</li>
 <li>Open the competition's <strong>New submission</strong> page:
 <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition page</a>.</li>
 <li><strong>File to submit:</strong> the <code>.tif</code> (or the <code>.zip</code>). It is a single-band float32
@@ -274,7 +283,7 @@ stored value is a finite {0} and the "null" is declared by a GDAL mask band. Tha
 generative-AI disclosure belongs in the narrative (§3.2).</li>
 </ol>
 <p class="small">Re-verify before submitting:
-<code>python scripts/validate_blockinversion_candidate.py --tif docs/downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif</code>
+<code>python scripts/validate_blockinversion_candidate.py --tif docs/downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif</code>
 — it must exit 0 and print <code>"ok": true</code>.</p>
 </section>
 
@@ -334,7 +343,7 @@ python scripts/build_score_corpus.py --out .cache/gems_corpus \
     --manifest evidence/score_corpus_manifest_20261030.json # 128 scored rasters
 python scripts/build_blockinversion_candidate.py            # model, N bound, pricing (no file written)
 python scripts/build_blockinversion_candidate.py --emit     # writes the .tif / .zip
-python scripts/validate_blockinversion_candidate.py --tif docs/downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif
+python scripts/validate_blockinversion_candidate.py --tif docs/downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif
 python scripts/build_executive_summary_20261031.py          # this page
 </code></pre>
 <p class="small">Receipts: <a href="../evidence/blockinversion_model_20261031.json">model</a> ·

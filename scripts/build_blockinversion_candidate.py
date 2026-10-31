@@ -419,7 +419,7 @@ def main() -> int:
 
     # ---------------- registry hits (cached), then quota-constrained selection ----------------
     inv = registry_inventory(args.registry, args.registry_manifest, args.score_table)
-    cache = ROOT / ".cache" / f"registry_hits_v2_{rep_idx.size}_{b_emit}_{len(inv)}.npz"
+    cache = ROOT / ".cache" / f"registry_hits_v3_{rep_idx.size}_{b_emit}_{len(inv)}.npz"
     if cache.exists():
         z = np.load(cache)
         for j, r in enumerate(inv):

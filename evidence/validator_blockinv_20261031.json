@@ -39,7 +39,7 @@
  "failed": [],
  "ok": true,
  "detail": {
-  "tif": "docs/downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif",
+  "tif": "docs/downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif",
   "raster_sha256": "f9f219371ef7e3e4239cbf7ce895e72797801a8ac49342c71240cceb497e22be",
   "grid_shape": [
    3730,

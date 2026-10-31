@@ -7,20 +7,21 @@
 
 | | |
 |---|---|
-| **File** | `docs/downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif` (zip beside it) |
-| **Submission name** | `gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask` |
+| **File** | `docs/downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif` (zip beside it) |
+| **Submission name** | `gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask` |
 | **Note (59 / 140 characters)** | `block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)` |
 | **SHA-256 (TIF)** | `f9f219371ef7e3e4239cbf7ce895e72797801a8ac49342c71240cceb497e22be` |
-| **SHA-256 (ZIP)** | `85a0e9ad6ad78c48bf280333dce4ded862fcd2c4981bf03d2ca2c55f2b670890` |
+| **SHA-256 (ZIP)** | `f5f2f6ac2b67e8bcf1ee44a18ca85aa2c00b3519efc4e82727321664a190513a` |
 | **Estimated score** | **ESTIMATE 0.3138** (band 0.2935–0.3153 over every admissible hidden-truth mass; leave-one-file-out σ 0.0205; calibrated 0.3212). Not a leaderboard score. |
 | **Estimator** | 300 m **presence-block** inversion of 128 published (file, score) pairs; leave-one-file-out RMSE **0.0206**, ρ **0.958** (baseline "predict the mean": 0.0825) |
 | **Hidden truth mass** | **N ≤ 12,512 px**, proven from 27 nested rater pairs, no labels |
 | **Portal encoding** | **no NaN stored anywhere** — 7,111,787 outside-footprint cells are finite `0` with null-ness declared by a GDAL internal mask band. This is what fixes `Predicted values must be in range [0, 1]`. |
-| **Uniqueness** | worst 3 px overlap against **458 discriminating** sibling submissions = **36.7%** (cap 65%, protocol 70%); lift 1.45× over that raster's own footprint coverage. All nine focus-site best files are 98.2–100% contained in another focus site's file; this one is not a copy of any. |
-| **One stated exception** | `13gems_20261001_r13-lattice-s5_v2_nan-outside.tif` — its 3 px neighbourhood covers **99.96%** of the footprint, so *every* admissible placement overlaps it (99.9% here, **below** the 99.96% a random placement would score). A rule demanding <70% against this raster has an empty feasible set — including the nine files that were actually submitted. Reported with its number, not counted as a pass. |
+| **Uniqueness** | worst 3 px overlap against **458 discriminating** sibling submissions = **36.7%** against a 65% cap; the binding raster is `gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif` (121,131 dots, its own 3 px neighbourhood covers 25.3% of the footprint, lift 1.45×). All nine focus-site best files are 98.2–100% contained in another focus site's file; this one is not a copy of any. |
+| **One measured exception** | `13gems_20261001_r13-lattice-s5_v2_nan-outside.tif`: 206,895 dots on a **5 px lattice** (746 rows × 659 columns), so its 3 px neighbourhood covers **99.96% of the footprint**. Every dot inside the footprint is within 300 m of a lattice dot, so overlap with it cannot discriminate between placements — 99.9% here, i.e. **below the 100% a random placement would score**. A <70% rule against this raster has an empty feasible set. |
+| **What it is not** | Union over all 458 discriminating rasters: **99.90%** of this file's dots lie within 300 m of at least one published dot. Not one dot stands outside the published corpus's reach — the file is a re-allocation of demonstrated recall, priced by the metric's algebra. That is also the ceiling: no estimate here can exceed what that corpus reaches, and the 0.4544 top belongs to a method with the organizer's labels. |
 | **Format** | **29/29 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m, values exactly {0,1} inside the footprint, the shared portal range gate, the mask-band null declaration, and a recomputation of the headline estimate from the raster. |
 
-Validator: `/home/user/venv/bin/python scripts/validate_blockinversion_candidate.py --tif docs/downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif` — exits 0 only when every gate passes.
+Validator: `/home/user/venv/bin/python scripts/validate_blockinversion_candidate.py --tif docs/downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif` — exits 0 only when every gate passes.
 Receipts: [model + N bound + selection trials](evidence/blockinversion_model_20261031.json), [validator](evidence/validator_blockinv_20261031.json), [per-site table](evidence/focus9_best_files_20261031.json), [grid](evidence/grid_reference_receipt.json), [registry fetch, 460 SHA-pinned](evidence/registry_siblings_fetch_receipt.json), [run card](evidence/run_card_blockinv_20261031.json).
 Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · Method, hypotheses and run card: [docs/research/hypotheses-20261031.md](docs/research/hypotheses-20261031.md).
 

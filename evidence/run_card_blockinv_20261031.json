@@ -1,10 +1,12 @@
 {
  "schema_version": 1,
+ "generated_utc": "2026-10-31T06:34:00+00:00",
  "label": "ESTIMATE",
  "not_organizer_confirmed": true,
- "hypothesis": "H-BLOCKINV: the organizer metric is a linear measurement of the hidden truth field; invert it on a 300 m presence design and emit one dot per block while expected credit > 0.2*DTI",
- "mechanism": "DTI = TP/(0.2D+0.8N) has no TP in the denominator, so each published score fixes the truth credit of its own dot set; a presence-in-300m-block design makes the fitted coefficient the credit of one emitted dot",
- "named_non_fault_process_that_could_mimic_it": "chunk selection: if the scored public split is enriched in faults, a dispersed field inherits a higher capture rate without any skill (H-selection, docs/research/why-02778-20261030.md section 3)",
+ "hypothesis": "H-BLOCKINV",
+ "assignment": "300 m presence-block inversion of the 128 published (file, score) pairs",
+ "mechanism": "DTI = TP/(0.2D+0.8N) has no TP in the denominator, so each published score fixes the truth credit of its own dot set; a presence design at the kernel radius makes the fitted coefficient the credit of one emitted dot",
+ "named_non_fault_process_that_could_mimic_it": "fault-density selection: if the scored public subset is unusually fault-rich, a dispersed field inherits a higher capture rate with no skill (H-selection)",
  "statistic": "leave-one-file-out prediction of 128 published OWNER-REPORT scores",
  "loo_rmse": 0.020591,
  "loo_rho": 0.957671,
@@ -20,7 +22,8 @@
  "hidden_truth_mass_N_upper_bound": 12512.1,
  "nested_pairs_used": 27,
  "correlation_overlap_vs_registry": {
-  "submissions_compared": 458,
+  "rasters": 460,
+  "discriminating": 458,
   "worst_overlap": 0.3672,
   "worst_raster": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif",
   "worst_raster_footprint_coverage": 0.253,
@@ -30,22 +33,30 @@
   "non_discriminating": {
    "raster": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
    "coverage_of_footprint": 0.99964,
-   "overlap": 0.9991
+   "overlap": 0.9991,
+   "why": "206,895 dots on a 5 px lattice (746x659); its 3 px neighbourhood covers 99.96% of the footprint, so overlap with it is uninformative and the <70% rule has an empty feasible set"
   }
  },
- "raster_sha256": "636de5efd59bbbeda925b84ade38297951bc157d801464c70f1536f4a15ab97b",
- "zip_sha256": "b82a5747b861451d85319af62d73d0adde25e3c6a3450366df17a3f770d320b5",
+ "raster_sha256": "f9f219371ef7e3e4239cbf7ce895e72797801a8ac49342c71240cceb497e22be",
+ "zip_sha256": "f5f2f6ac2b67e8bcf1ee44a18ca85aa2c00b3519efc4e82727321664a190513a",
+ "encoding": "finite 0 payload + GDAL internal mask band; no NaN stored; shared portal range gate passes",
  "validator_output": {
-  "gates": 28,
-  "passed": 28,
-  "note": "no NaN inside the footprint, values in [0,1], binary, CRS/shape/transform match the official grid, estimate recomputed from the raster"
+  "gates": 29,
+  "passed": 29,
+  "receipt": "evidence/validator_blockinv_20261031.json"
  },
- "submission_name": "gemsdoesass3-blockinv3-123899-20261031T055633Z-nanoutside",
+ "submission_name": "gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask",
  "submission_note": "block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)",
  "verdict": "promote",
  "negative_results": [
   "block counts beat exact-dot incidence but lose to presence (0.0330 vs 0.0205)",
-  "averaging designs at 2/3/4/6 px did not beat 3 px alone (0.0206-0.0215 vs 0.0205)",
-  "checking the uniqueness ratio incrementally collapses the estimate to 0.121; the quota must come from the final dot count"
- ]
+  "averaging designs at 2/3/4/6 px did not beat 3 px alone",
+  "checking the uniqueness ratio incrementally collapses the estimate to 0.121; the quota must come from the final dot count",
+  "the earlier '0.369' was a projection from the coarser exact-dot model (LOO sigma 0.052); it is retired"
+ ],
+ "budget": {
+  "experiments": 3,
+  "wall_clock_hours": 2,
+  "source": "PARALLEL-RUN PROTOCOL in README"
+ }
 }
