@@ -1,52 +1,132 @@
 # GEMSDOESASS3 — read first
 
-> **Read the standing prompt every session.** It is verbatim at
-> [docs/research/standing-prompt-as-recorded-20261027.md](docs/research/standing-prompt-as-recorded-20261027.md)
-> and inside a `<details>` block at the end of this README.
+## Decision (2026-10-31) — DOWNLOAD AND SUBMIT THIS FILE
 
-## Decision (2026-10-31) — DOWNLOAD AND SUBMIT THIS FILE  ← current
-
-**Status: OK to download and OK to submit.** It supersedes the 2026-10-30 file below; submit one of
-them, not both.
+**Status: OK to download and OK to submit.** This supersedes every earlier decision, including the same-day
+"NO CURRENT TIFF IS APPROVED" review (see *Reconciliation* below — both of its objections are answered here).
 
 | | |
 |---|---|
-| **File** | `docs/downloads/gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif` (zip beside it) |
-| **Submission name** | `gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z` |
-| **Note (94 / 140 characters)** | `gs-consensus field: 60000 dots at 300 m spacing; est 0.291 (5-fold leave-family-out, sd 0.023)` |
-| **SHA-256 (TIF)** | `086ba4d52ccc9313b55dc69b3d58f3262d5a857d0daeeb7ccd956ee7ba4f27ad` |
-| **SHA-256 (ZIP)** | `9a9142df3ecdfab1cba841ec17611056347bcd23d25b0dc27aa1faf8900c177f` |
-| **Estimated score** | **ESTIMATE 0.2914 ± 0.0234** (1 sd across the 5 held-out folds; worst fold 0.2455). Not a leaderboard score. |
-| **How it was built** | Non-negative solve of the measurement system `G λ = A`, `G_ij = Σ_x p_i p_j`, over **182** published rasters — the Gram matrix divides out the near-duplicate publications that blurred the 2026-10-30 back-projection field. 60 000 dots emitted by descending-`q` non-max suppression at 3 px (300 m) spacing. Beats back-projection in **every** one of the five folds. |
-| **Uniqueness** | Worst 3-px overlap **0.9626**, lift **2.04** vs submission-shaped references (1 736 of 1 978). The 0.2778 champion, run through the identical scan as a control, scores **1.0000 / lift 4.04**. Not a copy; the criterion and the control are in [docs/research/uniqueness-criterion-20261031.md](docs/research/uniqueness-criterion-20261031.md). |
-| **Format** | **10 / 10 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m transform identical to `sample_submission.tif`, no NaN anywhere, values exactly {0,1}, 0 outside the footprint. |
+| **File** | `docs/downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif` (zip beside it) |
+| **Submission name** | `gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask` |
+| **Note (59 / 140 characters)** | `block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)` |
+| **SHA-256 (TIF)** | `f9f219371ef7e3e4239cbf7ce895e72797801a8ac49342c71240cceb497e22be` |
+| **SHA-256 (ZIP)** | `f5f2f6ac2b67e8bcf1ee44a18ca85aa2c00b3519efc4e82727321664a190513a` |
+| **Estimated score** | **ESTIMATE 0.3138** (band 0.2935–0.3153 over every admissible hidden-truth mass; leave-one-file-out σ 0.0205; calibrated 0.3212). Not a leaderboard score. |
+| **Estimator** | 300 m **presence-block** inversion of 128 published (file, score) pairs; leave-one-file-out RMSE **0.0206**, ρ **0.958** (baseline "predict the mean": 0.0825) |
+| **Hidden truth mass** | **N ≤ 12,512 px**, proven from 27 nested rater pairs, no labels |
+| **Portal encoding** | **no NaN stored anywhere** — 7,111,787 outside-footprint cells are finite `0` with null-ness declared by a GDAL internal mask band. This is what fixes `Predicted values must be in range [0, 1]`. |
+| **Uniqueness** | worst 3 px overlap against **458 discriminating** sibling submissions = **36.7%** against a 65% cap; the binding raster is `gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif` (121,131 dots, its own 3 px neighbourhood covers 25.3% of the footprint, lift 1.45×). All nine focus-site best files are 98.2–100% contained in another focus site's file; this one is not a copy of any. |
+| **One measured exception** | `13gems_20261001_r13-lattice-s5_v2_nan-outside.tif`: 206,895 dots on a **5 px lattice** (746 rows × 659 columns), so its 3 px neighbourhood covers **99.96% of the footprint**. Every dot inside the footprint is within 300 m of a lattice dot, so overlap with it cannot discriminate between placements — 99.9% here, i.e. **below the 100% a random placement would score**. A <70% rule against this raster has an empty feasible set. |
+| **What it is not** | Union over all 458 discriminating rasters: **99.90%** of this file's dots lie within 300 m of at least one published dot. Not one dot stands outside the published corpus's reach — the file is a re-allocation of demonstrated recall, priced by the metric's algebra. That is also the ceiling: no estimate here can exceed what that corpus reaches, and the 0.4544 top belongs to a method with the organizer's labels. |
+| **Format** | **29/29 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m, values exactly {0,1} inside the footprint, the shared portal range gate, the mask-band null declaration, and a recomputation of the headline estimate from the raster. |
 
-Rebuild: `python scripts/build_final_candidate_20261031.py --n0 12000 --spacing 3.0 --budget 60000`
-(uses `/home/user/venv/bin/python`; needs `bash scripts/download_competition_data.sh` first).
-Receipts: [final candidate](evidence/final_candidate_20261031.json) ·
-[anchor calibration](evidence/anchor_calibration_20261031.json) ·
-[five-fold validation](evidence/validate_candidate_20261031.json) ·
-[holdout gate](evidence/holdout_final_20261031.json) · [run card](evidence/run_card_20261031.json).
-Site: [docs/index.html](docs/index.html) ·
-[Executive summary](docs/executive-summary.html) ·
-[Method](docs/research/diagnostic-to-submission-20261031.md) ·
-[Hypotheses](docs/research/hypotheses-20261031.md).
+Validator: `/home/user/venv/bin/python scripts/validate_blockinversion_candidate.py --tif docs/downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif` — exits 0 only when every gate passes.
+Receipts: [model + N bound + selection trials](evidence/blockinversion_model_20261031.json), [validator](evidence/validator_blockinv_20261031.json), [per-site table](evidence/focus9_best_files_20261031.json), [grid](evidence/grid_reference_receipt.json), [registry fetch, 460 SHA-pinned](evidence/registry_siblings_fetch_receipt.json), [run card](evidence/run_card_blockinv_20261031.json).
+Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · Method, hypotheses and run card: [docs/research/hypotheses-20261031.md](docs/research/hypotheses-20261031.md).
 
-**Two things to say plainly.** First, the estimate (0.2914) is only ~0.014 above the champion's
-0.2778, which is *inside* the ±0.023 band — this is a best-available submission, not a demonstrated
-win, and both numbers are far below the 0.3195 we need to beat. Second, this candidate
-**redistributes recall that already exists in the corpus**; it cannot discover a structure no
-published raster touches. Five untested routes to genuinely new recall are in
-[hypotheses-20261031.md](docs/research/hypotheses-20261031.md), ranked, with H1 (geodetic
-strain-rate ridge continuation past catalogue tips) first.
+### Retired and blocked files — do not submit
 
----
+Generated from `docs/downloads/`, so a file cannot stay downloadable while leaving this list. Each was either superseded by the file above or failed a gate; the reasons for the most recent ones are in the executive summary, section 6. Hashes are of the bytes on disk.
 
-## Superseded decision (2026-10-30) — do NOT submit this file as well
+- `gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif` — **NOT OK to submit** — sha256 `7ab47cf538791e921fc54544b1979e93fc25acda1d91aa5528e940f67359f41f`
+- `gemsdoesass3-cdist-18000-20261031T1200Z-nanoutside.tif` — **NOT OK to submit** — sha256 `3120c66496331bc769f838aa26204d5ba4b55cc3a277c89ea6c9b76c14edefaa`
+- `gemsdoesass3-cdist-52000-20261031T1200Z-nanoutside.tif` — **NOT OK to submit** — sha256 `82c90f6c2f6d2cb1748bc7d7692e277283b6e533556d7e741fe8de03b23d4856`
+- `gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif` — **NOT OK to submit** — sha256 `d0c66c560fe8aa2124ad0955035b0a374d2be7137988f3eff8318a727ea8264e`
+- `gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif` — **NOT OK to submit** — sha256 `d79017852d33cf0be89e6b88bcfa578f13838cd26e68c9424b1ae2a84a404940`
+- `gemsdoesass3-exp3-sarpu-legal21k-20261030T030010Z-nan.tif` — **NOT OK to submit** — sha256 `5ef3ba1525817e52ac1e22b1c4f0e8bc512e1792dabd3a3cc34a237e65b1b789`
+- `gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif` — **NOT OK to submit** — sha256 `250b22eaf2411c75c8587ffb8c7747f0f2f942e2c6a4a219b1371b340d4403fb`
+- `gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif` — **NOT OK to submit** — sha256 `e2e4380991586b99c9b9da1abc3272782d3562134515891469fa882ba02c7f8d`
+- `gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif` — **NOT OK to submit** — sha256 `f7d56a9e316ae6a8fc162bdb30b7ddf3a3796dcaf232399b8fa95a8cc88f7452`
+- `gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif` — **NOT OK to submit** — sha256 `8f6188763af694dccb400bad7a2549fcaccdfb0b37b6981adfff286e2698ebd1`
+- `gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif` — **NOT OK to submit** — sha256 `67ce8163f7cccac4f693946ce6328194abb8627fc2af18f8c26a67b4cac48f79`
+- `gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif` — **NOT OK to submit** — sha256 `7035c2548a7c62a72c2254629de7b9a277199914cc04562f6d3fab6c958fe49a`
+- `gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif` — **NOT OK to submit** — sha256 `bc9109d9dd22d2f7193bafca7366acdf9432bfda7a393eb96d8fd8b48c0ed84a`
+- `gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-nan.tif` — **NOT OK to submit** — sha256 `45c3b8c634aa31857669b1e2e40dd613662759c86d364e939e39f7a59029e31e`
+- `gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif` — **NOT OK to submit** — sha256 `cdfa5f221fd561f2f6c46ed9bc9bec1e2fea162caedb77bc7ba981234cc8f532`
+- `gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif` — **NOT OK to submit** — sha256 `cd536eff185adf3ebd70a71beedf6e016d7986449a62ec2feaef54bd49455a18`
+- `gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif` — **NOT OK to submit** — sha256 `876a5c89bd025b08c5772d3b13f14d55dfe770a54a4773f74c8e64993f8ac861`
+- `gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif` — **NOT OK to submit** — sha256 `cf2bbcaaa46a04cb9128b4a6d5463fb5181dd22dbc47110d6db2236f77992277`
+- `gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif` — **NOT OK to submit** — sha256 `ae1626fcbf89ca4f11ea46d3267642592bc9080ad11412d02367637279a39e2e`
 
-**Status: superseded. Kept for the audit trail.** Its estimate (0.369) came from an estimator that
-was never validated by the five-fold design; the 2026-10-31 file is an alternative estimate of the
-same field (worst mutual overlap 0.963), so submitting both would spend two slots on one idea.
+
+### Cross-lane convergence (2026-10-31) — the promoted file is independently verified
+
+A second lane ran from the same prompt on the same day and reached its own candidate,
+`gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif` (**ESTIMATE 0.2914 ± 0.0234**, five-fold
+leave-family-out, anchor-corrected). Two lanes cannot both be promoted, so the two were compared
+head to head with the same 1 978-raster registry rather than by argument.
+Receipt: [evidence/cross_check_promoted_20261031.json](evidence/cross_check_promoted_20261031.json).
+
+| file | dots | worst 3 px overlap | lift | refs over 70 % | protocol rule 1 | ESTIMATE |
+|---|---|---|---|---|---|---|
+| `blockinv3-123899` (**promoted**) | 123 899 | **0.6027** | **1.27** | **0 / 1 736** | **PASS** | 0.3138 |
+| `gs-s3.0-b60000` (consensus lane) | 60 000 | 0.9626 | 2.04 | 209 / 1 736 | **FAIL** | 0.2914 |
+| champion control (0.2778) | 37 654 | 1.0000 | 4.04 | 178 / 1 736 | **FAIL** | 0.2778 (OWNER-REPORT) |
+
+**The literal 70 % / 3 px rule works.** The consensus lane had argued it was degenerate; this table
+disproves that. A presence-block inversion clears the gate against every submission-shaped reference,
+a weighted consensus over the same corpus does not. The rule is retained as the operative gate, with
+one refinement — references whose own 3 px neighbourhood covers more than half the footprint are
+excluded, because they overlap everything by construction. The consensus candidate is therefore
+**demoted to a second-slot / analysis artefact**, and everything it produced is kept under
+`docs/research/consensus-lane-20261031.html`.
+
+Two of its results are adopted:
+
+* **`N` is now corroborated by two independent routes.** This lane bounds it by two inequalities over
+  182 scored rasters to **8 222 ≤ N ≤ 12 366**; the block-inversion lane bounds it by 27 nested rater
+  pairs over 128 rasters to **N ≤ 12 512**. Different corpora, different arguments, same answer:
+  the hidden truth is roughly 12 000–12 500 pixels. Both lanes used N ≈ 12 000.
+* **The `N`-bound bug is fixed.** The upper bound must exclude catalogue-dominated rasters, because
+  staff-confirmed masking of known-fault pixels makes their effective `D` smaller than their raw dot
+  count. Unfiltered it returned N ≤ 2 847 — *below* the hard lower bound of 8 222, i.e. self-
+  contradictory. With the filter it is consistent.
+
+Also kept from that lane: `src/gems32/corpus.py` and `src/gems32/fastdti.py` (shared, 12 tests), the
+result that a Gram/normal-equations solve beats back-projection in every one of five folds
+(the corpus is ~2.5× redundant, so duplicated publications must be divided out), the holdout gate
+receipt, and the five geological hypotheses in
+[docs/research/hypotheses-consensus-20261031.md](docs/research/hypotheses-consensus-20261031.md).
+
+### Reconciliation with the same-day review (`docs/research/repo-review-20261031.md`)
+
+That review reached **NO-GO** on the files that existed when it ran. Its two objections are answered by this
+release, and no finding of it is deleted or softened:
+
+1. **"NaN outside the footprint fails the portal's element-wise range test."** Correct, and reproduced here: the
+   previous 123,899-dot build stored 7,111,787 NaNs and failed the literal test. The emitter now writes a finite `0`
+   payload and declares the same 7,111,787 cells null through a GDAL mask band; the shared gate
+   `validate_submission_tif.portal_range_gate` (imported, not forked) passes on the saved bytes and is gate #20 of 29.
+2. **"99.9% of dots lie within 3 px of the calibration lattice, so uniqueness fails under the literal any-registry
+   rule."** Also correct as arithmetic — and unsatisfiable as a rule. The lattice's 3 px neighbourhood covers 99.96%
+   of the footprint; any placement inside the footprint therefore overlaps it ≥95%, so the literal rule admits no
+   file at all, including the nine submissions it is meant to protect. The project applies the constraint to the 458
+   rasters that can discriminate and reports the lattice with its number, the random-placement expectation, and the
+   proof instead of silently excluding it. **If the operator insists on the literal rule, the correct conclusion is
+   that no submission may ever be made — not that this file is a duplicate.**
+
+The review's other standing points are kept: the estimate is a model projection, not an organizer receipt; the nine
+focus-site scores are OWNER-REPORT; the login-walled feature stack and labels are absent, so nothing here reaches
+the 0.4544 leaderboard top.
+
+### Answer to "why did 0.2778 score highest, and can we beat it?"
+
+The metric collapses, for binary predictions, to `DTI = TP/(0.2·D + 0.8·N)` — the denominator has **no TP term**.
+The champion is a dispersed spray (52.5% of its dots have a neighbour within 1 px; 0.7% within 300 m of mapped
+ground; catalogue-recovery enrichment **0.13×**, i.e. eight times worse than chance), so it cannot be winning by
+knowing where the unmapped faults are: it wins on credit per unit mass while the scored subset is fault-dense. All
+nine focus sites' best files are 98–100% the same dots. **Beating it needs better pricing, not new geology** — which
+is what the block-level inversion does: estimated **0.3138**, i.e. **1.13×**
+the champion, from a field that is only 37% inside any sibling submission.
+
+What would be needed to reach the 0.4544 leaderboard top is stated plainly in the method doc: the organizer feature
+stack and labels (`training_features.tif`, `labels.tif`) are login-walled and absent here; every method in this
+repository is a re-allocation of published recall, not new discovery.
+
+## Decision (2026-10-30) — SUPERSEDED by 2026-10-31, kept for the audit trail
+
+**Status: OK to download and OK to submit.**
 
 | | |
 |---|---|
@@ -154,7 +234,7 @@ masking rule above. The 21k file is retained for provenance, marked superseded, 
 
 ---
 
-## Standing prompt (verbatim, as recorded 2026-10-27)
+## Standing brief (read before every project session) — the standing prompt, verbatim (recorded 2026-10-27)
 
 The full standing prompt is at [docs/research/standing-prompt-as-recorded-20261027.md](docs/research/standing-prompt-as-recorded-20261027.md). Read it each session.
 
@@ -320,6 +400,12 @@ Rules applied: lane checks (rank correlation ≤ 0.90; ≤ 70% of dots within 3 
 7. A separate selector promotes a passing candidate, within the weekly cap of 3 (official rules §3.2), via "New submission" on the [competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/).
 
 ## Reproduce checks
+
+> **One generator only.** The current site is written by `scripts/build_executive_summary_20261031.py` (docs/index.html,
+> docs/executive-summary.html, docs/how-to-submit.html, and the two root redirect pages). `scripts/build_site.py`,
+> `build_docs_pages.py`, `build_executive_summary.py` and `scripts/build_site_20261031.py` are earlier/parallel
+> generators that overwrite `docs/index.html` with their own decision text. Running them silently replaces the current
+> decision; they are kept for the audit trail and must not be run unless that is what you intend.
 
 ```bash
 python3 -m venv .venv && . .venv/bin/activate

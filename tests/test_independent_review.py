@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from conftest import assert_no_unbacked_approval  # noqa: E402
 sys.path.insert(0, str(ROOT / "scripts"))
 
 PAGES = ["README.md", "index.html", "executive-summary.html", "docs/index.html", "docs/executive-summary.html"]
@@ -95,6 +97,7 @@ def test_fail_closed_verifier_reports_format_integrity_but_no_approval():
                 "transform_matches_card", "all_values_in_0_1", "zip_exists"):
         assert result["checks"][key] is True, key
     assert result["ok_to_submit"] is False
+    assert result["checks"]["submission_ui_matches_decision"] is True
     assert result["checks"]["complete_uniqueness_gate"] is False
     assert result["checks"]["holdout_gate"] is False
 
@@ -177,31 +180,34 @@ def test_missing_lattice_witness_reuses_only_archived_measurement(tmp_path, monk
     assert "witness unavailable" in ir._safe_block_reason(lat)
 
 
-def test_pages_state_the_current_decision_and_link_review():
-    """Policy lock, updated 2026-10-30.
-
-    The 2026-10-28/29 policy was "nothing is cleared". That was superseded on 2026-10-30 by the
-    organizer masking rule (forum thread 11516) and the validated estimator. The invariants that
-    still matter are asserted here: the decision is stated explicitly, the legacy artifacts stay
-    blocked, the standing prompt and review links are intact, and no page claims an organizer score.
-    """
+def test_pages_state_the_current_no_go_decision_and_link_review():
+    """The 2026-10-31 review supersedes positive candidate banners from prior sessions."""
     readme = (ROOT / "README.md").read_text()
-    assert "OK to download and OK to submit" in readme
-    assert "Superseded decision (2026-10-29)" in readme
-    assert "independent-review-20261028.md" in readme
+    # the same-day review's headline is preserved in its own document, and the README links it
+    review = (ROOT / "docs" / "research" / "repo-review-20261031.md").read_text()
+    assert "NO-GO" in review or "NO CURRENT TIFF IS APPROVED FOR SUBMISSION" in review
+    assert "repo-review-20261031" in readme
+    assert "NO-GO" in review  # the review still states its own verdict about the files it saw
+    assert "repo-review-20261031" in readme  # and the README preserves the pointer
     assert "Maximize P(Win)" in readme and "Own the Outcome" in readme
-    assert "Standing prompt (verbatim" in readme
-    assert "MUST GENERATE A UNIQUE TIF SUBMISSION" in readme
+    assert "Standing brief (read before every project session)" in readme
+    assert "MUST GENERATE A UNIQUE TIFF SUBMISSION" in readme or "UNIQUE TIF SUBMISSION" in readme
+    assert "repo-review-20261031.md" in readme
     for rel in ["index.html", "docs/index.html", "executive-summary.html",
                 "docs/executive-summary.html"]:
         txt = (ROOT / rel).read_text()
         assert "localhost" not in txt.lower() and "127.0.0.1" not in txt, rel
+        assert "DO NOT SUBMIT" in txt or "NOT OK to submit" in txt or "SUPERSEDED" in txt, rel
+        assert_no_unbacked_approval(txt, rel), rel
     docs_index = (ROOT / "docs/index.html").read_text()
     assert "any registry" in docs_index.lower()
     assert "OK TO SUBMIT" in docs_index
-    # the only file cleared is the LB-inversion candidate; the CDTI file is named as superseded
-    assert "lbinv-84262" in docs_index
-    assert "cdti128-consensus" in docs_index
+    # the only file cleared is the one the current receipt clears; every retired file stays named
+    import json as _json
+    cleared = _json.loads((ROOT / "evidence" / "blockinversion_model_20261031.json").read_text())
+    assert cleared["submission"]["submission_name"] in docs_index
+    for retired in ("lbinv-84262", "cdti128-consensus"):
+        assert retired in docs_index
     for legacy in ("bgk-pbe", "unique-structural"):
         assert legacy in docs_index  # named, and marked not submittable
     assert "ESTIMATE" in docs_index
@@ -241,3 +247,17 @@ def test_independent_review_markdown_has_run_card_and_sources():
     assert "**Competition download:** **NO**" in md
     assert '"ok_to_download": false' in md
     assert md.count("| GEMSDOE") == 9
+
+
+def test_exact_byte_portal_range_review_supersedes_stale_lbinv_readiness():
+    """A local finite-pixel check must not hide the portal-wide NaN range failure."""
+    receipt = json.loads((ROOT / "evidence/validator_review_lbinv_20261031.json").read_text())
+    readiness = json.loads((ROOT / "evidence/submission_readiness_20261031.json").read_text())
+    assert receipt["checks"]["values_in_0_1"] is True
+    assert receipt["checks"]["portal_range_test_all_cells"] is False
+    assert receipt["stats"]["positive_pixels"] == 84262
+    assert "7111787" in " ".join(receipt["notes"])
+    assert readiness["validator_output"]["portal_range_test_all_cells"] is False
+    assert readiness["validator_output"]["portal_range_failing_stored_cells"] == 7111787
+    assert readiness["ok_to_submit"] is False
+    assert readiness["verdict"] == "negative"

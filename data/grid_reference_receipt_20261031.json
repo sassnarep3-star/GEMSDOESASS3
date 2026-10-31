@@ -1,0 +1,32 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31",
+ "source": "evidence/organizer_footprint_mask.npz (np.packbits mask saved 2026-10-30 from the owner's authenticated sample_submission.tif)",
+ "original_sample_sha256_recorded": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+ "output": ".cache/gems_data/sample_submission.tif",
+ "output_sha256": "6217ce35c9376c788ae1f2a44b2f1b5884d4c6b8e7b15d0d0967c51005c25e54",
+ "shape": [
+  3730,
+  3292
+ ],
+ "transform": [
+  100.0,
+  0.0,
+  243350.0,
+  0.0,
+  -100.0,
+  4508550.0
+ ],
+ "crs": "EPSG:32611",
+ "footprint_pixels": 5167373,
+ "grid_cells": 12279160,
+ "outside_cells": 7111787,
+ "cross_checks": {
+  "probe_shape_matches": true,
+  "probe_crs_matches": true,
+  "probe_transform_matches": true,
+  "probe_finite_mask_identical": true,
+  "probe_mask_mismatch_cells": 0
+ },
+ "label": "SYNTHETIC STAND-IN (mask identical to organizer footprint)"
+}

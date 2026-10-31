@@ -121,22 +121,61 @@
    "all_pass": true
   },
   "uniqueness": {
-   "literal_70pct_rule": "FAIL (candidate 209/1736 refs over 70%; champion control 178/1736, worst 1.000) - rule is non-discriminating, see docs/research/uniqueness-criterion-20261031.md",
+   "literal_70pct_rule": "FAIL - 209/1736 submission-shaped references over 70%; worst 0.9626 (lift 2.04)",
    "coverage_normalised_criterion": "overlap>=0.90 AND lift>=3.0 AND reference coverage<=0.50",
    "candidate": "PASS - worst lift 2.04 < 3.0",
    "champion_control": "FAIL - overlap 1.000, lift 4.04",
-   "verdict": "OK to submit"
+   "verdict": "NOT promoted - fails protocol rule 1"
   }
  },
  "decision": {
-  "promote_to_submission_slot": true,
+  "promote_to_submission_slot": false,
   "caveat": "estimate 0.2914 +/- 0.0234 is only ~0.014 above the champion's 0.2778, inside the noise band; both are far below the 0.3195 that must be beaten. This is a best-available submission, not a demonstrated win.",
-  "slots_remaining_this_week": "unknown - owner must confirm on the portal"
+  "slots_remaining_this_week": "unknown - owner must confirm on the portal",
+  "promotion_note": "superseded by the promoted blockinv3 file, which passes the literal uniqueness gate this file fails; kept as the second-slot candidate"
  },
  "next_session": [
   "Run H1 (geodetic strain-rate ridge continuation past catalogue tips) and validate on the five-fold design before spending a second slot.",
   "Re-verify the promoted 2026-10-30 file with scripts/verify_all_gates.py.",
   "Re-fetch forum thread 11527 later chunks for the staff answer on how new faults were identified.",
   "N upper bound still rests on only four qualifying files; a broader catalogue-independent probe would tighten it."
- ]
+ ],
+ "cross_lane_convergence": {
+  "conflict": "a parallel lane merged blockinv3 and promoted it; two lanes cannot both be promoted",
+  "resolution": "compared both files with this lane's independent 1978-raster registry scan",
+  "rows": [
+   {
+    "file": "docs/downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif",
+    "dots": 123899,
+    "worst_3px_overlap": 0.602708657858417,
+    "lift": 1.2745224236899122,
+    "n_refs_over_70pct": 0,
+    "rule_1_pass": true
+   },
+   {
+    "file": "docs/downloads/gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif",
+    "dots": 60000,
+    "worst_3px_overlap": 0.9625666666666667,
+    "lift": 2.0354988848547646,
+    "n_refs_over_70pct": 209,
+    "rule_1_pass": false
+   },
+   {
+    "file": ".cache/sibling_downloads/60GEMSDOE__gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-nan.tif",
+    "dots": 37654,
+    "worst_3px_overlap": 1.0,
+    "lift": 4.041398862827602,
+    "n_refs_over_70pct": 178,
+    "rule_1_pass": false
+   }
+  ],
+  "verdict": "this lane's candidate FAILS the literal 70%/3px rule (0.9626, 209/1736); the promoted file PASSES it (0.6027, 0/1736). The rule is retained as the operative gate; the earlier claim that it is degenerate is withdrawn.",
+  "adopted_from_this_lane": [
+   "N bounds: 8222 <= N <= 12366, independently corroborating the block-inversion lane's N <= 12512",
+   "the N upper bound must filter catalogue-dominated rasters (masked known-fault pixels understate N); unfiltered it returned 2848, below the hard lower bound",
+   "Gram/nnls solve beats back-projection in every one of five folds",
+   "shared modules src/gems32/corpus.py and src/gems32/fastdti.py with 12 tests",
+   "five geological hypotheses H1-H5 (none run)"
+  ]
+ }
 }

@@ -1,0 +1,25 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31T04:47:43+00:00",
+ "label": "RECONSTRUCTED GRID \u2014 not the organizer file",
+ "out": ".cache/gems_data/sample_submission.tif",
+ "sha256_written": "63efd4808935224821064cd206f193b7776952a8fb2201f84a85357d2652e75a",
+ "original_sample_submission_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+ "bytes_same_as_original": false,
+ "crs": "EPSG:32611",
+ "shape": [
+  3730,
+  3292
+ ],
+ "transform": [
+  100.0,
+  0.0,
+  243350.0,
+  0.0,
+  -100.0,
+  4508550.0
+ ],
+ "footprint_pixels": 5167373,
+ "source_npz": "evidence/organizer_footprint_mask.npz",
+ "note": "The footprint bitmap, CRS, shape and transform are the committed receipt of the official sample_submission.tif (evidence/organizer_footprint_mask.npz). The GeoTIFF written here is a re-encoding, so its bytes differ from the organizer file; only geometry and footprint are claimed."
+}

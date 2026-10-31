@@ -1,0 +1,54 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31T06:25:49+00:00",
+ "label": "ESTIMATE",
+ "not_organizer_confirmed": true,
+ "hypothesis": "H-BLOCKINV",
+ "submission_name": "gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask",
+ "raster_sha256": "f9f219371ef7e3e4239cbf7ce895e72797801a8ac49342c71240cceb497e22be",
+ "zip_sha256": "f5f2f6ac2b67e8bcf1ee44a18ca85aa2c00b3519efc4e82727321664a190513a",
+ "n_dots": 123899,
+ "expected_tp": 10788.4,
+ "est_score": 0.3138,
+ "est_score_calibrated": 0.3212,
+ "N_estimate": 12000.0,
+ "N_upper_bound": 12512.133928571544,
+ "block_px": 3,
+ "loo_rmse": 0.020591446897108987,
+ "loo_rho": 0.957671442959165,
+ "est_band_over_admissible_N": [
+  {
+   "N": 6000.0,
+   "expected_tp_at_same_dots": 8681.3,
+   "est_score_at_same_dots": 0.2935
+  },
+  {
+   "N": 8000.0,
+   "expected_tp_at_same_dots": 9380.0,
+   "est_score_at_same_dots": 0.3008
+  },
+  {
+   "N": 10000.0,
+   "expected_tp_at_same_dots": 10083.4,
+   "est_score_at_same_dots": 0.3076
+  },
+  {
+   "N": 12000.0,
+   "expected_tp_at_same_dots": 10788.4,
+   "est_score_at_same_dots": 0.3138
+  },
+  {
+   "N": 12512.0,
+   "expected_tp_at_same_dots": 10968.9,
+   "est_score_at_same_dots": 0.3153
+  }
+ ],
+ "worst_registry_overlap": 0.36723460237774314,
+ "worst_registry_raster": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif",
+ "worst_registry_overlap_lift": 1.45,
+ "registry_rasters_compared": 458,
+ "submission_note": "block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)",
+ "field_npz": ".cache/blockinv_field.npz",
+ "encoding": "finite 0 payload + GDAL internal mask band (no NaN stored); portal range test passes",
+ "null_cells": 7111787
+}

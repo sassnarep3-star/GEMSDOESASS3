@@ -104,3 +104,44 @@ The candidate redistributes the recall already present in the corpus; it does no
 recall. Its uniqueness is *not* evidence of new geological content. If the hidden truth contains
 a structure no published raster touches, this candidate scores near zero on it — which is what
 hypotheses H1–H5 in `docs/research/hypotheses-20261031.md` are for.
+
+---
+
+## Correction, 2026-10-31, after the cross-check — the rule is NOT degenerate
+
+The argument above concludes that the literal 70 % / 3 px rule "cannot discriminate here". **That
+conclusion was wrong, and the measurement that disproved it is this lane's most useful result.**
+
+While this document was being written, a parallel lane merged `gemsdoesass3-blockinv3-123899-…
+-nullmask.tif` to `main` and promoted it. Rather than take that lane's uniqueness number on trust,
+this lane re-ran **its own** 1 978-raster registry scan on their file, on this lane's file, and on
+the champion. Receipt: `evidence/cross_check_promoted_20261031.json`.
+
+| file | dots | worst 3 px overlap (submission-shaped) | lift | references over 70 % | rule 1 |
+|---|---|---|---|---|---|
+| `gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif` (parallel lane) | 123 899 | **0.6027** | **1.27** | **0 / 1 736** | **PASS** |
+| `gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif` (this lane) | 60 000 | 0.9626 | 2.04 | 209 / 1 736 | **FAIL** |
+| champion control (0.2778) | 37 654 | 1.0000 | 4.04 | 178 / 1 736 | **FAIL** |
+
+**The rule discriminates perfectly well.** A field built by 300 m presence-block inversion sits at
+0.60 worst-case with lift 1.27 — barely above what a random placement would score — and clears the
+70 % threshold against every single one of the 1 736 submission-shaped references. A field built by
+weighted consensus over the same corpus sits at 0.96 with lift 2.04 and fails against 209 of them.
+The difference is not the rule; it is that the consensus estimator concentrates its dots where
+everyone else already put theirs, and the presence-block estimator does not.
+
+The "dense surface rasters overlap everything at 1.00" defect is real and the coverage cap is still
+the right fix, but it is not what makes or breaks the gate.
+
+**Consequences, accepted:**
+
+1. The literal rule from parallel-run protocol 1 is **retained as the operative gate**, with the
+   single refinement that references covering more than 50 % of the footprint are excluded as
+   degenerate. The supplementary `lift` statistic is kept as a diagnostic, not as a replacement.
+2. **This lane's candidate is not promoted.** It fails the gate. It is demoted to a second-slot /
+   analysis artefact and the lane page says so.
+3. One independent corroboration survives and is worth recording: this lane's `N` bound
+   (**8 222 ≤ N ≤ 12 366**, from two independent inequalities over 182 rasters) and the parallel
+   lane's (**N ≤ 12 512**, from 27 nested rater pairs over 128 rasters) were derived by different
+   routes on different corpora and agree. N ≈ 12 000–12 500 is now the project's best-supported
+   estimate of the hidden truth mass.

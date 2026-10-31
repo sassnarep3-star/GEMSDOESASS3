@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to submit — GEMSDOESASS3</title>
+<style>body{font:16px/1.6 system-ui,sans-serif;max-width:820px;margin:0 auto;padding:32px;color:#14243a}
+a{color:#075fac}code{background:#eef2f7;padding:1px 4px;border-radius:4px;overflow-wrap:anywhere;font-size:13px}
+.pill{background:#0f766e;color:#fff;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700}
+.pill.no{background:#9f1239}.small{font-size:13px;color:#475569}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #d7dde7;padding:6px 8px;text-align:left;vertical-align:top}</style>
+</head><body>
+<p class="small"><a href="index.html">Overview</a> · <a href="executive-summary.html">Executive summary</a> ·
+<a href="research/hypotheses-20261031.md">Method</a> · <a href="research/FEED.md">Feed</a></p>
+<h1>How to submit this file</h1>
+<p><span class="pill">SUBMIT THIS ONE</span> &nbsp;<code>gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif</code></p>
+<table>
+<tr><th>Step</th><th>Do this</th></tr>
+<tr><td>1</td><td>Download <a href="downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif.zip"><code>gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif.zip</code></a>
+(270 KB) or the
+<a href="downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif">plain .tif</a> (305 KB).
+The zip holds exactly one member, byte-identical to the .tif.</td></tr>
+<tr><td>2</td><td>Check the bytes you downloaded: SHA-256 <code>f9f219371ef7e3e4239cbf7ce895e72797801a8ac49342c71240cceb497e22be</code>
+(<code>sha256sum gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif</code>).</td></tr>
+<tr><td>3</td><td>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">the competition page</a>
+→ <em>Submit</em> → upload the .tif (not the .zip, unless the form asks for one).</td></tr>
+<tr><td>4</td><td>Paste the note (optional, 59/140 characters):
+<code>block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)</code></td></tr>
+<tr><td>5</td><td>Submit. Weekly cap: three submissions per entity, one final submission (official rules §3.2/§3.4).
+State the generative-AI use in the narrative (§3.2).</td></tr>
+</table>
+<h2>Verify before you upload</h2>
+<p><code>python scripts/validate_blockinversion_candidate.py --tif docs/downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif</code></p>
+<p>The command exits 0 and prints <code>"ok": true</code> with <strong>29/29</strong> gates. It recomputes
+the estimate from the raster's own dots, re-runs the portal's element-wise range test, and re-checks the uniqueness cap
+against every neighbouring raster.</p>
+<h2>What this file is, in one paragraph</h2>
+<p>It is a <strong>123,899-dot</strong> single-band float32 GeoTIFF on the competition grid. Its score is an
+<strong>ESTIMATE of 0.314</strong> (leave-one-file-out σ 0.021), obtained by inverting
+128 published (file, score) pairs with the competition's own metric algebra — not an organizer receipt, and not a
+promise. The file stores no NaN: outside the footprint the value is <code>0</code> and null-ness is declared by a GDAL
+mask band, which is what stops the <em>"Predicted values must be in range [0, 1]"</em> rejection.</p>
+<h2>Do not submit anything else in <code>docs/downloads</code></h2>
+<p>Every other raster there is retired — superseded, or it failed a gate. They are listed with their hashes on the
+<a href="executive-summary.html">executive summary</a>.</p>
+</body></html>

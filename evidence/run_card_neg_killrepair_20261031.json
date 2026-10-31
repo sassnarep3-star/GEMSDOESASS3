@@ -1,0 +1,150 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31",
+ "lane_id": "GEMSDOESASS3-H-LBINV2-KERNELPACK-KILLREPAIR",
+ "hypothesis": "H-LBINV2: the metric-inversion credit field emitted at kernel-scale packing with post-hoc kill-repair uniqueness repair reaches EST ~0.32 while staying under the 65% overlap cap.",
+ "mechanism": "Greedy admission of the highest-q cells with a Chebyshev >=3 px exclusion, marginal trim q>0.2*EST, then removal of the lowest-credit dots inside the worst offender's 3 px halo until the per-raster cap holds.",
+ "mimic": "Not applicable (placement study). The named non-fault process for the field itself remains: sibling methods share input features, so the consensus field can encode survey-line artefacts common to all of them.",
+ "holdout_dti": {
+  "score_label": "NOT RUN (blocked: data placement)",
+  "note": "hide-and-recover and SGMC-CAL require labels.tif from the owner's DrivenData account; the lane's honest test here is the estimator leave-one-file-out on the 133-file corpus (ESTIMATE class)."
+ },
+ "correlation_overlap_vs_registry": {
+  "pre_placement_worst_abs_phi": 0.2193,
+  "final_dot_worst_abs_phi": 0.1987,
+  "limit": 0.9,
+  "worst_overlap_after_repair": 0.65,
+  "cap": 0.65,
+  "rasters_checked": 527
+ },
+ "result": {
+  "verdict": "negative",
+  "observation": "kill-repair collapses the candidate: 42,000-dot budget ends at 2,445 dots (EST 0.0554) because the corpus is redundant (top rasters share 87-100% of dots, so their halos coincide and each repair round exposes the next offender)",
+  "sweep_rows": [
+   {
+    "sep": 3,
+    "budget": 42000,
+    "n_dots": 2445,
+    "expected_tp": 559.1,
+    "est_score": 0.0554,
+    "est_before_repair": 0.3209,
+    "worst_overlap": 0.6499,
+    "worst_raster": "own:gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+    "worst_raster_footprint_coverage": 0.0684,
+    "repair_rounds": 3,
+    "rasters_able_to_reach_cap": 524,
+    "worst_abs_dot_phi": 0.1573
+   },
+   {
+    "sep": 3,
+    "budget": 50000,
+    "n_dots": 3928,
+    "expected_tp": 838.9,
+    "est_score": 0.0808,
+    "est_before_repair": 0.3217,
+    "worst_overlap": 0.6499,
+    "worst_raster": "own:gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+    "worst_raster_footprint_coverage": 0.0684,
+    "repair_rounds": 3,
+    "rasters_able_to_reach_cap": 524,
+    "worst_abs_dot_phi": 0.1987
+   },
+   {
+    "sep": 3,
+    "budget": 58000,
+    "n_dots": 3928,
+    "expected_tp": 838.9,
+    "est_score": 0.0808,
+    "est_before_repair": 0.3217,
+    "worst_overlap": 0.6499,
+    "worst_raster": "own:gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+    "worst_raster_footprint_coverage": 0.0684,
+    "repair_rounds": 3,
+    "rasters_able_to_reach_cap": 524,
+    "worst_abs_dot_phi": 0.1987
+   },
+   {
+    "sep": 3,
+    "budget": 66000,
+    "n_dots": 3928,
+    "expected_tp": 838.9,
+    "est_score": 0.0808,
+    "est_before_repair": 0.3217,
+    "worst_overlap": 0.6499,
+    "worst_raster": "own:gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+    "worst_raster_footprint_coverage": 0.0684,
+    "repair_rounds": 3,
+    "rasters_able_to_reach_cap": 524,
+    "worst_abs_dot_phi": 0.1987
+   },
+   {
+    "sep": 4,
+    "budget": 42000,
+    "n_dots": 3260,
+    "expected_tp": 700.8,
+    "est_score": 0.0684,
+    "est_before_repair": 0.277,
+    "worst_overlap": 0.65,
+    "worst_raster": "own:gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+    "worst_raster_footprint_coverage": 0.0684,
+    "repair_rounds": 3,
+    "rasters_able_to_reach_cap": 524,
+    "worst_abs_dot_phi": 0.1814
+   },
+   {
+    "sep": 4,
+    "budget": 50000,
+    "n_dots": 3260,
+    "expected_tp": 700.8,
+    "est_score": 0.0684,
+    "est_before_repair": 0.277,
+    "worst_overlap": 0.65,
+    "worst_raster": "own:gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+    "worst_raster_footprint_coverage": 0.0684,
+    "repair_rounds": 3,
+    "rasters_able_to_reach_cap": 524,
+    "worst_abs_dot_phi": 0.1814
+   },
+   {
+    "sep": 4,
+    "budget": 58000,
+    "n_dots": 3260,
+    "expected_tp": 700.8,
+    "est_score": 0.0684,
+    "est_before_repair": 0.277,
+    "worst_overlap": 0.65,
+    "worst_raster": "own:gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+    "worst_raster_footprint_coverage": 0.0684,
+    "repair_rounds": 3,
+    "rasters_able_to_reach_cap": 524,
+    "worst_abs_dot_phi": 0.1814
+   },
+   {
+    "sep": 4,
+    "budget": 66000,
+    "n_dots": 3260,
+    "expected_tp": 700.8,
+    "est_score": 0.0684,
+    "est_before_repair": 0.277,
+    "worst_overlap": 0.65,
+    "worst_raster": "own:gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif",
+    "worst_raster_footprint_coverage": 0.0684,
+    "repair_rounds": 3,
+    "rasters_able_to_reach_cap": 524,
+    "worst_abs_dot_phi": 0.1814
+   }
+  ]
+ },
+ "raster_sha256": null,
+ "validator_output": {
+  "status": "NOT EMITTED (sweep only; no raster produced)"
+ },
+ "submission_name": null,
+ "submission_note": null,
+ "verdict": "negative",
+ "promoted": false,
+ "replacement": "scripts/emit_lbinv_quota_20261031.py (quota placement, uniqueness by construction) -> evidence/run_card_kernelpack_20261031.json",
+ "open_risks": [
+  "The uniqueness cap and a redundant corpus are in tension: any field drawn from the corpus spends its mass in the shared hot zone, so strict per-raster caps force exploration of lower-credit cells."
+ ]
+}

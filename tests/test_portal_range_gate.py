@@ -88,3 +88,36 @@ def test_dilation_beyond_the_kernel_radius_is_pure_false_positive() -> None:
     wide = near.copy()
     wide[20 - 5, 20] = 1.0  # 500 m away: outside the triangular kernel, so no credit at all
     assert dti_exact(near, truth)["dti"] > dti_exact(wide, truth)["dti"]
+
+
+def test_tiled_render_resets_striped_block_sizes(tmp_path: Path) -> None:
+    """Regression for IR-SASS3-87: a striped source has blockxsize=width; flipping to tiled=True
+    without resetting the block size makes GDAL raise "Bad value W for TileWidth tag". The safe
+    renderer must pin a valid 256x256 block. This test reproduces the failure mode and the fix."""
+    arr = np.zeros((100, 100), dtype=np.float32)
+    arr[10:20, 10:20] = 1.0
+    striped = tmp_path / "striped.tif"
+    with rasterio.open(striped, "w", driver="GTiff", width=100, height=100, count=1,
+                       dtype="float32", crs="EPSG:32611",
+                       transform=rasterio.transform.from_origin(0.0, 10000.0, 100.0, 100.0),
+                       compress="deflate") as ds:
+        ds.write(arr, 1)
+    with rasterio.open(striped) as ds:
+        prof = ds.profile.copy()
+    assert prof.get("tiled") is not True  # striped source
+    # the buggy update: tiled=True but blockxsize left at the striped width
+    bad = prof.copy()
+    bad.update(tiled=True, driver="GTiff")
+    bad_out = tmp_path / "bad.tif"
+    with pytest.raises(Exception):
+        with rasterio.open(bad_out, "w", **bad) as ds:
+            ds.write(arr, 1)
+    # the fixed update: pin a valid tile block
+    good = prof.copy()
+    good.update(tiled=True, driver="GTiff", blockxsize=256, blockysize=256)
+    good_out = tmp_path / "good.tif"
+    with rasterio.open(good_out, "w", **good) as ds:
+        ds.write(arr, 1)
+    with rasterio.open(good_out) as ds:
+        assert ds.profile.get("tiled") is True
+        assert ds.profile.get("blockxsize") == 256

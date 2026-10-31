@@ -115,9 +115,14 @@ def test_estimate_beats_the_champion_point_estimate():
     assert card["score_estimate"]["optimism_corrected"] > champ
 
 
-def test_site_pages_promote_this_exact_file():
+def test_site_pages_keep_this_file_visible_but_superseded():
+    """The CDTI file may never quietly disappear, and it may never be presented as the live file."""
+    import json
+    rec = json.loads((ROOT / "evidence" / "blockinversion_model_20261031.json").read_text())
+    cleared = rec["submission"]["submission_name"]
     for page in ("index.html", "executive-summary.html"):
         txt = (ROOT / "docs" / page).read_text()
-        assert f"{NAME}.tif" in txt, f"{page} dropped the superseded candidate entirely"
+        assert "cdti128-consensus" in txt, f"{page} dropped the superseded candidate entirely"
         assert "superseded" in txt.lower(), page
-        assert "gemsdoesass3-lbinv-84262" in txt, f"{page} does not name the replacement"
+        assert cleared in txt, f"{page} does not name the current file"
+        assert "NOT OK to submit" in txt, f"{page} does not block the superseded file"

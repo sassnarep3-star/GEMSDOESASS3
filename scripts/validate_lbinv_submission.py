@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+from datetime import datetime, timezone
 import json
 import zipfile
 from pathlib import Path
@@ -102,7 +103,9 @@ def main() -> int:
     checks["note_has_no_newline"] = "\n" not in note
 
     ok = all(bool(v) for v in checks.values())
-    receipt = {"schema_version": 1, "generated_utc": "2026-10-30", "tif": str(tif.relative_to(ROOT)),
+    receipt = {"schema_version": 1,
+               "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+               "tif": str(tif.relative_to(ROOT)),
                "label": "ESTIMATE", "not_organizer_confirmed": True,
                "ok": ok, "n_gates": len(checks), "n_passed": int(sum(bool(v) for v in checks.values())),
                "checks": checks, "detail": detail,

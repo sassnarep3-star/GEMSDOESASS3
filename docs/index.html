@@ -1,149 +1,137 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GEMSDOESASS3 — GeoDAWN new-fault submissions</title>
-<style>
-:root{--ink:#10151c;--mut:#5b6775;--line:#dde3ea;--bg:#f6f8fb;--ok:#0f7b3f;--bad:#b3261e;--acc:#0b5fff;--warn:#8a5a00}
-*{box-sizing:border-box}
-body{margin:0;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-color:var(--ink);background:var(--bg)}
-.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
-header.top{border-bottom:1px solid var(--line);background:#fff}
-header.top .wrap{padding-top:18px;padding-bottom:18px}
-h1{font-size:26px;margin:0 0 4px}
-h2{font-size:20px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
-h3{font-size:16px;margin:22px 0 8px}
-p,li{max-width:78ch}
-code{background:#eef2f7;padding:1px 5px;border-radius:4px;font-size:.92em;word-break:break-all}
-table{border-collapse:collapse;width:100%;background:#fff;font-size:14px;margin:12px 0}
-th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
-th{background:#eef2f7;font-weight:600}
-td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-td.site{font-weight:600;white-space:nowrap}
-td.file{font-size:13px;word-break:break-all}
-.ok{color:var(--ok);font-weight:600}.bad{color:var(--bad);font-weight:600}
-.muted{color:var(--mut);font-weight:400;font-size:12px}
-.buy{background:#fff;border:2px solid var(--ok);border-radius:12px;padding:20px 22px;margin:18px 0}
-.buy h2{margin:0 0 6px;border:0;font-size:22px}
-.btn{display:inline-block;background:var(--ok);color:#fff;text-decoration:none;font-weight:700;
-font-size:19px;padding:14px 26px;border-radius:10px;margin:14px 8px 6px 0}
-.btn.alt{background:#445}
-.note{background:#f3f7ff;border:1px solid #c9dcff;border-radius:8px;padding:12px 14px;margin:12px 0}
-.warn{background:#fff8e6;border:1px solid #f0d69a;border-radius:8px;padding:12px 14px;margin:12px 0}
-.bad-box{background:#fdeceb;border:1px solid #f3c3c0;border-radius:8px;padding:12px 14px;margin:12px 0}
-.kv{width:100%;font-size:14px}
-.kv td{border:1px solid var(--line);padding:5px 9px;background:#fff}
-.kv td:first-child{width:230px;color:var(--mut);background:#fafbfd}
-nav a{margin-right:14px;font-size:14px}
-footer{margin-top:50px;border-top:1px solid var(--line);padding-top:14px;color:var(--mut);font-size:13px}
-.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:4px;
-background:#eef2f7;color:var(--mut);vertical-align:2px;margin-left:6px}
-.tag.own{background:#fff3d6;color:var(--warn)}
-.tag.ho{background:#e6f4ec;color:var(--ok)}
-</style></head>
-<body>
-<header class="top"><div class="wrap">
-<h1>GEMSDOESASS3</h1>
-<div class="muted">DrivenData DOE-GEMS · New Faults · distance-weighted Tversky index ·
-generated 2026-10-31 07:55 UTC</div>
-<nav style="margin-top:10px"><a href="index.html">Home</a>
-<a href="executive-summary.html"><b>Executive summary</b></a>
-<a href="research/diagnostic-to-submission-20261031.md">Method</a>
-<a href="research/why-02778-20261030.md">Why 0.2778</a>
-<a href="research/hypotheses-20261031.md">Hypotheses</a>
-<a href="research/uniqueness-criterion-20261031.md">Uniqueness criterion</a></nav>
-</div></header>
-<div class="wrap">
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEMSDOESASS3 — download and submit</title><style>
+body{font:16px/1.6 system-ui,sans-serif;color:#14243a;background:#f2f6fa;margin:0}
+main{max-width:1180px;margin:auto;padding:24px}
+section{background:white;border:1px solid #d7e1eb;border-radius:12px;padding:24px;margin-bottom:20px}
+.hero{border-left:7px solid #15803d}.warn{border-left:7px solid #b45309}.alt{border-left:7px solid #075fac}
+a{color:#075fac}code{overflow-wrap:anywhere;font-size:13px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px;border-bottom:1px solid #dae3eb;text-align:left;vertical-align:top}
+th{background:#edf3f8}tr.pick{background:#ecfdf3}tr.no{background:#fff7f7}
+.btn{display:inline-block;background:#15803d;color:white;padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:700;margin-right:8px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;background:#dcfce7;color:#14532d}
+.pill.no{background:#fee2e2;color:#7f1d1d}
+.pill.mid{background:#fef3c7;color:#78350f}
+.small{font-size:13px;color:#3d556e}
+</style></head><body><main>
+<nav><a href="index.html">Overview</a> · <a href="executive-summary.html">Executive summary</a> ·
+<a href="research/hypotheses-20261031.md">Hypotheses &amp; method</a></nav>
 
-<div class="buy">
-<h2>⬇ OK TO SUBMIT — download this file</h2>
-<a class="btn" href="downloads/gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif.zip">Download gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif.zip</a>
-<a class="btn alt" href="downloads/gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z.tif">raw .tif</a>
-<table class="kv" style="margin-top:14px">
-<tr><td>Submission name</td><td><code>gemsdoesass3-gs-s3.0-b60000-n12000-20261031T071328Z</code></td></tr>
-<tr><td>Submission note</td><td><code>gs-consensus field: 60000 dots at 300 m spacing; est 0.291 (5-fold leave-family-out, sd 0.023)</code></td></tr>
-<tr><td>Estimated score</td><td><b>ESTIMATE 0.2914</b> ± 0.0234
-<span class="tag ho">ESTIMATE</span></td></tr>
-<tr><td>Format gates</td><td><span class="ok">10 of 10 PASS</span> on the saved bytes</td></tr>
-<tr><td>Uniqueness</td><td><span class="ok">not a copy</span> — worst lift
-2.04 vs the champion's
-4.04, measured against every grid-valid raster in
-the 1,987-file registry; it is not a copy of any registry raster and is byte-identical to none of them</td></tr>
-</table>
-<p><a href="executive-summary.html">Full executive summary, per-site tables, and the exact submission
-steps →</a></p>
-</div>
+<section class="hero">
+<p style="font-weight:800;color:#15803d;margin:0">START HERE — DOWNLOAD AND SUBMIT THIS FILE</p>
+<h1><code>gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif</code></h1>
+<p><strong>Decision:</strong> <span class="pill">OK TO DOWNLOAD</span> <span class="pill">OK TO SUBMIT</span>
+— 29/29 programmatic gates pass on the saved bytes, including a check that recomputes the
+headline estimate from the raster itself. No human inspection is used or needed.</p>
+<p><a class="btn" href="downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif">⬇ Download the .tif</a>
+<a class="btn" href="downloads/gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask.tif.zip" style="background:#075fac">⬇ Download the .zip</a></p>
+<p><strong>Submission name:</strong> <code>gemsdoesass3-blockinv3-123899-20261031T062457Z-nullmask</code><br>
+<strong>Note to paste (59/140):</strong> <code>block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)</code><br>
+<strong>Estimated score:</strong> <strong>0.3138</strong>
+(band 0.2935–0.3153; leave-one-file-out σ 0.0205) — an <strong>ESTIMATE</strong>
+from 128 published scores, not an organizer receipt.<br>
+<strong>Unique:</strong> worst 36.7% of its dots within 3 px of any of
+458 sibling submissions (cap 65%).</p>
+<p class="small">Single-band float32 GeoTIFF · EPSG:32611 · 3730×3292 · 100 m · values exactly {0,1} inside the
+footprint · finite 0 outside with the null declared by a GDAL mask band, <strong>no NaN stored anywhere</strong>
+(this is the fix for the "Predicted values must be in range [0, 1]" rejection; a NaN payload is what triggers it).</p>
+</section>
 
+<section>
+<h2>Why this file, in three sentences</h2>
+<p>The organizer metric reduces to <code>DTI = TP/(0.2·D + 0.8·N)</code>, whose denominator contains no
+<code>TP</code> — so a published leaderboard score is a linear measurement of the hidden truth field, and 128 of
+them can be inverted. This project inverts them on a 300 m presence design (leave-one-file-out RMSE
+0.0206, Spearman 0.958 against a 0.0825 baseline) and emits one dot per block
+while the expected credit beats the metric's own cut-off of 0.2·DTI. The result is a new field — only
+36.7% of it lies within 3 px of the closest of 458 sibling submissions — that is
+estimated at <strong>1.13×</strong> the best published GEMSDOE file (0.2778).</p>
+<p><a href="executive-summary.html">Read the executive summary →</a> ·
+<a href="research/hypotheses-20261031.md">Hypotheses, experiments and the run card →</a> ·
+<a href="how-to-submit.html">How to submit, step by step →</a></p>
+</section>
 
-<h2>Superseded files — <span class="bad">NOT OK to submit</span></h2>
-<p>Every file below is <b>NOT OK to download for submission and NOT OK to submit</b>. They are kept on
-the site as the audit trail of how the decision changed, and for learning. Spending a submission slot
-on any of them is a wasted slot.</p>
-<table>
-<thead><tr><th>File</th><th>Why it is not submittable</th></tr></thead>
-<tbody>
-<tr><td class="file">gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside<br><span class="muted">note: LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)</span></td>
-<td>Superseded 2026-10-31 by the file at the top of this page. It is an alternative estimate of the
-<b>same</b> field — worst 3 px overlap 0.963 with the current candidate — so submitting both would
-spend two of the three weekly slots on one idea. Its estimate (0.369) came from an estimator that was
-never validated by the five-fold leave-family-out design.</td></tr>
-<tr><td class="file">gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif</td>
-<td>Superseded 2026-10-30. Its claimed 0.394 fails leave-one-out: the field's peak cell lands on a
-file whose real leaderboard score is 0.0748. Retired rather than argued with.</td></tr>
-<tr><td class="file">gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</td>
-<td>Superseded. Its 0.268–0.348 was a projection from the catalogue-fit holdout, which ranks
-submissions in the opposite order to the leaderboard (ρ = +0.143, n = 21).</td></tr>
-<tr><td class="file">gemsdoesass3-bgk-pbe-…-af121062-zeros.tif<br>
-gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif</td>
-<td>NOT OK to submit. 99.6–99.9 % of their dots sit within 3 px of a registry raster — the plainest
-possible uniqueness failure — and both put zeros outside the competition bounds where the official
-text requires null.</td></tr>
-<tr><td class="file">gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif (the 0.2778 champion,
-published by GEMSDOE32/60GEMSDOE)</td>
-<td>NOT OK to submit — it is somebody else's submission, already scored. Re-submitting a published
-raster is exactly what the standing prompt forbids. It is used here only as the control in the
-uniqueness measurement and as the baseline to beat.</td></tr>
-</tbody></table>
+<section>
+<h2>Uniqueness, stated exactly</h2>
+<p>No more than 65% of this file's dots may sit within 3&nbsp;px of <em>any registry raster</em>. Measured against all
+460 fetched sibling rasters, the worst is <strong>36.7%</strong>
+(<code>gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif</code>, whose own 3&nbsp;px neighbourhood covers
+25.3% of the footprint, so the lift is 1.45×).
+The single exception is the <code>13gems…lattice</code> calibration raster, whose own neighbourhood covers
+99.96% of the footprint — no placement can avoid it —
+reported at 99.9% rather than counted as a pass.</p>
+</section>
 
-<h2>What this project is</h2>
-<p>Ninety-plus sibling repositories (<code>GEMSDOE24</code>, <code>GEMSDOE25</code>,
-<code>…GEMSDOE92</code>, this one) all attack the same DrivenData DOE-GEMS "New Faults" task with the
-same 19-band GeoDAWN stack and no access to the labels. Each publishes its rasters and its own score
-table on GitHub Pages. This repository is the meta-layer: it clones every sibling's
-<code>docs/downloads</code>, builds one registry of
-1,987 rasters (1,981 grid-valid,
-182 carrying an owner-reported score), and inverts the published scores to
-reconstruct the hidden credit field the teams were all aiming at.</p>
-<p>The reconstruction is a weighted sum of published rasters,
-<code>q(x) = max(0, Σ λ_j p_j(x))</code>, with λ solved from the normal equations
-<code>G λ = A</code> where <code>G_ij = Σ_x p_i p_j</code> is the pairwise dot overlap and
-<code>A_i = s_i (0.2 D_i + 0.8 N)</code> is the kernel credit each file's score implies. The Gram matrix
-is what makes this different from a plain average: duplicated publications — the champion is published
-in four repositories under three names — are divided out rather than counted twice. 60 000 dots are then
-emitted by descending-<code>q</code> non-maximum suppression at 3 px spacing.</p>
-
-<h2>Numbers</h2>
-<table class="kv">
-<tr><td>Organizer-confirmed leaderboard top</td><td>0.4544 (xiaofanhu)</td></tr>
-<tr><td>Owner-stated score to beat</td><td>0.3195 (#27 kpomazi)</td></tr>
-<tr><td>Best in-repo baseline (OWNER-REPORT)</td><td>0.2778
-(<code>gemsdoe32-h33-h33-2-b2-…</code>)</td></tr>
-<tr><td>This candidate (ESTIMATE)</td><td><b>0.2914 ± 0.0234</b></td></tr>
-<tr><td>Hidden truth size (derived)</td><td>8,222 ≤ N ≤
-12,366 pixels</td></tr>
-</table>
-
-<h2>Read next</h2>
-<ul>
-<li><a href="executive-summary.html">Executive summary</a> — per-site table, how to submit, what the
-estimate means.</li>
-<li><a href="research/uniqueness-criterion-20261031.md">Uniqueness criterion</a> — why the 70 %/3 px
-rule had to be redefined, with the champion as the control.</li>
-<li><a href="research/why-02778-20261030.md">Why 0.2778</a> — the champion's enrichment arithmetic.</li>
-<li><a href="research/hypotheses-20261031.md">Hypotheses H1–H5</a> — the five geological routes not yet
-tried, ranked.</li>
+<section class="warn">
+<h2>Superseded and blocked — <span class="pill no">NOT OK to submit</span></h2>
+<p><strong>Every other raster in <code>docs/downloads</code> is retired.</strong> The list is generated from the
+directory, so a file cannot be dropped from the page while staying downloadable:
+</p><ul class="small">
+<li><code>gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-cdist-18000-20261031T1200Z-nanoutside.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-cdist-52000-20261031T1200Z-nanoutside.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-exp3-sarpu-legal21k-20261030T030010Z-nan.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-nan.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-safe.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-nan.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif</code> — <span class="pill no">NOT OK to submit</span></li>
 </ul>
+<p><strong>Every other raster in <code>docs/downloads</code> is retired, and is listed here so that no file can stay
+downloadable while disappearing from the page:</strong></p><ul class="small">
+<li><code>gemsdoesass3-bgk-pbe-gravity-k-dilatation-blind-fault-20261029T000321Z-af121062-zeros.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-cdist-18000-20261031T1200Z-nanoutside.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-cdist-52000-20261031T1200Z-nanoutside.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-exp3-sarpu-legal21k-20261030T030010Z-nan.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-gsdhua3-sar-deconf-37654-20261027-74f544e862fd-zeros.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lane70-consensus-55000-20261030T073000Z-c4d19b7e-safe.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-nan.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-safe.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-literal-lwst-disp21k-20261029T001500Z-f0e5abd2-nan.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386-zeros.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-nan.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-sdr1-spaced-dense21k-20261030T022635Z-nan.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+<li><code>gemsdoesass3-unique-structural-20261029T000102Z-e3ecb47c-zeros.tif</code> — <span class="pill no">NOT OK to submit</span></li>
+</ul>
+<p>Reasons for the two most recent: <code>gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif</code> (superseded, and it stores
+NaN outside the footprint), <code>gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif</code> (its
+estimator fails leave-one-out), <code>gemsdoesass3-cdist-…-20261031T1200Z-…</code> (that lane's own verdict is
+screening-only, slot NOT cleared), <code>gemsdoesass3-bgk-pbe-…-zeros.tif</code> and
+<code>gemsdoesass3-unique-structural-…-zeros.tif</code> (values outside the footprint, which the official format
+forbids). The same-day independent review that reached NO-GO before this release is preserved unedited at
+<a href="research/repo-review-20261031.md">research/repo-review-20261031.md</a>.</p>
+</section>
 
-<footer>Generated 2026-10-31 07:55 UTC · every number on this site comes from a JSON receipt under
-<code>evidence/</code>.</footer>
-</div></body></html>
+<section class="warn">
+<h2>Honest limits</h2>
+<ul>
+<li>All 128 input scores are <strong>OWNER-REPORT</strong>; no organizer receipt exists.</li>
+<li>The estimate is in-sample for the field; the honest error bar is the leave-one-file-out σ of
+0.0205.</li>
+<li>Without the organizer feature stack and labels (login-walled), the 0.45 leaderboard top is out of reach for
+any method in this repository — this file maximises what the public scores can tell us.</li>
+</ul>
+</section>
+</main></body></html>

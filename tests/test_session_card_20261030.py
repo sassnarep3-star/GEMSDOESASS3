@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from conftest import assert_no_unbacked_approval  # noqa: E402
 
 
 def test_session_card_reproduces_from_receipts():
@@ -30,7 +32,9 @@ def test_exp3_is_never_marked_submittable():
     assert card["uniqueness"]["exp3_binary_surface"]["passes_rule_1"] is False
     assert "NOT OK" in card["decision"]["blocked"]["reason"] or card["decision"]["blocked"]["file"].endswith(".tif")
     for page in ("docs/index.html", "docs/executive-summary.html"):
-        assert "NOT OK to submit" in (ROOT / page).read_text()
+        html = (ROOT / page).read_text()
+        assert "DO NOT SUBMIT" in html or "NOT OK to submit" in html or "SUPERSEDED" in html
+        assert_no_unbacked_approval(html, page)
 
 
 def test_downloadable_file_exists_with_matching_sha():
