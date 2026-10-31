@@ -70,7 +70,7 @@ These are qualitative research priorities, not score projections. Layer details,
 - The user-reported portal error says predicted values must be in `[0,1]`. Existing NaN-outside candidates are not proven to pass a portal-wide range test; a finite masked payload needs acceptance verified by the actual portal before any go-live claim.
 - The protocol's referenced method paragraph and a complete live registry are not available as reproducible inputs here.
 
-To reproduce the available tests in a clean checkout: `python -m venv .venv && .venv/bin/pip install numpy scipy scikit-learn rasterio pytest && .venv/bin/python -m pytest -q`. Cache-dependent tests remain skipped until authorized data is restored.
+To reproduce the available tests in a clean checkout: `python -m venv .venv && .venv/bin/pip install -r requirements.txt && .venv/bin/python -m pytest -q`. Cache-dependent tests remain skipped until authorized data is restored.
 
 ## Submission procedure — only after a later explicit GO decision
 

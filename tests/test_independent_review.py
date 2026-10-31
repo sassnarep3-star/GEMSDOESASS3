@@ -95,6 +95,7 @@ def test_fail_closed_verifier_reports_format_integrity_but_no_approval():
                 "transform_matches_card", "all_values_in_0_1", "zip_exists"):
         assert result["checks"][key] is True, key
     assert result["ok_to_submit"] is False
+    assert result["checks"]["submission_blocked_ui"] is True
     assert result["checks"]["complete_uniqueness_gate"] is False
     assert result["checks"]["holdout_gate"] is False
 
@@ -235,3 +236,17 @@ def test_independent_review_markdown_has_run_card_and_sources():
     assert "**Competition download:** **NO**" in md
     assert '"ok_to_download": false' in md
     assert md.count("| GEMSDOE") == 9
+
+
+def test_exact_byte_portal_range_review_supersedes_stale_lbinv_readiness():
+    """A local finite-pixel check must not hide the portal-wide NaN range failure."""
+    receipt = json.loads((ROOT / "evidence/validator_review_lbinv_20261031.json").read_text())
+    readiness = json.loads((ROOT / "evidence/submission_readiness_20261031.json").read_text())
+    assert receipt["checks"]["values_in_0_1"] is True
+    assert receipt["checks"]["portal_range_test_all_cells"] is False
+    assert receipt["stats"]["positive_pixels"] == 84262
+    assert "7111787" in " ".join(receipt["notes"])
+    assert readiness["validator_output"]["portal_range_test_all_cells"] is False
+    assert readiness["validator_output"]["portal_range_failing_stored_cells"] == 7111787
+    assert readiness["ok_to_submit"] is False
+    assert readiness["verdict"] == "negative"
