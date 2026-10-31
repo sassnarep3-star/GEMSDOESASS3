@@ -39,18 +39,35 @@
     "zip_sha256": "d720227cf2555260581f52f5e3db1149b2c12e49e858e6ad56998f9ab135df1f"
   },
   "validator_output": {
-    "status": "FORMAT CHECK CONFIRMED BY DIRECT REVIEW; full original 22-gate command not rerun because required .cache inputs are absent",
+    "status": "Fresh exact-byte review: in-footprint finite values are [0,1], but the portal-wide elementwise [0,1] gate fails on outside-footprint NaNs; do not treat as portal-accepted or submit-ready.",
     "single_band_float32": true,
     "crs": "EPSG:32611",
-    "shape": [3730, 3292],
-    "transform": [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0],
-    "inside_values": [0.0, 1.0],
+    "shape": [
+      3730,
+      3292
+    ],
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "inside_values": [
+      0.0,
+      1.0
+    ],
     "no_nan_inside_footprint": true,
     "nan_outside_footprint": true,
     "positive_cells": 84262,
     "footprint_mask_matches_committed_mask": true,
     "zip_single_tif_and_identical_bytes": true,
-    "protocol_validation": false
+    "protocol_validation": false,
+    "portal_range_test_all_cells": false,
+    "portal_range_failing_stored_cells": 7111787,
+    "fresh_review_receipt": "evidence/validator_review_lbinv_20261031.json",
+    "all_hard_checks_pass": false
   },
   "submission_name": "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside",
   "submission_note": "LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)",

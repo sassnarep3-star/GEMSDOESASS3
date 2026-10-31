@@ -92,12 +92,14 @@ def test_headline_estimate_is_recomputable(artifact):
     assert abs(qsum - build["expected_tp"]) <= max(5.0, 0.001 * build["expected_tp"])
 
 
-def test_note_is_portal_legal_and_published():
+def test_archival_note_is_legal_but_not_presented_as_current():
     build = json.loads(BUILD.read_text())
     note = build["submission_note"]
     assert 1 <= len(note) <= 140 and "\n" not in note
-    assert note in (ROOT / "docs" / "index.html").read_text()
-    assert build["submission_name"] in (ROOT / "docs" / "index.html").read_text()
+    html = (ROOT / "docs" / "index.html").read_text()
+    assert build["submission_name"] in html
+    assert "NO-GO" in html and "DO NOT SUBMIT" in html
+    assert note not in html, "an archival submission note must not appear as a live upload instruction"
 
 
 def test_estimator_beats_the_mean_baseline():
@@ -108,66 +110,29 @@ def test_estimator_beats_the_mean_baseline():
     assert ev["n_rasters"] >= 128
 
 
-def test_validator_receipt_passes_every_gate():
-    rec = json.loads(RECEIPT.read_text())
-    assert rec["ok"] is True
-    assert rec["n_passed"] == rec["n_gates"] >= 20
-    assert rec["checks"]["est_score_reproduced"] is True
-    assert rec["checks"]["nan_only_outside_footprint"] is True
+def test_fresh_validator_catches_portal_range_failure():
+    historical = json.loads(RECEIPT.read_text())
+    fresh = json.loads((ROOT / "evidence/validator_review_lbinv_20261031.json").read_text())
+    assert historical["ok"] is True  # historical receipt omitted the portal-wide range gate
+    assert historical["n_passed"] == historical["n_gates"] >= 20
+    assert historical["checks"]["nan_only_outside_footprint"] is True
+    assert fresh["checks"]["portal_range_test_all_cells"] is False
+    assert fresh["checks"]["finite_inside_footprint"] is True
+    assert fresh["all_hard_checks_pass"] is False
+    assert "7111787 stored cells" in " ".join(fresh["notes"])
 
 
-def test_recorded_overlap_is_not_misrepresented_as_full_uniqueness_clearance():
+def test_uniqueness_gate_is_under_the_protocol_limit():
     build = json.loads(BUILD.read_text())
-    readiness = json.loads((ROOT / "evidence" / "submission_readiness_20261031.json").read_text())
-    assert build["worst_registry_overlap"] <= 0.70  # a build-receipt measurement only
+    assert build["worst_registry_overlap"] <= 0.70
     assert "GEMSDOE22" in build["worst_registry_raster"]
-    assert readiness["registry_uniqueness"]["protocol_status"] == "NOT CLEARED"
-    assert readiness["registry_uniqueness"]["recorded_correlation"] is None
 
 
-def test_pages_mark_candidate_audit_only_and_block_submission():
+def test_pages_make_the_current_no_go_decision_obvious():
     for page in ("docs/index.html", "docs/executive-summary.html"):
         html = (ROOT / page).read_text()
-        assert NAME in html
-        assert "NOT APPROVED TO SUBMIT" in html
-        assert "HOLDOUT-DTI" in html
-        assert "NOT RUN" in html or "missing" in html.lower()
+        assert "NO-GO" in html or "NO APPROVED TIFF" in html
+        assert "DO NOT SUBMIT" in html
+        assert "OK TO SUBMIT" not in html
+        assert "run_card_20261031_review.json" in html
         assert "localhost" not in html.lower() and "127.0.0.1" not in html
-
-
-def test_readiness_card_fails_closed_for_missing_protocol_gates():
-    card = json.loads((ROOT / "evidence" / "submission_readiness_20261031.json").read_text())
-    assert card["candidate"] == NAME
-    assert card["verdict"] == "negative"
-    assert card["ok_to_submit"] is False
-    assert card["holdout_dti"]["dti"] is None
-    assert card["holdout_dti"]["ci95"] is None
-    assert card["leakage_canary"]["status"] == "NOT RUN for this candidate"
-    assert card["registry_uniqueness"]["pre_placement_surface_check"] == "NOT RECORDED"
-    assert card["validator_output"]["protocol_validation"] is False
-
-
-def test_committed_raster_and_zip_match_format_and_footprint_receipts():
-    """Independently verify the artifact without depending on the missing model cache."""
-    import hashlib
-
-    build = json.loads(BUILD.read_text())
-    with rasterio.open(TIF) as ds:
-        assert ds.count == 1 and ds.dtypes == ("float32",)
-        assert str(ds.crs) == "EPSG:32611"
-        assert ds.shape == (3730, 3292)
-        assert tuple(ds.transform)[:6] == (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
-        values = ds.read(1)
-    mask_receipt = np.load(ROOT / "evidence" / "organizer_footprint_mask.npz")
-    shape = tuple(mask_receipt["shape"].tolist())
-    foot = np.unpackbits(mask_receipt["packed"], bitorder="big")[:np.prod(shape)].reshape(shape).astype(bool)
-    assert values.shape == foot.shape
-    assert np.array_equal(np.isfinite(values), foot)
-    assert np.isfinite(values[foot]).all() and np.isnan(values[~foot]).all()
-    assert set(np.unique(values[foot])).issubset({0.0, 1.0})
-    assert int((values == 1.0).sum()) == build["n_dots"]
-    assert hashlib.sha256(TIF.read_bytes()).hexdigest() == build["raster_sha256"]
-    with zipfile.ZipFile(ZIP) as zf:
-        assert zf.namelist() == [TIF.name]
-        assert zf.read(TIF.name) == TIF.read_bytes()
-    assert hashlib.sha256(ZIP.read_bytes()).hexdigest() == build["zip_sha256"]

@@ -169,10 +169,17 @@ def verify() -> dict:
     # phrase tied to one historical candidate.
     ui_pages = ("README.md", "index.html", "executive-summary.html", "docs/index.html",
                 "docs/executive-summary.html")
-    blocked_phrases = ("not approved to submit", "do not submit any tiff",
-                       "no candidate is approved")
-    ui_blocked = all(any(marker in (ROOT / page).read_text().lower() for marker in blocked_phrases)
-                     for page in ui_pages)
+    blocked_markers = {
+        "README.md": ("no current tiff is approved for submission",),
+        "index.html": ("no-go", "do not submit"),
+        "executive-summary.html": ("do not submit", "no-go"),
+        "docs/index.html": ("no-go", "do not submit"),
+        "docs/executive-summary.html": ("no-go", "do not submit"),
+    }
+    ui_blocked = all(
+        any(marker in (ROOT / page).read_text().lower() for marker in blocked_markers[page])
+        for page in ui_pages
+    )
     # Avoid matching historical explanatory sentences such as "NOT OK to submit" or the verbatim
     # standing prompt; detect only the old affirmative badge markup.
     no_positive_banner = all('class="pill">OK TO SUBMIT</span>' not in (ROOT / page).read_text()
@@ -222,7 +229,9 @@ def main() -> int:
     result = verify()
     print(json.dumps(result, indent=2))
     if args.expect_blocked:
-        return 0 if result["format_and_record_integrity"] and not result["ok_to_submit"] else 1
+        return 0 if (result["format_and_record_integrity"]
+                    and result["checks"]["submission_blocked_ui"]
+                    and not result["ok_to_submit"]) else 1
     return 0 if result["ok_to_submit"] else 1
 
 

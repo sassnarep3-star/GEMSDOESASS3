@@ -72,19 +72,17 @@ def test_no_broken_sassnarep3_sibling_links_remain():
 
 
 
-def test_readme_contains_standing_prompt_and_synchronized_runcard():
-    """The README must stay synchronised with the file it tells the owner to submit.
-
-    Changed 2026-10-30: the synced card is now the released candidate's run card
-    (evidence/run_card_tipcont_20261030.json). The previous card stays on disk as an archive.
-    """
-    # 2026-10-30 second pass: the synced receipt is the live candidate's build receipt.
-    rc = json.loads((ROOT / "docs" / "downloads"
-                     / "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside-build.json").read_text())
+def test_readme_contains_current_brief_and_fail_closed_run_card():
+    """README and feed must describe the current negative decision, not a stale upload."""
+    card = json.loads((ROOT / "evidence/run_card_20261031_review.json").read_text())
     readme = (ROOT / "README.md").read_text()
-    assert rc["submission_name"] in readme
-    assert rc["submission_note"] in readme
-    assert rc["raster_sha256"] in readme
-    assert "PARALLEL-RUN PROTOCOL" in readme
-    assert "MUST GENERATE A UNIQUE TIF SUBMISSION" in readme
+    assert card["verdict"] == "negative" and card["ok_to_submit"] is False
+    assert card["new_submission"]["generated"] is False
+    assert "NO CURRENT TIFF IS APPROVED FOR SUBMISSION" in readme
+    assert "MUST GENERATE A UNIQUE TIFF SUBMISSION" in readme
+    assert "Standing brief (read before every project session)" in readme
+    assert "docs/research/FEED.md" in readme
     assert "https://www.drivendata.org/competitions/306/competition-doe-gems/" in readme
+    feed = json.loads((ROOT / "evidence/feed.json").read_text())
+    assert feed["decision"] == "NO-GO"
+    assert any(c["id"] == "uniqueness" and c["status"] == "FAIL" for c in feed["checks"])

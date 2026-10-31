@@ -31,8 +31,8 @@ def test_exp3_is_never_marked_submittable():
     assert "NOT OK" in card["decision"]["blocked"]["reason"] or card["decision"]["blocked"]["file"].endswith(".tif")
     for page in ("docs/index.html", "docs/executive-summary.html"):
         html = (ROOT / page).read_text()
-        assert "NOT APPROVED TO SUBMIT" in html
-        assert "NOT OK to submit" in html or "DO NOT SUBMIT" in html
+        assert "DO NOT SUBMIT" in html
+        assert "OK TO SUBMIT" not in html
 
 
 def test_downloadable_file_exists_with_matching_sha():
