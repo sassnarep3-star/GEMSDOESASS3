@@ -1,0 +1,41 @@
+{
+ "schema_version": 1,
+ "checked_utc": "2026-10-31T05:05:00Z",
+ "label": "MEASURED (HTTP fetch via the agent web tool; sandbox bash cannot reach these hosts)",
+ "sources": [
+  {
+   "url": "https://gdr.openei.org/submissions/1391",
+   "status": "reachable",
+   "title": "GDR: INGENIOUS - Great Basin Regional Dataset Compilation",
+   "doi": "10.15121/1881483",
+   "license": "CC-BY-4.0",
+   "direct_downloads_verified_on_page": [
+    "https://gdr.openei.org/files/1391/wellspringdata.gdb.zip (19.85 MB, springs/wells)",
+    "https://gdr.openei.org/files/1391/great_basin_q_volcanics.zip (9.44 MB, vents+flows)",
+    "https://gdr.openei.org/files/1391/paleo_geothermal_regional.zip (82 KB, sinter/tufa)",
+    "https://gdr.openei.org/files/1391/faults_quaternary_INGENIOUS_regional_data.zip (5.76 MB)",
+    "https://gdr.openei.org/files/1391/qfaults_ingenious_nad83conus117_2023-06-27.zip (5.85 MB)",
+    "https://gdr.openei.org/files/1391/seismicity_INGENIOUS_regional_data.zip (22.98 MB)",
+    "https://gdr.openei.org/files/1391/geodetics_INGENIOUS_regional_data.zip (51.99 MB)",
+    "https://gdr.openei.org/files/1391/2m_temperature_probe_INGENIOUS_regional_data.zip (1.03 MB)"
+   ],
+   "doi_landing_pages_listed": [
+    "MT conductance 10.5066/P9TWT2LU",
+    "gravity/magnetics 10.5066/P9Z6SA1Z",
+    "heat flow 10.5066/P9BZPVUC",
+    "slip/dilation tendency 10.5066/P9YL58W6",
+    "elevation trend 10.5066/P9MQRCBY"
+   ]
+  },
+  {
+   "url": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+   "status": "named-official-source (fetch deferred; sandbox allow-list blocks usgs.gov)",
+   "used_for": "H-SASS3-O radiometrics"
+  },
+  {
+   "url": "https://www.usgs.gov/3d-elevation-program",
+   "status": "named-official-source (fetch deferred)",
+   "used_for": "H-SASS3-Q/R 1 m lidar"
+  }
+ ]
+}

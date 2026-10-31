@@ -37,6 +37,7 @@ Usage
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import json
 import zipfile
@@ -238,11 +239,11 @@ def main() -> int:
         print("  ", sweep[-1], flush=True)
 
     ev = {
-        "schema_version": 1, "generated_utc": "2026-10-30", "label": "ESTIMATE",
+        "schema_version": 1, "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "label": "ESTIMATE",
         "not_organizer_confirmed": True,
-        "method": "least-norm inversion of the organizer metric's linear form on 128 published rasters",
+        "method": f"least-norm inversion of the organizer metric's linear form on {n} published rasters",
         "n_rasters": n, "N_estimate": N, "scale_c": c,
-        "model_selection": "leave-one-file-out squared error on the 128 owner-reported scores",
+        "model_selection": f"leave-one-file-out squared error on the {n} owner-reported scores",
         "baseline_loo_rmse": float(np.sqrt(np.mean((obs - obs.mean()) ** 2))),
         "chosen": best, "grid": grid, "sweep": sweep,
         "field_stats": {"max_q": float(q.max()), "cells_over_0.1": int((q > 0.1).sum()),

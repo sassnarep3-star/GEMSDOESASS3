@@ -362,6 +362,12 @@ Rules applied: lane checks (rank correlation ≤ 0.90; ≤ 70% of dots within 3 
 
 ## Reproduce checks
 
+> **One generator only.** The current site is written by `scripts/build_executive_summary_20261031.py` (docs/index.html,
+> docs/executive-summary.html, docs/how-to-submit.html, and the two root redirect pages). `scripts/build_site.py`,
+> `build_docs_pages.py`, `build_executive_summary.py` and `scripts/build_site_20261031.py` are earlier/parallel
+> generators that overwrite `docs/index.html` with their own decision text. Running them silently replaces the current
+> decision; they are kept for the audit trail and must not be run unless that is what you intend.
+
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
 pip install numpy scipy scikit-learn rasterio pytest
