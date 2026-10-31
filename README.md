@@ -1,6 +1,30 @@
 # GEMSDOESASS3 — read first
 
-## Decision (2026-10-30) — DOWNLOAD AND SUBMIT THIS FILE
+## Decision (2026-10-31, H-CELLDISTILL session) — supersedes the block below
+
+**Gate verdict: the generated unique raster is OK to download, NOT OK to submit.**
+
+| | |
+|---|---|
+| **File (download this one)** | `docs/downloads/gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif` (+ `.zip`) |
+| **Submission name** | `gemsdoesass3-cdist-52000-20261031T1200Z-zeros` |
+| **Note (90 / 140 chars)** | `cell-credit distillation, 52000 dots, unique 47% overlap; screening-only, slot NOT cleared` |
+| **Format gates** | **all pass**, computed from the saved bytes: values ∈ {0,1} inside the footprint, no NaN anywhere, CRS EPSG:32611, 3730×3292 at 100 m, 52,000 dots |
+| **Score gate** | **no estimate published.** No estimator in this repo can honestly price this file above the 0.2778 champion, and it loses the shared holdout floor (HOLDOUT-DTI **0.0461** [0.0394, 0.0533], 22,232 withheld positives; SGMC-CAL **0.0804** [0.0707, 0.0894], 62,703) |
+| **Uniqueness** | worst 3 px overlap over **511** registry rasters = **47.0 %** (repo cap 65 %, protocol 70 %); the binding raster already covers 35.3 % of the footprint, so the **lift is 1.33×**; 1.07 M field cells with positive credit lie outside every published raster's dots |
+| **Why "not OK"** | a weekly slot spent on a raster that fails the floor test and cannot be priced above the incumbent buys nothing; promotion stays a separate selector step (protocol rule 6) |
+
+Three things this session delivered besides the raster:
+
+1. **The portal error is fixed and explained.** `…-nanoutside.tif` carries NaN outside the footprint and trips the submission form's element-wise `Predicted values must be in range [0, 1]` check — the exact error reported. The `…-zeros` variant of the *same in-footprint assertion* passes it, and the organizer's scorer accepts it (the 0.2778 champion is itself a `-zeros` file). The zeros file is now the default download on every page. `docs/irregularities.md` IR-31-02.
+2. **A validated score screen, and the retirement of this site's own headline.** `scripts/compare_estimators_20261031.py` scores every estimator on the only fair unit — withholding *whole families* of near-duplicate rasters (132 files → 110 clusters). The bag-mean channel model beats the predict-the-mean baseline (RMSE **0.0586** vs **0.0818**, ρ **0.746**); the incumbent corpus-inversion that produced the published `0.369` scores **0.1364** on that unit and is retired (IR-31-01). Field-sum pricing of our own emission is a winner's-curse artefact (0.0806, ρ 0.30); an unbounded version implied a score of **493**, which is impossible and was caught before publication.
+3. **The focus-site answer, in one table.** `evidence/focus9_verdict_table_20261031.json` + `docs/research/focus9-verdict-20261031.md`: per site, the file to download, its OWNER-REPORT score, the estimator's rank-score, its dot mass, and whether it is unique. **20 of 132 published rasters — including all six highest scores (0.2449–0.2778) — are one near-duplicate family spanning 13 sites**, so the nine "site leaders" measure one idea nine times (IR-31-04). The best *distinct* submissions on the focus sites are GEMSDOE27's `h31-drcg-wl-celf28` (0.2250) and `h29-hydrothermal-piedmont-celf` (0.2190).
+
+**Why the champion wins, in one line:** with α = 0.2, β = 0.8 the metric is exactly `TP/(0.2 D + 0.8 N)`, so a leaderboard score is recall per unit emitted mass; 37,654 off-catalogue dots (0.73 % of the footprint) sited on unmapped scarp steps is the best such set published — `-zeros` is a fill convention, not an empty submission, and the score is not a bug. Full derivation and the five ranked next hypotheses: **[`docs/research/cellcredit-20261031.md`](docs/research/cellcredit-20261031.md)**.
+
+Live leaderboard, fetched 2026-10-31 (ORGANIZER-PUBLISHED page): #1 `xiaofanhu` **0.4544**, #2 **0.3934**, #3 **0.3917**, #4 **0.3860**, #5 `op01` **0.3642**. The prompt's "0.4413 / 0.3195 is the highest" are stale (IR-31-03) — the gap between the published family (≈0.28) and the top of the board (≈0.45) is a *localisation* gap, not a calibration one, which is why the next session should chase 1 m-DEM scarp steps over the 1.07 M off-corpus cells and the relay-bridge signal rather than another re-shaping of the corpus.
+
+## Superseded decision (2026-10-30) — kept for the audit trail
 
 **Status: OK to download and OK to submit.**
 
@@ -162,6 +186,15 @@ Create a github page for this repo that has clean ui, user friendly, simple and 
 ```
 
 </details>
+
+## Standing protocol, added 2026-10-31 (binding, stored with the standing prompt)
+
+- **Three passes per session.** (1) re-read the standing prompt + the feed; (2) generate, gate, validate; (3) *only then* write the site copy. Never publish between passes.
+- **Duplicate check twice**: once before placing dots (against the registry) and once on the final dot set. Rank-correlation > 0.90 with a registry raster, or > 70 % of dots within 3 px of one, means the file is a duplicate → log it and stop.
+- **Fix shared tools in the template, once** — `evaluate_holdout.py`, `submission_writer.py`, the cached feature stack, `status_feed.py` — no private forks per lane.
+- **Every number carries its label**: `HOLDOUT-DTI` (evaluator version, withheld-positive count, 95 % CI) or `ORGANIZER-CONFIRMED`. A projection is never written as a score. A leakage canary with AUC > 0.90 is leakage until proven otherwise.
+- **One JSON run card per experiment**: hypothesis, mechanism, the named non-fault process that could mimic it, holdout DTI + CI, registry correlation/overlap, raster sha256, validator output, submission name + note ≤ 140 chars, verdict promote/negative. Negative results are deliverables.
+- Stop after 3 experiments or 2 hours. Do not self-assign a real slot.
 
 ## Core Values
 

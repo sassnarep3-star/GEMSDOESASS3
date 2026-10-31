@@ -124,6 +124,31 @@ def main() -> int:
         add(rec("candidate-bytes", "candidate build receipt + TIF", "file + hash check", "MISSING",
                 {"receipt": bool(cand_receipt), "tif": str(safe)}, "scripts/build_candidate.py --mass 44090 --mode wide"))
 
+    # generic check: the newest lane build in docs/downloads (any script that writes *-build.json
+    # is verified here, so no lane can quietly become the site's offer without being checked)
+    builds = sorted((ROOT / "docs" / "downloads").glob("*-build.json"),
+                    key=lambda q: q.stat().st_mtime, reverse=True)
+    if builds:
+        b = j(builds[0]) or {}
+        rel = b.get("path") or b.get("tif") or ""
+        cand = (ROOT / "docs" / "downloads" / Path(rel).name) if rel else None
+        ok = bool(cand and cand.exists())
+        got = sha(cand) if ok else ""
+        want = b.get("raster_sha256") or b.get("sha256") or ""
+        add(rec("latest-build", "newest lane build matches its build receipt",
+                "sha256(docs/downloads/<newest -build.json raster>) vs that receipt",
+                "OK" if ok and got == want else "FAIL",
+                {"file": cand.name if cand else None, "sha256": got[:16] + "…",
+                 "generated_utc": b.get("generated_utc") or b.get("built_utc"),
+                 "n_dots": b.get("n_dots") or b.get("emitted_px"),
+                 "submission_note_len": b.get("note_length"),
+                 "worst_overlap": b.get("worst_registry_overlap"),
+                 "receipt_age_h": age_h(builds[0])},
+                "" if ok and got == want else "rebuild the lane script or correct the receipt"))
+    else:
+        add(rec("latest-build", "newest lane build receipt", "docs/downloads/*-build.json", "MISSING",
+                {}, "run a candidate builder"))
+
     val = j(ROOT / "evidence/validator_s3_ocm_safe.json") or {}
     add(rec("format-gate", "in-project format gate (portal range test included)",
             "scripts/validate_submission_tif.py receipt",
