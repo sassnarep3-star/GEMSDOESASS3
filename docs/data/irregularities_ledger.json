@@ -1,8 +1,82 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-31",
  "repository": "sassnarep3-star/GEMSDOESASS3",
+ "generated_utc": "2026-10-31",
  "irregularities": [
+  {
+   "id": "IR-31-01",
+   "severity": "high",
+   "title": "the site's own 0.369 headline estimate does not survive cluster-honest validation",
+   "detail": "The incumbent estimator (scripts/distill_from_leaderboard.py) reported leave-one-FILE-out RMSE 0.0533 and used it to price gemsdoesass3-lbinv-84262 at 0.369. When whole clusters of near-duplicate rasters are withheld together (scripts/compare_estimators_20261031.py), the same estimator scores RMSE 0.1364 against a predict-the-mean baseline of 0.0818. The estimate is retired, not argued with.",
+   "evidence": [
+    "evidence/estimator_arms_20261031.json",
+    "evidence/cellcredit_distillation_20261031.json"
+   ],
+   "status": "OPEN \u2014 headline replaced with 'not priced' on 2026-10-31"
+  },
+  {
+   "id": "IR-31-02",
+   "severity": "high",
+   "title": "every '-nanoutside' download fails the portal's element-wise [0,1] gate",
+   "detail": "The owner's live submission error 'Predicted values must be in range [0, 1]' reproduces on this repo's own file: 7,111,787 NaN cells outside the footprint. The official text asks for null-or-NaN outside the bounds, but the portal range-tests stored cells. The zeros variant of the identical in-footprint raster passes (and the 0.2778 champion is a '-zeros' file, so the organizer's scorer accepts it). The download default is now the zeros variant.",
+   "evidence": [
+    "docs/downloads/gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif",
+    "evidence/run_card_cellcredit_20261031.json"
+   ],
+   "status": "FIXED \u2014 zeros variant published beside every candidate on this site"
+  },
+  {
+   "id": "IR-31-03",
+   "severity": "medium",
+   "title": "the prompt's leaderboard numbers are stale against the live public page",
+   "detail": "The prompt states 'Current competition leaderboard GEMSDOE high score: 0.4413' and later '0.3195 is the highest score right now'. The public leaderboard fetched 2026-10-31 shows #1 xiaofanhu 0.4544 (36 submissions), #2 cfld__ 0.3934, #3 0.3917, #4 0.3860, #5 op01 0.3642. Target-setting against 0.3195 would have aimed 0.13 too low.",
+   "evidence": [
+    "registry/published_score_table_20261031.json#leaderboard_snapshot"
+   ],
+   "status": "LOGGED \u2014 live page is the authority; snapshot stored with the score table"
+  },
+  {
+   "id": "IR-31-04",
+   "severity": "high",
+   "title": "the nine focus sites are not nine independent experiments",
+   "detail": "20 of 132 matched rasters form one Jaccard cluster (>=0.35 dot overlap), including every one of the six highest published scores (0.2449-0.2778). Site leaders on GEMSDOE24/25/27/28/30/31/32/33/36 are re-skins of one raster family. Any 'best file per site' ranking therefore measures one idea nine times, and a weekly slot spent on a site leader buys no new information.",
+   "evidence": [
+    "evidence/focus9_verdict_table_20261031.json"
+   ],
+   "status": "OPEN \u2014 uniqueness is now a gate, reported as overlap + lift, not as a site label"
+  },
+  {
+   "id": "IR-31-05",
+   "severity": "low",
+   "title": "byte-identical rasters published under two sites",
+   "detail": "19GEMSDOE 'h19-4-multiline-corroborated-\u2026-691e4dfa' and GEMSDOE21 'h19-4-reference-\u2026-691e4dfa' have the same SHA-256 and the same published score 0.1894. Score-corpus deduplication keys on SHA, so the pair contributes one equation, as it should.",
+   "evidence": [
+    "evidence/score_corpus_manifest_20261031.json"
+   ],
+   "status": "HANDLED"
+  },
+  {
+   "id": "IR-31-06",
+   "severity": "medium",
+   "title": "six published tokens could not be matched to a raster, thirteen have no score",
+   "detail": "Corpus matching is 133/139. Unmatched: GEMSDOE, GEMSDOE2, GEMSDOE4, 5GEMSDOE, WBGGEMSDOE2, WBGGEMSDOE3 (files no longer in those repos' docs/downloads or renamed). The owner's 2026-10-31 list also carries entries with no score (e.g. gems28-s31-far65-dispfill, gems91-s91-alm-alteration-halo, GEMSDOEkarage2 halo39, WBGGEMSDOE2 gems-wbg4-triphysics) \u2014 recorded as pending, never used for calibration or claimed as zero.",
+   "evidence": [
+    "evidence/score_corpus_manifest_20261031.json",
+    "registry/published_score_table_20261031.json"
+   ],
+   "status": "OPEN \u2014 needs a re-fetch when the sibling repos republish"
+  },
+  {
+   "id": "IR-31-07",
+   "severity": "low",
+   "title": "GitHub REST quota exhausted mid-session",
+   "detail": "The 5,000/h authenticated quota ran out while fetching 139 corpus rasters + 386 registry rasters, so 6 registry rasters stayed unreadable. Mitigation added to the shared tool: scripts/build_score_corpus.py --offline-cache builds the identical manifest from bytes already on disk, and every corpus number in this session is reproducible without the API.",
+   "evidence": [
+    "data/restore_receipt.json (28 files SHA-verified)",
+    "scripts/build_score_corpus.py"
+   ],
+   "status": "MITIGATED"
+  },
   {
    "id": "IR-SASS3-01",
    "severity": "CRITICAL (RESOLVED)",
@@ -652,38 +726,78 @@
   },
   {
    "id": "IR-SASS3-94",
-   "severity": "MEDIUM (RESOLVED)",
-   "title": "Prompt leaderboard figures contradict the live page",
-   "finding": "The 2026-10-31 prompt states 'Current competition leaderboard GEMSDOE high score: 0.4413' and later '0.3195 is the highest score right now'. The live leaderboard fetched 2026-10-31 shows #1 xiaofanhu 0.4544 and #50 kpomazi 0.3195 \u2014 0.3195 is the LOWEST score in the displayed top-50 table, not the highest.",
-   "resolution": "evidence/leaderboard_snapshot_20261031.json records the fetched rows (ORGANIZER-CONFIRMED). The site uses 0.4544 as the live top and labels both prompt figures as superseded.",
-   "status": "closed"
+   "severity": "HIGH (FIXED)",
+   "title": "make_portal_safe_render.py did not reset striped block sizes when switching to tiled=True",
+   "finding": "When the source raster is striped (blockxsize=width, tiled=False), the safe-renderer copied that profile and set tiled=True without resetting blockxsize/blockysize. GDAL then raised 'Bad value 3292 for TileWidth tag' / 'TIFF dataset blocks must be multiples of 16'. The lbinv candidate (width 3292) could not be rendered portal-safe until the block size was pinned to 256x256.",
+   "resolution": "Fixed once in scripts/make_portal_safe_render.py (pin blockxsize=blockysize=256 when tiled=True). Regression test added: tests/test_portal_range_gate.py::test_tiled_render_resets_striped_block_sizes.",
+   "detected_utc": "2026-10-31"
   },
   {
    "id": "IR-SASS3-95",
-   "severity": "MEDIUM (FIXED)",
-   "title": "GitHub REST budget exhausted broke the corpus/registry fetchers; build_score_corpus path bug",
-   "finding": "On 2026-10-31 the token's REST budget was 5000/5000 used, so scripts/build_score_corpus.py and scripts/fetch_focus_registry.py downloaded 0 files. build_score_corpus.py also crashed at manifest write when --table was passed as a relative path (Path.relative_to(ROOT) ValueError).",
-   "resolution": "Fixed the relative-path crash in build_score_corpus.py (resolve before relative_to). Wrote scripts/fetch_pool_via_git.py, which materialises the same two caches with blobless depth-1 git clones (git smart-HTTP is outside the REST budget) and reuses build_score_corpus.norm/repo_of for matching: corpus 134/140 matched (133 unique rasters), registry 378/386 verified (8 rows point at the HISTORICAL_SCORED pseudo-repo, known-unavailable).",
-   "status": "closed"
+   "severity": "HIGH (FIXED)",
+   "title": "The promoted LB-inversion candidate was shipped only as a NaN-payload raster",
+   "finding": "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif stored NaN in the 7,111,787 outside-footprint cells. The DrivenData form compares every stored cell against [0,1] element-wise and NaN compares False, so the file is rejected with 'Predicted values must be in range [0, 1]' (the exact error the owner reported). The pages and README promoted this file as submittable.",
+   "resolution": "Re-rendered in the portal-safe encoding (finite {0,1} inside, 0.0 outside, internal GDAL per-dataset mask band); dot set bit-identical (symmetric difference 0). Pages, README, session card, and run card updated to the -safe file. The NaN copy is retained as the analysis source only.",
+   "detected_utc": "2026-10-31"
   },
   {
    "id": "IR-SASS3-96",
-   "severity": "MEDIUM (CLOSED-NEGATIVE)",
-   "title": "Kill-repair uniqueness repair collapses on a redundant corpus (E2 negative result)",
-   "finding": "scripts/emit_lbinv_kernelpack_20261031.py repaired dot-overlap by killing the lowest-credit offenders per offending raster. Because the top published rasters share 87-100% of their dots, their 3 px halos coincide; each repair round exposed the next offender and the loop collapsed a 42,000-dot candidate to 2,445 dots (EST 0.3209 -> 0.0554).",
-   "resolution": "Negative run card recorded (evidence/run_card_neg_killrepair_20261031.json). Replacement: scripts/emit_lbinv_quota_20261031.py enforces the per-raster halo cap DURING placement (uniqueness by construction); see evidence/run_card_kernelpack_20261031.json.",
-   "status": "closed"
+   "severity": "MEDIUM",
+   "title": "GitHub API rate limit blocked the registry/corpus fetch; codeload tarballs used instead",
+   "finding": "The API-based fetchers (fetch_registry_rasters.py, build_score_corpus.py) exhausted the unauthenticated GitHub API rate limit when run with many workers, returning 0 matched entries and overwriting the corpus manifest. raw.githubusercontent.com is not on the sandbox allow-list.",
+   "resolution": "Added codeload-based fetchers (fetch_focus_registry_codeload.py, fetch_score_corpus_codeload.py) that download repo tarballs under the separate codeload limit. Restored the overwritten manifest from git. Uniqueness re-verified against 521 rasters (392 registry + 129 corpus), worst overlap 65.0%.",
+   "detected_utc": "2026-10-31"
   },
   {
    "id": "IR-SASS3-97",
-   "severity": "HIGH (FIXED)",
-   "title": "The promoted 2026-10-30 file is portal-incompatible (NaN outside) and was rejected by the live form",
-   "finding": "The user submitted the file promoted in the 2026-10-30 README (gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif) and the form returned 'Predicted values must be in range [0, 1]'. Root cause (tests/test_portal_range_gate.py): the form compares every STORED cell with [0, 1] element-wise and NaN compares False, so a NaN-outside raster is rejected even though every finite value is legal and the official sentence allows null/NaN outside. The 2026-10-30 promotion shipped the NaN variant as the primary download despite the known portal-safe fix (0.0 outside + GDAL mask band).",
-   "resolution": "This session promotes the portal-safe render as THE downloadable submission and keeps the NaN variant only as an analysis copy. Gate scripts/validate_submission_tif.py (portal_range_gate) run on the promoted bytes; see evidence/validator_kernelpack_20261031.json and evidence/portal_safe_render receipt.",
-   "status": "closed"
+   "severity": "HIGH",
+   "title": "The uniqueness sweep measured radius 1 px, not the organizer's 3 px kernel, and missed the calibration lattice",
+   "finding": "scripts/emit_lbinv_candidate.py dilated each reference with binary_dilation(m, STRUCT) where STRUCT is a (3,3) square and the call used the default one iteration. One iteration of a (3,3) square is radius 1 px, but the STRUCT comment claims '3 px == 300 m == the organizer's kernel radius'. The correct 3 px kernel is three iterations (Chebyshev radius 3) or a Euclidean disk of radius 3. Additionally the sweep globbed only the registry and corpus directories, so the calibration lattice (a registry raster under HISTORICAL_SCORED, stored under .cache/gems_data/scored/) was never checked.",
+   "resolution": "Corrected the lane-rule measurement to three dilation iterations and included the lattice. At the correct 3 px the LB-inversion candidate has 99.9% of its dots within 3 px of the lattice and fails the binding lane rule. Regression test added: tests/test_lbinv_submission.py::test_lattice_rule_fails_so_candidate_is_not_cleared.",
+   "detected_utc": "2026-10-31"
   },
   {
    "id": "IR-SASS3-98",
+   "severity": "HIGH",
+   "title": "The portal-safe LB-inversion candidate is a near-duplicate of the calibration lattice",
+   "finding": "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif fixes the portal range blocker (11/11 byte gates) but 99.9% of its 84,262 dots fall within 3 px of the 13GEMSDOE calibration lattice, a registry raster. The lane rule caps this at 70%. The earlier run card recorded literal_uniqueness_gate=CLEARED on the radius-1, lattice-excluding sweep.",
+   "resolution": "Run card verdict corrected to negative / NOT CLEARED; the file is documented as FORMAT-OK but not submittable on the pages and README. The safe encoding itself (mask band, finite 0.0 outside) is retained as the correct fix for the portal range error.",
+   "detected_utc": "2026-10-31"
+  },
+  {
+   "id": "IR-SASS3-99",
+   "severity": "MEDIUM (RESOLVED)",
+   "title": "Prompt leaderboard figures contradict the live page (2026-10-31 refresh)",
+   "finding": "The 2026-10-31 prompt states 'Current competition leaderboard GEMSDOE high score: 0.4413' and later '0.3195 is the highest score right now'. The live leaderboard fetched 2026-10-31 shows #1 xiaofanhu 0.4544 and #50 kpomazi 0.3195 - 0.3195 is the LOWEST score in the displayed top-50 table, not the highest. Extends IR-SASS3-25 with a same-day live read.",
+   "resolution": "evidence/leaderboard_snapshot_20261031.json records the fetched rows (ORGANIZER-CONFIRMED). The research pages use 0.4544 as the live top and label both prompt figures as superseded.",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-100",
+   "severity": "MEDIUM (FIXED)",
+   "title": "Git-blobless fetch workaround and build_score_corpus relative-path crash",
+   "finding": "Parallel to IR-SASS3-96: this lane hit the same exhausted REST budget (5000/5000) and downloaded 0 files with the API-based fetchers. Independently found that scripts/build_score_corpus.py crashed at manifest write when --table was passed as a relative path (Path.relative_to(ROOT) ValueError on the unresolved path).",
+   "resolution": "Fixed the relative-path crash in build_score_corpus.py (resolve before relative_to; the fix is also on main). Wrote scripts/fetch_pool_via_git.py, which materialises corpus and registry caches with blobless depth-1 git clones (git smart-HTTP is outside the REST budget) and reuses build_score_corpus.norm/repo_of for matching: corpus 133 unique rasters, registry 378 verified. Main's codeload fetchers (IR-SASS3-96) are the surviving shared tool.",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-101",
+   "severity": "MEDIUM (CLOSED-NEGATIVE)",
+   "title": "Kill-repair uniqueness repair collapses on a redundant corpus",
+   "finding": "scripts/emit_lbinv_kernelpack_20261031.py repaired dot-overlap by killing the lowest-credit offenders per offending raster. Because the top published rasters share 87-100% of their dots, their halos coincide; each repair round exposed the next offender and the loop collapsed a 42,000-dot candidate to 2,445 dots (EST 0.3209 -> 0.0554).",
+   "resolution": "Negative run card recorded (evidence/run_card_neg_killrepair_20261031.json). Replacement emission engine enforces per-raster halo quotas during placement (scripts/emit_lbinv_quota_20261031.py) - which then failed the corrected 3 px lane rule, see IR-SASS3-102.",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-102",
+   "severity": "HIGH (CONVERGED NEGATIVE)",
+   "title": "Kernel-pack quota emission carried the same radius-1 halo bug; true-3px re-measurement fails the lattice rule",
+   "finding": "The quota emitter's halo cache (scripts/emit_lbinv_kernelpack_20261031.py Pool.halo) used binary_dilation(m, STRUCT) with the default iterations=1, i.e. Chebyshev radius 1 px, while labelling it '3 px halos'. Every sweep overlap (worst 0.6500 by construction) therefore measured radius 1. Independent re-measurement of the emitted 49,278-dot candidate (gemsdoesass3-lbinv2-dense-49278-20261031T180000Z) against the 13GEMSDOE calibration lattice with the corrected 3-iteration dilation (IR-SASS3-97's definition) gives 99.88% of dots within 3 px of the lattice (radius-1 measure: 36.54%). The lane rule caps this at 70%.",
+   "resolution": "Converges with IR-SASS3-97/98: the candidate is FORMAT-OK (validator 22/22, portal gate pass) but NOT CLEARED; run card verdict corrected to negative and the pages document no approved TIFF. The quota engine is retained as the shared tool for any future compliant emission, which must place >=30% of dots outside the lattice's true-3px halo (priced in the run card open_risks).",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-103",
    "severity": "LOW (RESOLVED)",
    "title": "Hypothesis ID collision across research documents",
    "finding": "docs/hypotheses.md assigns H-SASS3-J..N one set of meanings (tip continuation, relay bridging, strain ridges, lidar scarps, Euler depth) while research/hypotheses-20261030.md re-uses H-SASS3-J..M for different hypotheses (trace extrapolation, strain-optimal lineaments, gravity-only steps, discharge corridors).",
@@ -691,11 +805,11 @@
    "status": "closed"
   },
   {
-   "id": "IR-SASS3-99",
+   "id": "IR-SASS3-104",
    "severity": "LOW (RESOLVED)",
    "title": "Refreshing the distilled field drifts the historical estimate-recompute test",
    "finding": "Rebuilding .cache/distill_q.npz with the expanded corpus (128 -> 133 rasters) shifts the recomputed estimate of the frozen 2026-10-30 file from 0.3687 to 0.3681 (6.4e-4), just outside tests/test_lbinv_submission.py's 5e-4 tolerance.",
-   "resolution": "The release-time strict check is preserved in evidence/validator_lbinv_20261030.json and asserted in the test; the tolerance against the refreshed field is 2e-3 (still 25x tighter than the estimator's LOO error). The new candidate is validated against the same field it was built from at 5e-4.",
+   "resolution": "The release-time strict check is preserved in evidence/validator_lbinv_20261030.json and asserted in the test; the tolerance against the refreshed field is 2e-3 (25x tighter than the estimator's LOO error). Main's test file now governs; the drift note stands as documentation.",
    "status": "closed"
   }
  ]

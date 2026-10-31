@@ -1,0 +1,85 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31T05:10:43.485316+00:00",
+ "candidate": {
+  "file": "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif",
+  "sha256": "67ce8163f7cccac4f693946ce6328194abb8627fc2af18f8c26a67b4cac48f79",
+  "dots": 84262
+ },
+ "method": "3 px (300 m) binary dilation of each registry raster's positive cells; fraction of candidate dots inside it",
+ "n_rasters_checked": 521,
+ "worst_within_3px_fraction": 0.65,
+ "worst_raster": "gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+ "worst_raster_coverage_of_footprint": 0.3528,
+ "worst_lift": 1.842,
+ "cap": 0.7,
+ "pass": true,
+ "top10": [
+  {
+   "raster": "gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+   "within_3px_fraction": 0.65,
+   "coverage_of_footprint": 0.3528,
+   "lift": 1.842
+  },
+  {
+   "raster": "gems22-h23-a-dti-optimal-emission-6pct-20261002-e2ec4b49-nan.tif",
+   "within_3px_fraction": 0.5524,
+   "coverage_of_footprint": 0.2517,
+   "lift": 2.195
+  },
+  {
+   "raster": "gemsdoe67-ovtr-ml-cover-tau3p0-20261012-nan.tif",
+   "within_3px_fraction": 0.5264,
+   "coverage_of_footprint": 0.2918,
+   "lift": 1.804
+  },
+  {
+   "raster": "gems85-h85-edti-collar35-skel-r33-20261021-d97b248e-zeros.tif",
+   "within_3px_fraction": 0.4426,
+   "coverage_of_footprint": 0.3026,
+   "lift": 1.463
+  },
+  {
+   "raster": "pindrop-v4-nodes-20260925T152420Z-f347b70daa.tif",
+   "within_3px_fraction": 0.3953,
+   "coverage_of_footprint": 0.2699,
+   "lift": 1.465
+  },
+  {
+   "raster": "12GEMSDOE_r7-nms3-dem10-scarp_0c9199f14e62.tif",
+   "within_3px_fraction": 0.3901,
+   "coverage_of_footprint": 0.18,
+   "lift": 2.168
+  },
+  {
+   "raster": "13gems_20261001_r13-lattice-s5_v2_zerofill.tif",
+   "within_3px_fraction": 0.3746,
+   "coverage_of_footprint": 0.36,
+   "lift": 1.041
+  },
+  {
+   "raster": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "within_3px_fraction": 0.3746,
+   "coverage_of_footprint": 0.36,
+   "lift": 1.041
+  },
+  {
+   "raster": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif",
+   "within_3px_fraction": 0.3443,
+   "coverage_of_footprint": 0.0995,
+   "lift": 3.46
+  },
+  {
+   "raster": "gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-nan.tif",
+   "within_3px_fraction": 0.3443,
+   "coverage_of_footprint": 0.0995,
+   "lift": 3.46
+  }
+ ],
+ "correction_20261031": {
+  "issue": "The sweep used binary_dilation(m, STRUCT) with one iteration. STRUCT is a (3,3) square, so one iteration is radius 1 px, not the organizer's 300 m (3 px) kernel radius.",
+  "missed_reference": "The calibration lattice scored/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif (registry HISTORICAL_SCORED) was not globbed; it lives under .cache/gems_data/scored/.",
+  "corrected_lattice_overlap_3px": 0.9989,
+  "consequence": "The reported worst 65.0% is a radius-1 figure over a raster set that excluded the lattice. At the correct 3 px the candidate fails the lane rule."
+ }
+}

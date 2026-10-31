@@ -23,7 +23,10 @@
   "overlap_cap": 0.65,
   "protocol_cap": 0.7,
   "rasters_checked": 527,
-  "gate_applies_to": "registry (386 nine-site files) + scored corpus (133) - the other GEMDOE sites and the public pool. This repo's own previous files are measured, not constraining (copy-prevention = different sha/dots, see verdict)."
+  "gate_applies_to": "registry + scored corpus + calibration lattice (the binding rule counts ANY registry raster; the lattice is one under HISTORICAL_SCORED)",
+  "worst_overlap_external_lattice_true_3px": 0.9988,
+  "worst_overlap_external_lattice_radius1_buggy": 0.3654,
+  "measured_radius_note": "sweep halos were radius 1 px (bug); the lattice re-measurement above uses the corrected 3-iteration dilation"
  },
  "raster_sha256": "9bf2a19e476c8b034900af68f355d811b4c60651a687f262b73ec15c4b12e11f",
  "zip_sha256": "64e909a242a9fe840aa2185045c30cc0fc96bd253195a067bb37fc4ab49d2a12",
@@ -354,12 +357,12 @@
    ]
   }
  ],
- "verdict": "The downloadable submission is gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-safe.tif (portal-safe render of gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-nan). ok_to_submit: the raster-level gates are green (validator all_pass, portal gate pass, worst external overlap 0.65 <= protocol cap 0.70, worst external dot phi 0.2737 <= 0.90). The OWNER-HOLDOUT-DTI gate is not run (no labels.tif in this sandbox) and the scientific claim stays ESTIMATE 0.410 +- 0.053 (LOO). It is a new emission, not a copy of any previous GEMSDOESASS3 submission (new sha, new dot set, fresh construction on the refreshed field).",
- "ok_to_submit": true,
+ "verdict": "negative / NOT CLEARED. The downloadable-but-not-submittable artifact is gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-safe.tif (FORMAT-OK: validator all_pass, portal gate pass). It FAILS the binding lane rule: with the corrected 3-iteration (Chebyshev radius 3) dilation, 99.88% of its 49,278 dots fall within 3 px of the 13GEMSDOE calibration lattice (a registry raster; cap 70%). The sweep's worst_overlap 0.65 values were measured at radius 1 px due to the halo-cache bug (IR-SASS3-102) and are superseded by this verdict.",
+ "ok_to_submit": false,
  "open_risks": [
-  "ESTIMATE is leave-one-file-out, not organizer truth; realized scores can land outside the band.",
-  "The consensus field inherits artefacts shared by sibling methods (see mimic).",
-  "Uniqueness vs this repo's own previous files is measured, not gated at 65 % (gating against our own dense 84k-dot file collapses any new emission - see the negative run card).",
-  "3 submissions/week cap: selector step stays separate; do not auto-submit."
+  "NOT CLEARED: 99.88% of dots within true-3px of the calibration lattice (IR-SASS3-97/98/102).",
+  "A compliant emission needs >=30% of dots outside the lattice's true-3px halo; rebuild the halo cache at 3-iteration dilation and re-run the quota sweep to price it.",
+  "ESTIMATE is leave-one-file-out, not organizer truth (0.410 could not survive the lattice rule).",
+  "3 submissions/week cap: selector step stays separate; nothing is approved for upload."
  ]
 }

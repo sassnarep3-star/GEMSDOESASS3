@@ -129,9 +129,15 @@ def main() -> int:
                     default=ROOT / "evidence" / "score_corpus_manifest_20261030.json")
     ap.add_argument("--table", type=Path, default=DEFAULT_TABLE)
     ap.add_argument("--only", nargs="*", default=None, help="restrict to these site labels")
+    ap.add_argument("--offline-cache", action="store_true",
+                    help="do not touch the GitHub API; match tokens against files already in --out. "
+                         "Needed when the API is rate-limited (60/h anonymous, 5000/h auth): the "
+                         "cache is the authoritative source of what was downloaded, and the match "
+                         "rule is identical, so the manifest stays reproducible.")
     ap.add_argument("--max-per-entry", type=int, default=1)
     args = ap.parse_args()
 
+    args.table = Path(args.table)
     table = json.loads(args.table.read_text())
     entries = table["entries"]
     if args.only:
@@ -139,10 +145,32 @@ def main() -> int:
         entries = [e for e in entries if e["site"] in keep]
 
     trees: dict[tuple[str, str], list[str]] = {}
+    if args.offline_cache:
+        local_by_site: dict[str, list[str]] = {}
+        for q in sorted(args.out.glob("*.tif")):
+            local_by_site.setdefault(q.name.split("__", 1)[0], []).append(q.name)
     rows = []
     for i, e in enumerate(entries, 1):
         owner, repo = repo_of(e["site"])
         key = (owner, repo)
+        if args.offline_cache:
+            tok = norm(e["token"])
+            hits = [p for p in local_by_site.get(e["site"], []) if tok in norm(p)]
+            hits.sort()
+            hits = hits[: args.max_per_entry]
+            row = {"site": e["site"], "repo": f"{owner}/{repo}", "token": e["token"],
+                   "owner_reported_score": e["owner_reported_score"], "status": "unmatched",
+                   "path": None, "sha256": None, "local": None}
+            if len(hits) == 1:
+                dest = args.out / hits[0]
+                row.update(status="matched", path=f"<offline-cache {repo}>", sha256=sha256_file(dest),
+                           local=str(dest.relative_to(ROOT)) if dest.is_relative_to(ROOT) else str(dest))
+            elif len(hits) > 1:
+                row.update(status="ambiguous", candidates=hits)
+            rows.append(row)
+            print(f"[{i:3d}/{len(entries)}] {row['status']:14s} {e['owner_reported_score']:.4f}  "
+                  f"{e['token'][:70]}")
+            continue
         if key not in trees:
             try:
                 trees[key] = list_tifs(owner, repo)
@@ -195,7 +223,8 @@ def main() -> int:
         "schema_version": 1,
         "score_label": "OWNER-REPORT",
         "provenance": table["provenance"],
-        "source_table": str(Path(args.table).resolve().relative_to(ROOT)) if Path(args.table).resolve().is_relative_to(ROOT) else str(args.table),
+        "source_table": (str(args.table.relative_to(ROOT))
+                         if args.table.is_relative_to(ROOT) else str(args.table)),
         "n_entries": len(rows),
         "n_matched": len(matched),
         "n_unique_rasters": len(uniq_hashes),

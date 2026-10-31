@@ -73,6 +73,11 @@ def main() -> int:
             break
     dst = src.with_name(f"{stem}{args.suffix}.tif")
     prof.update(count=1, dtype="float32", driver="GTiff", tiled=True, compress="deflate", predictor=2)
+    # Bug fix (2026-10-31, IR-SASS3-87): switching to tiled=True while leaving the source's
+    # striped blockxsize/blockysize (e.g. 3292x1) produces "Bad value 3292 for TileWidth tag".
+    # GTiff tile dimensions must be multiples of 16, so pin a valid 256x256 block explicitly.
+    prof["blockxsize"] = 256
+    prof["blockysize"] = 256
     prof.pop("nodata", None)                    # do NOT declare 0 as nodata: legal zeros would vanish
     with rasterio.open(dst, "w", **prof) as ds:
         ds.crs = src_crs

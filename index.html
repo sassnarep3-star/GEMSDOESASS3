@@ -1,17 +1,13 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="refresh" content="0; url=docs/index.html">
-<title>GEMSDOESASS3 — redirecting to the submission page</title>
-<style>body{font:16px/1.6 system-ui,sans-serif;color:#14243a;background:#f2f6fa;margin:0}
-main{max-width:760px;margin:10vh auto;background:white;border:1px solid #d7e1eb;border-radius:12px;padding:32px;border-left:7px solid #15803d}
-a{color:#075fac}code{overflow-wrap:anywhere;font-size:13px}</style></head><body><main>
-<h1>GEMSDOESASS3 — 2026-10-31</h1>
-<p><strong>Status: OK to download and OK to submit:</strong> <code>gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-nan-safe.tif</code>
-(49,278 dots, ESTIMATE 0.410 (LOO band 0.357-0.463), worst registry overlap
-65.0%, portal-safe encoding).</p>
-<p>This legacy landing page redirects to <a href="docs/index.html">docs/index.html</a>, which is the current
-submission page and carries the download buttons, the paste-ready note, and the gate receipts.</p>
-<p><a href="docs/index.html">Continue to the submission page →</a> ·
-<a href="docs/executive-summary.html">Executive summary</a> ·
-<a href="docs/research/hypotheses-20261031.md">Hypotheses</a></p>
+<title>GEMSDOESASS3 — current submission status</title>
+<style>body{font:16px/1.6 system-ui,sans-serif;max-width:760px;margin:10vh auto;padding:24px;color:#14243a;background:#f8fafc}main{background:white;padding:28px;border:2px solid #e11d48;border-radius:14px}a{color:#075fac}.status{color:#9f1239;font-weight:900}code{overflow-wrap:anywhere;font-size:13px}</style></head>
+<body><main>
+<p class="status">NO-GO — no TIFF is approved for submission.</p>
+<h1>GEMSDOESASS3</h1>
+<p>This root landing page redirects to the current fail-closed status and nine-site executive summary. Two independent sessions on 2026-10-31 reached the same verdict: the review lane generated nothing and found no accepted candidate, and the modelling lane generated a unique candidate that <strong>passes every format gate but fails the score gate</strong>. No submission slot was used, and the 2026-10-30 claim of an approved <code>0.369</code> estimate is retired (it loses to a predict-the-mean baseline once whole families of near-duplicate rasters are withheld).</p>
+<p>The one unique, format-legal file available for <em>inspection</em> is <code>docs/downloads/gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif</code> (52,000 dots, worst registry overlap 47.0%). <strong>Always download a <code>-zeros</code> file, never a <code>-nanoutside</code> one</strong>: NaN outside the footprint is exactly what trips the portal's “Predicted values must be in range [0, 1]” rejection.</p>
+<p><a href="docs/index.html">Open current project status →</a> · <a href="docs/executive-summary.html">Open executive summary</a> · <a href="docs/research/cellcredit-20261031.md">Cell-credit distillation: method, negative result, next hypotheses</a></p>
 </main></body></html>

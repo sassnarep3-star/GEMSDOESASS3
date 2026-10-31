@@ -1,256 +1,174 @@
 {
-  "schema_version": 1,
-  "generated_utc": "2026-10-30T03:25:34+00:00",
-  "freshness_rule_h": 24.0,
-  "counts": {
-    "OK": 19,
-    "STALE": 0,
-    "TODO": 1,
-    "FAIL": 0,
-    "MISSING": 0
-  },
+  "schema_version": 2,
+  "generated_utc": "2026-10-31T05:47:50+00:00",
+  "decision": "NO-GO",
+  "current_branch": "arena/c1edbd31-gemsdoesass3",
+  "head": "241424f",
   "checks": [
     {
-      "id": "git",
-      "what": "branch state",
-      "how_checked": "git status --porcelain, git rev-parse",
+      "id": "uniqueness",
+      "evidence_class": "REGISTRY-MEASUREMENT (recorded; not re-run by this script)",
+      "status": "FAIL",
+      "detail": {
+        "max_abs_binned_spearman": 0.983609033618752,
+        "references_over_0p90": 1909,
+        "strict_max_overlap_3px": 0.995182,
+        "max_overlap_excluding_lattice": 0.6952727272727273,
+        "preplacement_surface_check": null
+      },
+      "next_action": "Fail candidate; do not exclude the lattice or claim a pass."
+    },
+    {
+      "id": "format",
+      "evidence_class": "FORMAT-RECEIPT (recorded; not re-run by this script)",
+      "status": "MISSING",
+      "detail": {
+        "crs": "EPSG:32611",
+        "shape": [
+          3730,
+          3292
+        ],
+        "transform": [
+          100.0,
+          0.0,
+          243350.0,
+          0.0,
+          -100.0,
+          4508550.0
+        ],
+        "no_nan_inside_footprint": true,
+        "stored_values_in_range_0_1": true,
+        "organizer_portal_acceptance_receipt": false,
+        "artifact_sha256": "e2e4380991586b99c9b9da1abc3272782d3562134515891469fa882ba02c7f8d"
+      },
+      "next_action": "Re-run exact-byte checks and capture the portal's acceptance receipt before any submit claim."
+    },
+    {
+      "id": "decision",
+      "evidence_class": "REPOSITORY-REVIEW",
+      "status": "NEGATIVE",
+      "detail": {
+        "verdict": "negative",
+        "ok_to_submit": false,
+        "new_tif_generated": false,
+        "slots_spent": 0
+      },
+      "next_action": "Do not upload; satisfy the documented blockers before proposing a candidate."
+    },
+    {
+      "id": "holdout",
+      "evidence_class": "HOLDOUT-DTI",
+      "status": "RECORDED-NOT-RERUN",
+      "detail": {
+        "evaluator_version": "GEMSDOE32-HIDE-RECOVER-v3.0",
+        "n_withheld_positives": 22232,
+        "dti": 0.07893860428429801,
+        "ci95": [
+          0.06869196481136113,
+          0.08918496004671007
+        ],
+        "use": "Not interpreted as leaderboard performance; target is not equivalent to the competition's expert-mapped off-catalogue test labels."
+      },
+      "next_action": "Restore data and reproduce with shared evaluator; do not treat as leaderboard score."
+    },
+    {
+      "id": "leaderboard",
+      "evidence_class": "ORGANIZER-CONFIRMED",
+      "status": "SNAPSHOT",
+      "detail": {
+        "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+        "fetched_utc": "2026-10-31",
+        "top_rows": [
+          {
+            "rank": 1,
+            "participant": "xiaofanhu",
+            "public_score": 0.4544
+          },
+          {
+            "rank": 2,
+            "participant": "cfld__",
+            "public_score": 0.3934
+          },
+          {
+            "rank": 3,
+            "participant": "Batik Shirt Brothers",
+            "public_score": 0.3917
+          },
+          {
+            "rank": 4,
+            "participant": "BrandenKMurray",
+            "public_score": 0.386
+          },
+          {
+            "rank": 5,
+            "participant": "op01",
+            "public_score": 0.3642
+          }
+        ],
+        "scope_note": "Public leaderboard only. Not evidence for per-site owner-reported scores or the private/final round."
+      },
+      "next_action": "Refresh manually from official public leaderboard before making a current leaderboard claim."
+    },
+    {
+      "id": "inputs",
+      "evidence_class": "LOCAL-CHECK",
       "status": "OK",
       "detail": {
-        "branch": "arena/6ced5a8f-gemsdoesass3",
-        "head": "ab31670",
-        "uncommitted_paths": 60
+        "verified_manifest_files_present": 28,
+        "manifest_files": 28,
+        "cache_root": ".cache/gems_data"
       },
       "next_action": ""
     },
     {
-      "id": "standing-prompt",
-      "what": "standing prompt is in the README and mirrored on disk",
-      "how_checked": "README.md heading scan + docs/research/standing-prompt-as-recorded-20261027.md",
+      "id": "runtime",
+      "evidence_class": "LOCAL-CHECK",
       "status": "OK",
       "detail": {
-        "readme_heading": "Standing prompt",
-        "mirror_age_h": 1.12,
-        "re_read_utc": "2026-10-30T03:25:34+00:00"
-      },
-      "next_action": "re-read line by line at session start; do not work from memory"
-    },
-    {
-      "id": "data",
-      "what": "competition + external data present and SHA-verified",
-      "how_checked": "recompute sha256 of every registry/data_manifest.json entry",
-      "status": "OK",
-      "detail": {
-        "verified": 28,
-        "of": 28,
-        "root": ".cache/gems_data",
-        "restore_receipt_age_h": 0.05
+        "numpy": true,
+        "rasterio": true,
+        "scipy": true,
+        "sklearn": true,
+        "pytest": true
       },
       "next_action": ""
     },
     {
-      "id": "candidate-bytes",
-      "what": "downloadable candidate still matches its build receipt",
-      "how_checked": "sha256(docs/downloads/<safe tif>) vs evidence/candidate_build_receipt.json",
+      "id": "lane-build",
+      "evidence_class": "LOCAL-CHECK (bytes re-hashed by this script)",
       "status": "OK",
       "detail": {
-        "file": "gemsdoesass3-s3-ocm-wide44090-20261030T024750Z-s3hash-safe.tif",
-        "sha256": "cdfa5f221fd561f2\u2026",
-        "receipt_age_h": 0.62,
-        "emitted_px": 44090
+        "file": "gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif",
+        "bytes_match_receipt": true,
+        "encoding_is_portal_safe_zeros": true,
+        "n_dots": 52000,
+        "note_length": 90,
+        "worst_registry_overlap": 0.4703,
+        "uniqueness_limit": 0.65,
+        "est_score_label": "rank-only; never a score",
+        "generated_utc": "2026-10-31T05:31:14+00:00"
       },
       "next_action": ""
     },
     {
-      "id": "format-gate",
-      "what": "in-project format gate (portal range test included)",
-      "how_checked": "scripts/validate_submission_tif.py receipt",
+      "id": "scope",
+      "evidence_class": "BUDGET-RECORD",
       "status": "OK",
       "detail": {
-        "all_hard_checks_pass": true,
-        "checks_failed": [],
-        "receipt_age_h": 0.08
+        "experiments_used_this_review": 0,
+        "submission_slots_spent": 0,
+        "lane_assignment_available": false
       },
-      "next_action": ""
-    },
-    {
-      "id": "lane-submissions",
-      "what": "3-px duplicate lane test vs 451 pinned sibling submissions",
-      "how_checked": "scripts/lane_sweep.py rows (docs/downloads scope)",
-      "status": "OK",
-      "detail": {
-        "max_overlap3px": 0.4467,
-        "cap": 0.7,
-        "n_over_cap": 0,
-        "worst_holder": "GEMSDOE24/docs/downloads/gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif",
-        "correlation_measured": false
-      },
-      "next_action": "re-run scripts/lane_sweep.py without --skip-correlation to re-measure |Spearman| vs the 0.90 cap"
-    },
-    {
-      "id": "lane-lattices",
-      "what": "same test against the six calibration lattices (proposed-exemption scope)",
-      "how_checked": "scripts/lane_sweep.py rows (lattice scope)",
-      "status": "TODO",
-      "detail": {
-        "max_overlap3px": 0.9976,
-        "n": 7,
-        "note": "a saturated lattice trivially contains any emission; repo ruling is 'proposed amendment only, not applied', so this must be an owner decision"
-      },
-      "next_action": "owner ruling: does the lattice scope count for the uniqueness rule? (docs/research/lattice-decision-20261028.md)"
-    },
-    {
-      "id": "registry",
-      "what": "sibling registry bytes on disk vs pinned manifest",
-      "how_checked": "count rglob(*.tif) under /tmp/registry_git vs manifest file count",
-      "status": "OK",
-      "detail": {
-        "pinned": 460,
-        "on_disk": 463,
-        "layout": "<repo>/docs/downloads/*.tif",
-        "fetch_receipt": {}
-      },
-      "next_action": ""
-    },
-    {
-      "id": "scoreboard",
-      "what": "evidence receipt fresh (<= 24 h): per-site table on SHA-verified sibling bytes",
-      "how_checked": "mtime of evidence/focus9_scoreboard_20261030.json",
-      "status": "OK",
-      "detail": {
-        "path": "evidence/focus9_scoreboard_20261030.json",
-        "age_h": 0.16,
-        "bytes": 15853
-      },
-      "next_action": ""
-    },
-    {
-      "id": "e1",
-      "what": "evidence receipt fresh (<= 24 h): geometry arms (E1)",
-      "how_checked": "mtime of evidence/geometry_experiment_E1_partial.log",
-      "status": "OK",
-      "detail": {
-        "path": "evidence/geometry_experiment_E1_partial.log",
-        "age_h": 0.8,
-        "bytes": 4962
-      },
-      "next_action": ""
-    },
-    {
-      "id": "e2",
-      "what": "evidence receipt fresh (<= 24 h): operating-point / mass sweep (E2)",
-      "how_checked": "mtime of evidence/operating_point_experiment_E2.json",
-      "status": "OK",
-      "detail": {
-        "path": "evidence/operating_point_experiment_E2.json",
-        "age_h": 0.76,
-        "bytes": 6152
-      },
-      "next_action": ""
-    },
-    {
-      "id": "e3",
-      "what": "evidence receipt fresh (<= 24 h): support-design sweep (E3)",
-      "how_checked": "mtime of evidence/operating_point_E3_design.json",
-      "status": "OK",
-      "detail": {
-        "path": "evidence/operating_point_E3_design.json",
-        "age_h": 0.71,
-        "bytes": 5761
-      },
-      "next_action": ""
-    },
-    {
-      "id": "e3b",
-      "what": "evidence receipt fresh (<= 24 h): selection-rule sweep (E3b)",
-      "how_checked": "mtime of evidence/operating_point_E3b_selection.json",
-      "status": "OK",
-      "detail": {
-        "path": "evidence/operating_point_E3b_selection.json",
-        "age_h": 0.67,
-        "bytes": 6485
-      },
-      "next_action": ""
-    },
-    {
-      "id": "geoprior",
-      "what": "evidence receipt fresh (<= 24 h): geothermal/spring proximity audit",
-      "how_checked": "mtime of evidence/geothermal_prior_audit_20261030.json",
-      "status": "OK",
-      "detail": {
-        "path": "evidence/geothermal_prior_audit_20261030.json",
-        "age_h": 0.27,
-        "bytes": 5107
-      },
-      "next_action": ""
-    },
-    {
-      "id": "runcard",
-      "what": "evidence receipt fresh (<= 24 h): protocol run card for this pass",
-      "how_checked": "mtime of evidence/run_card_20261030_s3pass.json",
-      "status": "OK",
-      "detail": {
-        "path": "evidence/run_card_20261030_s3pass.json",
-        "age_h": 0.05,
-        "bytes": 12249
-      },
-      "next_action": ""
-    },
-    {
-      "id": "runcard-main",
-      "what": "evidence receipt fresh (<= 24 h): protocol run card for main\u2019s promoted tipcont pass",
-      "how_checked": "mtime of evidence/run_card_20261030.json",
-      "status": "OK",
-      "detail": {
-        "path": "evidence/run_card_20261030.json",
-        "age_h": 0.06,
-        "bytes": 3824
-      },
-      "next_action": ""
-    },
-    {
-      "id": "portalsafe",
-      "what": "evidence receipt fresh (<= 24 h): main\u2019s candidate re-rendered in the portal-safe encoding",
-      "how_checked": "mtime of evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json",
-      "status": "OK",
-      "detail": {
-        "path": "evidence/portal_safe_render_gemsdoesass3-tipcont-disp44923-4px-20261030T0330Z-safe.json",
-        "age_h": 0.07,
-        "bytes": 1566
-      },
-      "next_action": ""
-    },
-    {
-      "id": "pytest",
-      "what": "unit/gate test suite green",
-      "how_checked": "pytest -q --tb=no",
-      "status": "OK",
-      "detail": {
-        "summary": "81 passed, 2 skipped, 1 warning in 10.48s",
-        "exit": 0
-      },
-      "next_action": ""
-    },
-    {
-      "id": "page-exec",
-      "what": "docs/executive-summary.html regenerated after the latest candidate build",
-      "how_checked": "mtime comparison",
-      "status": "OK",
-      "detail": {
-        "page_age_h": 0.01,
-        "candidate_age_h": 0.62
-      },
-      "next_action": ""
-    },
-    {
-      "id": "page-index",
-      "what": "docs/index.html regenerated after the latest candidate build",
-      "how_checked": "mtime comparison",
-      "status": "OK",
-      "detail": {
-        "page_age_h": 0.04,
-        "candidate_age_h": 0.62
-      },
-      "next_action": ""
+      "next_action": "Recover the assigned method paragraph; the protocol says not to invent it."
     }
-  ]
+  ],
+  "counts": {
+    "FAIL": 1,
+    "MISSING": 1,
+    "NEGATIVE": 1,
+    "OK": 4,
+    "RECORDED-NOT-RERUN": 1,
+    "SNAPSHOT": 1
+  },
+  "note": "Local review feed only. It does not fetch DrivenData or imply portal acceptance."
 }

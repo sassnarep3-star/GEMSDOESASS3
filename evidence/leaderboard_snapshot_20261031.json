@@ -1,74 +1,14 @@
 {
- "schema_version": 1,
- "fetched_utc": "2026-10-31T05:05:00Z",
- "label": "ORGANIZER-CONFIRMED (read from the live DrivenData leaderboard page)",
- "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
- "page_title": "Competition: The Geologic Enhanced Mapping System (GEMS) Prize Challenge - Leaderboard",
- "top50_shown": true,
- "rows": [
-  {
-   "rank": 1,
-   "participant": "xiaofanhu",
-   "best_public_dw_tversky": 0.4544,
-   "submissions": 36
-  },
-  {
-   "rank": 2,
-   "participant": "cfld__",
-   "best_public_dw_tversky": 0.3934,
-   "submissions": 23
-  },
-  {
-   "rank": 3,
-   "participant": "Batik Shirt Brothers",
-   "best_public_dw_tversky": 0.3917,
-   "submissions": 61
-  },
-  {
-   "rank": 4,
-   "participant": "BrandenKMurray",
-   "best_public_dw_tversky": 0.386,
-   "submissions": 37
-  },
-  {
-   "rank": 5,
-   "participant": "op01",
-   "best_public_dw_tversky": 0.3642,
-   "submissions": 16
-  },
-  {
-   "rank": 6,
-   "participant": "No Fault of Our Own",
-   "best_public_dw_tversky": 0.3631,
-   "submissions": 53
-  },
-  {
-   "rank": 7,
-   "participant": "herculesschonfeldt6",
-   "best_public_dw_tversky": 0.3568,
-   "submissions": 2
-  },
-  {
-   "rank": 50,
-   "participant": "kpomazi",
-   "best_public_dw_tversky": 0.3195,
-   "submissions": 36
-  }
- ],
- "prize_context": {
-  "top5_cut_observed": 0.3642,
-  "first_place": 0.4544,
-  "last_shown_rank": 50,
-  "last_shown_score": 0.3195
- },
- "prompt_claims_checked": {
-  "prompt_0.4413": "NOT on the page (2026-10-28/29/31 snapshots); superseded",
-  "prompt_0.3195_is_highest": "INCORRECT: 0.3195 is rank #50 (kpomazi), the lowest score shown in the top-50 table; the highest is 0.4544 (xiaofanhu). Flagged IR-SASS3-83."
- },
- "our_team_best_known": {
-  "team": "sassnarep3-star (GEMSDOESASS3)",
-  "best_owner_reported_public": 0.1339,
-  "file": "gemsdoesass3-lwst-geoconduit-dual37654-20261027T120000Z-a9ad3386",
-  "note": "not visible in top-50 table; consistent with 0.1339 < 0.3195"
- }
+  "schema_version": 1,
+  "evidence_class": "ORGANIZER-CONFIRMED",
+  "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+  "fetched_utc": "2026-10-31",
+  "observed_rows": [
+    {"rank": 1, "participant": "xiaofanhu", "public_score": 0.4544},
+    {"rank": 2, "participant": "cfld__", "public_score": 0.3934},
+    {"rank": 3, "participant": "Batik Shirt Brothers", "public_score": 0.3917},
+    {"rank": 4, "participant": "BrandenKMurray", "public_score": 0.3860},
+    {"rank": 5, "participant": "op01", "public_score": 0.3642}
+  ],
+  "scope_note": "Public leaderboard only. Not evidence for per-site owner-reported scores or the private/final round."
 }
