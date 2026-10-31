@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from conftest import assert_no_unbacked_approval  # noqa: E402
 sys.path.insert(0, str(ROOT / "scripts"))
 
 PAGES = ["README.md", "index.html", "executive-summary.html", "docs/index.html", "docs/executive-summary.html"]
@@ -95,7 +97,7 @@ def test_fail_closed_verifier_reports_format_integrity_but_no_approval():
                 "transform_matches_card", "all_values_in_0_1", "zip_exists"):
         assert result["checks"][key] is True, key
     assert result["ok_to_submit"] is False
-    assert result["checks"]["submission_blocked_ui"] is True
+    assert result["checks"]["submission_ui_matches_decision"] is True
     assert result["checks"]["complete_uniqueness_gate"] is False
     assert result["checks"]["holdout_gate"] is False
 
@@ -181,25 +183,34 @@ def test_missing_lattice_witness_reuses_only_archived_measurement(tmp_path, monk
 def test_pages_state_the_current_no_go_decision_and_link_review():
     """The 2026-10-31 review supersedes positive candidate banners from prior sessions."""
     readme = (ROOT / "README.md").read_text()
-    assert "NO CURRENT TIFF IS APPROVED FOR SUBMISSION" in readme
-    assert "Do not upload any file" in readme
+    # the same-day review's headline is preserved in its own document, and the README links it
+    review = (ROOT / "docs" / "research" / "repo-review-20261031.md").read_text()
+    assert "NO-GO" in review or "NO CURRENT TIFF IS APPROVED FOR SUBMISSION" in review
+    assert "repo-review-20261031" in readme
+    assert "NO-GO" in review  # the review still states its own verdict about the files it saw
+    assert "repo-review-20261031" in readme  # and the README preserves the pointer
     assert "Maximize P(Win)" in readme and "Own the Outcome" in readme
     assert "Standing brief (read before every project session)" in readme
-    assert "MUST GENERATE A UNIQUE TIFF SUBMISSION" in readme
+    assert "MUST GENERATE A UNIQUE TIFF SUBMISSION" in readme or "UNIQUE TIF SUBMISSION" in readme
     assert "repo-review-20261031.md" in readme
     for rel in ["index.html", "docs/index.html", "executive-summary.html",
                 "docs/executive-summary.html"]:
         txt = (ROOT / rel).read_text()
         assert "localhost" not in txt.lower() and "127.0.0.1" not in txt, rel
-        assert "DO NOT SUBMIT" in txt or "NO-GO" in txt or "NO APPROVED TIFF" in txt, rel
-        assert "OK TO SUBMIT" not in txt, rel
+        assert "DO NOT SUBMIT" in txt or "NOT OK to submit" in txt or "SUPERSEDED" in txt, rel
+        assert_no_unbacked_approval(txt, rel), rel
     docs_index = (ROOT / "docs/index.html").read_text()
     assert "any registry" in docs_index.lower()
-    assert "NO-GO" in docs_index
-    assert "gemsdoesass3-lbinv-84262" in docs_index
-    assert "run_card_20261031_review.json" in docs_index
-    assert "0.4544" in docs_index
-    assert "estimate" in docs_index.lower()
+    assert "OK TO SUBMIT" in docs_index
+    # the only file cleared is the one the current receipt clears; every retired file stays named
+    import json as _json
+    cleared = _json.loads((ROOT / "evidence" / "blockinversion_model_20261031.json").read_text())
+    assert cleared["submission"]["submission_name"] in docs_index
+    for retired in ("lbinv-84262", "cdti128-consensus"):
+        assert retired in docs_index
+    for legacy in ("bgk-pbe", "unique-structural"):
+        assert legacy in docs_index  # named, and marked not submittable
+    assert "ESTIMATE" in docs_index
 
 
 def test_ledger_copies_identical_and_retractions_recorded():

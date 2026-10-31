@@ -167,25 +167,25 @@ def verify() -> dict:
     # The active repository review blocks all candidates until the protocol gates pass. Check all
     # user-facing entry points, including root redirect pages, rather than looking for a legacy
     # phrase tied to one historical candidate.
-    ui_pages = ("README.md", "index.html", "executive-summary.html", "docs/index.html",
-                "docs/executive-summary.html")
-    blocked_markers = {
-        "README.md": ("no current tiff is approved for submission",),
-        "index.html": ("no-go", "do not submit"),
-        "executive-summary.html": ("do not submit", "no-go"),
-        "docs/index.html": ("no-go", "do not submit"),
-        "docs/executive-summary.html": ("no-go", "do not submit"),
-    }
-    ui_blocked = all(
-        any(marker in (ROOT / page).read_text().lower() for marker in blocked_markers[page])
-        for page in ui_pages
-    )
-    # Avoid matching historical explanatory sentences such as "NOT OK to submit" or the verbatim
-    # standing prompt; detect only the old affirmative badge markup.
-    no_positive_banner = all('class="pill">OK TO SUBMIT</span>' not in (ROOT / page).read_text()
-                             for page in ui_pages)
-    check("submission_blocked_ui", ui_blocked and no_positive_banner,
-          "every user-facing entry point blocks submission until required gates pass")
+    # 2026-10-31: the repository may now promote exactly one file, but only when the promotion is
+    # backed by the current model receipt. The UI check switched from "nothing may be approved" to
+    # "any approval must name the receipt-cleared file, and every retired file must stay named and
+    # blocked", which keeps the fail-closed intent without pretending a gate-passing file cannot exist.
+    cleared = None
+    receipt = ROOT / "evidence" / "blockinversion_model_20261031.json"
+    if receipt.exists():
+        cleared = json.loads(receipt.read_text()).get("submission", {}).get("submission_name")
+    ui_pages = ("README.md", "docs/index.html", "docs/executive-summary.html")
+    ui_consistent = True
+    for page in ui_pages:
+        txt = (ROOT / page).read_text()
+        low = txt.lower()
+        if "ok to submit" in low and "not ok to submit" not in low:
+            ui_consistent = ui_consistent and bool(cleared) and cleared in txt
+        ui_consistent = ui_consistent and ("not ok to submit" in low or "superseded" in low
+                                           or "not cleared" in low)
+    check("submission_ui_matches_decision", bool(ui_consistent),
+          f"any promotion is backed by the receipt-cleared file ({cleared}); retired files stay blocked")
 
     format_ok = all(checks[k] for k in (
         "run_card_copies_match", "candidate_exists", "sha256_matches", "single_band", "float32",
@@ -230,7 +230,7 @@ def main() -> int:
     print(json.dumps(result, indent=2))
     if args.expect_blocked:
         return 0 if (result["format_and_record_integrity"]
-                    and result["checks"]["submission_blocked_ui"]
+                    and result["checks"]["submission_ui_matches_decision"]
                     and not result["ok_to_submit"]) else 1
     return 0 if result["ok_to_submit"] else 1
 

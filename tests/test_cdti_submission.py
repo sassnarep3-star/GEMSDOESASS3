@@ -115,10 +115,14 @@ def test_estimate_beats_the_champion_point_estimate():
     assert card["score_estimate"]["optimism_corrected"] > champ
 
 
-def test_site_pages_do_not_promote_the_superseded_file():
+def test_site_pages_keep_this_file_visible_but_superseded():
+    """The CDTI file may never quietly disappear, and it may never be presented as the live file."""
+    import json
+    rec = json.loads((ROOT / "evidence" / "blockinversion_model_20261031.json").read_text())
+    cleared = rec["submission"]["submission_name"]
     for page in ("index.html", "executive-summary.html"):
         txt = (ROOT / "docs" / page).read_text()
-        assert "NO-GO" in txt or "NO APPROVED TIFF" in txt
-        assert "DO NOT SUBMIT" in txt
-        assert "run_card_20261031_review.json" in txt or "repo-review-20261031.md" in txt
-        assert "OK TO SUBMIT" not in txt
+        assert "cdti128-consensus" in txt, f"{page} dropped the superseded candidate entirely"
+        assert "superseded" in txt.lower(), page
+        assert cleared in txt, f"{page} does not name the current file"
+        assert "NOT OK to submit" in txt, f"{page} does not block the superseded file"

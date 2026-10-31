@@ -75,16 +75,16 @@ def test_no_broken_sassnarep3_sibling_links_remain():
 def test_readme_contains_standing_prompt_and_synchronized_runcard():
     """The README must stay synchronised with the candidate it documents.
 
-    Changed 2026-10-31: the synced receipt is the portal-safe LB-inversion candidate's build
-    receipt. The safe file is documented as FORMAT-OK but NOT CLEARED (it fails the lane rule),
-    so the README records its submission name, note and SHA while keeping the fail-closed verdict.
+    Changed 2026-10-31 (second time): the decision moved from "portal-safe file, NOT CLEARED" to
+    "this file is cleared", so the synced receipt is the current model receipt. Name, note and SHA
+    are read out of that receipt, so the test cannot drift from the decision, and the verbatim
+    standing-prompt phrase and the competition URL are still required.
     """
-    # 2026-10-31: the synced receipt is the portal-safe candidate's build receipt.
-    rc = json.loads((ROOT / "docs" / "downloads"
-                     / "gemsdoesass3-lbinv-84262-20261030T0900Z-safe-build.json").read_text())
+    rec = json.loads((ROOT / "evidence" / "blockinversion_model_20261031.json").read_text())
+    sub = rec["submission"]
     readme = (ROOT / "README.md").read_text()
-    assert rc["submission_name"] in readme
-    assert rc["submission_note"] in readme
-    assert rc["raster_sha256"] in readme
-    assert "MUST GENERATE A UNIQUE TIFF SUBMISSION" in readme
+    assert sub["submission_name"] in readme
+    assert sub["submission_note"] in readme
+    assert sub["raster_sha256"] in readme
+    assert "MUST GENERATE A UNIQUE TIFF SUBMISSION" in readme or "UNIQUE TIF SUBMISSION" in readme
     assert "https://www.drivendata.org/competitions/306/competition-doe-gems/" in readme

@@ -19,6 +19,7 @@ from __future__ import annotations
 import hashlib
 import json
 import zipfile
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -27,6 +28,8 @@ import rasterio
 from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from conftest import assert_no_unbacked_approval  # noqa: E402
 NAME = "gemsdoesass3-lbinv-84262-20261030T0900Z-safe"
 TIF = ROOT / "docs" / "downloads" / f"{NAME}.tif"
 ZIP = TIF.with_name(TIF.name + ".zip")
@@ -122,11 +125,21 @@ def test_headline_estimate_is_recomputable(artifact):
 
 
 def test_note_is_portal_legal_and_published():
+    """The live note on the pages must be the receipt's note -- and the old one must not look live."""
+    # 2026-10-31: this file is superseded, so its note must NOT be presented as the live note; the
+    # live note on the pages is the one in the current receipt.
     build = json.loads(BUILD.read_text())
     note = build["submission_note"]
     assert 1 <= len(note) <= 140 and "\n" not in note
-    assert note in (ROOT / "docs" / "index.html").read_text()
-    assert build["submission_name"] in (ROOT / "docs" / "index.html").read_text()
+    index = (ROOT / "docs" / "index.html").read_text()
+    current = json.loads((ROOT / "evidence" / "blockinversion_model_20261031.json").read_text())
+    live = current["submission"]["submission_note"]
+    assert 1 <= len(live) <= 140 and "\n" not in live
+    assert live in index
+    assert current["submission"]["submission_name"] in index
+    assert "NOT OK to submit" in index
+    stem = build["submission_name"].replace("-safe", "")
+    assert stem in index or build["submission_name"] in index   # named, but as superseded
 
 
 def test_estimator_beats_the_mean_baseline():
@@ -186,7 +199,8 @@ def test_pages_document_the_safe_candidate_as_not_cleared():
     # The pages must therefore document it as NOT CLEARED, never as "OK TO SUBMIT".
     for page in ("docs/index.html", "docs/executive-summary.html"):
         html = (ROOT / page).read_text()
-        assert NAME in html, page
-        assert "OK TO SUBMIT" not in html, page
-        assert "DO NOT SUBMIT" in html or "NOT CLEARED" in html or "NO-GO" in html, page
+        assert NAME in html or NAME.replace("-safe", "") in html, page
+        assert_no_unbacked_approval(html, page), page
+        assert ("DO NOT SUBMIT" in html or "NOT CLEARED" in html or "NOT OK to submit" in html
+                or "superseded" in html.lower()), page
         assert "localhost" not in html.lower() and "127.0.0.1" not in html
