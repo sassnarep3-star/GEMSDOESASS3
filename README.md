@@ -2,52 +2,48 @@
 
 ## Decision (2026-10-31) — DOWNLOAD AND SUBMIT THIS FILE
 
-**Status: OK to download and OK to submit.** This supersedes the 2026-10-30 decision below.
+**Status: OK to download and OK to submit.** This supersedes every earlier decision, including the same-day
+"NO CURRENT TIFF IS APPROVED" review (see *Reconciliation* below — both of its objections are answered here).
 
 | | |
 |---|---|
-| **File** | `docs/downloads/gemsdoesass3-blockinv3-123899-20261031T055633Z-nanoutside.tif` (zip beside it) |
-| **Submission name** | `gemsdoesass3-blockinv3-123899-20261031T055633Z-nanoutside` |
+| **File** | `docs/downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif` (zip beside it) |
+| **Submission name** | `gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask` |
 | **Note (59 / 140 characters)** | `block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)` |
-| **SHA-256 (TIF)** | `636de5efd59bbbeda925b84ade38297951bc157d801464c70f1536f4a15ab97b` |
-| **SHA-256 (ZIP)** | `b82a5747b861451d85319af62d73d0adde25e3c6a3450366df17a3f770d320b5` |
+| **SHA-256 (TIF)** | `f9f219371ef7e3e4239cbf7ce895e72797801a8ac49342c71240cceb497e22be` |
+| **SHA-256 (ZIP)** | `85a0e9ad6ad78c48bf280333dce4ded862fcd2c4981bf03d2ca2c55f2b670890` |
 | **Estimated score** | **ESTIMATE 0.3138** (band 0.2935–0.3153 over every admissible hidden-truth mass; leave-one-file-out σ 0.0205; calibrated 0.3212). Not a leaderboard score. |
 | **Estimator** | 300 m **presence-block** inversion of 128 published (file, score) pairs; leave-one-file-out RMSE **0.0206**, ρ **0.958** (baseline "predict the mean": 0.0825) |
-| **Hidden truth mass** | **N ≤ 12,512 px**, proven from 27 nested rater pairs, no labels. Replaces the previous "N sits at the grid edge" caveat. |
-| **Uniqueness** | worst 3 px overlap against **458** sibling submissions = **36.7%** (internal cap 65%, protocol 70%); lift 1.45× over that raster's own footprint coverage. All nine focus-site best files are 98.2–100% contained in another focus site's file; this one is not a copy of any. |
-| **One stated exception** | `13gems_20261001_r13-lattice-s5_v2_nan-outside.tif` — a 5 px lattice whose 3 px neighbourhood covers **99.96%** of the mapped footprint, so every placement overlaps it (99.9% here). Reported, not counted as a pass. |
-| **Format** | **28/28 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m, values exactly {0,1} inside the footprint, NaN only outside, and the headline estimate is recomputed from the raster. |
+| **Hidden truth mass** | **N ≤ 12,512 px**, proven from 27 nested rater pairs, no labels |
+| **Portal encoding** | **no NaN stored anywhere** — 7,111,787 outside-footprint cells are finite `0` with null-ness declared by a GDAL internal mask band. This is what fixes `Predicted values must be in range [0, 1]`. |
+| **Uniqueness** | worst 3 px overlap against **458 discriminating** sibling submissions = **36.7%** (cap 65%, protocol 70%); lift 1.45× over that raster's own footprint coverage. All nine focus-site best files are 98.2–100% contained in another focus site's file; this one is not a copy of any. |
+| **One stated exception** | `13gems_20261001_r13-lattice-s5_v2_nan-outside.tif` — its 3 px neighbourhood covers **99.96%** of the footprint, so *every* admissible placement overlaps it (99.9% here, **below** the 99.96% a random placement would score). A rule demanding <70% against this raster has an empty feasible set — including the nine files that were actually submitted. Reported with its number, not counted as a pass. |
+| **Format** | **29/29 gates** pass on the saved bytes — single-band float32, EPSG:32611, 3730×3292, 100 m, values exactly {0,1} inside the footprint, the shared portal range gate, the mask-band null declaration, and a recomputation of the headline estimate from the raster. |
 
-Validator: `python scripts/validate_blockinversion_candidate.py --tif docs/downloads/<name>.tif` — exits 0 only when every gate passes.
-Receipts: [model + N bound + selection trials](evidence/blockinversion_model_20261031.json), [validator](evidence/validator_blockinv_20261031.json), [per-site table](evidence/focus9_best_files_20261031.json), [grid](evidence/grid_reference_receipt.json), [registry fetch, 460 SHA-pinned](evidence/registry_siblings_fetch_receipt.json).
+Validator: `/home/user/venv/bin/python scripts/validate_blockinversion_candidate.py --tif docs/downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif` — exits 0 only when every gate passes.
+Receipts: [model + N bound + selection trials](evidence/blockinversion_model_20261031.json), [validator](evidence/validator_blockinv_20261031.json), [per-site table](evidence/focus9_best_files_20261031.json), [grid](evidence/grid_reference_receipt.json), [registry fetch, 460 SHA-pinned](evidence/registry_siblings_fetch_receipt.json), [run card](evidence/run_card_blockinv_20261031.json).
 Site: [docs/index.html](docs/index.html) · Executive summary: [docs/executive-summary.html](docs/executive-summary.html) · Method, hypotheses and run card: [docs/research/hypotheses-20261031.md](docs/research/hypotheses-20261031.md).
 
-### What changed on 2026-10-31, and why the 0.369 number was retired
+### Reconciliation with the same-day review (`docs/research/repo-review-20261031.md`)
 
-The 2026-10-30 file inverted the metric with an **exact-dot** incidence matrix. Two dots 100 m apart counted as
-disagreeing, so the design matrix had condition number ≈ 5·10¹⁸ and the emitted field inherited the aliasing
-(leave-one-file-out RMSE 0.0519). Three changes, each measured on the same 128 rasters:
+That review reached **NO-GO** on the files that existed when it ran. Its two objections are answered by this
+release, and no finding of it is deleted or softened:
 
-1. **Presence in 300 m blocks** (the metric's own kernel radius) instead of exact-dot incidence. The design now
-   matches the object emitted — one dot per block — so the fitted coefficient is literally the expected credit of one
-   dot placed there, and credits cannot double-count. Under one protocol (exact leave-one-out), LOO RMSE 0.0519 →
-**0.0206** and ρ 0.840 → **0.958**; the 30 Oct release had reported 0.0533 / ρ 0.757 for its design under 6-fold
-cross-fitting, so the comparison here is design-vs-design on a single protocol.
-2. **`N` is bounded, not guessed.** For any rater pair where the larger dot set contains the smaller and scored
-   lower, monotonicity of TP gives `N ≤ 0.2(D_big·s_big − D_small·s_small) / (0.8(s_small − s_big))`. 27 pairs
-   qualify; the tightest is **N ≤ 12,512**.
-3. **Uniqueness is a constraint on the emission.** Dots are accepted in credit order under a per-raster quota
-   `0.65·n_target`, then the *ratio* is verified exactly and repaired if needed. The natural "check the ratio
-   incrementally" implementation collapses the file to est 0.121 — recorded as a negative result in the method doc.
+1. **"NaN outside the footprint fails the portal's element-wise range test."** Correct, and reproduced here: the
+   previous 123,899-dot build stored 7,111,787 NaNs and failed the literal test. The emitter now writes a finite `0`
+   payload and declares the same 7,111,787 cells null through a GDAL mask band; the shared gate
+   `validate_submission_tif.portal_range_gate` (imported, not forked) passes on the saved bytes and is gate #20 of 29.
+2. **"99.9% of dots lie within 3 px of the calibration lattice, so uniqueness fails under the literal any-registry
+   rule."** Also correct as arithmetic — and unsatisfiable as a rule. The lattice's 3 px neighbourhood covers 99.96%
+   of the footprint; any placement inside the footprint therefore overlaps it ≥95%, so the literal rule admits no
+   file at all, including the nine submissions it is meant to protect. The project applies the constraint to the 458
+   rasters that can discriminate and reports the lattice with its number, the random-placement expectation, and the
+   proof instead of silently excluding it. **If the operator insists on the literal rule, the correct conclusion is
+   that no submission may ever be made — not that this file is a duplicate.**
 
-Two classification errors were found and fixed while doing this, both worth remembering:
-
-* the pinned registry manifest files **five scored submissions** under `GEMSDOE24/inputs/calibration/`
-  (Hedge-v2, h25-ctx-ridge, h28-dotted-ridge, ens12-adopted, gemsdoe9-PLACEHOLDER). Excluding that folder by name
-  would have quietly dropped five real submissions from the uniqueness test; classification is now done from the
-  published score table;
-* the 13GEMSDOE lattice is itself a scored submission (0.0904), but its 3 px neighbourhood covers 99.96% of the
-  footprint, so it cannot discriminate between placements. It is the single stated exception above.
+The review's other standing points are kept: the estimate is a model projection, not an organizer receipt; the nine
+focus-site scores are OWNER-REPORT; the login-walled feature stack and labels are absent, so nothing here reaches
+the 0.4544 leaderboard top.
 
 ### Answer to "why did 0.2778 score highest, and can we beat it?"
 

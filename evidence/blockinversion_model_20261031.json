@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-31T05:57:24+00:00",
+ "generated_utc": "2026-10-31T06:05:03+00:00",
  "hypothesis": "H-BLOCKINV",
  "label": "ESTIMATE",
  "not_organizer_confirmed": true,
@@ -1704,13 +1704,13 @@
  ],
  "submission": {
   "schema_version": 1,
-  "generated_utc": "2026-10-31T05:57:24+00:00",
+  "generated_utc": "2026-10-31T06:05:03+00:00",
   "label": "ESTIMATE",
   "not_organizer_confirmed": true,
   "hypothesis": "H-BLOCKINV",
-  "submission_name": "gemsdoesass3-blockinv3-123899-20261031T055633Z-nanoutside",
-  "raster_sha256": "636de5efd59bbbeda925b84ade38297951bc157d801464c70f1536f4a15ab97b",
-  "zip_sha256": "b82a5747b861451d85319af62d73d0adde25e3c6a3450366df17a3f770d320b5",
+  "submission_name": "gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask",
+  "raster_sha256": "f9f219371ef7e3e4239cbf7ce895e72797801a8ac49342c71240cceb497e22be",
+  "zip_sha256": "85a0e9ad6ad78c48bf280333dce4ded862fcd2c4981bf03d2ca2c55f2b670890",
   "n_dots": 123899,
   "expected_tp": 10788.4,
   "est_score": 0.3138,
@@ -1752,6 +1752,8 @@
   "worst_registry_overlap_lift": 1.45,
   "registry_rasters_compared": 458,
   "submission_note": "block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)",
-  "field_npz": ".cache/blockinv_field.npz"
+  "field_npz": ".cache/blockinv_field.npz",
+  "encoding": "finite 0 payload + GDAL internal mask band (no NaN stored); portal range test passes",
+  "null_cells": 7111787
  }
 }

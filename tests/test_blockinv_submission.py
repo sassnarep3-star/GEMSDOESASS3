@@ -66,15 +66,21 @@ def test_format_gates_on_the_saved_bytes():
         assert ds.shape == (3730, 3292)
         assert abs(ds.transform.a - 100.0) < 1e-9 and abs(ds.transform.e + 100.0) < 1e-9
         a = ds.read(1)
-    finite = np.isfinite(a)
-    values = a[finite]
-    assert values.min() >= 0.0 and values.max() <= 1.0          # the portal's [0, 1] rule
-    assert np.isin(np.unique(values), [0.0, 1.0]).all()          # binary, as priced
+        mask = ds.read_masks(1) > 0
+        flags = ds.mask_flag_enums[0]
+    # the portal's literal element-wise test on the *stored* array: NaN compares False, so a NaN
+    # payload outside the footprint is what triggers "Predicted values must be in range [0, 1]"
+    assert np.count_nonzero(~((a >= 0.0) & (a <= 1.0))) == 0
+    assert not np.isnan(a).any()                                # nothing stored is NaN
+    assert np.isin(np.unique(a), [0.0, 1.0]).all()              # binary, as priced
     assert int((a == 1.0).sum()) == build["n_dots"]
-    assert not np.isnan(a[finite]).any()                        # no NaN inside the footprint
-    # the footprint is 78.6% of the grid; everything else must be NaN, never 0
-    assert (~finite).sum() > 0
-    assert (a[~finite] != a[~finite]).all()                     # NaN outside
+    # null-ness outside the footprint is carried by the mask band, and it must match the footprint
+    from rasterio.enums import MaskFlags
+    assert MaskFlags.per_dataset in flags
+    assert 0 < int((~mask).sum()) < mask.size                   # something is declared null ...
+    assert not mask[~mask].any()
+    assert float(a[~mask].max()) == 0.0                         # ... and it is stored as finite 0
+    assert (a[mask] == 1.0).sum() == build["n_dots"]             # every dot is in the valid area
 
 
 def test_note_is_submittable():

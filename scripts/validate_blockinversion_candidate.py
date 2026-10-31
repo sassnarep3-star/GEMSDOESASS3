@@ -37,7 +37,11 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
+import rasterio.enums
 from scipy.ndimage import binary_dilation
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from validate_submission_tif import portal_range_gate  # noqa: E402  (shared gate, no private fork)
 
 ROOT = Path(__file__).resolve().parents[1]
 ALPHA, BETA = 0.2, 0.8
@@ -124,8 +128,20 @@ def main() -> int:
     vals = a[np.isfinite(a)]
     checks["all_values_in_0_1"] = bool(vals.size and vals.min() >= 0.0 and vals.max() <= 1.0)
     checks["values_are_binary"] = bool(np.isin(np.unique(vals), [0.0, 1.0]).all())
-    checks["nan_only_outside_footprint"] = bool(np.isnan(a[~foot]).all())
+    # ---- the live portal's own test, shared with scripts/validate_submission_tif.py (no private fork) ----
+    portal_ok, portal_bad = portal_range_gate(a)
+    checks["portal_range_test_all_stored_cells"] = bool(portal_ok)
+    detail["portal_range_violating_cells"] = int(portal_bad)
     checks["no_nan_inside_footprint"] = bool(np.isfinite(a[foot]).all())
+    # null-ness outside may be carried by a NaN payload OR by a GDAL mask band; at least one must
+    # declare it, and the declaration must match the footprint exactly.
+    with rasterio.open(tif) as ds:
+        m = ds.read_masks(1) > 0
+        has_mask_band = bool((ds.mask_flag_enums[0] != [rasterio.enums.MaskFlags.all_valid]))
+    checks["nulls_declared_outside_footprint"] = bool(
+        (not m[~foot].any()) and m[foot].all() or bool(np.isnan(a[~foot]).all()))
+    detail["null_encoding"] = ("gdalmask" if has_mask_band else "nodata/nan")
+    detail["null_cells_declared"] = int((~m).sum())
     dots = a == 1.0
     n_dots = int(dots.sum())
     detail["n_dots"] = n_dots

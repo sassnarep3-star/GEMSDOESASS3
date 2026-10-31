@@ -583,17 +583,24 @@ def main() -> int:
         return 0
 
     # ---------------- write the raster -------------------------------------------------------
-    arr = np.where(foot, 0.0, np.nan).astype(np.float32)
+    # Portal-safe encoding (IR-SASS3-81): a NaN payload outside the footprint is exactly what the
+    # DrivenData form rejects with "Predicted values must be in range [0, 1]", because it compares every
+    # stored cell with [0,1] and NaN compares False. The stored payload is therefore finite 0 everywhere
+    # and the null-ness outside the footprint is declared by a GDAL internal mask band, which satisfies
+    # both the literal range test and the official "null outside the bounds" sentence.
+    arr = np.zeros(shape, dtype=np.float32)
     dot_fp = rep_idx[alive]
     arr.ravel()[fps[dot_fp]] = 1.0
     assert int((arr == 1.0).sum()) == n_dots, "dot count mismatch after write"
-    name = f"gemsdoesass3-blockinv{b_emit}-{n_dots}-{stamp}-nanoutside"
+    assert int(np.count_nonzero(~((arr >= 0.0) & (arr <= 1.0)))) == 0, "stored payload is not in [0,1]"
+    name = f"gemsdoesass3-blockinv{b_emit}-{n_dots}-{stamp}-nullmask"
     args.out_dir.mkdir(parents=True, exist_ok=True)
     tif = args.out_dir / f"{name}.tif"
     with rasterio.open(tif, "w", driver="GTiff", height=shape[0], width=shape[1], count=1,
-                       dtype="float32", crs=crs, transform=transform, nodata=float("nan"),
-                       compress="deflate") as ds:
+                       dtype="float32", crs=crs, transform=transform,
+                       tiled=True, compress="deflate", predictor=2) as ds:
         ds.write(arr, 1)
+        ds.write_mask((foot.astype("uint8") * 255))
     zp = args.out_dir / f"{name}.tif.zip"
     with zipfile.ZipFile(zp, "w", zipfile.ZIP_DEFLATED) as zf:
         zf.write(tif, tif.name)
@@ -617,6 +624,8 @@ def main() -> int:
         "worst_registry_overlap_lift": receipt["uniqueness"]["worst_submission_lift"],
         "registry_rasters_compared": len(sub_rows),
         "submission_note": note, "field_npz": ".cache/blockinv_field.npz",
+        "encoding": "finite 0 payload + GDAL internal mask band (no NaN stored); portal range test passes",
+        "null_cells": int((~foot).sum()),
     }
     (args.out_dir / f"{name}-build.json").write_text(json.dumps(build, indent=1) + "\n")
     receipt["submission"] = build

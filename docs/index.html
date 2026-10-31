@@ -21,13 +21,13 @@ th{background:#edf3f8}tr.pick{background:#ecfdf3}tr.no{background:#fff7f7}
 
 <section class="hero">
 <p style="font-weight:800;color:#15803d;margin:0">START HERE — DOWNLOAD AND SUBMIT THIS FILE</p>
-<h1><code>gemsdoesass3-blockinv3-123899-20261031T055633Z-nanoutside.tif</code></h1>
+<h1><code>gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif</code></h1>
 <p><strong>Decision:</strong> <span class="pill">OK TO DOWNLOAD</span> <span class="pill">OK TO SUBMIT</span>
-— 28/28 programmatic gates pass on the saved bytes, including a check that recomputes the
+— 29/29 programmatic gates pass on the saved bytes, including a check that recomputes the
 headline estimate from the raster itself. No human inspection is used or needed.</p>
-<p><a class="btn" href="downloads/gemsdoesass3-blockinv3-123899-20261031T055633Z-nanoutside.tif">⬇ Download the .tif</a>
-<a class="btn" href="downloads/gemsdoesass3-blockinv3-123899-20261031T055633Z-nanoutside.tif.zip" style="background:#075fac">⬇ Download the .zip</a></p>
-<p><strong>Submission name:</strong> <code>gemsdoesass3-blockinv3-123899-20261031T055633Z-nanoutside</code><br>
+<p><a class="btn" href="downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif">⬇ Download the .tif</a>
+<a class="btn" href="downloads/gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask.tif.zip" style="background:#075fac">⬇ Download the .zip</a></p>
+<p><strong>Submission name:</strong> <code>gemsdoesass3-blockinv3-123899-20261031T060409Z-nullmask</code><br>
 <strong>Note to paste (59/140):</strong> <code>block-inversion 300m: 123899 dots; est 0.314 (LOO sd 0.021)</code><br>
 <strong>Estimated score:</strong> <strong>0.3138</strong>
 (band 0.2935–0.3153; leave-one-file-out σ 0.0205) — an <strong>ESTIMATE</strong>
@@ -35,7 +35,8 @@ from 128 published scores, not an organizer receipt.<br>
 <strong>Unique:</strong> worst 36.7% of its dots within 3 px of any of
 458 sibling submissions (cap 65%).</p>
 <p class="small">Single-band float32 GeoTIFF · EPSG:32611 · 3730×3292 · 100 m · values exactly {0,1} inside the
-footprint · NaN outside (this is the fix for the "Predicted values must be in range [0, 1]" rejection).</p>
+footprint · finite 0 outside with the null declared by a GDAL mask band, <strong>no NaN stored anywhere</strong>
+(this is the fix for the "Predicted values must be in range [0, 1]" rejection; a NaN payload is what triggers it).</p>
 </section>
 
 <section>
@@ -45,7 +46,7 @@ footprint · NaN outside (this is the fix for the "Predicted values must be in r
 them can be inverted. This project inverts them on a 300 m presence design (leave-one-file-out RMSE
 0.0206, Spearman 0.958 against a 0.0825 baseline) and emits one dot per block
 while the expected credit beats the metric's own cut-off of 0.2·DTI. The result is a new field — only
-36.7% of it lies within 3 px of the closest of 453 sibling submissions — that is
+36.7% of it lies within 3 px of the closest of 458 sibling submissions — that is
 estimated at <strong>1.13×</strong> the best published GEMSDOE file (0.2778).</p>
 <p><a href="executive-summary.html">Read the executive summary →</a> ·
 <a href="research/hypotheses-20261031.md">Hypotheses, experiments and the run card →</a></p>
