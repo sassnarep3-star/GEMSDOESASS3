@@ -1,0 +1,173 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31T05:31:14+00:00",
+ "label": "ESTIMATE",
+ "not_organizer_confirmed": true,
+ "hypothesis": "H-CELLDISTILL: the leaderboard corpus, read through the metric's linear form, identifies which geophysical channels carry credit for unmapped faults; the fitted channel model then places dots where the corpus never drew any",
+ "submission_name": "gemsdoesass3-cdist-52000-20261031T1200Z-zeros",
+ "submission_note": "cell-credit distillation, 52000 dots, unique 47% overlap; screening-only, slot NOT cleared",
+ "note_length": 90,
+ "raster_sha256": "d0c66c560fe8aa2124ad0955035b0a374d2be7137988f3eff8318a727ea8264e",
+ "zip_sha256": "9f8dcdf4d38a0f98d7b00b34484d109739a36bb7265139e38d5249102d8e9084",
+ "n_dots": 52000,
+ "est_score": 37.5879,
+ "est_score_95": [
+  37.473,
+  37.7029
+ ],
+ "est_score_fieldsum_upper_bound": 0.6889,
+ "expected_tp_bag": 436020.1,
+ "credit_per_dot": 8.385,
+ "N_estimate": 1500.0,
+ "lambda": 150.0,
+ "gloo_rmse": 0.05864,
+ "gloo_rho": 0.7464,
+ "feature_winsorisation": {
+  "lo": [
+   0.2944,
+   0.3072,
+   0.04809,
+   0.28348,
+   0.21927,
+   0.34456,
+   0.22797,
+   0.39259,
+   0.43199,
+   0.02144,
+   0.47122,
+   0.19138,
+   0.29308,
+   0.33264,
+   0.0804,
+   0.14354,
+   0.35306,
+   0.42988,
+   0.07291,
+   0.00866,
+   0.00885,
+   0.43981,
+   0.49974,
+   0.4382,
+   0.05235,
+   0.0838,
+   0.0931,
+   0.05486
+  ],
+  "hi": [
+   0.48455,
+   0.47518,
+   0.37364,
+   0.80432,
+   0.67151,
+   0.67258,
+   0.77607,
+   0.59611,
+   0.505,
+   0.21202,
+   0.5866,
+   0.55975,
+   0.62664,
+   0.49508,
+   0.30665,
+   0.52838,
+   0.5411,
+   0.59807,
+   0.57512,
+   0.26857,
+   0.2638,
+   0.48501,
+   0.52564,
+   0.53549,
+   0.16503,
+   0.45529,
+   0.26106,
+   0.35646
+  ],
+  "n_channels_clipped": 25
+ },
+ "worst_registry_overlap": 0.4703,
+ "worst_registry_raster": "corpus:GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+ "overlap_lift": 1.333,
+ "uniqueness_limit": 0.65,
+ "path": "docs/downloads/gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif",
+ "sweep": [
+  {
+   "budget": 12000,
+   "placed": 12000,
+   "mean_q_on_dots": 0.22912,
+   "credit_per_dot": 9.46655,
+   "est_score_bag": 31.5552,
+   "est_score_fieldsum_upper_bound": 0.7637
+  },
+  {
+   "budget": 18000,
+   "placed": 18000,
+   "mean_q_on_dots": 0.21147,
+   "credit_per_dot": 8.99855,
+   "est_score_bag": 33.7446,
+   "est_score_fieldsum_upper_bound": 0.793
+  },
+  {
+   "budget": 24000,
+   "placed": 24000,
+   "mean_q_on_dots": 0.19746,
+   "credit_per_dot": 8.82832,
+   "est_score_bag": 35.3133,
+   "est_score_fieldsum_upper_bound": 0.7898
+  },
+  {
+   "budget": 30000,
+   "placed": 30000,
+   "mean_q_on_dots": 0.18556,
+   "credit_per_dot": 8.74831,
+   "est_score_bag": 36.4513,
+   "est_score_fieldsum_upper_bound": 0.7732
+  },
+  {
+   "budget": 37654,
+   "placed": 37654,
+   "mean_q_on_dots": 0.17269,
+   "credit_per_dot": 8.629,
+   "est_score_bag": 37.215,
+   "est_score_fieldsum_upper_bound": 0.7448
+  },
+  {
+   "budget": 44090,
+   "placed": 44090,
+   "mean_q_on_dots": 0.1635,
+   "credit_per_dot": 8.52322,
+   "est_score_bag": 37.5114,
+   "est_score_fieldsum_upper_bound": 0.7196
+  },
+  {
+   "budget": 52000,
+   "placed": 52000,
+   "mean_q_on_dots": 0.15368,
+   "credit_per_dot": 8.385,
+   "est_score_bag": 37.5879,
+   "est_score_fieldsum_upper_bound": 0.6889
+  },
+  {
+   "budget": 60000,
+   "placed": 60000,
+   "mean_q_on_dots": 0.14497,
+   "credit_per_dot": 8.24403,
+   "est_score_bag": 37.4729,
+   "est_score_fieldsum_upper_bound": 0.659
+  }
+ ],
+ "repair": [
+  {
+   "round": 0,
+   "n_dots": 52000,
+   "worst_overlap": 0.4703,
+   "worst_raster": "corpus:GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+   "worst_raster_coverage": 0.3528,
+   "lift": 1.333
+  }
+ ],
+ "variant": "zeros-outside: no NaN anywhere, every stored cell in [0,1]",
+ "note_supersedes": "cell-credit distillation, 52000 dots, unique 47% overlap; screening-only, slot NOT cleared",
+ "note_revised_utc": "2026-10-31T06:05:00+00:00",
+ "note_revision_reason": "the old note quoted est 37.588, a bag-model number this session retired (the estimator ranks files; it cannot price an emission). Do not submit; no slot cleared."
+}

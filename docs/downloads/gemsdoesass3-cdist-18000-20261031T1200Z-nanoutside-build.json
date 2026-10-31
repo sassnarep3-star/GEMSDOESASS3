@@ -1,0 +1,106 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31T05:26:16+00:00",
+ "label": "ESTIMATE",
+ "not_organizer_confirmed": true,
+ "hypothesis": "H-CELLDISTILL: the leaderboard corpus, read through the metric's linear form, identifies which geophysical channels carry credit for unmapped faults; the fitted channel model then places dots where the corpus never drew any",
+ "submission_name": "gemsdoesass3-cdist-18000-20261031T1200Z-nanoutside",
+ "submission_note": "cell-credit distillation, 18000 dots, est 493.575 (gloo sd 0.059, rho 0.75)",
+ "note_length": 75,
+ "raster_sha256": "3120c66496331bc769f838aa26204d5ba4b55cc3a277c89ea6c9b76c14edefaa",
+ "zip_sha256": "e6d83be8250802d15bd0e8ae0447e38c62002ed838f1490bb5d2d8f355dd4d92",
+ "n_dots": 18000,
+ "est_score": 493.5752,
+ "est_score_95": [
+  493.4602,
+  493.6901
+ ],
+ "est_score_fieldsum_upper_bound": 0.793,
+ "expected_tp_bag": 2369160.8,
+ "credit_per_dot": 131.62004,
+ "N_estimate": 1500.0,
+ "lambda": 150.0,
+ "gloo_rmse": 0.05864,
+ "gloo_rho": 0.7464,
+ "worst_registry_overlap": 0.5274,
+ "worst_registry_raster": "corpus:GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+ "overlap_lift": 1.495,
+ "uniqueness_limit": 0.65,
+ "path": "docs/downloads/gemsdoesass3-cdist-18000-20261031T1200Z-nanoutside.tif",
+ "sweep": [
+  {
+   "budget": 12000,
+   "placed": 12000,
+   "mean_q_on_dots": 0.22912,
+   "credit_per_dot": 139.51323,
+   "est_score_bag": 465.0441,
+   "est_score_fieldsum_upper_bound": 0.7637
+  },
+  {
+   "budget": 18000,
+   "placed": 18000,
+   "mean_q_on_dots": 0.21147,
+   "credit_per_dot": 131.62004,
+   "est_score_bag": 493.5752,
+   "est_score_fieldsum_upper_bound": 0.793
+  },
+  {
+   "budget": 24000,
+   "placed": 24000,
+   "mean_q_on_dots": 0.19746,
+   "credit_per_dot": 122.82487,
+   "est_score_bag": 491.2995,
+   "est_score_fieldsum_upper_bound": 0.7898
+  },
+  {
+   "budget": 30000,
+   "placed": 30000,
+   "mean_q_on_dots": 0.18556,
+   "credit_per_dot": 113.4227,
+   "est_score_bag": 472.5946,
+   "est_score_fieldsum_upper_bound": 0.7732
+  },
+  {
+   "budget": 37654,
+   "placed": 37654,
+   "mean_q_on_dots": 0.17269,
+   "credit_per_dot": 102.67563,
+   "est_score_bag": 442.8172,
+   "est_score_fieldsum_upper_bound": 0.7448
+  },
+  {
+   "budget": 44090,
+   "placed": 44090,
+   "mean_q_on_dots": 0.1635,
+   "credit_per_dot": 95.08888,
+   "est_score_bag": 418.4936,
+   "est_score_fieldsum_upper_bound": 0.7196
+  },
+  {
+   "budget": 52000,
+   "placed": 52000,
+   "mean_q_on_dots": 0.15368,
+   "credit_per_dot": 87.45303,
+   "est_score_bag": 392.0308,
+   "est_score_fieldsum_upper_bound": 0.6889
+  },
+  {
+   "budget": 60000,
+   "placed": 60000,
+   "mean_q_on_dots": 0.14497,
+   "credit_per_dot": 81.10296,
+   "est_score_bag": 368.6498,
+   "est_score_fieldsum_upper_bound": 0.659
+  }
+ ],
+ "repair": [
+  {
+   "round": 0,
+   "n_dots": 18000,
+   "worst_overlap": 0.5274,
+   "worst_raster": "corpus:GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+   "worst_raster_coverage": 0.3528,
+   "lift": 1.495
+  }
+ ]
+}
