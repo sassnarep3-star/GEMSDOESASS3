@@ -177,18 +177,11 @@ def test_missing_lattice_witness_reuses_only_archived_measurement(tmp_path, monk
     assert "witness unavailable" in ir._safe_block_reason(lat)
 
 
-def test_pages_state_the_current_decision_and_link_review():
-    """Policy lock, updated 2026-10-30.
-
-    The 2026-10-28/29 policy was "nothing is cleared". That was superseded on 2026-10-30 by the
-    organizer masking rule (forum thread 11516) and the validated estimator. The invariants that
-    still matter are asserted here: the decision is stated explicitly, the legacy artifacts stay
-    blocked, the standing prompt and review links are intact, and no page claims an organizer score.
-    """
+def test_pages_state_the_current_block_and_link_review():
+    """No candidate is promoted while required holdout and uniqueness gates are missing."""
     readme = (ROOT / "README.md").read_text()
-    assert "OK to download and OK to submit" in readme
-    assert "Superseded decision (2026-10-29)" in readme
-    assert "independent-review-20261028.md" in readme
+    assert "NO candidate approved for submission" in readme
+    assert "repo-review-20261031.md" in readme
     assert "Maximize P(Win)" in readme and "Own the Outcome" in readme
     assert "Standing prompt (verbatim" in readme
     assert "MUST GENERATE A UNIQUE TIF SUBMISSION" in readme
@@ -196,14 +189,14 @@ def test_pages_state_the_current_decision_and_link_review():
                 "docs/executive-summary.html"]:
         txt = (ROOT / rel).read_text()
         assert "localhost" not in txt.lower() and "127.0.0.1" not in txt, rel
+        assert "not approved" in txt.lower() or "no candidate is approved" in txt.lower()
     docs_index = (ROOT / "docs/index.html").read_text()
-    assert "any registry" in docs_index.lower()
-    assert "OK TO SUBMIT" in docs_index
-    # the only file cleared is the LB-inversion candidate; the CDTI file is named as superseded
+    assert "registry" in docs_index.lower()
+    assert "DO NOT SUBMIT" in docs_index
     assert "lbinv-84262" in docs_index
     assert "cdti128-consensus" in docs_index
     for legacy in ("bgk-pbe", "unique-structural"):
-        assert legacy in docs_index  # named, and marked not submittable
+        assert legacy in docs_index
     assert "ESTIMATE" in docs_index
 
 

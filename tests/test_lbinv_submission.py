@@ -116,15 +116,58 @@ def test_validator_receipt_passes_every_gate():
     assert rec["checks"]["nan_only_outside_footprint"] is True
 
 
-def test_uniqueness_gate_is_under_the_protocol_limit():
+def test_recorded_overlap_is_not_misrepresented_as_full_uniqueness_clearance():
     build = json.loads(BUILD.read_text())
-    assert build["worst_registry_overlap"] <= 0.70
+    readiness = json.loads((ROOT / "evidence" / "submission_readiness_20261031.json").read_text())
+    assert build["worst_registry_overlap"] <= 0.70  # a build-receipt measurement only
     assert "GEMSDOE22" in build["worst_registry_raster"]
+    assert readiness["registry_uniqueness"]["protocol_status"] == "NOT CLEARED"
+    assert readiness["registry_uniqueness"]["recorded_correlation"] is None
 
 
-def test_pages_send_the_reader_to_this_file_first():
+def test_pages_mark_candidate_audit_only_and_block_submission():
     for page in ("docs/index.html", "docs/executive-summary.html"):
         html = (ROOT / page).read_text()
-        assert html.index(NAME) < html.index("cdti128-consensus") if "cdti128" in html else True
-        assert "OK TO SUBMIT" in html
+        assert NAME in html
+        assert "NOT APPROVED TO SUBMIT" in html
+        assert "HOLDOUT-DTI" in html
+        assert "NOT RUN" in html or "missing" in html.lower()
         assert "localhost" not in html.lower() and "127.0.0.1" not in html
+
+
+def test_readiness_card_fails_closed_for_missing_protocol_gates():
+    card = json.loads((ROOT / "evidence" / "submission_readiness_20261031.json").read_text())
+    assert card["candidate"] == NAME
+    assert card["verdict"] == "negative"
+    assert card["ok_to_submit"] is False
+    assert card["holdout_dti"]["dti"] is None
+    assert card["holdout_dti"]["ci95"] is None
+    assert card["leakage_canary"]["status"] == "NOT RUN for this candidate"
+    assert card["registry_uniqueness"]["pre_placement_surface_check"] == "NOT RECORDED"
+    assert card["validator_output"]["protocol_validation"] is False
+
+
+def test_committed_raster_and_zip_match_format_and_footprint_receipts():
+    """Independently verify the artifact without depending on the missing model cache."""
+    import hashlib
+
+    build = json.loads(BUILD.read_text())
+    with rasterio.open(TIF) as ds:
+        assert ds.count == 1 and ds.dtypes == ("float32",)
+        assert str(ds.crs) == "EPSG:32611"
+        assert ds.shape == (3730, 3292)
+        assert tuple(ds.transform)[:6] == (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
+        values = ds.read(1)
+    mask_receipt = np.load(ROOT / "evidence" / "organizer_footprint_mask.npz")
+    shape = tuple(mask_receipt["shape"].tolist())
+    foot = np.unpackbits(mask_receipt["packed"], bitorder="big")[:np.prod(shape)].reshape(shape).astype(bool)
+    assert values.shape == foot.shape
+    assert np.array_equal(np.isfinite(values), foot)
+    assert np.isfinite(values[foot]).all() and np.isnan(values[~foot]).all()
+    assert set(np.unique(values[foot])).issubset({0.0, 1.0})
+    assert int((values == 1.0).sum()) == build["n_dots"]
+    assert hashlib.sha256(TIF.read_bytes()).hexdigest() == build["raster_sha256"]
+    with zipfile.ZipFile(ZIP) as zf:
+        assert zf.namelist() == [TIF.name]
+        assert zf.read(TIF.name) == TIF.read_bytes()
+    assert hashlib.sha256(ZIP.read_bytes()).hexdigest() == build["zip_sha256"]

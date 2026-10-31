@@ -164,12 +164,21 @@ def verify() -> dict:
     check("candidate_not_promoted", card["verdict"] == "negative" and card["ok_to_submit"] is False)
     note_len = len(card["submission_note"])
     check("submission_note_length", 0 < note_len <= 140, f"note length {note_len}")
-    # 2026-10-30: this check scraped the site for a "blocks download as a submission" banner. That
-    # banner is a presentation policy for the LEGACY candidate and is no longer present, because the
-    # site now clears a different, fully validated file. Presentation is therefore reported as a
-    # separate check and is deliberately NOT part of format_and_record_integrity, which is about the
-    # saved bytes and the run-card record.
-    check("archive_only_ui", all("NOT approved" in (ROOT / p).read_text() or "NOT OK to submit" in (ROOT / p).read_text() for p in ("README.md", "docs/index.html", "docs/executive-summary.html")), "UI no longer blocks the legacy candidate (expected after 2026-10-30)")
+    # The active repository review blocks all candidates until the protocol gates pass. Check all
+    # user-facing entry points, including root redirect pages, rather than looking for a legacy
+    # phrase tied to one historical candidate.
+    ui_pages = ("README.md", "index.html", "executive-summary.html", "docs/index.html",
+                "docs/executive-summary.html")
+    blocked_phrases = ("not approved to submit", "do not submit any tiff",
+                       "no candidate is approved")
+    ui_blocked = all(any(marker in (ROOT / page).read_text().lower() for marker in blocked_phrases)
+                     for page in ui_pages)
+    # Avoid matching historical explanatory sentences such as "NOT OK to submit" or the verbatim
+    # standing prompt; detect only the old affirmative badge markup.
+    no_positive_banner = all('class="pill">OK TO SUBMIT</span>' not in (ROOT / page).read_text()
+                             for page in ui_pages)
+    check("submission_blocked_ui", ui_blocked and no_positive_banner,
+          "every user-facing entry point blocks submission until required gates pass")
 
     format_ok = all(checks[k] for k in (
         "run_card_copies_match", "candidate_exists", "sha256_matches", "single_band", "float32",
