@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-31",
+  "candidate": "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside",
+  "hypothesis": "H-LBINV: invert the official metric using the spatial incidence of published submissions and their owner-reported scores to estimate hidden-test credit.",
+  "mechanism": "A score-weighted linear combination of previous submissions' dot patterns is interpreted as a candidate hidden-truth field; high estimated marginal-credit cells were emitted as binary dots.",
+  "named_non_fault_mimic": "Shared lithologic contacts, drainage/topographic lineaments, and common copying or adaptation among submissions can create consensus patterns that resemble unmapped faults without representing geothermal faults.",
+  "holdout_dti": {
+    "status": "NOT RUN for this candidate",
+    "score_label": "HOLDOUT-DTI",
+    "evaluator_version": null,
+    "n_withheld_positives": null,
+    "dti": null,
+    "ci95": null,
+    "reason": "No candidate-specific whole-segment hide-and-recover receipt with buffered withholding, visible-only catalogue features, and pixel-exact masking was found in the checkout."
+  },
+  "leaderboard_score": {
+    "status": "NOT ORGANIZER-CONFIRMED",
+    "estimate": 0.3687,
+    "label": "ESTIMATE, not a score",
+    "source": "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside-build.json",
+    "caveat": "Fitted from owner-reported submission scores; does not replace the required candidate-specific spatial holdout."
+  },
+  "leakage_canary": {
+    "status": "NOT RUN for this candidate",
+    "single_feature_results": null
+  },
+  "registry_uniqueness": {
+    "recorded_max_within_3px_fraction": 0.65,
+    "recorded_registry_raster": "corpus:GEMSDOE22__gems22-h23-b-dti-optimal-emission-10pct-20261002-86176698-nan.tif",
+    "recorded_correlation": null,
+    "pre_placement_surface_check": "NOT RECORDED",
+    "final_dot_check": "Overlap is recorded in the build receipt, but the full candidate-specific registry audit was not independently replayed in this review.",
+    "protocol_status": "NOT CLEARED"
+  },
+  "raster": {
+    "path": "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside.tif",
+    "sha256": "8f6188763af694dccb400bad7a2549fcaccdfb0b37b6981adfff286e2698ebd1",
+    "zip_sha256": "d720227cf2555260581f52f5e3db1149b2c12e49e858e6ad56998f9ab135df1f"
+  },
+  "validator_output": {
+    "status": "Fresh exact-byte review: in-footprint finite values are [0,1], but the portal-wide elementwise [0,1] gate fails on outside-footprint NaNs; do not treat as portal-accepted or submit-ready.",
+    "single_band_float32": true,
+    "crs": "EPSG:32611",
+    "shape": [
+      3730,
+      3292
+    ],
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "inside_values": [
+      0.0,
+      1.0
+    ],
+    "no_nan_inside_footprint": true,
+    "nan_outside_footprint": true,
+    "positive_cells": 84262,
+    "footprint_mask_matches_committed_mask": true,
+    "zip_single_tif_and_identical_bytes": true,
+    "protocol_validation": false,
+    "portal_range_test_all_cells": false,
+    "portal_range_failing_stored_cells": 7111787,
+    "fresh_review_receipt": "evidence/validator_review_lbinv_20261031.json",
+    "all_hard_checks_pass": false
+  },
+  "submission_name": "gemsdoesass3-lbinv-84262-20261030T0900Z-nanoutside",
+  "submission_note": "LB-inversion field: 84262 dots; est 0.369 (LOO sd 0.053)",
+  "verdict": "negative",
+  "ok_to_submit": false,
+  "ok_to_download_for_analysis": true,
+  "reason": "Required holdout, per-feature canary, and complete two-stage uniqueness evidence are absent. The leaderboard value is only an estimate. No candidate is promoted by this review."
+}

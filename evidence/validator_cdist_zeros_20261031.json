@@ -1,0 +1,37 @@
+{
+ "file": "gemsdoesass3-cdist-52000-20261031T1200Z-zeros.tif",
+ "sha256": "d0c66c560fe8aa2124ad0955035b0a374d2be7137988f3eff8318a727ea8264e",
+ "bytes": 319806,
+ "checks": {
+  "single_band": true,
+  "dtype_float32": true,
+  "crs_epsg_32611": true,
+  "shape_3730x3292": true,
+  "transform_matches_training_grid": true,
+  "no_inf_anywhere": true,
+  "values_in_0_1": true,
+  "portal_range_test_all_cells": true,
+  "finite_inside_footprint": true,
+  "outside_cells_are_null": false,
+  "nan_outside_and_finite_inside_footprint": false
+ },
+ "mask": {
+  "has_internal_mask_band": true,
+  "mask_flags": [
+   "1:all_valid"
+  ],
+  "masked_fraction": 0.0
+ },
+ "stats": {
+  "min": 0.0,
+  "max": 1.0,
+  "positive_pixels": 52000,
+  "unique_values": 2
+ },
+ "notes": [
+  "outside-bounds check: 7111787 non-null cells outside the footprint, carried by the internal mask band; 0 non-finite cells inside it"
+ ],
+ "all_hard_checks_pass": false,
+ "encoding_label": "zeros (portal-safe, the file the site offers)",
+ "interpretation": "all_hard_checks_pass is false only because of the repo's NaN-outside convention check; the portal-relevant checks (values_in_0_1, portal_range_test_all_cells, finite_inside_footprint) are what decide whether an upload is rejected."
+}

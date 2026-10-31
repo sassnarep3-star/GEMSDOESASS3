@@ -5,8 +5,8 @@
  "not_organizer_confirmed": true,
  "hypothesis": "H-CELLDISTILL: the leaderboard corpus, read through the metric's linear form, identifies which geophysical channels carry credit for unmapped faults; the fitted channel model then places dots where the corpus never drew any",
  "submission_name": "gemsdoesass3-cdist-52000-20261031T1200Z-nanoutside",
- "submission_note": "cell-credit distillation, 52000 dots, est 37.588 (gloo sd 0.059, rho 0.75)",
- "note_length": 74,
+ "submission_note": "cell-credit distillation, 52000 dots, unique 47% overlap; screening-only, slot NOT cleared",
+ "note_length": 90,
  "raster_sha256": "82c90f6c2f6d2cb1748bc7d7692e277283b6e533556d7e741fe8de03b23d4856",
  "zip_sha256": "f1ba1581120f334304b7cf0211befd0b4ee67288d21a6f22ac1e474fbf266f14",
  "n_dots": 52000,
@@ -165,5 +165,8 @@
    "worst_raster_coverage": 0.3528,
    "lift": 1.333
   }
- ]
+ ],
+ "note_supersedes": "cell-credit distillation, 52000 dots, est 37.588 (gloo sd 0.059, rho 0.75)",
+ "note_revised_utc": "2026-10-31T06:05:00+00:00",
+ "note_revision_reason": "the old note quoted est 37.588, a bag-model number this session retired (the estimator ranks files; it cannot price an emission). Do not submit; no slot cleared."
 }

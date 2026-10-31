@@ -1,6 +1,8 @@
 # Forensic Irregularities & Data/Template Fixes Ledger (`GEMSDOESASS3`)
 
-> **Status banner updated 2026-10-30.** The previous banner said *"NO FILE APPROVED / DO NOT SUBMIT"*. That decision was superseded on 2026-10-30: exactly one file is now cleared and documented in `README.md` and `docs/index.html` — `gemsdoesass3-cdti128-consensus-40533-20261030T041500Z-nanoutside.tif` (40,533 dots, 17/17 gates, worst registry overlap 64.0%, ESTIMATE 0.394). Every legacy file named below remains blocked, and the halo-saturation exception for the calibration lattice is still NOT applied. Measurements in old entries are archival unless explicitly revalidated.
+> **Current status — 2026-10-31 UTC: NO TIFF APPROVED / DO NOT SUBMIT.** This entry supersedes all older positive status banners in this ledger, README, and Pages output. The earlier lbinv candidate has no organizer acceptance receipt and contains NaN outside; the later lane-70 candidate fails the literal rank-correlation and all-registry overlap gates (its lattice exception is not authorized). No experiment or slot was used in this review. See [current repo review](research/repo-review-20261031.md) and [negative run card](../evidence/run_card_20261031_review.json). Older claims below are archival unless independently revalidated.
+
+Every irregularity uncovered during the line-by-line audit of DrivenData Competition #306, the 19-band `training_features.tif` GeoTIFF metadata, the shared `template57` toolkit, and the 9 sibling `GEMSDOE` repositories is documented below with exact cryptographic/numerical proof and remediation status.
 
 Every irregularity uncovered during the line-by-line audit of DrivenData Competition #306, the 19-band `training_features.tif` GeoTIFF metadata, the shared `template57` toolkit, and the 9 sibling `GEMSDOE` repositories is documented below with exact cryptographic/numerical proof and remediation status.
 
