@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "repository": "sassnarep3-star/GEMSDOESASS3",
- "generated_utc": "2026-10-31T05:50:18.847315+00:00",
+ "generated_utc": "2026-10-31",
  "irregularities": [
   {
    "id": "IR-31-01",
@@ -763,6 +763,54 @@
    "finding": "docs/downloads/gemsdoesass3-lbinv-84262-20261030T0900Z-safe.tif fixes the portal range blocker (11/11 byte gates) but 99.9% of its 84,262 dots fall within 3 px of the 13GEMSDOE calibration lattice, a registry raster. The lane rule caps this at 70%. The earlier run card recorded literal_uniqueness_gate=CLEARED on the radius-1, lattice-excluding sweep.",
    "resolution": "Run card verdict corrected to negative / NOT CLEARED; the file is documented as FORMAT-OK but not submittable on the pages and README. The safe encoding itself (mask band, finite 0.0 outside) is retained as the correct fix for the portal range error.",
    "detected_utc": "2026-10-31"
+  },
+  {
+   "id": "IR-SASS3-99",
+   "severity": "MEDIUM (RESOLVED)",
+   "title": "Prompt leaderboard figures contradict the live page (2026-10-31 refresh)",
+   "finding": "The 2026-10-31 prompt states 'Current competition leaderboard GEMSDOE high score: 0.4413' and later '0.3195 is the highest score right now'. The live leaderboard fetched 2026-10-31 shows #1 xiaofanhu 0.4544 and #50 kpomazi 0.3195 - 0.3195 is the LOWEST score in the displayed top-50 table, not the highest. Extends IR-SASS3-25 with a same-day live read.",
+   "resolution": "evidence/leaderboard_snapshot_20261031.json records the fetched rows (ORGANIZER-CONFIRMED). The research pages use 0.4544 as the live top and label both prompt figures as superseded.",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-100",
+   "severity": "MEDIUM (FIXED)",
+   "title": "Git-blobless fetch workaround and build_score_corpus relative-path crash",
+   "finding": "Parallel to IR-SASS3-96: this lane hit the same exhausted REST budget (5000/5000) and downloaded 0 files with the API-based fetchers. Independently found that scripts/build_score_corpus.py crashed at manifest write when --table was passed as a relative path (Path.relative_to(ROOT) ValueError on the unresolved path).",
+   "resolution": "Fixed the relative-path crash in build_score_corpus.py (resolve before relative_to; the fix is also on main). Wrote scripts/fetch_pool_via_git.py, which materialises corpus and registry caches with blobless depth-1 git clones (git smart-HTTP is outside the REST budget) and reuses build_score_corpus.norm/repo_of for matching: corpus 133 unique rasters, registry 378 verified. Main's codeload fetchers (IR-SASS3-96) are the surviving shared tool.",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-101",
+   "severity": "MEDIUM (CLOSED-NEGATIVE)",
+   "title": "Kill-repair uniqueness repair collapses on a redundant corpus",
+   "finding": "scripts/emit_lbinv_kernelpack_20261031.py repaired dot-overlap by killing the lowest-credit offenders per offending raster. Because the top published rasters share 87-100% of their dots, their halos coincide; each repair round exposed the next offender and the loop collapsed a 42,000-dot candidate to 2,445 dots (EST 0.3209 -> 0.0554).",
+   "resolution": "Negative run card recorded (evidence/run_card_neg_killrepair_20261031.json). Replacement emission engine enforces per-raster halo quotas during placement (scripts/emit_lbinv_quota_20261031.py) - which then failed the corrected 3 px lane rule, see IR-SASS3-102.",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-102",
+   "severity": "HIGH (CONVERGED NEGATIVE)",
+   "title": "Kernel-pack quota emission carried the same radius-1 halo bug; true-3px re-measurement fails the lattice rule",
+   "finding": "The quota emitter's halo cache (scripts/emit_lbinv_kernelpack_20261031.py Pool.halo) used binary_dilation(m, STRUCT) with the default iterations=1, i.e. Chebyshev radius 1 px, while labelling it '3 px halos'. Every sweep overlap (worst 0.6500 by construction) therefore measured radius 1. Independent re-measurement of the emitted 49,278-dot candidate (gemsdoesass3-lbinv2-dense-49278-20261031T180000Z) against the 13GEMSDOE calibration lattice with the corrected 3-iteration dilation (IR-SASS3-97's definition) gives 99.88% of dots within 3 px of the lattice (radius-1 measure: 36.54%). The lane rule caps this at 70%.",
+   "resolution": "Converges with IR-SASS3-97/98: the candidate is FORMAT-OK (validator 22/22, portal gate pass) but NOT CLEARED; run card verdict corrected to negative and the pages document no approved TIFF. The quota engine is retained as the shared tool for any future compliant emission, which must place >=30% of dots outside the lattice's true-3px halo (priced in the run card open_risks).",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-103",
+   "severity": "LOW (RESOLVED)",
+   "title": "Hypothesis ID collision across research documents",
+   "finding": "docs/hypotheses.md assigns H-SASS3-J..N one set of meanings (tip continuation, relay bridging, strain ridges, lidar scarps, Euler depth) while research/hypotheses-20261030.md re-uses H-SASS3-J..M for different hypotheses (trace extrapolation, strain-optimal lineaments, gravity-only steps, discharge corridors).",
+   "resolution": "Flagged here; the 2026-10-31 hypothesis set uses the next free letters H-SASS3-O..S and checks each against both documents and the sibling-site method list (research/hypotheses-20261031.md).",
+   "status": "closed"
+  },
+  {
+   "id": "IR-SASS3-104",
+   "severity": "LOW (RESOLVED)",
+   "title": "Refreshing the distilled field drifts the historical estimate-recompute test",
+   "finding": "Rebuilding .cache/distill_q.npz with the expanded corpus (128 -> 133 rasters) shifts the recomputed estimate of the frozen 2026-10-30 file from 0.3687 to 0.3681 (6.4e-4), just outside tests/test_lbinv_submission.py's 5e-4 tolerance.",
+   "resolution": "The release-time strict check is preserved in evidence/validator_lbinv_20261030.json and asserted in the test; the tolerance against the refreshed field is 2e-3 (25x tighter than the estimator's LOO error). Main's test file now governs; the drift note stands as documentation.",
+   "status": "closed"
   }
  ]
 }

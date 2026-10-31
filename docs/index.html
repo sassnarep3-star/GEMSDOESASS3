@@ -91,6 +91,26 @@
       </ol>
       <p class="small">Official sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem, metric and GeoTIFF format</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">live leaderboard</a> · <a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS GeoDAWN</a>.</p>
     </section>
+
+    <section id="kernelpack-lane">
+      <h2>Kernel-pack emission lane (2026-10-31) — FORMAT-OK, NOT CLEARED</h2>
+      <p><strong>DO NOT SUBMIT this file either.</strong> The H-LBINV2 quota emission
+      (<code>gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-safe.tif</code>, 49,278 dots) is
+      format-clean — validator 22/22, portal-safe encoding that passes the live form's element-wise
+      range test — but it fails the binding lane rule exactly like the 2026-10-30 candidate: with the
+      corrected 3-iteration (Chebyshev radius 3) dilation, <strong>99.88% of its dots fall within
+      3 px of the 13GEMSDOE calibration lattice</strong> (cap 70%; the lane's own halo cache had
+      measured radius 1 px and reported 36.5% — IR-SASS3-102, converging with IR-SASS3-97/98).
+      The estimator number is ESTIMATE 0.410 (LOO sd 0.053 over 133 published files; rho 0.751) —
+      a projection, never a score. Receipts:
+      <a href="../evidence/run_card_kernelpack_20261031.json">run card</a> ·
+      <a href="../evidence/validator_kernelpack_20261031.json">validator</a> ·
+      <a href="../evidence/run_card_neg_killrepair_20261031.json">negative run card (kill-repair)</a> ·
+      <a href="../evidence/distill_from_leaderboard_20261031.json">distillation</a>.
+      A compliant emission would need ≥30% of its dots outside the lattice's true-3px halo; the quota
+      engine can build one once its halo cache is rebuilt at the corrected radius. Geological upside:
+      <a href="research/hypotheses-20261031.md">research/hypotheses-20261031.md</a> (H-SASS3-O..S).</p>
+    </section>
   </main>
   <footer>Maximize P(Win) · Own the Outcome · Evidence first; never confuse an estimate with a score.</footer>
 </body>

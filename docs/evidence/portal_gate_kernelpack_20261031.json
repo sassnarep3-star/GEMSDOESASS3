@@ -1,0 +1,35 @@
+{
+ "file": "gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-safe.tif",
+ "sha256": "e11decb18ce157406c6b155284d70ed93510c92582c0a661ad9e86754aadc198",
+ "bytes": 185434,
+ "checks": {
+  "single_band": true,
+  "dtype_float32": true,
+  "crs_epsg_32611": true,
+  "shape_3730x3292": true,
+  "transform_matches_training_grid": true,
+  "no_inf_anywhere": true,
+  "values_in_0_1": true,
+  "portal_range_test_all_cells": true,
+  "finite_inside_footprint": true,
+  "outside_cells_are_null": true,
+  "nan_outside_and_finite_inside_footprint": true
+ },
+ "mask": {
+  "has_internal_mask_band": true,
+  "mask_flags": [
+   "2:per_dataset"
+  ],
+  "masked_fraction": 0.579175
+ },
+ "stats": {
+  "min": 0.0,
+  "max": 1.0,
+  "positive_pixels": 49278,
+  "unique_values": 2
+ },
+ "notes": [
+  "outside-bounds check: 0 non-null cells outside the footprint, carried by the internal mask band; 0 non-finite cells inside it"
+ ],
+ "all_hard_checks_pass": true
+}

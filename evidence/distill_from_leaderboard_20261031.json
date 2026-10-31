@@ -1,0 +1,135 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-31",
+ "label": "ESTIMATE",
+ "not_organizer_confirmed": true,
+ "method": "least-norm inversion of the organizer metric's linear form on 133 published rasters",
+ "n_rasters": 133,
+ "N_estimate": 12000,
+ "scale_c": 0.9150672565982481,
+ "model_selection": "leave-one-file-out squared error on the 133 owner-reported scores",
+ "baseline_loo_rmse": 0.08194474435407206,
+ "chosen": {
+  "N": 12000,
+  "c": 0.9150672565982481,
+  "in_sample_rmse": 0.018558608405338597,
+  "loo_rmse": 0.05306222893001986,
+  "loo_rho": 0.7506197651523653
+ },
+ "grid": [
+  {
+   "N": 12000,
+   "c": 0.9150672565982481,
+   "in_sample_rmse": 0.018558608405338597,
+   "loo_rmse": 0.05306222893001986,
+   "loo_rho": 0.7506197651523653
+  },
+  {
+   "N": 16000,
+   "c": 0.9150672565982481,
+   "in_sample_rmse": 0.020720642237144316,
+   "loo_rmse": 0.055365798643798876,
+   "loo_rho": 0.734327338019404
+  },
+  {
+   "N": 20000,
+   "c": 0.9000000000000001,
+   "in_sample_rmse": 0.022918499124620954,
+   "loo_rmse": 0.05659022842708619,
+   "loo_rho": 0.7222533946807317
+  },
+  {
+   "N": 25000,
+   "c": 0.9000000000000001,
+   "in_sample_rmse": 0.0255580458390798,
+   "loo_rmse": 0.05843944204387501,
+   "loo_rho": 0.7113781740647412
+  },
+  {
+   "N": 30000,
+   "c": 0.8500000000000001,
+   "in_sample_rmse": 0.027963366580807583,
+   "loo_rmse": 0.05991007492364384,
+   "loo_rho": 0.7053284500260149
+  },
+  {
+   "N": 40000,
+   "c": 0.8500000000000001,
+   "in_sample_rmse": 0.03172125159642666,
+   "loo_rmse": 0.06340939157740416,
+   "loo_rho": 0.6871027636934942
+  },
+  {
+   "N": 55000,
+   "c": 0.8,
+   "in_sample_rmse": 0.036474120896142666,
+   "loo_rmse": 0.06651426394140018,
+   "loo_rho": 0.6698462574346313
+  },
+  {
+   "N": 75000,
+   "c": 0.8,
+   "in_sample_rmse": 0.041008867003123096,
+   "loo_rmse": 0.07140963972100878,
+   "loo_rho": 0.6547168463900592
+  },
+  {
+   "N": 100000,
+   "c": 0.7500000000000001,
+   "in_sample_rmse": 0.04548982012304814,
+   "loo_rmse": 0.07389160254921158,
+   "loo_rho": 0.6498148355964538
+  }
+ ],
+ "sweep": [
+  {
+   "max_dots": 30000,
+   "n_dots": 30000,
+   "expected_tp": 5246.5,
+   "est_score": 0.3363
+  },
+  {
+   "max_dots": 36000,
+   "n_dots": 36000,
+   "expected_tp": 5939.8,
+   "est_score": 0.3536
+  },
+  {
+   "max_dots": 42000,
+   "n_dots": 42000,
+   "expected_tp": 6565.6,
+   "est_score": 0.3648
+  },
+  {
+   "max_dots": 50000,
+   "n_dots": 50000,
+   "expected_tp": 7314.4,
+   "est_score": 0.3732
+  },
+  {
+   "max_dots": 60000,
+   "n_dots": 60000,
+   "expected_tp": 8136.0,
+   "est_score": 0.3767
+  },
+  {
+   "max_dots": 80000,
+   "n_dots": 80000,
+   "expected_tp": 9509.9,
+   "est_score": 0.3715
+  }
+ ],
+ "field_stats": {
+  "max_q": 0.5413323017501974,
+  "cells_over_0.1": 95797,
+  "cells_over_0.2": 9060,
+  "cells_over_0.4": 56,
+  "sum_q": 60094.189188571996
+ },
+ "known_limitations": [
+  "the top published rasters share 0.87-1.00 of their dots, so the corpus is redundant",
+  "q is defined only where at least one published raster places a dot",
+  "scores are OWNER-REPORT; no organizer receipt exists",
+  "N is not pinned by the corpus; it is chosen by LOO and reported explicitly"
+ ]
+}

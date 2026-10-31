@@ -59,6 +59,38 @@ off-corpus cells this session's field nominates, and relay-bridge scoring betwee
 [`evidence/focus9_verdict_table_20261031.json`](evidence/focus9_verdict_table_20261031.json).
 
 
+## Kernel-pack emission lane · 2026-10-31 UTC — H-LBINV2 quota emission, verdict negative (NOT CLEARED)
+
+**What ran.**  The metric-inversion credit field (consensus of the 133 published scored files;
+estimator leave-one-file-out RMSE 0.0531, rho 0.751 — ESTIMATE class only) was emitted under
+per-raster halo quotas with a dense-fill sweep (`scripts/emit_lbinv_quota_20261031.py`);
+the kill-repair predecessor is a recorded negative result
+([evidence/run_card_neg_killrepair_20261031.json](evidence/run_card_neg_killrepair_20261031.json)).
+The emission produced `docs/downloads/gemsdoesass3-lbinv2-dense-49278-20261031T180000Z-safe.tif`
+(49,278 dots; validator 22/22; portal-safe encoding — FORMAT-OK) with ESTIMATE 0.410 (LOO sd 0.053).
+
+**Why it is NOT CLEARED (IR-SASS3-102).**  The quota engine's halo cache used a radius-1 px
+dilation while labelling it 3 px — the same measurement bug as IR-SASS3-97.  Re-measured with the
+correct 3-iteration (Chebyshev radius 3) dilation, **99.88% of the candidate's dots fall within
+3 px of the 13GEMSDOE calibration lattice** (a registry raster), far above the 70% lane cap; the
+radius-1 measure had shown 36.5%.  The file is documented FORMAT-OK / NOT CLEARED exactly like the
+2026-10-30 candidate: **NO CURRENT TIFF IS APPROVED FOR SUBMISSION — Do not upload any file** until
+a later explicit GO decision.
+
+**Receipts.**  Run card ([evidence/run_card_kernelpack_20261031.json](evidence/run_card_kernelpack_20261031.json)),
+line-by-line validator ([evidence/validator_kernelpack_20261031.json](evidence/validator_kernelpack_20261031.json)),
+portal gate ([evidence/portal_gate_kernelpack_20261031.json](evidence/portal_gate_kernelpack_20261031.json)),
+distillation ([evidence/distill_from_leaderboard_20261031.json](evidence/distill_from_leaderboard_20261031.json)),
+live leaderboard read ([evidence/leaderboard_snapshot_20261031.json](evidence/leaderboard_snapshot_20261031.json)).
+
+**What a compliant emission would need (remaining work).**  At least 30% of the dots outside the
+calibration lattice's true-3px halo, while keeping the marginal rule q > 0.2*EST — the quota engine
+does this once its halo cache is rebuilt at the corrected radius (it is radius-aware by design).
+That constraint prices the ESTIMATE down (cold-zone mass pays the denominator); the sweep in the run
+card is the starting point.  The geological upside is in
+[research/hypotheses-20261031.md](research/hypotheses-20261031.md) (H-SASS3-O..S, ranked
+O > P > S > Q > R; none runnable in this sandbox — GeoDAWN/3DEP/USGS sources unreachable).
+
 ## Read the project brief every session
 
 Before research or implementation, read [`docs/research/standing-prompt-as-recorded-20261027.md`](docs/research/standing-prompt-as-recorded-20261027.md) and the latest [`docs/research/repo-review-20261031.md`](docs/research/repo-review-20261031.md). The standing brief requires: focus on the nine listed GEMSDOE sites; evidence labels for every score; the shared buffered holdout and feature-alone leakage canaries; the exact surface-and-final-dot uniqueness gates; no more than three experiments or two hours; and a separate selector decision before any real submission slot. The exact method/lane paragraph referenced by the protocol has not been found in the recorded prompt, so do not invent a lane.
